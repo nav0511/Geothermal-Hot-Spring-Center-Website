@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\FA24\\DATN\\Project\\GHCW\\GHCW_BE\\GHCW_BE.csproj": {}
+    "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_BE\\GHCW_BE.csproj": {}
   },
   "projects": {
-    "D:\\FA24\\DATN\\Project\\GHCW\\GHCW_BE\\GHCW_BE.csproj": {
+    "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_BE\\GHCW_BE.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\FA24\\DATN\\Project\\GHCW\\GHCW_BE\\GHCW_BE.csproj",
+        "projectUniqueName": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_BE\\GHCW_BE.csproj",
         "projectName": "GHCW_BE",
-        "projectPath": "D:\\FA24\\DATN\\Project\\GHCW\\GHCW_BE\\GHCW_BE.csproj",
+        "projectPath": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_BE\\GHCW_BE.csproj",
         "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
-        "outputPath": "D:\\FA24\\DATN\\Project\\GHCW\\GHCW_BE\\obj\\",
+        "outputPath": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_BE\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

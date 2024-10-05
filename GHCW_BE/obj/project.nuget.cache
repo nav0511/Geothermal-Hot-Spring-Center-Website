@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "aimpGupJ3W9Vd7yMnQIbkgsMVwulew6QD7vRFjL5Hos94SZ+j0oNRRg5cK5bZHtiLUHuIEoKnSKvjBlwCSYajA==",
+  "dgSpecHash": "LWpNBXBXyGeOJXR0qPc4dhl9AV0CqLjSMVKhgf/fF7ihoQuFN1Lp68i/+P12jGtV6gjTnw8octFB/bklQfZtMg==",
   "success": true,
-  "projectFilePath": "D:\\FA24\\DATN\\Project\\GHCW\\GHCW_BE\\GHCW_BE.csproj",
+  "projectFilePath": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_BE\\GHCW_BE.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\admin\\.nuget\\packages\\microsoft.extensions.apidescription.server\\6.0.5\\microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
     "C:\\Users\\admin\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
