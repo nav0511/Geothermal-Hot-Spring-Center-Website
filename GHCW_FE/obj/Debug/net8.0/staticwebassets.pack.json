@@ -1,831 +1,831 @@
 {
   "Files": [
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\GHCW_FE.bundle.scp.css",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\GHCW_FE.bundle.scp.css",
       "PackagePath": "staticwebassets\\GHCW_FE.bundle.scp.css"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\css\\site.css",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\css\\style.css",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\css\\style.css",
       "PackagePath": "staticwebassets\\css\\style.css"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\css\\style.min.css",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\css\\style.min.css",
       "PackagePath": "staticwebassets\\css\\style.min.css"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\favicon.ico",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\favicon.ico",
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\img\\about-1.jpg",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\img\\about-1.jpg",
       "PackagePath": "staticwebassets\\img\\about-1.jpg"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\img\\about-2.jpg",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\img\\about-2.jpg",
       "PackagePath": "staticwebassets\\img\\about-2.jpg"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\img\\about.jpg",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\img\\about.jpg",
       "PackagePath": "staticwebassets\\img\\about.jpg"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\img\\blog-1.jpg",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\img\\blog-1.jpg",
       "PackagePath": "staticwebassets\\img\\blog-1.jpg"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\img\\blog-100x100.jpg",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\img\\blog-100x100.jpg",
       "PackagePath": "staticwebassets\\img\\blog-100x100.jpg"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\img\\blog-2.jpg",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\img\\blog-2.jpg",
       "PackagePath": "staticwebassets\\img\\blog-2.jpg"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\img\\blog-3.jpg",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\img\\blog-3.jpg",
       "PackagePath": "staticwebassets\\img\\blog-3.jpg"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\img\\carousel-1.jpg",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\img\\carousel-1.jpg",
       "PackagePath": "staticwebassets\\img\\carousel-1.jpg"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\img\\carousel-2.jpg",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\img\\carousel-2.jpg",
       "PackagePath": "staticwebassets\\img\\carousel-2.jpg"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\img\\destination-1.jpg",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\img\\destination-1.jpg",
       "PackagePath": "staticwebassets\\img\\destination-1.jpg"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\img\\destination-2.jpg",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\img\\destination-2.jpg",
       "PackagePath": "staticwebassets\\img\\destination-2.jpg"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\img\\destination-3.jpg",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\img\\destination-3.jpg",
       "PackagePath": "staticwebassets\\img\\destination-3.jpg"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\img\\destination-4.jpg",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\img\\destination-4.jpg",
       "PackagePath": "staticwebassets\\img\\destination-4.jpg"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\img\\destination-5.jpg",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\img\\destination-5.jpg",
       "PackagePath": "staticwebassets\\img\\destination-5.jpg"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\img\\destination-6.jpg",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\img\\destination-6.jpg",
       "PackagePath": "staticwebassets\\img\\destination-6.jpg"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\img\\package-1.jpg",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\img\\package-1.jpg",
       "PackagePath": "staticwebassets\\img\\package-1.jpg"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\img\\package-2.jpg",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\img\\package-2.jpg",
       "PackagePath": "staticwebassets\\img\\package-2.jpg"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\img\\package-3.jpg",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\img\\package-3.jpg",
       "PackagePath": "staticwebassets\\img\\package-3.jpg"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\img\\package-4.jpg",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\img\\package-4.jpg",
       "PackagePath": "staticwebassets\\img\\package-4.jpg"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\img\\package-5.jpg",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\img\\package-5.jpg",
       "PackagePath": "staticwebassets\\img\\package-5.jpg"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\img\\package-6.jpg",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\img\\package-6.jpg",
       "PackagePath": "staticwebassets\\img\\package-6.jpg"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\img\\team-1.jpg",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\img\\team-1.jpg",
       "PackagePath": "staticwebassets\\img\\team-1.jpg"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\img\\team-2.jpg",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\img\\team-2.jpg",
       "PackagePath": "staticwebassets\\img\\team-2.jpg"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\img\\team-3.jpg",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\img\\team-3.jpg",
       "PackagePath": "staticwebassets\\img\\team-3.jpg"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\img\\team-4.jpg",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\img\\team-4.jpg",
       "PackagePath": "staticwebassets\\img\\team-4.jpg"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\img\\testimonial-1.jpg",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\img\\testimonial-1.jpg",
       "PackagePath": "staticwebassets\\img\\testimonial-1.jpg"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\img\\testimonial-2.jpg",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\img\\testimonial-2.jpg",
       "PackagePath": "staticwebassets\\img\\testimonial-2.jpg"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\img\\testimonial-3.jpg",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\img\\testimonial-3.jpg",
       "PackagePath": "staticwebassets\\img\\testimonial-3.jpg"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\img\\testimonial-4.jpg",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\img\\testimonial-4.jpg",
       "PackagePath": "staticwebassets\\img\\testimonial-4.jpg"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\img\\user.jpg",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\img\\user.jpg",
       "PackagePath": "staticwebassets\\img\\user.jpg"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\js\\main.js",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\js\\main.js",
       "PackagePath": "staticwebassets\\js\\main.js"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\js\\site.js",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\js\\site.js",
       "PackagePath": "staticwebassets\\js\\site.js"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\bootstrap\\LICENSE",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\bootstrap\\LICENSE",
       "PackagePath": "staticwebassets\\lib\\bootstrap"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css.map",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css.map"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css.map",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css.map"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css.map",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css.map"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css.map",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css.map"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css.map",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css.map"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css.map",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css.map"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css.map",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css.map"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css.map",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css.map"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css.map",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css.map"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css.map",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css.map"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css.map",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css.map"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css.map",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css.map"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.css"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css.map",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.css.map"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.min.css"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css.map",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css.map"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css.map",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css.map"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js.map",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js.map"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js.map",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js.map"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js.map",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js.map"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.js"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js.map",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.js.map"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.min.js"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\easing\\easing.js",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\easing\\easing.js",
       "PackagePath": "staticwebassets\\lib\\easing\\easing.js"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\easing\\easing.min.js",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\easing\\easing.min.js",
       "PackagePath": "staticwebassets\\lib\\easing\\easing.min.js"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt",
       "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\LICENSE.txt"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.js",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.js",
       "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.js"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js",
       "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\jquery-validation\\LICENSE.md",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\jquery-validation\\LICENSE.md",
       "PackagePath": "staticwebassets\\lib\\jquery-validation\\LICENSE.md"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.js",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.js",
       "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\additional-methods.js"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.min.js",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.min.js",
       "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\additional-methods.min.js"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.js",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.js",
       "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\jquery.validate.js"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.min.js",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.min.js",
       "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\jquery.validate.min.js"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\jquery\\LICENSE.txt",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\jquery\\LICENSE.txt",
       "PackagePath": "staticwebassets\\lib\\jquery\\LICENSE.txt"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\jquery\\dist\\jquery.js",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\jquery\\dist\\jquery.js",
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.js"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\jquery\\dist\\jquery.min.js",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\jquery\\dist\\jquery.min.js",
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.js"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\jquery\\dist\\jquery.min.map",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\jquery\\dist\\jquery.min.map",
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\owlcarousel\\LICENSE",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\owlcarousel\\LICENSE",
       "PackagePath": "staticwebassets\\lib\\owlcarousel"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\owlcarousel\\assets\\ajax-loader.gif",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\owlcarousel\\assets\\ajax-loader.gif",
       "PackagePath": "staticwebassets\\lib\\owlcarousel\\assets\\ajax-loader.gif"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\owlcarousel\\assets\\owl.carousel.css",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\owlcarousel\\assets\\owl.carousel.css",
       "PackagePath": "staticwebassets\\lib\\owlcarousel\\assets\\owl.carousel.css"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\owlcarousel\\assets\\owl.carousel.min.css",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\owlcarousel\\assets\\owl.carousel.min.css",
       "PackagePath": "staticwebassets\\lib\\owlcarousel\\assets\\owl.carousel.min.css"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\owlcarousel\\assets\\owl.theme.default.css",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\owlcarousel\\assets\\owl.theme.default.css",
       "PackagePath": "staticwebassets\\lib\\owlcarousel\\assets\\owl.theme.default.css"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\owlcarousel\\assets\\owl.theme.default.min.css",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\owlcarousel\\assets\\owl.theme.default.min.css",
       "PackagePath": "staticwebassets\\lib\\owlcarousel\\assets\\owl.theme.default.min.css"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\owlcarousel\\assets\\owl.theme.green.css",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\owlcarousel\\assets\\owl.theme.green.css",
       "PackagePath": "staticwebassets\\lib\\owlcarousel\\assets\\owl.theme.green.css"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\owlcarousel\\assets\\owl.theme.green.min.css",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\owlcarousel\\assets\\owl.theme.green.min.css",
       "PackagePath": "staticwebassets\\lib\\owlcarousel\\assets\\owl.theme.green.min.css"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\owlcarousel\\assets\\owl.video.play.png",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\owlcarousel\\assets\\owl.video.play.png",
       "PackagePath": "staticwebassets\\lib\\owlcarousel\\assets\\owl.video.play.png"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\owlcarousel\\owl.carousel.js",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\owlcarousel\\owl.carousel.js",
       "PackagePath": "staticwebassets\\lib\\owlcarousel\\owl.carousel.js"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\owlcarousel\\owl.carousel.min.js",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\owlcarousel\\owl.carousel.min.js",
       "PackagePath": "staticwebassets\\lib\\owlcarousel\\owl.carousel.min.js"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\tempusdominus\\css\\tempusdominus-bootstrap-4.css",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\tempusdominus\\css\\tempusdominus-bootstrap-4.css",
       "PackagePath": "staticwebassets\\lib\\tempusdominus\\css\\tempusdominus-bootstrap-4.css"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\tempusdominus\\css\\tempusdominus-bootstrap-4.min.css",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\tempusdominus\\css\\tempusdominus-bootstrap-4.min.css",
       "PackagePath": "staticwebassets\\lib\\tempusdominus\\css\\tempusdominus-bootstrap-4.min.css"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\tempusdominus\\js\\moment-timezone.min.js",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\tempusdominus\\js\\moment-timezone.min.js",
       "PackagePath": "staticwebassets\\lib\\tempusdominus\\js\\moment-timezone.min.js"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\tempusdominus\\js\\moment.min.js",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\tempusdominus\\js\\moment.min.js",
       "PackagePath": "staticwebassets\\lib\\tempusdominus\\js\\moment.min.js"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\tempusdominus\\js\\tempusdominus-bootstrap-4.js",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\tempusdominus\\js\\tempusdominus-bootstrap-4.js",
       "PackagePath": "staticwebassets\\lib\\tempusdominus\\js\\tempusdominus-bootstrap-4.js"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\lib\\tempusdominus\\js\\tempusdominus-bootstrap-4.min.js",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\lib\\tempusdominus\\js\\tempusdominus-bootstrap-4.min.js",
       "PackagePath": "staticwebassets\\lib\\tempusdominus\\js\\tempusdominus-bootstrap-4.min.js"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\mail\\contact.js",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\mail\\contact.js",
       "PackagePath": "staticwebassets\\mail\\contact.js"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\mail\\contact.php",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\mail\\contact.php",
       "PackagePath": "staticwebassets\\mail\\contact.php"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\mail\\jqBootstrapValidation.min.js",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\mail\\jqBootstrapValidation.min.js",
       "PackagePath": "staticwebassets\\mail\\jqBootstrapValidation.min.js"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_alert.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_alert.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\_alert.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_badge.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_badge.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\_badge.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_breadcrumb.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_breadcrumb.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\_breadcrumb.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_button-group.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_button-group.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\_button-group.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_buttons.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_buttons.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\_buttons.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_card.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_card.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\_card.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_carousel.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_carousel.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\_carousel.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_close.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_close.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\_close.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_code.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_code.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\_code.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_custom-forms.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_custom-forms.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\_custom-forms.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_dropdown.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_dropdown.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\_dropdown.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_forms.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_forms.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\_forms.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_functions.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_functions.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\_functions.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_grid.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_grid.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\_grid.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_images.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_images.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\_images.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_input-group.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_input-group.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\_input-group.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_jumbotron.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_jumbotron.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\_jumbotron.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_list-group.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_list-group.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\_list-group.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_media.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_media.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\_media.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_mixins.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_mixins.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\_mixins.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_modal.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_modal.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\_modal.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_nav.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_nav.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\_nav.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_navbar.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_navbar.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\_navbar.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_pagination.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_pagination.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\_pagination.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_popover.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_popover.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\_popover.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_print.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_print.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\_print.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_progress.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_progress.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\_progress.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_reboot.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_reboot.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\_reboot.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_root.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_root.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\_root.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_spinners.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_spinners.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\_spinners.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_tables.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_tables.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\_tables.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_toasts.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_toasts.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\_toasts.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_tooltip.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_tooltip.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\_tooltip.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_transitions.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_transitions.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\_transitions.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_type.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_type.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\_type.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_utilities.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_utilities.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\_utilities.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_variables.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\_variables.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\_variables.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\bootstrap-grid.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\bootstrap-grid.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\bootstrap-grid.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\bootstrap-reboot.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\bootstrap-reboot.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\bootstrap-reboot.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\bootstrap.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\bootstrap.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\bootstrap.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_alert.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_alert.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\mixins\\_alert.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_background-variant.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_background-variant.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\mixins\\_background-variant.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_badge.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_badge.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\mixins\\_badge.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_border-radius.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_border-radius.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\mixins\\_border-radius.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_box-shadow.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_box-shadow.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\mixins\\_box-shadow.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_breakpoints.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_breakpoints.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\mixins\\_breakpoints.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_buttons.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_buttons.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\mixins\\_buttons.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_caret.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_caret.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\mixins\\_caret.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_clearfix.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_clearfix.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\mixins\\_clearfix.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_deprecate.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_deprecate.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\mixins\\_deprecate.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_float.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_float.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\mixins\\_float.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_forms.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_forms.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\mixins\\_forms.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_gradients.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_gradients.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\mixins\\_gradients.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_grid-framework.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_grid-framework.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\mixins\\_grid-framework.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_grid.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_grid.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\mixins\\_grid.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_hover.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_hover.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\mixins\\_hover.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_image.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_image.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\mixins\\_image.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_list-group.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_list-group.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\mixins\\_list-group.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_lists.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_lists.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\mixins\\_lists.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_nav-divider.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_nav-divider.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\mixins\\_nav-divider.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_pagination.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_pagination.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\mixins\\_pagination.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_reset-text.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_reset-text.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\mixins\\_reset-text.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_resize.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_resize.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\mixins\\_resize.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_screen-reader.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_screen-reader.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\mixins\\_screen-reader.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_size.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_size.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\mixins\\_size.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_table-row.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_table-row.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\mixins\\_table-row.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_text-emphasis.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_text-emphasis.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\mixins\\_text-emphasis.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_text-hide.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_text-hide.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\mixins\\_text-hide.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_text-truncate.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_text-truncate.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\mixins\\_text-truncate.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_transition.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_transition.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\mixins\\_transition.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_visibility.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\mixins\\_visibility.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\mixins\\_visibility.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\utilities\\_align.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\utilities\\_align.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\utilities\\_align.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\utilities\\_background.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\utilities\\_background.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\utilities\\_background.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\utilities\\_borders.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\utilities\\_borders.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\utilities\\_borders.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\utilities\\_clearfix.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\utilities\\_clearfix.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\utilities\\_clearfix.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\utilities\\_display.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\utilities\\_display.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\utilities\\_display.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\utilities\\_embed.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\utilities\\_embed.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\utilities\\_embed.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\utilities\\_flex.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\utilities\\_flex.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\utilities\\_flex.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\utilities\\_float.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\utilities\\_float.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\utilities\\_float.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\utilities\\_interactions.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\utilities\\_interactions.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\utilities\\_interactions.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\utilities\\_overflow.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\utilities\\_overflow.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\utilities\\_overflow.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\utilities\\_position.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\utilities\\_position.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\utilities\\_position.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\utilities\\_screenreaders.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\utilities\\_screenreaders.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\utilities\\_screenreaders.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\utilities\\_shadows.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\utilities\\_shadows.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\utilities\\_shadows.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\utilities\\_sizing.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\utilities\\_sizing.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\utilities\\_sizing.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\utilities\\_spacing.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\utilities\\_spacing.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\utilities\\_spacing.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\utilities\\_stretched-link.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\utilities\\_stretched-link.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\utilities\\_stretched-link.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\utilities\\_text.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\utilities\\_text.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\utilities\\_text.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\utilities\\_visibility.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\utilities\\_visibility.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\utilities\\_visibility.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\vendor\\_rfs.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\bootstrap\\scss\\vendor\\_rfs.scss",
       "PackagePath": "staticwebassets\\scss\\bootstrap\\scss\\vendor\\_rfs.scss"
     },
     {
-      "Id": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\wwwroot\\scss\\style.scss",
+      "Id": "F:\\users\\Ky9\\GHCW_FE\\wwwroot\\scss\\style.scss",
       "PackagePath": "staticwebassets\\scss\\style.scss"
     },
     {
