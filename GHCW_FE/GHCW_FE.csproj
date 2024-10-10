@@ -155,4 +155,8 @@
     <None Include="wwwroot\scss\style.scss" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\" />
+  </ItemGroup>
+
 </Project>

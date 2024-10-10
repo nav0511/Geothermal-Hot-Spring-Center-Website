@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GHCW_BE", "GHCW_BE\GHCW_BE.csproj", "{FF5A65CF-F3D2-49CA-86D7-30DBD03F759A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GHCW_BE", "GHCW_BE\GHCW_BE.csproj", "{FF5A65CF-F3D2-49CA-86D7-30DBD03F759A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GHCW_FE", "GHCW_FE\GHCW_FE.csproj", "{D63C82C9-B3F6-491B-86E2-D2EE2709DC52}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GHCW_FE", "GHCW_FE\GHCW_FE.csproj", "{D63C82C9-B3F6-491B-86E2-D2EE2709DC52}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

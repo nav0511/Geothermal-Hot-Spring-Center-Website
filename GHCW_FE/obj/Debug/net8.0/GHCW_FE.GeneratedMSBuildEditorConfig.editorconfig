@@ -18,6 +18,10 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = D:\FA24\DATN\Project\Geothermal-Hot-Spring-Center-Website\GHCW_FE
 build_property._RazorSourceGeneratorDebug = 
 
+[D:/FA24/DATN/Project/Geothermal-Hot-Spring-Center-Website/GHCW_FE/Pages/About.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWJvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/FA24/DATN/Project/Geothermal-Hot-Spring-Center-Website/GHCW_FE/Pages/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
@@ -26,8 +30,24 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/FA24/DATN/Project/Geothermal-Hot-Spring-Center-Website/GHCW_FE/Pages/News/Detail.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTmV3c1xEZXRhaWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FA24/DATN/Project/Geothermal-Hot-Spring-Center-Website/GHCW_FE/Pages/News/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTmV3c1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/FA24/DATN/Project/Geothermal-Hot-Spring-Center-Website/GHCW_FE/Pages/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJpdmFjeS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FA24/DATN/Project/Geothermal-Hot-Spring-Center-Website/GHCW_FE/Pages/Promotions/Detail.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJvbW90aW9uc1xEZXRhaWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FA24/DATN/Project/Geothermal-Hot-Spring-Center-Website/GHCW_FE/Pages/Promotions/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJvbW90aW9uc1xJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/FA24/DATN/Project/Geothermal-Hot-Spring-Center-Website/GHCW_FE/Pages/Shared/_ValidationScriptsPartial.cshtml]
