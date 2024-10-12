@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="~/GHCW_FE.styles.css" asp-append-version="true" />
 
     <!-- Favicon -->
-    <link href="img/favicon.ico" rel="icon">
+    <link href="~/img/favicon.ico" rel="icon">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -19,11 +19,11 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
 
     <!-- Libraries Stylesheet -->
-    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+    <link href="~/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="~/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
 
     <!-- Customized Bootstrap Stylesheet -->
-    <link href="css/style.css" rel="stylesheet">
+    <link href="~/css/style.css" rel="stylesheet">
 </head>
 <body>
     <header>
@@ -33,7 +33,7 @@
                 <div class="row">
                     <div class="col-lg-6 text-center text-lg-left mb-2 mb-lg-0">
                         <div class="d-inline-flex align-items-center">
-                            <p><i class="fa fa-envelope mr-2"></i>info@example.com</p>
+                            <p><i class="fa fa-envelope mr-2"></i>email@email.com</p>
                             <p class="text-body px-3">|</p>
                             <p><i class="fa fa-phone-alt mr-2"></i>+012 345 6789</p>
                         </div>
@@ -73,20 +73,20 @@
                     </button>
                     <div class="collapse navbar-collapse justify-content-between px-3" id="navbarCollapse">
                         <div class="navbar-nav ml-auto py-0">
-                            <a href="index.html" class="nav-item nav-link active">Trang chủ</a>
-                            <a href="about.html" class="nav-item nav-link">Tin tức</a>
-                            <a href="service.html" class="nav-item nav-link">Khuyến mãi</a>
-                            <a href="package.html" class="nav-item nav-link">Dịch vụ</a>
-                            <a href="contact.html" class="nav-item nav-link">Đặt vé</a>
-                            <a href="contact.html" class="nav-item nav-link">Giới thiệu</a>
-                            <a href="contact.html" class="nav-item nav-link">Đăng ký</a>
-                            <a href="contact.html" class="nav-item nav-link active">Đăng nhập</a>
+                            <a asp-page="/Index" class="nav-item nav-link active">Trang chủ</a>
+                            <a asp-page="/News/Index" class="nav-item nav-link">Tin tức</a>
+                            <a asp-page="/Promotions/Index" class="nav-item nav-link">Khuyến mãi</a>
+                            <a asp-page="/Services/Index" class="nav-item nav-link">Dịch vụ</a>
+                            <a asp-page="/Book/Index" class="nav-item nav-link">Đặt vé</a>
+                            <a asp-page="/About" class="nav-item nav-link">Giới thiệu</a>
+                            <a asp-page="/" class="nav-item nav-link">Đăng ký</a>
+                            <a asp-page="/" class="nav-item nav-link active">Đăng nhập</a>
                             @* <div class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages</a>
-                                <div class="dropdown-menu border-0 rounded-0 m-0">
-                                    <a href="blog.html" class="dropdown-item">Blog Grid</a>
-                                    <a href="single.html" class="dropdown-item">Blog Detail</a>
-                                </div>
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages</a>
+                            <div class="dropdown-menu border-0 rounded-0 m-0">
+                            <a href="blog.html" class="dropdown-item">Blog Grid</a>
+                            <a href="single.html" class="dropdown-item">Blog Detail</a>
+                            </div>
                             </div> *@
                         </div>
                     </div>
@@ -95,8 +95,8 @@
         </div>
         <!-- Navbar End -->
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+    <div>
+        <main role="main">
             @RenderBody()
         </main>
     </div>
@@ -121,18 +121,18 @@
                 <div class="col-lg-3 col-md-6 mb-5">
                     <h5 class="text-white text-uppercase mb-4" style="letter-spacing: 5px;">Dịch vụ</h5>
                     <div class="d-flex flex-column justify-content-start">
-                        <a class="text-white-50 mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Tin tức</a>
-                        <a class="text-white-50 mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Khuyến mãi</a>
-                        <a class="text-white-50 mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Dịch vụ</a>
-                        <a class="text-white-50 mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Đặt vé</a>
-                        <a class="text-white-50 mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Về chúng tôi</a>
+                        <a class="text-white-50 mb-2" asp-page="/News/Index"><i class="fa fa-angle-right mr-2"></i>Tin tức</a>
+                        <a class="text-white-50 mb-2" asp-page="/Promotions/Index"><i class="fa fa-angle-right mr-2"></i>Khuyến mãi</a>
+                        <a class="text-white-50 mb-2" asp-page="/Services/Index"><i class="fa fa-angle-right mr-2"></i>Dịch vụ</a>
+                        <a class="text-white-50 mb-2" asp-page="/Book/Index"><i class="fa fa-angle-right mr-2"></i>Đặt vé</a>
+                        <a class="text-white-50 mb-2" asp-page="/About"><i class="fa fa-angle-right mr-2"></i>Về chúng tôi</a>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6 mb-5">
                     <h5 class="text-white text-uppercase mb-4" style="letter-spacing: 5px;">Liên hệ</h5>
-                    <p><i class="fa fa-map-marker-alt mr-2"></i>123 Street, New York, USA</p>
+                    <p><i class="fa fa-map-marker-alt mr-2"></i>Viet Nam</p>
                     <p><i class="fa fa-phone-alt mr-2"></i>+012 345 67890</p>
-                    <p><i class="fa fa-envelope mr-2"></i>info@example.com</p>
+                    <p><i class="fa fa-envelope mr-2"></i>email@email.com</p>
                     <h6 class="text-white text-uppercase mt-4 mb-3" style="letter-spacing: 5px;">Đăng ký nhận thông tin ưu đãi</h6>
                     <div class="w-100">
                         <div class="input-group">
@@ -165,18 +165,17 @@
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-    <script src="lib/easing/easing.min.js"></script>
-    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-    <script src="lib/tempusdominus/js/moment.min.js"></script>
-    <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
-    <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="~/lib/easing/easing.min.js"></script>
+    <script src="~/lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="~/lib/tempusdominus/js/moment.min.js"></script>
+    <script src="~/lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="~/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
     <!-- Contact Javascript File -->
-    <script src="mail/jqBootstrapValidation.min.js"></script>
-    <script src="mail/contact.js"></script>
+    <script src="~/mail/jqBootstrapValidation.min.js"></script>
+    <script src="~/mail/contact.js"></script>
 
-    <!-- Template Javascript -->
-    <script src="js/main.js"></script>
+    <script src="~/js/main.js"></script>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
