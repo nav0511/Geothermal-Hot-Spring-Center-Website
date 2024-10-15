@@ -1,4 +1,63 @@
 ﻿@page
 @model GHCW_FE.Pages.Authentications.LoginModel
 @{
+    ViewData["Title"] = "Đăng nhập";
 }
+
+<!-- Carousel Start -->
+<div class="container-fluid p-0">
+    <div id="header-carousel" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img class="w-100" src="/img/carousel-1.jpg" alt="Banner Image">
+                <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-md-4">
+                                <div class="bg-white-opacity p-4 rounded">
+                                    <h2 class="text-center mt-5">Đăng Nhập</h2>
+                                    <form action="/login" method="POST">
+                                        <div class="form-group">
+                                            <label for="email">Email</label>
+                                            <input type="email" class="form-control" id="email" name="email" placeholder="Nhập email" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="password">Mật Khẩu</label>
+                                            <input type="password" class="form-control" id="password" name="password" placeholder="Nhập mật khẩu" required>
+                                        </div>
+                                        <div class="form-group form-check">
+                                            <input type="checkbox" class="form-check-input" id="remember" name="remember">
+                                            <label class="form-check-label" for="remember">Nhớ tài khoản</label>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary btn-block">Đăng Nhập</button>
+                                    </form>
+                                    <p class="text-center mt-3">
+                                        <a href="/Authentications/ForgotPassword" style="color:black">Quên mật khẩu?</a>
+                                    </p>
+                                    <p class="text-center" style="color:black">
+                                        Chưa có tài khoản? <a href="/Authentications/Register">Đăng ký tài khoản mới</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Carousel End -->
+
+<style>
+    /* CSS cho nền màu trắng với opacity 50% */
+    .bg-white-opacity {
+        background-color: rgba(255, 255, 255, 0.9); /* Nền trắng với độ trong suốt 50% */
+        border-radius: 10px;
+        padding: 20px;
+    }
+
+    .form-group{
+        color: black;
+        text-align: left;
+    }
+</style>
