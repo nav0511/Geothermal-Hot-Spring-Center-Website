@@ -13,7 +13,6 @@
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    @* <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"> *@
 
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
@@ -65,7 +64,7 @@
         <div class="container-fluid position-relative nav-bar p-0">
             <div class="container-lg position-relative p-0 px-lg-3" style="z-index: 9;">
                 <nav class="navbar navbar-expand-lg bg-light navbar-light shadow-lg py-3 py-lg-0 pl-3 pl-lg-5">
-                    <a href="" class="navbar-brand">
+                    <a asp-page="/Index" class="navbar-brand">
                         <h1 class="m-0 text-primary"><span class="text-dark">GH</span>CW</h1>
                     </a>
                     <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
@@ -73,21 +72,18 @@
                     </button>
                     <div class="collapse navbar-collapse justify-content-between px-3" id="navbarCollapse">
                         <div class="navbar-nav ml-auto py-0">
-                            <a asp-page="/Index" class="nav-item nav-link active">Trang chủ</a>
-                            <a asp-page="/News/Index" class="nav-item nav-link">Tin tức</a>
-                            <a asp-page="/Promotions/Index" class="nav-item nav-link">Khuyến mãi</a>
-                            <a asp-page="/Services/Index" class="nav-item nav-link">Dịch vụ</a>
-                            <a asp-page="/Book/Index" class="nav-item nav-link">Đặt vé</a>
-                            <a asp-page="/About" class="nav-item nav-link">Giới thiệu</a>
-                            <a asp-page="/" class="nav-item nav-link">Đăng ký</a>
-                            <a asp-page="/" class="nav-item nav-link active">Đăng nhập</a>
-                            @* <div class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages</a>
-                            <div class="dropdown-menu border-0 rounded-0 m-0">
-                            <a href="blog.html" class="dropdown-item">Blog Grid</a>
-                            <a href="single.html" class="dropdown-item">Blog Detail</a>
+                            <a asp-page="/Index" class="nav-item nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/Index" ? "active" : "")">Trang chủ</a>
+                            <a asp-page="/News/Index" class="nav-item nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/News/Index" ? "active" : "")">Tin tức</a>
+                            <a asp-page="/Promotions/Index" class="nav-item nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/Promotions/Index" ? "active" : "")">Khuyến mãi</a>
+                            <a asp-page="/Services/Index" class="nav-item nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/Services/Index" ? "active" : "")">Dịch vụ</a>
+                            <a asp-page="/Book/Index" class="nav-item nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/Book/Index" ? "active" : "")">Đặt vé</a>
+                            <a asp-page="/About" class="nav-item nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/About" ? "active" : "")">Giới thiệu</a>
+                            <div class="nav-item dropdown">
+                                <a asp-page="/Authentications/Login" class="nav-link dropdown-toggle @(ViewContext.RouteData.Values["page"]?.ToString() == "/Authentications/Login" ? "active" : "")" data-toggle="dropdown">Đăng nhập</a>
+                                <div class="dropdown-menu border-0 rounded-0 m-0">
+                                    <a asp-page="/Authentications/Register" class="dropdown-item @(ViewContext.RouteData.Values["page"]?.ToString() == "/Authentications/Register" ? "active" : "")">Đăng ký</a>
+                                </div>
                             </div>
-                            </div> *@
                         </div>
                     </div>
                 </nav>
