@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - GHCW_FE</title>
+    <title>@ViewData["Title"] - Trung tâm khoáng nóng địa chất</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/GHCW_FE.styles.css" asp-append-version="true" />
@@ -34,25 +34,13 @@
                         <div class="d-inline-flex align-items-center">
                             <p><i class="fa fa-envelope mr-2"></i>email@email.com</p>
                             <p class="text-body px-3">|</p>
-                            <p><i class="fa fa-phone-alt mr-2"></i>+012 345 6789</p>
+                            <p><i class="fa fa-phone-alt mr-2"></i>02033 860 669 - 0969 365 916</p>
                         </div>
                     </div>
                     <div class="col-lg-6 text-center text-lg-right">
                         <div class="d-inline-flex align-items-center">
-                            <a class="text-primary px-3" href="">
+                            <a class="text-primary px-3" href="https://www.facebook.com/p/Trung-t%C3%A2m-kho%C3%A1ng-n%C3%B3ng-%C4%90%E1%BB%8Ba-ch%E1%BA%A5t-100089380076299/?locale=vi_VN">
                                 <i class="fab fa-facebook-f"></i>
-                            </a>
-                            <a class="text-primary px-3" href="">
-                                <i class="fab fa-twitter"></i>
-                            </a>
-                            <a class="text-primary px-3" href="">
-                                <i class="fab fa-linkedin-in"></i>
-                            </a>
-                            <a class="text-primary px-3" href="">
-                                <i class="fab fa-instagram"></i>
-                            </a>
-                            <a class="text-primary pl-3" href="">
-                                <i class="fab fa-youtube"></i>
                             </a>
                         </div>
                     </div>
@@ -106,12 +94,12 @@
                         <h1 class="text-primary"><span class="text-white">GH</span>CW</h1>
                     </a>
                     @* <p>Sed ipsum clita tempor ipsum ipsum amet sit ipsum lorem amet labore rebum lorem ipsum dolor. No sed vero lorem dolor dolor</p> *@
-                    <h6 class="text-white text-uppercase mt-4 mb-3" style="letter-spacing: 5px;">Liên kết</h6>
+                    <h6 class="text-white text-uppercase mt-4 mb-3" style="letter-spacing: 5px;">Kết nối với chúng tôi</h6>
                     <div class="d-flex justify-content-start">
-                        <a class="btn btn-outline-primary btn-square mr-2" href="#"><i class="fab fa-twitter"></i></a>
-                        <a class="btn btn-outline-primary btn-square mr-2" href="#"><i class="fab fa-facebook-f"></i></a>
+                        @* <a class="btn btn-outline-primary btn-square mr-2" href="#"><i class="fab fa-twitter"></i></a>
                         <a class="btn btn-outline-primary btn-square mr-2" href="#"><i class="fab fa-linkedin-in"></i></a>
-                        <a class="btn btn-outline-primary btn-square" href="#"><i class="fab fa-instagram"></i></a>
+                        <a class="btn btn-outline-primary btn-square" href="#"><i class="fab fa-instagram"></i></a> *@
+                        <a class="btn btn-outline-primary btn-square mr-2" href="https://www.facebook.com/p/Trung-t%C3%A2m-kho%C3%A1ng-n%C3%B3ng-%C4%90%E1%BB%8Ba-ch%E1%BA%A5t-100089380076299/?locale=vi_VN"><i class="fab fa-facebook-f"></i></a>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6 mb-5">
@@ -126,8 +114,8 @@
                 </div>
                 <div class="col-lg-3 col-md-6 mb-5">
                     <h5 class="text-white text-uppercase mb-4" style="letter-spacing: 5px;">Liên hệ</h5>
-                    <p><i class="fa fa-map-marker-alt mr-2"></i>Viet Nam</p>
-                    <p><i class="fa fa-phone-alt mr-2"></i>+012 345 67890</p>
+                    <p><i class="fa fa-map-marker-alt mr-2"></i>Km4, tổ 1, khu Long Thạch A, phường Cẩm Thạch, thành phố Cẩm Phả, tỉnh Quảng Ninh</p>
+                    <p><i class="fa fa-phone-alt mr-2"></i>02033 860 669 - 0969 365 916</p>
                     <p><i class="fa fa-envelope mr-2"></i>email@email.com</p>
                     <h6 class="text-white text-uppercase mt-4 mb-3" style="letter-spacing: 5px;">Đăng ký nhận thông tin ưu đãi</h6>
                     <div class="w-100">
@@ -141,7 +129,7 @@
                 </div>
             </div>
         </div>
-        <div class="container-fluid bg-dark text-white border-top py-4 px-sm-3 px-md-5" style="border-color: rgba(256, 256, 256, .1) !important;">
+        @* <div class="container-fluid bg-dark text-white border-top py-4 px-sm-3 px-md-5" style="border-color: rgba(256, 256, 256, .1) !important;">
             <div class="row">
                 <div class="col-lg-6 text-center text-md-left mb-3 mb-md-0">
                     <p class="m-0 text-white-50">
@@ -149,7 +137,7 @@
                     </p>
                 </div>
             </div>
-        </div>
+        </div> *@
         <!-- Footer End -->
     </footer>
 
@@ -172,9 +160,6 @@
     <script src="~/mail/contact.js"></script>
 
     <script src="~/js/main.js"></script>
-
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
