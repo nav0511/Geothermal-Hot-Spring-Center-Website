@@ -9,79 +9,79 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = GHCW_FE
 build_property.RootNamespace = GHCW_FE
-build_property.ProjectDir = D:\FA24\DATN\Project\Geothermal-Hot-Spring-Center-Website\GHCW_FE\
+build_property.ProjectDir = F:\users\Ky9\GHCW_FE\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = D:\FA24\DATN\Project\Geothermal-Hot-Spring-Center-Website\GHCW_FE
+build_property.MSBuildProjectDirectory = F:\users\Ky9\GHCW_FE
 build_property._RazorSourceGeneratorDebug = 
 
-[D:/FA24/DATN/Project/Geothermal-Hot-Spring-Center-Website/GHCW_FE/Pages/About.cshtml]
+[F:/users/Ky9/GHCW_FE/Pages/About.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWJvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/FA24/DATN/Project/Geothermal-Hot-Spring-Center-Website/GHCW_FE/Pages/Authentications/ForgotPassword.cshtml]
+[F:/users/Ky9/GHCW_FE/Pages/Authentications/ForgotPassword.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXV0aGVudGljYXRpb25zXEZvcmdvdFBhc3N3b3JkLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/FA24/DATN/Project/Geothermal-Hot-Spring-Center-Website/GHCW_FE/Pages/Authentications/Login.cshtml]
+[F:/users/Ky9/GHCW_FE/Pages/Authentications/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXV0aGVudGljYXRpb25zXExvZ2luLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/FA24/DATN/Project/Geothermal-Hot-Spring-Center-Website/GHCW_FE/Pages/Authentications/Register.cshtml]
+[F:/users/Ky9/GHCW_FE/Pages/Authentications/Register.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXV0aGVudGljYXRpb25zXFJlZ2lzdGVyLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/FA24/DATN/Project/Geothermal-Hot-Spring-Center-Website/GHCW_FE/Pages/Error.cshtml]
+[F:/users/Ky9/GHCW_FE/Pages/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/FA24/DATN/Project/Geothermal-Hot-Spring-Center-Website/GHCW_FE/Pages/Index.cshtml]
+[F:/users/Ky9/GHCW_FE/Pages/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/FA24/DATN/Project/Geothermal-Hot-Spring-Center-Website/GHCW_FE/Pages/News/Detail.cshtml]
+[F:/users/Ky9/GHCW_FE/Pages/News/Detail.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTmV3c1xEZXRhaWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/FA24/DATN/Project/Geothermal-Hot-Spring-Center-Website/GHCW_FE/Pages/News/Index.cshtml]
+[F:/users/Ky9/GHCW_FE/Pages/News/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTmV3c1xJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/FA24/DATN/Project/Geothermal-Hot-Spring-Center-Website/GHCW_FE/Pages/Privacy.cshtml]
+[F:/users/Ky9/GHCW_FE/Pages/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJpdmFjeS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/FA24/DATN/Project/Geothermal-Hot-Spring-Center-Website/GHCW_FE/Pages/Promotions/Detail.cshtml]
+[F:/users/Ky9/GHCW_FE/Pages/Promotions/Detail.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJvbW90aW9uc1xEZXRhaWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/FA24/DATN/Project/Geothermal-Hot-Spring-Center-Website/GHCW_FE/Pages/Promotions/Index.cshtml]
+[F:/users/Ky9/GHCW_FE/Pages/Promotions/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJvbW90aW9uc1xJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/FA24/DATN/Project/Geothermal-Hot-Spring-Center-Website/GHCW_FE/Pages/Services/Detail.cshtml]
+[F:/users/Ky9/GHCW_FE/Pages/Services/Detail.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2VydmljZXNcRGV0YWlsLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/FA24/DATN/Project/Geothermal-Hot-Spring-Center-Website/GHCW_FE/Pages/Services/Index.cshtml]
+[F:/users/Ky9/GHCW_FE/Pages/Services/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2VydmljZXNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/FA24/DATN/Project/Geothermal-Hot-Spring-Center-Website/GHCW_FE/Pages/Shared/_ValidationScriptsPartial.cshtml]
+[F:/users/Ky9/GHCW_FE/Pages/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/FA24/DATN/Project/Geothermal-Hot-Spring-Center-Website/GHCW_FE/Pages/_ViewImports.cshtml]
+[F:/users/Ky9/GHCW_FE/Pages/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/FA24/DATN/Project/Geothermal-Hot-Spring-Center-Website/GHCW_FE/Pages/_ViewStart.cshtml]
+[F:/users/Ky9/GHCW_FE/Pages/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/FA24/DATN/Project/Geothermal-Hot-Spring-Center-Website/GHCW_FE/Pages/Shared/_Layout.cshtml]
+[F:/users/Ky9/GHCW_FE/Pages/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-49l33vvpa5
