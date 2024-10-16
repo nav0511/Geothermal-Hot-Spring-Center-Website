@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GHCW_FE")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4ef1a954a84ebeba13614cb5c14b8eb59ee54c91")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1a05369e76341176f054969beed2b3566f7205f0")]
 [assembly: System.Reflection.AssemblyProductAttribute("GHCW_FE")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GHCW_FE")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

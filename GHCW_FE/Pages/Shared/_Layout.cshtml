@@ -66,12 +66,38 @@
                             <a asp-page="/Services/Index" class="nav-item nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/Services/Index" ? "active" : "")">Dịch vụ</a>
                             <a asp-page="/Book/Index" class="nav-item nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/Book/Index" ? "active" : "")">Đặt vé</a>
                             <a asp-page="/About" class="nav-item nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/About" ? "active" : "")">Giới thiệu</a>
-                            <div class="nav-item dropdown">
+                            <a asp-page="/Authentications/Login" class="nav-item nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/Authentications/Login" ? "active" : "")">Đăng nhập</a>
+                            @* <li class="user-footer">
+                                <div class="pull-left">
+                                    @if (Context.Session.GetString("acc") != null)
+                                    {
+                                        var u = new Account();
+                                        u = JsonSerializer.Deserialize<Account>
+                                        (Context.Session.GetString("acc"));
+                                        if (u.Type == "teacher")
+                                        {
+                                            <a href="#" class="btn btn-default btn-flat">Profile</a>
+                                        }
+                                        if (account.Type == "student")
+                                        {
+                                            <a href="/Student/profile" class="btn btn-default btn-flat">Profile</a>
+                                        }
+                                        if (account.Type == "admin")
+                                        {
+                                            <a href="#" class="btn btn-default btn-flat">Profile</a>
+                                        }
+                                    }
+                                </div>
+                                <div class="pull-right">
+                                    <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                                </div>
+                            </li> *@
+                            @* <div class="nav-item dropdown">
                                 <a asp-page="/Authentications/Login" class="nav-link dropdown-toggle @(ViewContext.RouteData.Values["page"]?.ToString() == "/Authentications/Login" ? "active" : "")" data-toggle="dropdown">Đăng nhập</a>
                                 <div class="dropdown-menu border-0 rounded-0 m-0">
                                     <a asp-page="/Authentications/Register" class="dropdown-item @(ViewContext.RouteData.Values["page"]?.ToString() == "/Authentications/Register" ? "active" : "")">Đăng ký</a>
                                 </div>
-                            </div>
+                            </div> *@
                         </div>
                     </div>
                 </nav>
