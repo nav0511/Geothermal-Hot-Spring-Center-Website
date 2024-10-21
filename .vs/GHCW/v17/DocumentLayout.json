@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "E:\\Geothermal-Hot-Spring-Center-Website\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{FF5A65CF-F3D2-49CA-86D7-30DBD03F759A}|GHCW_BE\\GHCW_BE.csproj|e:\\geothermal-hot-spring-center-website\\ghcw_be\\helpers\\helper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FF5A65CF-F3D2-49CA-86D7-30DBD03F759A}|GHCW_BE\\GHCW_BE.csproj|solutionrelative:ghcw_be\\helpers\\helper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{D63C82C9-B3F6-491B-86E2-D2EE2709DC52}|GHCW_FE\\GHCW_FE.csproj|e:\\geothermal-hot-spring-center-website\\ghcw_fe\\pages\\admin\\addaccount.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{D63C82C9-B3F6-491B-86E2-D2EE2709DC52}|GHCW_FE\\GHCW_FE.csproj|solutionrelative:ghcw_fe\\pages\\admin\\addaccount.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
@@ -35,19 +39,32 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "Helper.cs",
+              "DocumentMoniker": "E:\\Geothermal-Hot-Spring-Center-Website\\GHCW_BE\\Helpers\\Helper.cs",
+              "RelativeDocumentMoniker": "GHCW_BE\\Helpers\\Helper.cs",
+              "ToolTip": "E:\\Geothermal-Hot-Spring-Center-Website\\GHCW_BE\\Helpers\\Helper.cs",
+              "RelativeToolTip": "GHCW_BE\\Helpers\\Helper.cs",
+              "ViewState": "AQIAADMAAAAAAAAAAAAYwAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-21T15:30:38.683Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "AddAccount.cshtml",
               "DocumentMoniker": "E:\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\Pages\\Admin\\AddAccount.cshtml",
               "RelativeDocumentMoniker": "GHCW_FE\\Pages\\Admin\\AddAccount.cshtml",
               "ToolTip": "E:\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\Pages\\Admin\\AddAccount.cshtml",
               "RelativeToolTip": "GHCW_FE\\Pages\\Admin\\AddAccount.cshtml",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA8AAAAXAAAA",
+              "ViewState": "AQIAAGoBAAAAAAAAAAAAAAMAAAASAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2024-10-20T11:16:23.832Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "Dashboard.cshtml",
               "DocumentMoniker": "E:\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\Pages\\Admin\\Dashboard.cshtml",
               "RelativeDocumentMoniker": "GHCW_FE\\Pages\\Admin\\Dashboard.cshtml",
@@ -59,7 +76,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "UserManagement.cshtml",
               "DocumentMoniker": "E:\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\Pages\\Admin\\UserManagement.cshtml",
               "RelativeDocumentMoniker": "GHCW_FE\\Pages\\Admin\\UserManagement.cshtml",
