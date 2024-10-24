@@ -1,6 +1,8 @@
 using GHCW_BE.Mapper;
 using GHCW_BE.Models;
+using GHCW_BE.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.OData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -75,6 +77,19 @@ builder.Services.AddCors(options =>
                        .AllowAnyHeader();
     });
 });
+
+builder.Services.AddControllers().AddOData(opt => opt
+        .Count()
+        .Select()
+        .Expand()
+        .Filter()
+        .OrderBy()
+        .SetMaxTop(100));
+
+builder.Services.AddScoped<NewsService>();
+builder.Services.AddScoped<DiscountService>();
+builder.Services.AddScoped<ServicesService>();
+
 
 var app = builder.Build();
 
