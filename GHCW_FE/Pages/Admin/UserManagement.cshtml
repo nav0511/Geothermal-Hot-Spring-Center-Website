@@ -139,6 +139,7 @@
         /* User table */
         .user-table {
             width: 100%;
+            font-size: 12px;
             border-collapse: collapse;
             margin-top: 20px;
             background-color: white;
@@ -263,12 +264,12 @@
             <nav>
                 <ul>
                     <li><a href="https://localhost:7260/Admin/Dashboard"><i class="fas fa-chart-line"></i> Dashboard</a></li>
-                    <li><a href="#"><i class="fas fa-cogs"></i> Quản lý dịch vụ</a></li>
+                    <li><a href="https://localhost:7260/Admin/ServiceManagement"><i class="fas fa-cogs"></i> Quản lý dịch vụ</a></li>
                     <li class="active"><a href="https://localhost:7260/Admin/UserManagement"><i class="fas fa-users"></i> Quản lý người dùng</a></li>
-                    <li><a href="#"><i class="fas fa-ticket-alt"></i> Quản lý phiếu giảm giá</a></li>
-                    <li><a href="#"><i class="fas fa-newspaper"></i> Quản lý tin tức</a></li>
+                    <li><a href="https://localhost:7260/Admin/DiscountManagement"><i class="fas fa-ticket-alt"></i> Quản lý phiếu giảm giá</a></li>
+                    <li><a href="https://localhost:7260/Admin/NewsManagement"><i class="fas fa-newspaper"></i> Quản lý tin tức</a></li>
                     <li><a href="#"><i class="fas fa-bullhorn"></i> Quản lý tin khuyến mãi</a></li>
-                    <li><a href="#"><i class="fas fa-boxes"></i> Quản lý sản phẩm</a></li>
+                    <li><a href="https://localhost:7260/Admin/ProductManagement"><i class="fas fa-boxes"></i> Quản lý sản phẩm</a></li>
                 </ul>
             </nav>
         </aside>
@@ -282,7 +283,7 @@
 
             <div class="search-container">
                 @* <h3>Tất cả người dùng</h3> *@
-                <input type="text" placeholder="Tìm kiếm người dùng...">
+                <input type="text" placeholder="Tìm kiếm...">
                 <select>
                     <option value="0">Sắp xếp: chọn tùy chọn</option>
                     <option value="1">A-Z</option>
@@ -305,41 +306,44 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
+                    <tr onclick="window.location.href='/Admin/UserDetails'">
                         <td>1</td>
                         <td>Nguyen Van A</td>
                         <td>Customer</td>
                         <td>0933444233</td>
                         <td>anguyen12@gmail.com</td>
                         <td>Đống Đa, Hà Nội</td>
-                        <td><span class="status active">Active</span></td>
+                        <td><span class="status active">Hoạt động</span></td>
                     </tr>
-                    <tr>
+                    
+                    <tr onclick="window.location.href='/Admin/UserDetails'">
                         <td>2</td>
                         <td>Cao Duc B</td>
                         <td>Customer</td>
                         <td>0921223144</td>
                         <td>floyd@gmail.com</td>
                         <td>Nam Từ Liêm, Hà Nội</td>
-                        <td><span class="status inactive">Inactive</span></td>
+                        <td><span class="status inactive">Không hoạt động</span></td>
                     </tr>
-                    <tr>
+
+                    <tr onclick="window.location.href='/Admin/UserDetails'">
                         <td>3</td>
                         <td>Tran Hoai N</td>
                         <td>Customer</td>
                         <td>0987777333</td>
                         <td>ronald07@gmail.com</td>
                         <td>Thạch Thất, Hà Nội</td>
-                        <td><span class="status inactive">Inactive</span></td>
+                        <td><span class="status inactive">Không hoạt động</span></td>
                     </tr>
-                    <tr>
+                  
+                    <tr onclick="window.location.href='/Admin/UserDetails'">
                         <td>4</td>
                         <td>Dinh Tien M</td>
                         <td>Customer</td>
                         <td>0964462234</td>
                         <td>marvin98@gmail.com</td>
                         <td>Từ Sơn, Bắc Ninh</td>
-                        <td><span class="status active">Active</span></td>
+                        <td><span class="status active">Hoạt động</span></td>
                     </tr>
                 </tbody>
             </table>
