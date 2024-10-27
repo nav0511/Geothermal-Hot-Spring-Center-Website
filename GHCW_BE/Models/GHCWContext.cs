@@ -29,6 +29,20 @@ namespace GHCW_BE.Models
         public virtual DbSet<Ticket> Tickets { get; set; } = null!;
         public virtual DbSet<TicketDetail> TicketDetails { get; set; } = null!;
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                Console.WriteLine(Directory.GetCurrentDirectory());
+                IConfiguration config = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json", true, true)
+                    .Build();
+                var strConn = config["ConnectionStrings:MyCnn"];
+                optionsBuilder.UseSqlServer(strConn);
+            }
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Account>(entity =>
