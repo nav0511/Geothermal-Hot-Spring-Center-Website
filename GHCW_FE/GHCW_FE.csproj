@@ -146,7 +146,10 @@
   </ItemGroup>
 
   <ItemGroup>
+<<<<<<< HEAD
     <Folder Include="DTOs\" />
+=======
+>>>>>>> main
     <Folder Include="Models\" />
   </ItemGroup>
 
