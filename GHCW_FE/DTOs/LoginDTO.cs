@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace GHCW_FE.DTOs
+﻿namespace GHCW_FE.DTOs
 {
     public class LoginDTO
     {
@@ -13,6 +11,7 @@ namespace GHCW_FE.DTOs
         [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$",
         ErrorMessage = "Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character.")]
         public string Password { get; set; } = null!;
+        public string? Email { get; set; }
         public string? Type { get; set; }
     }
 

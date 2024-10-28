@@ -1,4 +1,5 @@
 ﻿@page
+@using GHCW_FE.DTOs
 @model IndexModel
 @{
     ViewData["Title"] = "Trang chủ";
@@ -79,57 +80,25 @@
             <h1>Tin tức mới nhất</h1>
         </div>
         <div class="row pb-3">
-            <div class="col-lg-4 col-md-6 mb-4 pb-2">
-                <div class="blog-item">
-                    <div class="position-relative">
-                        <img class="img-fluid w-100" src="img/blog-1.jpg" alt="">
-                        <div class="blog-date">
-                            <h6 class="font-weight-bold mb-n1">01</h6>
-                            <small class="text-white text-uppercase">Jan</small>
+            @foreach (NewsDTO n in Model.NewsDtos)
+            {
+                <div class="col-lg-4 col-md-6 mb-4 pb-2">
+                    <div class="blog-item">
+                        <div class="position-relative">
+                            <img class="img-fluid w-100" src="@n.Image" alt="">
+                            <div class="blog-date">
+                                <h6 class="font-weight-bold text-white mb-n1">@n.UploadDate.Value.Day / @n.UploadDate.Value.Month</h6>
+                            </div>
                         </div>
-                    </div>
-                    <div class="bg-white p-4">
-                        <div class="d-flex mb-2">
-                            <a class="text-primary text-uppercase text-decoration-none" href="">Thông báo 1</a>
+                        <div class="bg-white p-4">
+                            <div class="d-flex mb-2">
+                                <a class="text-primary text-uppercase text-decoration-none" href="">@n.Title</a>
+                            </div>
+                            <a class="h5 m-0 text-decoration-none" href="">@n.Description</a>
                         </div>
-                        <a class="h5 m-0 text-decoration-none" href="">Tin tức mới nhất Thông báo 1</a>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-4 col-md-6 mb-4 pb-2">
-                <div class="blog-item">
-                    <div class="position-relative">
-                        <img class="img-fluid w-100" src="img/blog-2.jpg" alt="">
-                        <div class="blog-date">
-                            <h6 class="font-weight-bold mb-n1">01</h6>
-                            <small class="text-white text-uppercase">Jan</small>
-                        </div>
-                    </div>
-                    <div class="bg-white p-4">
-                        <div class="d-flex mb-2">
-                            <a class="text-primary text-uppercase text-decoration-none" href="">Thông báo 1</a>
-                        </div>
-                        <a class="h5 m-0 text-decoration-none" href="">Tin tức mới nhất Thông báo 1</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 mb-4 pb-2">
-                <div class="blog-item">
-                    <div class="position-relative">
-                        <img class="img-fluid w-100" src="img/blog-3.jpg" alt="">
-                        <div class="blog-date">
-                            <h6 class="font-weight-bold mb-n1">01</h6>
-                            <small class="text-white text-uppercase">Jan</small>
-                        </div>
-                    </div>
-                    <div class="bg-white p-4">
-                        <div class="d-flex mb-2">
-                            <a class="text-primary text-uppercase text-decoration-none" href="">Thông báo 1</a>
-                        </div>
-                        <a class="h5 m-0 text-decoration-none" href="">Tin tức mới nhất Thông báo 1</a>
-                    </div>
-                </div>
-            </div>
+            }
         </div>
     </div>
 </div>
@@ -142,60 +111,22 @@
             <h1>Các dịch vụ của chúng tôi</h1>
         </div>
         <div class="row">
-            <div class="col-lg-4 col-md-6 mb-4">
-                <div class="package-item bg-white mb-2">
-                    <img class="img-fluid" src="img/package-3.jpg" alt="">
-                    <div class="p-4">
-                        <div class="d-flex justify-content-between mb-3">
-                            <small class="m-0"><i class="fa fa-clock text-primary mr-2"></i>40' - 1h</small>
-                            <small class="m-0"><i class="fa fa-user text-primary mr-2"></i>8 - 10 người</small>
-                        </div>
-                        <a class="h5 text-decoration-none" href="">Tắm khoáng nóng</a>
-                        <div class="border-top mt-4 pt-4">
-                            <div class="d-flex justify-content-between">
-                                <h6 class="m-0"><i class="fa fa-star text-primary mr-2"></i>4.5 <small>(250)</small></h6>
-                                <h5 class="m-0">100.000₫</h5>
+            @foreach (ServiceDTO s in Model.ServiceDtos)
+            {
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="package-item bg-white mb-2">
+                        <img class="img-fluid" src="@s.Image" alt="">
+                        <div class="p-4">
+                            <div class="d-flex justify-content-between mb-3">
+                                <small class="m-0"><i class="fa fa-clock text-primary mr-2"></i>@s.Time</small>
+                                <h5 class="m-0">@(s.Price * 1000)₫</h5>
                             </div>
+                            <a class="h5 text-decoration-none" href="">@s.Name</a>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-4 col-md-6 mb-4">
-                <div class="package-item bg-white mb-2">
-                    <img class="img-fluid" src="img/package-5.jpg" alt="">
-                    <div class="p-4">
-                        <div class="d-flex justify-content-between mb-3">
-                            <small class="m-0"><i class="fa fa-clock text-primary mr-2"></i>40' - 1h</small>
-                            <small class="m-0"><i class="fa fa-user text-primary mr-2"></i>8 - 10 người</small>
-                        </div>
-                        <a class="h5 text-decoration-none" href="">Tắm khoáng nóng</a>
-                        <div class="border-top mt-4 pt-4">
-                            <div class="d-flex justify-content-between">
-                                <h6 class="m-0"><i class="fa fa-star text-primary mr-2"></i>4.5 <small>(250)</small></h6>
-                                <h5 class="m-0">100.000₫</h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 mb-4">
-                <div class="package-item bg-white mb-2">
-                    <img class="img-fluid" src="img/package-6.jpg" alt="">
-                    <div class="p-4">
-                        <div class="d-flex justify-content-between mb-3">
-                            <small class="m-0"><i class="fa fa-clock text-primary mr-2"></i>40' - 1h</small>
-                            <small class="m-0"><i class="fa fa-user text-primary mr-2"></i>8 - 10 người</small>
-                        </div>
-                        <a class="h5 text-decoration-none" href="">Tắm khoáng nóng</a>
-                        <div class="border-top mt-4 pt-4">
-                            <div class="d-flex justify-content-between">
-                                <h6 class="m-0"><i class="fa fa-star text-primary mr-2"></i>4.5 <small>(250)</small></h6>
-                                <h5 class="m-0">100.000₫</h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            }
+            
         </div>
     </div>
 </div>

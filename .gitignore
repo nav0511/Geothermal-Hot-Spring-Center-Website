@@ -4,6 +4,9 @@
 *.user
 *.userosscache
 *.sln.docstates
+*.bin
+.dbtcache.v2
+.futdcache.v2
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -390,3 +393,4 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/.vs
