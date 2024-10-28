@@ -1,3 +1,5 @@
+using GHCW_BE.DTOs;
+using GHCW_BE.Helpers;
 using GHCW_BE.Mapper;
 using GHCW_BE.Models;
 using GHCW_BE.Services;
@@ -17,6 +19,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<GHCWContext>(opt => opt.UseSqlServer(builder.Configuration["ConnectionStrings:MyCnn"]));
 builder.Services.AddAutoMapper(typeof(MapperProfile));
+builder.Services.AddScoped<Helper>();
+builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddAuthentication(opt =>
 {
     opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -35,6 +39,7 @@ builder.Services.AddAuthentication(opt =>
         ValidateAudience = true,
         ValidAudience = builder.Configuration["JWT:Audience"],
         RoleClaimType = "Type",
+        ClockSkew = TimeSpan.Zero
     };
 });
 builder.Services.AddSwaggerGen(c =>
@@ -102,6 +107,7 @@ if (app.Environment.IsDevelopment())
 app.UseCors("Cors");
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
