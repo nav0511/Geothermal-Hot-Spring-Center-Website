@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using GHCW_FE.Models
+@using System.Text.Json
+@using Microsoft.AspNetCore.Http
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -66,38 +69,25 @@
                             <a asp-page="/Services/Index" class="nav-item nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/Services/Index" ? "active" : "")">Dịch vụ</a>
                             <a asp-page="/Book/Index" class="nav-item nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/Book/Index" ? "active" : "")">Đặt vé</a>
                             <a asp-page="/About" class="nav-item nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/About" ? "active" : "")">Giới thiệu</a>
-                            <a asp-page="/Authentications/Login" class="nav-item nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/Authentications/Login" ? "active" : "")">Đăng nhập</a>
-                            @* <li class="user-footer">
-                                <div class="pull-left">
-                                    @if (Context.Session.GetString("acc") != null)
-                                    {
-                                        var u = new Account();
-                                        u = JsonSerializer.Deserialize<Account>
-                                        (Context.Session.GetString("acc"));
-                                        if (u.Type == "teacher")
-                                        {
-                                            <a href="#" class="btn btn-default btn-flat">Profile</a>
-                                        }
-                                        if (account.Type == "student")
-                                        {
-                                            <a href="/Student/profile" class="btn btn-default btn-flat">Profile</a>
-                                        }
-                                        if (account.Type == "admin")
-                                        {
-                                            <a href="#" class="btn btn-default btn-flat">Profile</a>
-                                        }
-                                    }
+                            @if (Context.Session.GetString("acc") != null)
+                            {
+                                var account = JsonSerializer.Deserialize<Account>(Context.Session.GetString("acc"));
+                                <div class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown">
+                                        @account.Name
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <a class="dropdown-item" asp-page="/User/Profile">Thông tin cá nhân</a>
+                                        <form method="post" class="dropdown-item" asp-page="/Authentications/Login" asp-page-handler="LogOut" style="width:100%">
+                                            <button type="submit" style="border:none; background:none; padding:0; text-align:left;">Đăng xuất</button>
+                                        </form>
+                                    </div>
                                 </div>
-                                <div class="pull-right">
-                                    <a href="#" class="btn btn-default btn-flat">Sign out</a>
-                                </div>
-                            </li> *@
-                            @* <div class="nav-item dropdown">
-                                <a asp-page="/Authentications/Login" class="nav-link dropdown-toggle @(ViewContext.RouteData.Values["page"]?.ToString() == "/Authentications/Login" ? "active" : "")" data-toggle="dropdown">Đăng nhập</a>
-                                <div class="dropdown-menu border-0 rounded-0 m-0">
-                                    <a asp-page="/Authentications/Register" class="dropdown-item @(ViewContext.RouteData.Values["page"]?.ToString() == "/Authentications/Register" ? "active" : "")">Đăng ký</a>
-                                </div>
-                            </div> *@
+                            }
+                            else
+                            {
+                                <a asp-page="/Authentications/Login" class="nav-item nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/Authentications/Login" ? "active" : "")">Đăng nhập</a>
+                            }
                         </div>
                     </div>
                 </nav>

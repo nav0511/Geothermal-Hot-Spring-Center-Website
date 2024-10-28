@@ -13,9 +13,9 @@ namespace GHCW_BE.Models
 
         public int Id { get; set; }
         public int? AccountId { get; set; }
-        public string? FullName { get; set; }
-        public string? Email { get; set; }
-        public string? PhoneNumber { get; set; }
+        public string FullName { get; set; } = null!;
+        public string Email { get; set; } = null!;
+        public string PhoneNumber { get; set; } = null!;
 
         public virtual Account? Account { get; set; }
         public virtual ICollection<Bill> Bills { get; set; }

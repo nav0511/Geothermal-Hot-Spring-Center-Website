@@ -14,10 +14,10 @@ namespace GHCW_BE.Models
 
         public string Code { get; set; } = null!;
         public string? Name { get; set; }
-        public DateTime? StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
         public string? Description { get; set; }
-        public bool? IsAvailable { get; set; }
+        public bool IsAvailable { get; set; }
 
         public virtual ICollection<Bill> Bills { get; set; }
         public virtual ICollection<News> News { get; set; }
