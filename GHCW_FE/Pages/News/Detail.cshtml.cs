@@ -10,4 +10,3 @@ namespace GHCW_FE.Pages.News
         }
     }
 }
-s

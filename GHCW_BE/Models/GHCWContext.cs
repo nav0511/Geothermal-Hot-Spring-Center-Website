@@ -33,13 +33,8 @@ namespace GHCW_BE.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                Console.WriteLine(Directory.GetCurrentDirectory());
-                IConfiguration config = new ConfigurationBuilder()
-                    .SetBasePath(Directory.GetCurrentDirectory())
-                    .AddJsonFile("appsettings.json", true, true)
-                    .Build();
-                var strConn = config["ConnectionStrings:MyCnn"];
-                optionsBuilder.UseSqlServer(strConn);
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("server=THANH;database=GHCW;uid=sa;pwd=123;");
             }
         }
 
@@ -47,9 +42,11 @@ namespace GHCW_BE.Models
         {
             modelBuilder.Entity<Account>(entity =>
             {
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.ActivationCode)
+                    .HasMaxLength(6)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Address).HasMaxLength(255);
 
@@ -68,15 +65,15 @@ namespace GHCW_BE.Models
                 entity.Property(e => e.PhoneNumber)
                     .HasMaxLength(10)
                     .IsUnicode(false);
+
+                entity.Property(e => e.RefreshToken).IsUnicode(false);
             });
 
             modelBuilder.Entity<Bill>(entity =>
             {
                 entity.ToTable("Bill");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.DiscountCode)
                     .HasMaxLength(255)
@@ -89,23 +86,25 @@ namespace GHCW_BE.Models
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.Bills)
                     .HasForeignKey(d => d.CustomerId)
-                    .HasConstraintName("FK__Bill__CustomerId__571DF1D5");
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Bill__CustomerId__4CA06362");
 
                 entity.HasOne(d => d.DiscountCodeNavigation)
                     .WithMany(p => p.Bills)
                     .HasForeignKey(d => d.DiscountCode)
-                    .HasConstraintName("FK__Bill__DiscountCo__5812160E");
+                    .HasConstraintName("FK__Bill__DiscountCo__4D94879B");
 
                 entity.HasOne(d => d.Receptionist)
                     .WithMany(p => p.Bills)
                     .HasForeignKey(d => d.ReceptionistId)
-                    .HasConstraintName("FK__Bill__Receptioni__5629CD9C");
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Bill__Receptioni__4E88ABD4");
             });
 
             modelBuilder.Entity<BillDetail>(entity =>
             {
                 entity.HasKey(e => new { e.BillId, e.ProductId })
-                    .HasName("PK__BillDeta__DAB2300645A427F0");
+                    .HasName("PK__BillDeta__DAB230067529CC78");
 
                 entity.ToTable("BillDetail");
 
@@ -117,22 +116,20 @@ namespace GHCW_BE.Models
                     .WithMany(p => p.BillDetails)
                     .HasForeignKey(d => d.BillId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__BillDetai__BillI__5AEE82B9");
+                    .HasConstraintName("FK__BillDetai__BillI__4F7CD00D");
 
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.BillDetails)
                     .HasForeignKey(d => d.ProductId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__BillDetai__Produ__5BE2A6F2");
+                    .HasConstraintName("FK__BillDetai__Produ__5070F446");
             });
 
             modelBuilder.Entity<Category>(entity =>
             {
                 entity.ToTable("Category");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Description).HasMaxLength(500);
 
@@ -143,9 +140,7 @@ namespace GHCW_BE.Models
             {
                 entity.ToTable("Customer");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Email)
                     .HasMaxLength(255)
@@ -160,13 +155,13 @@ namespace GHCW_BE.Models
                 entity.HasOne(d => d.Account)
                     .WithMany(p => p.Customers)
                     .HasForeignKey(d => d.AccountId)
-                    .HasConstraintName("FK__Customer__Accoun__398D8EEE");
+                    .HasConstraintName("FK__Customer__Accoun__5165187F");
             });
 
             modelBuilder.Entity<Discount>(entity =>
             {
                 entity.HasKey(e => e.Code)
-                    .HasName("PK__Discount__3213E83F18D0F5E8");
+                    .HasName("PK__Discount__A25C5AA6BDA97C65");
 
                 entity.ToTable("Discount");
 
@@ -185,9 +180,7 @@ namespace GHCW_BE.Models
 
             modelBuilder.Entity<News>(entity =>
             {
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Description).HasMaxLength(4000);
 
@@ -206,16 +199,14 @@ namespace GHCW_BE.Models
                 entity.HasOne(d => d.Discount)
                     .WithMany(p => p.News)
                     .HasForeignKey(d => d.DiscountId)
-                    .HasConstraintName("FK__News__DiscountId__412EB0B6");
+                    .HasConstraintName("FK__News__DiscountId__52593CB8");
             });
 
             modelBuilder.Entity<Product>(entity =>
             {
                 entity.ToTable("Product");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
 
@@ -234,16 +225,15 @@ namespace GHCW_BE.Models
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.Products)
                     .HasForeignKey(d => d.CategoryId)
-                    .HasConstraintName("FK__Product__Categor__49C3F6B7");
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Product__Categor__534D60F1");
             });
 
             modelBuilder.Entity<Schedule>(entity =>
             {
                 entity.ToTable("Schedule");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Date).HasColumnType("datetime");
 
@@ -252,14 +242,13 @@ namespace GHCW_BE.Models
                 entity.HasOne(d => d.Receptionist)
                     .WithMany(p => p.Schedules)
                     .HasForeignKey(d => d.ReceptionistId)
-                    .HasConstraintName("FK__Schedule__Recept__3C69FB99");
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Schedule__Recept__5441852A");
             });
 
             modelBuilder.Entity<Service>(entity =>
             {
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Description).HasMaxLength(500);
 
@@ -276,9 +265,7 @@ namespace GHCW_BE.Models
             {
                 entity.ToTable("Ticket");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.BookDate).HasColumnType("datetime");
 
@@ -293,23 +280,24 @@ namespace GHCW_BE.Models
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.Tickets)
                     .HasForeignKey(d => d.CustomerId)
-                    .HasConstraintName("FK__Ticket__Customer__4D94879B");
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Ticket__Customer__5535A963");
 
                 entity.HasOne(d => d.DiscountCodeNavigation)
                     .WithMany(p => p.Tickets)
                     .HasForeignKey(d => d.DiscountCode)
-                    .HasConstraintName("FK__Ticket__Discount__4F7CD00D");
+                    .HasConstraintName("FK__Ticket__Discount__5629CD9C");
 
                 entity.HasOne(d => d.Receptionist)
                     .WithMany(p => p.Tickets)
                     .HasForeignKey(d => d.ReceptionistId)
-                    .HasConstraintName("FK__Ticket__Receptio__4E88ABD4");
+                    .HasConstraintName("FK__Ticket__Receptio__571DF1D5");
             });
 
             modelBuilder.Entity<TicketDetail>(entity =>
             {
                 entity.HasKey(e => new { e.TicketId, e.ServiceId })
-                    .HasName("PK__TicketDe__CD7D7D0770213C7A");
+                    .HasName("PK__TicketDe__CD7D7D073EBD9B8B");
 
                 entity.ToTable("TicketDetail");
 
@@ -321,13 +309,13 @@ namespace GHCW_BE.Models
                     .WithMany(p => p.TicketDetails)
                     .HasForeignKey(d => d.ServiceId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__TicketDet__Servi__534D60F1");
+                    .HasConstraintName("FK__TicketDet__Servi__5812160E");
 
                 entity.HasOne(d => d.Ticket)
                     .WithMany(p => p.TicketDetails)
                     .HasForeignKey(d => d.TicketId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__TicketDet__Ticke__52593CB8");
+                    .HasConstraintName("FK__TicketDet__Ticke__59063A47");
             });
 
             OnModelCreatingPartial(modelBuilder);

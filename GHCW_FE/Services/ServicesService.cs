@@ -1,4 +1,5 @@
 ﻿using GHCW_FE.DTOs;
+using System.Net;
 
 namespace GHCW_FE.Services
 {
@@ -13,5 +14,32 @@ namespace GHCW_FE.Services
             string url = "Service/Total";
             return await GetData<int>(url);
         }
+
+        public async Task<ServiceDTO?> GetServiceByID(int id)
+        {
+            string url = $"Service/{id}";
+            return await GetData<ServiceDTO>(url);
+        }
+
+        public async Task<HttpStatusCode> UpdateService(ServiceDTO service)
+        {
+            string url = $"Service/{service.Id}";
+            return await PutData(url, service);
+        }
+
+        public async Task<HttpStatusCode> DeleteService(int id)
+        {
+            string url = $"Service/{id}";
+            return await DeleteData(url);
+        }
+
+        public async Task<HttpStatusCode> CreateService(ServiceDTO service)
+        {
+            string url = "Service"; 
+            return await PushData(url, service); 
+        }
+
+
+
     }
 }
