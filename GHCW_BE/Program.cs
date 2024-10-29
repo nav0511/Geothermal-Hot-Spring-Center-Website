@@ -94,6 +94,9 @@ builder.Services.AddControllers().AddOData(opt => opt
 builder.Services.AddScoped<NewsService>();
 builder.Services.AddScoped<DiscountService>();
 builder.Services.AddScoped<ServicesService>();
+builder.Services.AddScoped<ProductService>();
+builder.Services.AddScoped<CategoryService>();
+
 
 
 var app = builder.Build();
