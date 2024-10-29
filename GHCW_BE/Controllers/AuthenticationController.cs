@@ -284,5 +284,26 @@ namespace GHCW_BE.Controllers
             }
             return BadRequest("Bạn phải đăng nhập để sử dụng tính năng này");
         }
+
+        [Authorize]
+        [HttpPost("adduser")]
+        public async Task<IActionResult> AddNewUser(Account a)
+        {
+
+        }
+
+        [Authorize]
+        [HttpPut("edituser")]
+        public async Task<IActionResult> EditUser(Account a)
+        {
+
+        }
+
+        [Authorize]
+        [HttpDelete("useractivation")]
+        public async Task<IActionResult> UserActivation(int uid)
+        {
+
+        }
     }
 }
