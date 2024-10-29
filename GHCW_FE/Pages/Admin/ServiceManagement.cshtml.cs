@@ -14,7 +14,7 @@ namespace GHCW_FE.Pages.Admin
 
         public int CurrentPage { get; set; }
         public int TotalPages { get; set; }
-        private const int PageSize = 8;
+        private const int PageSize = 6;
 
         public async Task OnGet(int pageNumber = 1)
         {

@@ -27,7 +27,6 @@ namespace GHCW_FE.Pages.Admin
 
         public async Task<IActionResult> OnPostUpdateAsync(int id)
         {
-            Console.WriteLine($"Received ID: {id}");
             if (id <= 0)
             {
                 ModelState.AddModelError(string.Empty, "ID dịch vụ không hợp lệ.");

@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 ﻿using AutoMapper;
 using GHCW_BE.DTOs;
 using GHCW_BE.Services;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.EntityFrameworkCore;
 

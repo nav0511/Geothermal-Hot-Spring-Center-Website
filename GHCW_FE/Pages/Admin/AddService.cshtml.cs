@@ -32,12 +32,7 @@ namespace GHCW_FE.Pages.Admin
                 Image = "/images/" + Request.Form["image"].ToString(),
             };
 
-            Console.WriteLine($"Name: {Request.Form["name"]}");
-            Console.WriteLine($"Price: {Request.Form["price"]}");
-            Console.WriteLine($"Time: {Request.Form["time"]}");
-            Console.WriteLine($"Description: {Request.Form["description"]}");
-            Console.WriteLine($"Image: {Request.Form["image"]}");
-
+            
             var response = await _servicesService.CreateService(service);
 
             if (response == HttpStatusCode.OK)
