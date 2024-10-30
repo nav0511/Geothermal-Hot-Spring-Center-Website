@@ -20,6 +20,8 @@ namespace GHCW_BE.Services
         public async Task<Service> GetServiceById(int id)
         {
             return await _context.Services.FirstOrDefaultAsync(n => n.Id == id);
+        }
+
         public async Task UpdateService(Service service)
         {
             _context.Services.Update(service);
