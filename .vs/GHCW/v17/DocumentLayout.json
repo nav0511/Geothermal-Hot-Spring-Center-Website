@@ -5,6 +5,10 @@
     {
       "AbsoluteMoniker": "D:0:0:{D63C82C9-B3F6-491B-86E2-D2EE2709DC52}|GHCW_FE\\GHCW_FE.csproj|d:\\fa24\\datn\\project\\geothermal-hot-spring-center-website\\ghcw_fe\\pages\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{D63C82C9-B3F6-491B-86E2-D2EE2709DC52}|GHCW_FE\\GHCW_FE.csproj|solutionrelative:ghcw_fe\\pages\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D63C82C9-B3F6-491B-86E2-D2EE2709DC52}|GHCW_FE\\GHCW_FE.csproj|d:\\fa24\\datn\\project\\geothermal-hot-spring-center-website\\ghcw_fe\\pages\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D63C82C9-B3F6-491B-86E2-D2EE2709DC52}|GHCW_FE\\GHCW_FE.csproj|solutionrelative:ghcw_fe\\pages\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -88,9 +92,22 @@
               "RelativeDocumentMoniker": "GHCW_FE\\Pages\\Shared\\_Layout.cshtml",
               "ToolTip": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\Pages\\Shared\\_Layout.cshtml",
               "RelativeToolTip": "GHCW_FE\\Pages\\Shared\\_Layout.cshtml",
-              "ViewState": "AQIAAE4AAAAAAAAAAAAAAGMAAAAZAAAA",
+              "ViewState": "AQIAAE4AAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-10-15T13:47:37.27Z",
+              "WhenOpened": "2024-10-30T08:18:19.529Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\Pages\\Index.cshtml",
+              "RelativeDocumentMoniker": "GHCW_FE\\Pages\\Index.cshtml",
+              "ToolTip": "D:\\FA24\\DATN\\Project\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\Pages\\Index.cshtml",
+              "RelativeToolTip": "GHCW_FE\\Pages\\Index.cshtml",
+              "ViewState": "AQIAABIAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-30T08:18:16.436Z",
               "EditorCaption": ""
             }
           ]

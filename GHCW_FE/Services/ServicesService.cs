@@ -15,10 +15,31 @@ namespace GHCW_FE.Services
             return await GetData<int>(url);
         }
 
-        public async Task<ServiceDTO> GetServiceById(int id)
+        public async Task<ServiceDTO?> GetServiceByID(int id)
         {
-            string url = $"Service/GetById/{id}";
+            string url = $"Service/{id}";
             return await GetData<ServiceDTO>(url);
         }
+
+        public async Task<HttpStatusCode> UpdateService(ServiceDTO service)
+        {
+            string url = $"Service/{service.Id}";
+            return await PutData(url, service);
+        }
+
+        public async Task<HttpStatusCode> DeleteService(int id)
+        {
+            string url = $"Service/{id}";
+            return await DeleteData(url);
+        }
+
+        public async Task<HttpStatusCode> CreateService(ServiceDTO service)
+        {
+            string url = "Service"; 
+            return await PushData(url, service); 
+        }
+
+
+
     }
 }

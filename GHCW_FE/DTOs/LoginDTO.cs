@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+
 namespace GHCW_FE.DTOs
 {
     public class LoginDTO

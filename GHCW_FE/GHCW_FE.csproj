@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -9,7 +9,6 @@
   <ItemGroup>
     <None Include="wwwroot\css\style.css" />
     <None Include="wwwroot\css\style.min.css" />
-    <None Include="wwwroot\img\about-1.jpg" />
     <None Include="wwwroot\img\about-2.jpg" />
     <None Include="wwwroot\img\about.jpg" />
     <None Include="wwwroot\img\blog-1.jpg" />
@@ -30,15 +29,6 @@
     <None Include="wwwroot\img\package-4.jpg" />
     <None Include="wwwroot\img\package-5.jpg" />
     <None Include="wwwroot\img\package-6.jpg" />
-    <None Include="wwwroot\img\team-1.jpg" />
-    <None Include="wwwroot\img\team-2.jpg" />
-    <None Include="wwwroot\img\team-3.jpg" />
-    <None Include="wwwroot\img\team-4.jpg" />
-    <None Include="wwwroot\img\testimonial-1.jpg" />
-    <None Include="wwwroot\img\testimonial-2.jpg" />
-    <None Include="wwwroot\img\testimonial-3.jpg" />
-    <None Include="wwwroot\img\testimonial-4.jpg" />
-    <None Include="wwwroot\img\user.jpg" />
     <None Include="wwwroot\js\main.js" />
     <None Include="wwwroot\lib\easing\easing.js" />
     <None Include="wwwroot\lib\easing\easing.min.js" />
@@ -156,7 +146,21 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Services\" />
+
+    <Folder Include="Models\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.35">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.35" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.35">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
 </Project>

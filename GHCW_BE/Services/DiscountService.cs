@@ -1,5 +1,4 @@
 ﻿using GHCW_BE.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace GHCW_BE.Services
 {
