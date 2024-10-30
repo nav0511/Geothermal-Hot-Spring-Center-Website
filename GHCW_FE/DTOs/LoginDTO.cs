@@ -1,6 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
+<<<<<<< HEAD
 namespace GHCW_BE.DTOs
+=======
+namespace GHCW_FE.DTOs
+>>>>>>> 8b5e9fcb489bcfbf172a08a5baaca5deee132c4b
 {
     public class LoginDTO
     {
