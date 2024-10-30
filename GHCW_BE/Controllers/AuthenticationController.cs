@@ -192,63 +192,41 @@ namespace GHCW_BE.Controllers
             return Ok(user);
         }
 
-        [Authorize]
+        [Authorize(Roles = "0")]
         [HttpGet("userlist")]
         public async Task<IActionResult> GetUserList()
         {
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-
-            if (identity != null)
+            var acc = await _service.GetUserList();
+            if (acc == null)
             {
-                var roleClaim = identity.FindFirst("Role");
-
-                if (roleClaim != null && roleClaim.Value == "0")
-                {
-                    var acc = await _service.GetUserList();
-                    return Ok(acc);
-                }
+                return NotFound("Danh sách người dùng trống");
             }
-
-            return BadRequest("Bạn không có quyền truy cập vào danh sách người dùng");
+            return Ok(acc);
         }
 
-        [Authorize]
+        [Authorize(Roles = "0, 1")]
         [HttpGet("employeelist")]
         public async Task<IActionResult> GetEmployeeList()
         {
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-
-            if (identity != null)
+            var acc = await _service.GetEmployeeList();
+            if (acc == null)
             {
-                var roleClaim = identity.FindFirst("Role");
-
-                if (roleClaim != null && roleClaim.Value == "0" || roleClaim.Value == "1")
-                {
-                    var acc = await _service.GetEmployeeList();
-                    return Ok(acc);
-                }
+                return NotFound("Danh sách nhân viên trống");
             }
 
-            return BadRequest("Bạn không có quyền truy cập vào danh sách nhân viên");
+            return Ok(acc);
         }
 
-        [Authorize]
+        [Authorize(Roles = "0, 1, 2, 3")]
         [HttpGet("customerlist")]
         public async Task<IActionResult> GetCustomerList()
         {
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-
-            if (identity != null)
+            var acc = await _service.GetCustomerList();
+            if (acc == null)
             {
-                var roleClaim = identity.FindFirst("Role");
-
-                if (roleClaim != null && roleClaim.Value == "0" || roleClaim.Value == "1" || roleClaim.Value == "2" || roleClaim.Value == "3")
-                {
-                    var acc = await _service.GetCustomerList();
-                    return Ok(acc);
-                }
+                return NotFound("Danh sách khách hàng trống");
             }
-            return BadRequest("Bạn không có quyền truy cập vào danh sách khách hàng");
+            return Ok(acc);
         }
 
         [Authorize]
@@ -283,6 +261,36 @@ namespace GHCW_BE.Controllers
                 }
             }
             return BadRequest("Bạn phải đăng nhập để sử dụng tính năng này");
+        }
+
+        [Authorize]
+        [HttpPost("adduser")]
+        public async Task<IActionResult> AddNewUser(Account a)
+        {
+            return Ok(a);
+        }
+
+        [Authorize]
+        [HttpPut("edituser")]
+        public async Task<IActionResult> EditUser(Account a)
+        {
+            var user = await _service.GetUserProfileById(a.Id);
+            return Ok(a);
+        }
+
+        [Authorize]
+        [HttpPut("updateprofile")]
+        public async Task<IActionResult> UpdateProfile(Account a)
+        {
+            return Ok(a);
+        }
+
+        [Authorize]
+        [HttpDelete("useractivation")]
+        public async Task<IActionResult> UserActivation(int uid)
+        {
+            await _service.UserActivation(uid);
+            return Ok();
         }
     }
 }

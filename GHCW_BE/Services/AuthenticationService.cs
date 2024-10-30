@@ -208,10 +208,23 @@ namespace GHCW_BE.Services
 
 
         //cập nhật profile của user
-        public async Task UpdateProfile(Account user)
+        public async Task UpdateProfile(Account a)
         {
-            _context.Accounts.Update(user);
-            await _context.SaveChangesAsync();
+            var user = await _context.Accounts.FirstOrDefaultAsync(u => u.Id == a.Id);
+            if (user != null)
+            {
+                user.Name = a.Name;
+                user.Address = a.Address;
+                user.PhoneNumber = a.PhoneNumber;
+                user.DoB = a.DoB;
+                user.Gender = a.Gender;
+                _context.Accounts.Update(user);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                throw new KeyNotFoundException("User not found.");
+            }
         }
 
         //Đổi password
@@ -240,6 +253,18 @@ namespace GHCW_BE.Services
         {
             a.RefreshToken = null;
             _context.Accounts.Update(a);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UserActivation(int uid)
+        {
+            var acc = await _context.Accounts.FirstOrDefaultAsync(x => x.Id == uid);
+            if (acc == null)
+            {
+                return;
+            }
+            acc.IsActive = !acc.IsActive;
+
             await _context.SaveChangesAsync();
         }
     }
