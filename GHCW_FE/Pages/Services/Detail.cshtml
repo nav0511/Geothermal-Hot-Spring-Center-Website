@@ -1,0 +1,60 @@
+﻿@page
+@using GHCW_FE.DTOs
+@model GHCW_FE.Pages.Services.DetailModel
+@{
+}
+
+@if (Model.Service != null)
+{
+    <!-- Services Start -->
+    <div class="container-fluid py-5">
+        <div class="container py-5">
+            <div class="row">
+                <div class="col-lg-8">
+                    <!-- Services Detail Start -->
+                    <div class="pb-3">
+                        <div class="">
+                            <div class="d-flex m-3">
+                                <a class="text-primary text-uppercase text-decoration-none" asp-page="/Services/Index">Tin tức</a>
+                                <span class="text-primary px-2">|</span>
+                                <a class="text-black text-uppercase text-decoration-none" href="">@Model.Service.Name</a>
+                            </div>
+                            <div class="position-relative">
+                                <img class="img-fluid w-100" src="@Model.Service.Image" alt="">
+                                <div class="blog-date">
+                                    <h6 class="font-weight-bold text-white mb-n1">
+                                        @Model.Service.Time
+                                    </h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white mb-3" style="padding: 30px;">
+                            <h2 class="mb-3">@Model.Service.Name</h2>
+                            <p>
+                                @Model.Service.Description
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Services Detail End -->
+                </div>
+
+                <div class="col-lg-4 mt-5 mt-lg-0">
+                    <div class="mb-5">
+                        <h4 class="text-uppercase mb-4" style="letter-spacing: 5px; padding-top: 3rem;">Các dịch vụ khác</h4>
+                        @foreach (ServiceDTO s in Model.ServiceDTOs)
+                        {
+                            <a class="d-flex align-items-center text-decoration-none bg-white mb-3" asp-route-Id="@s.Id">
+                                <img class="img-fluid" src="@s.Image" alt="" style="max-width: 100px; max-height: 100px;">
+                                <div class="pl-3 m-1">
+                                    <h6>@s.Name</h6>
+                                    <small>@s.Time</small>
+                                </div>
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Services End -->
+}
