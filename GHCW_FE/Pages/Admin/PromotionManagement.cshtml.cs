@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace GHCW_FE.Pages.Admin
 {
-    public class NewsManagementModel : PageModel
+    public class PromotionManagementModel : PageModel
     {
         private NewsService _newsService = new NewsService();
 
@@ -20,10 +20,10 @@ namespace GHCW_FE.Pages.Admin
             CurrentPage = pageNumber;
             int skip = (pageNumber - 1) * PageSize;
 
-            int totalNewsCount = _newsService.GetTotalRegularNews().Result;
+            int totalNewsCount = _newsService.GetTotalPromotionNews().Result;
             TotalPages = (int)Math.Ceiling((double)totalNewsCount / PageSize);
 
-            NewsDTOs = await _newsService.GetNews($"News?$filter=DiscountId eq null&top={PageSize}&$skip={skip}");
+            NewsDTOs = await _newsService.GetNews($"News?$filter=DiscountId ne null&top={PageSize}&$skip={skip}");
         }
     }
 }

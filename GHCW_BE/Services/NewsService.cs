@@ -18,5 +18,7 @@ namespace GHCW_BE.Services
             return _context.News.Include(n => n.Discount).AsQueryable();
         }
 
+        
+
     }
 }

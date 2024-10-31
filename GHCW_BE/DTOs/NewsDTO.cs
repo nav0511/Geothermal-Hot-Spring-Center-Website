@@ -13,4 +13,6 @@ namespace GHCW_BE.DTOs
         public bool? IsActive { get; set; }
         public virtual DiscountDTO? Discount { get; set; }
     }
+
+
 }

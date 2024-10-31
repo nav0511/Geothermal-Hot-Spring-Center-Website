@@ -1,4 +1,5 @@
 ﻿using GHCW_BE.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace GHCW_BE.Services
 {
@@ -16,6 +17,11 @@ namespace GHCW_BE.Services
             return _context.Services.AsQueryable();
         }
 
+        public async Task<Service> GetServiceById(int id)
+        {
+            return await _context.Services.FirstOrDefaultAsync(n => n.Id == id);
+        }
+        
         public async Task UpdateService(Service service)
         {
             _context.Services.Update(service);

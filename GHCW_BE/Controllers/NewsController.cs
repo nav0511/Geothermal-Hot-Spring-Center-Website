@@ -38,5 +38,21 @@ namespace GHCW_BE.Controllers
             var list = _newsService.GetListNews();
             return Ok(list.Count());
         }
+
+        [HttpGet("Reguler")]
+        public async Task<IActionResult> GetTotalRegularNews()
+        {
+            var list = _newsService.GetListNews().Where(r => r.DiscountId == null);
+            return Ok(list.Count());
+        }
+
+        [HttpGet("Promotion")]
+        public async Task<IActionResult> GetTotalPromotionNews()
+        {
+            var list = _newsService.GetListNews().Where(r => r.DiscountId != null);
+            return Ok(list.Count());
+        }
+
+
     }
 }
