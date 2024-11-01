@@ -15,6 +15,7 @@ namespace GHCW_BE.Mapper
             CreateMap<Service, ServiceDTO2>();
             CreateMap<Product, ProductDTO>();
             CreateMap<Product, ProductDTO2>();
+            CreateMap<Product, ProductDTOImg>();
             CreateMap<Category, CategoryDTO>();
 
 
@@ -25,6 +26,7 @@ namespace GHCW_BE.Mapper
             CreateMap<ServiceDTO2, Service>();
             CreateMap<ProductDTO, Product>();
             CreateMap<ProductDTO2, Product>();
+            CreateMap<ProductDTOImg, Product>();
             CreateMap<CategoryDTO, Category>();
 
 

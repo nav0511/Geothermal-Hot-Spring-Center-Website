@@ -25,6 +25,8 @@ namespace GHCW_FE.Services
         {
             string url = $"News/GetByDiscountCode/{code}";
             return await GetData<NewsDTO>(url);
+        }
+
         public async Task<int> GetTotalRegularNews()
         {
             string url = "News/Reguler";

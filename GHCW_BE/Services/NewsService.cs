@@ -26,6 +26,8 @@ namespace GHCW_BE.Services
         public async Task<News> GetNewsByDiscountCode(string code)
         {
             return await _context.News.Include(n => n.Discount).FirstOrDefaultAsync(n => n.DiscountId == code);
+        }
+
         public async Task UpdateNews(News news)
         {
             _context.News.Update(news);

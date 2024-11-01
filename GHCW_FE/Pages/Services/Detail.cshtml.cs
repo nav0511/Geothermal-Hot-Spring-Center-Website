@@ -14,7 +14,7 @@ namespace GHCW_FE.Pages.Services
 
         public async Task<IActionResult> OnGet(int id)
         {
-            Service = await _servicesService.GetServiceByID(id);
+            Service = await _servicesService.GetServiceById(id);
             if (Service == null)
             {
                 return NotFound();

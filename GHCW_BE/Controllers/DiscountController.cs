@@ -38,15 +38,6 @@ namespace GHCW_BE.Controllers
             return Ok(await list.CountAsync());
         }
 
-        [HttpGet("GetByCode/{code}")]
-        public async Task<IActionResult> GetDiscountByCode(string code)
-        {
-            var discount = await _discountService.GetDiscountByCode(code);
-            if (discount == null) return NotFound();
-            var result = _mapper.Map<DiscountDTO>(discount);
-            return Ok(result);
-        }
-
         [HttpGet("{code}")]
         public async Task<IActionResult> GetDiscountByCode(string code)
         {

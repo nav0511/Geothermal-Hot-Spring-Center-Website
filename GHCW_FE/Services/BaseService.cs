@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using GHCW_FE.DTOs;
+using System.Net;
 using System.Text;
 using System.Text.Json;
 
@@ -31,10 +32,51 @@ namespace GHCW_FE.Services
         {
             url = _rootUrl + url;
             HttpClient client = new HttpClient();
-            var jsonStr = JsonSerializer.Serialize(value);
-            HttpContent content = new StringContent(jsonStr, Encoding.UTF8, "application/json");
-            HttpResponseMessage responseMessage = await client.PostAsync(url, content);
-            return responseMessage.StatusCode;
+            if (accepttype == "multipart/form-data")
+            {
+                // Create multipart content
+                var multipartContent = new MultipartFormDataContent();
+
+                // Use reflection to add properties automatically
+                foreach (var property in typeof(T).GetProperties())
+                {
+                    var propertyValue = property.GetValue(value);
+
+                    // If the property is null, skip it
+                    if (propertyValue == null) continue;
+
+                    if (property.PropertyType == typeof(IFormFile))
+                    {
+                        // If the property is a file (IFormFile), add as StreamContent
+                        var file = (IFormFile)propertyValue;
+                        var fileContent = new StreamContent(file.OpenReadStream())
+                        {
+                            Headers =
+                    {
+                        ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(file.ContentType)
+                    }
+                        };
+                        multipartContent.Add(fileContent, property.Name, file.FileName);
+                    }
+                    else
+                    {
+                        // Otherwise, add it as a string
+                        multipartContent.Add(new StringContent(propertyValue.ToString()), property.Name);
+                    }
+                }
+
+                // Send the multipart request
+                HttpResponseMessage responseMessage = await client.PostAsync(url, multipartContent);
+                return responseMessage.StatusCode;
+            }
+            else
+            {
+                // For application/json or other types, use JSON serialization
+                var jsonStr = JsonSerializer.Serialize(value);
+                HttpContent content = new StringContent(jsonStr, Encoding.UTF8, "application/json");
+                HttpResponseMessage responseMessage = await client.PostAsync(url, content);
+                return responseMessage.StatusCode;
+            }
         }
 
         public async Task<HttpStatusCode> PutData<T>(string url, T value, string? accepttype = null)
