@@ -18,7 +18,24 @@ namespace GHCW_BE.Services
             return _context.News.Include(n => n.Discount).AsQueryable();
         }
 
-        
+        public async Task UpdateNews(News news)
+        {
+            _context.News.Update(news);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteNews(News news)
+        {
+            _context.News.Remove(news);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task AddNews(News news)
+        {
+
+            await _context.News.AddAsync(news);
+            await _context.SaveChangesAsync();
+        }
 
     }
 }

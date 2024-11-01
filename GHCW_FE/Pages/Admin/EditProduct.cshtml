@@ -2,6 +2,7 @@
 @model GHCW_FE.Pages.Admin.EditProductModel
 @{
     Layout = null;
+
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -287,8 +288,16 @@
 
                         <div>
                             <label for="size">Kích thước:</label>
-                            <input type="text" id="size" name="size" value="@Model.Product.Size" required />
+                            <select id="size" name="size" required>
+                                <option value="">Lựa chọn kích thước</option>
+                                @foreach (var size in Model.Sizes)
+                                {
+                                    <option value="@size" selected="@(size == Model.Product.Size)"> @size </option>
+                                }
+                            </select>
                         </div>
+
+
 
                         <div>
                             <label for="quantity">Số lượng:</label>
@@ -301,8 +310,8 @@
                                 <option value="">Lựa chọn danh mục</option>
                                 @foreach (var category in Model.Categories)
                                 {
-                                    var selected = category.Id == Model.Product.CategoryId ? "selected" : "";
-                                    <option value="@category.Id" selected="@selected">@category.Name</option>
+                                    <option value="@category.Id" selected="@(category.Id == Model.Product.CategoryId)"> @category.Name </option>
+
                                 }
                             </select>
                         </div>
