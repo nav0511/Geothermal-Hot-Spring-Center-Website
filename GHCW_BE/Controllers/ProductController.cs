@@ -112,7 +112,7 @@ namespace GHCW_BE.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProduct([FromBody] ProductDTO2 productDto)
+        public async Task<IActionResult> CreateProduct([FromForm] ProductDTOImg productDto)
         {
             if (productDto == null)
             {
@@ -120,14 +120,19 @@ namespace GHCW_BE.Controllers
             }
 
             var product = _mapper.Map<Product>(productDto);
-            
 
+            product.Image = await _productService.UploadImageResult(productDto.Img);
 
             await _productService.AddProduct(product);
 
-
             return Ok("Add Success");
 
+        }
+
+        [HttpPost("Image")]
+        public async Task<IActionResult> AddImage( IFormFile img)
+        {
+            return Ok(await _productService.UploadImageResult(img));
         }
     }
 }

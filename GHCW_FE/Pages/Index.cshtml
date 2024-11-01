@@ -85,7 +85,7 @@
                 <div class="col-lg-4 col-md-6 mb-4 pb-2">
                     <div class="blog-item">
                         <div class="position-relative">
-                            <img class="img-fluid w-100" src="@n.Image" alt="">
+                            <img class="img-fluid w-100 service-image" src="@n.Image" alt="">
                             <div class="blog-date">
                                 <h6 class="font-weight-bold text-white mb-n1">@n.UploadDate.Value.Day / @n.UploadDate.Value.Month</h6>
                             </div>
@@ -94,7 +94,7 @@
                             <div class="d-flex mb-2">
                                 <a class="text-primary text-uppercase text-decoration-none" href="">@n.Title</a>
                             </div>
-                            <a class="h5 m-0 text-decoration-none" href="">@n.Description</a>
+                            <a class="h5 m-0 text-decoration-none service-description" href="">@n.Description</a>
                         </div>
                     </div>
                 </div>
@@ -115,13 +115,13 @@
             {
                 <div class="col-lg-4 col-md-6 mb-4">
                     <div class="package-item bg-white mb-2">
-                        <img class="img-fluid" src="@s.Image" alt="">
+                        <img class="img-fluid w-100 service-image" src="@s.Image" alt="">
                         <div class="p-4">
                             <div class="d-flex justify-content-between mb-3">
                                 <small class="m-0"><i class="fa fa-clock text-primary mr-2"></i>@s.Time</small>
                                 <h5 class="m-0">@(s.Price * 1000)₫</h5>
                             </div>
-                            <a class="h5 text-decoration-none" href="">@s.Name</a>
+                            <a class="h5 text-decoration-none service-description" href="">@s.Name</a>
                         </div>
                     </div>
                 </div>
@@ -139,3 +139,19 @@
         document.getElementById("dateInput").setAttribute("min", today); // Thiết lập thuộc tính min
     });
 </script>
+
+<style>
+    .service-description {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-height: 4.5em;
+    }
+
+    .service-image {
+        min-height: 150px;
+        max-height: 250px;
+    }
+</style>

@@ -33,10 +33,11 @@ namespace GHCW_FE.Services
             return await DeleteData(url);
         }
 
-        public async Task<HttpStatusCode> CreateProduct(ProductDTO product)
+        public async Task<HttpStatusCode> CreateProduct(ProductDTOImg product, string? accepttype = null)
         {
             string url = "Product";
-            return await PushData(url, product);
+            if (accepttype != null) return await PushData(url, product, accepttype);
+            else return await PushData(url, product);
         }
     }
 }

@@ -22,6 +22,11 @@ namespace GHCW_BE.Services
             return _context.Discounts.FirstOrDefault(x => x.Code == code);
         }
 
+        public async Task<Discount> GetDiscountByCode(string code)
+        {
+            return await _context.Discounts.FirstOrDefaultAsync(n => n.Code == code);
+        }
+
         public async Task UpdateDiscount(Discount discount)
         {
             _context.Discounts.Update(discount);

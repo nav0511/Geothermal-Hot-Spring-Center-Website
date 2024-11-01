@@ -9,10 +9,22 @@ namespace GHCW_FE.Services
             return await GetData<List<NewsDTO>>(url);
         }
 
-        public async Task<int> GetTotalNews()
+        public async Task<int> GetTotalNews(bool hasDiscount)
         {
-            string url = "News/Total";
+            string url = $"News/Total/{hasDiscount}";
             return await GetData<int>(url);
+        }
+
+        public async Task<NewsDTO> GetNewsById(int id)
+        {
+            string url = $"News/GetById/{id}";
+            return await GetData<NewsDTO>(url);
+        }
+
+        public async Task<NewsDTO> GetNewsByDiscountCode(string code)
+        {
+            string url = $"News/GetByDiscountCode/{code}";
+            return await GetData<NewsDTO>(url);
         }
 
         public async Task<int> GetTotalRegularNews()
