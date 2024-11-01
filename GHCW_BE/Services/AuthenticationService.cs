@@ -369,5 +369,11 @@ namespace GHCW_BE.Services
                 return (false, "Cập nhật thông tin thất bại, vui lòng kiểm tra lại.");
             }
         }
+
+        public async Task<IEnumerable<Ticket?>> GetBookingListById(int uid)
+        {
+            var tickets = await _context.Tickets.Where(t => t.CustomerId == uid).ToListAsync();
+            return tickets;
+        }
     }
 }
