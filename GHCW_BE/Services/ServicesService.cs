@@ -21,7 +21,7 @@ namespace GHCW_BE.Services
         {
             return await _context.Services.FirstOrDefaultAsync(n => n.Id == id);
         }
-
+        
         public async Task UpdateService(Service service)
         {
             _context.Services.Update(service);

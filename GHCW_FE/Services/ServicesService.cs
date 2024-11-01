@@ -15,7 +15,7 @@ namespace GHCW_FE.Services
             return await GetData<int>(url);
         }
 
-        public async Task<ServiceDTO?> GetServiceByID(int id)
+        public async Task<ServiceDTO?> GetServiceById(int id)
         {
             string url = $"Service/{id}";
             return await GetData<ServiceDTO>(url);

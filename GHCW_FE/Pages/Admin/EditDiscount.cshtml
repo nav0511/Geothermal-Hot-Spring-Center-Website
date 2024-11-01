@@ -1,15 +1,14 @@
 ﻿@page
-@model GHCW_FE.Pages.Admin.EditProductModel
+@model GHCW_FE.Pages.Admin.EditDiscountModel
 @{
     Layout = null;
-
 }
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thêm dịch vụ mới</title>
+    <title>Cập nhật phiếu giảm giá</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         * {
@@ -257,12 +256,12 @@
             <nav>
                 <ul>
                     <li><a href="https://localhost:7260/Admin/Dashboard"><i class="fas fa-chart-line"></i> Dashboard</a></li>
-                    <li><a href="https://localhost:7260/Admin/ServiceManagement"><i class="fas fa-cogs"></i>Quản lý dịch vụ</a></li>
+                    <li><a href="https://localhost:7260/Admin/ServiceManagement"><i class="fas fa-cogs"></i> Quản lý dịch vụ</a></li>
                     <li><a href="https://localhost:7260/Admin/UserManagement"><i class="fas fa-users"></i> Quản lý người dùng</a></li>
-                    <li><a href="https://localhost:7260/Admin/DiscountManagement"><i class="fas fa-ticket-alt"></i> Quản lý phiếu giảm giá</a></li>
+                    <li class="active"><a href="https://localhost:7260/Admin/DiscountManagement"><i class="fas fa-ticket-alt"></i> Quản lý phiếu giảm giá</a></li>
                     <li><a href="https://localhost:7260/Admin/NewsManagement"><i class="fas fa-newspaper"></i> Quản lý tin tức</a></li>
                     <li><a href="#"><i class="fas fa-bullhorn"></i> Quản lý tin khuyến mãi</a></li>
-                    <li class="active"><a href="https://localhost:7260/Admin/ProductManagement"><i class="fas fa-boxes"></i> Quản lý sản phẩm</a></li>
+                    <li><a href="https://localhost:7260/Admin/ProductManagement"><i class="fas fa-boxes"></i> Quản lý sản phẩm</a></li>
                 </ul>
             </nav>
         </aside>
@@ -270,81 +269,54 @@
         <!-- Main Content -->
         <main class="main-content">
             <header class="page-header">
-                <h2><span style="color:#9197B3">Quản lý sản phẩm > </span>Thêm sản phẩm mới</h2>
+                <h2><span style="color:#9197B3">Quản lý phiếu giảm giá > </span>Cập nhật phiếu giảm giá > @Model.Discount.Code</h2>
             </header>
+
             <div class="form-container">
-                <form method="post" asp-page-handler="Update" enctype="multipart/form-data">
-                    <input type="hidden" name="id" value="@Model.Product.Id" />
+                <form method="post" asp-page-handler="Update">
                     <div class="form-group">
-                        <div>
-                            <label for="name">Tên sản phẩm:</label>
-                            <input type="text" id="name" name="name" value="@Model.Product.Name" required />
-                        </div>
+                        <input type="hidden" id="code" name="code" value="@Model.Discount.Code" />
 
                         <div>
-                            <label for="price">Giá sản phẩm:</label>
-                            <input type="number" id="price" name="price" value="@Model.Product.Price" step="0.01" required />
+                            <label for="name">Tên giảm giá:</label>
+                            <input type="text" id="name" name="name" value="@Model.Discount.Name" />
                         </div>
 
                         <div>
-                            <label for="size">Kích thước:</label>
-                            <select id="size" name="size" required>
-                                <option value="">Lựa chọn kích thước</option>
-                                @foreach (var size in Model.Sizes)
-                                {
-                                    <option value="@size" selected="@(size == Model.Product.Size)"> @size </option>
-                                }
-                            </select>
-                        </div>
-
-
-
-                        <div>
-                            <label for="quantity">Số lượng:</label>
-                            <input type="number" id="quantity" name="quantity" value="@Model.Product.Quantity" required />
+                            <label for="value">Giá trị giảm:</label>
+                            <input type="number" id="value" name="value" value="@Model.Discount.Value" step="0.01" required />
                         </div>
 
                         <div>
-                            <label for="category">Danh mục:</label>
-                            <select id="category" name="categoryId" required>
-                                <option value="">Lựa chọn danh mục</option>
-                                @foreach (var category in Model.Categories)
-                                {
-                                    <option value="@category.Id" selected="@(category.Id == Model.Product.CategoryId)"> @category.Name </option>
-
-                                }
-                            </select>
+                            <label for="startDate">Ngày bắt đầu:</label>
+                            <input type="date" id="startDate" name="startDate" value="@Model.Discount.StartDate?.ToString("yyyy-MM-dd")" />
                         </div>
 
-                        <div class="form-group checkbox-group full-width">
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="isAvailable" name="isAvailable" @(Model.Product.IsAvailable == true ? "checked" : "") />
-                                <label for="isAvailable">IsAvailable</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="isForRent" name="isForRent" @(Model.Product.IsForRent == true ? "checked" : "") />
-                                <label for="isForRent">IsForRent</label>
-                            </div>
+                        <div>
+                            <label for="endDate">Ngày kết thúc:</label>
+                            <input type="date" id="endDate" name="endDate" value="@Model.Discount.EndDate?.ToString("yyyy-MM-dd")" />
                         </div>
-
 
                         <div class="full-width">
                             <label for="description">Mô tả:</label>
-                            <textarea id="description" name="description" rows="4" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">@Model.Product.Description</textarea>
-                        </div>
-
-                        <div class="full-width">
-                            <label for="image">Ảnh sản phẩm:</label>
-                            <input type="file" id="image" name="image" accept="image/*" onchange="previewImage(event)" />
-                            <img id="imagePreview" class="image-preview" src="@Model.Product.Image" alt="Xem trước ảnh" style="display: none;" />
+                            <textarea id="description" name="description" rows="4" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">@Model.Discount.Description</textarea>
                         </div>
                     </div>
+
+                    <div class="form-group checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="isAvailable" name="isAvailable" @(Model.Discount.IsAvailable == true ? "checked" : "") />                            <label for="isAvailable">IsAvailable</label>
+                        </div>
+                    </div>
+
                     <div class="form-group">
-                        <button type="submit">Cập nhật sản phẩm</button>
+                        <button type="submit" class="btn-add">Cập nhật phiếu giảm giá</button>
                     </div>
                 </form>
             </div>
 
+
+            </div>
         </main>
     </div>
     <script>
@@ -365,22 +337,6 @@
                 profileMenu.classList.remove('show');
             }
         });
-
-        function previewImage(event) {
-            var input = event.target;
-            var imagePreview = document.getElementById("imagePreview");
-
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-
-                reader.onload = function (e) {
-                    imagePreview.src = e.target.result;
-                    imagePreview.style.display = "block";
-                };
-
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
     </script>
 </body>
 </html>

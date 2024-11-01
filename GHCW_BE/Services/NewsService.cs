@@ -26,6 +26,23 @@ namespace GHCW_BE.Services
         public async Task<News> GetNewsByDiscountCode(string code)
         {
             return await _context.News.Include(n => n.Discount).FirstOrDefaultAsync(n => n.DiscountId == code);
+        public async Task UpdateNews(News news)
+        {
+            _context.News.Update(news);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteNews(News news)
+        {
+            _context.News.Remove(news);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task AddNews(News news)
+        {
+
+            await _context.News.AddAsync(news);
+            await _context.SaveChangesAsync();
         }
 
     }
