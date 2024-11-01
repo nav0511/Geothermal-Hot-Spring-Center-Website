@@ -13,7 +13,7 @@ namespace GHCW_BE.Models
         public int Id { get; set; }
         public int CategoryId { get; set; }
         public string Name { get; set; } = null!;
-        public string? Size { get; set; }
+        public string Size { get; set; } = null!;
         public string? Description { get; set; }
         public double Price { get; set; }
         public bool IsForRent { get; set; }

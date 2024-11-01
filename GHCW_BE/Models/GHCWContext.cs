@@ -29,15 +29,6 @@ namespace GHCW_BE.Models
         public virtual DbSet<Ticket> Tickets { get; set; } = null!;
         public virtual DbSet<TicketDetail> TicketDetails { get; set; } = null!;
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("server=THANH;database=GHCW;uid=sa;pwd=123;");
-            }
-        }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Account>(entity =>
@@ -92,6 +83,7 @@ namespace GHCW_BE.Models
                 entity.HasOne(d => d.DiscountCodeNavigation)
                     .WithMany(p => p.Bills)
                     .HasForeignKey(d => d.DiscountCode)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Bill__DiscountCo__4D94879B");
 
                 entity.HasOne(d => d.Receptionist)
@@ -104,7 +96,7 @@ namespace GHCW_BE.Models
             modelBuilder.Entity<BillDetail>(entity =>
             {
                 entity.HasKey(e => new { e.BillId, e.ProductId })
-                    .HasName("PK__BillDeta__DAB230067529CC78");
+                    .HasName("PK__BillDeta__DAB23006DE900610");
 
                 entity.ToTable("BillDetail");
 
@@ -161,7 +153,7 @@ namespace GHCW_BE.Models
             modelBuilder.Entity<Discount>(entity =>
             {
                 entity.HasKey(e => e.Code)
-                    .HasName("PK__Discount__A25C5AA6BDA97C65");
+                    .HasName("PK__Discount__A25C5AA653429F61");
 
                 entity.ToTable("Discount");
 
@@ -199,6 +191,7 @@ namespace GHCW_BE.Models
                 entity.HasOne(d => d.Discount)
                     .WithMany(p => p.News)
                     .HasForeignKey(d => d.DiscountId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__News__DiscountId__52593CB8");
             });
 
@@ -297,7 +290,7 @@ namespace GHCW_BE.Models
             modelBuilder.Entity<TicketDetail>(entity =>
             {
                 entity.HasKey(e => new { e.TicketId, e.ServiceId })
-                    .HasName("PK__TicketDe__CD7D7D073EBD9B8B");
+                    .HasName("PK__TicketDe__CD7D7D0756E67730");
 
                 entity.ToTable("TicketDetail");
 

@@ -34,6 +34,11 @@ namespace GHCW_BE.Controllers
                 {
                     return Conflict("Email đã được sử dụng, vui lòng dùng email khác để đăng ký");
                 }
+                checkAccExist = await _service.CheckPhoneExsit(registerDTO.PhoneNumber);
+                if (checkAccExist != null)
+                {
+                    return Conflict("Số điện thoại đã được sử dụng, vui lòng dùng số khác để đăng ký");
+                }
 
                 var activeCode = await _helper.GenerateVerificationCode(6);
                 Account a = new()
@@ -46,7 +51,9 @@ namespace GHCW_BE.Controllers
                     ActivationCode = activeCode,
                     Role = 5
                 };
-                var activationLink = $"https://localhost:7226/api/Authentication/activate/{a.Email}/{a.ActivationCode}";
+                var encodedEmail = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(a.Email));
+                var encodedActivationCode = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(a.ActivationCode));
+                var activationLink = $"https://localhost:7226/api/Authentication/activate/{encodedEmail}/{encodedActivationCode}";
 
                 var emailSent = await _service.SendActivationEmail(registerDTO, activationLink);
                 if (!emailSent)
@@ -65,28 +72,33 @@ namespace GHCW_BE.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest("Mời nhập tên đăng nhập và mật khẩu");
+                return BadRequest("Thông tin đăng nhập không hợp lệ.");
             }
             var a = await _service.CheckActiveStatus(loginDTO.Email);
             if (a == null)
             {
-                return Unauthorized("Email hoặc mật khẩu không đúng. Vui lòng kiểm tra lại");
+                return BadRequest("Email hoặc mật khẩu không đúng. Vui lòng kiểm tra lại");
             }
-            
+
             bool isCorrectPass = _helper.VerifyPassword(loginDTO.Password, a.Password);
             if (!isCorrectPass)
             {
-                return Unauthorized("Email hoặc mật khẩu không đúng. Vui lòng kiểm tra lại");
+                return BadRequest("Email hoặc mật khẩu không đúng. Vui lòng kiểm tra lại");
             }
 
             string token = await _service.Login(a);
             string refToken = await _service.RefTokenGenerator();
             a.RefreshToken = refToken;
-            await _service.UpdateProfile(a);
+            var (isSuccess, message) = await _service.UpdateRefreshToken(a);
+            if (!isSuccess)
+            {
+                return BadRequest(message);
+            }
             return Ok(new LoginResponse()
             {
                 AccessToken = token,
-                RefreshToken = refToken
+                RefreshToken = refToken,
+                Message = "Đăng nhập thành công"
             });
         }
 
@@ -95,30 +107,35 @@ namespace GHCW_BE.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest("");
+                return BadRequest("Refresh token không hợp lệ.");
             }
 
             var a = await _service.GetAccountByRefreshToken(request.RefreshToken);
             if (a == null)
             {
-                return NotFound("Invalid or expired refresh token.");
+                return NotFound("Refresh token không hợp lệ hoặc hết hạn.");
             }
 
             await _service.DeleteRefToken(a);
             bool isValidatedRefToken = _service.Validate(request.RefreshToken);
             if (!isValidatedRefToken)
             {
-                return BadRequest("Invalid Refresh token");
+                return BadRequest("Refresh token không hợp lệ.");
             }
 
             string token = await _service.Login(a);
             string refToken = await _service.RefTokenGenerator();
             a.RefreshToken = refToken;
-            await _service.UpdateProfile(a);
+            var (isSuccess, message) = await _service.UpdateRefreshToken(a);
+            if (!isSuccess)
+            {
+                return BadRequest(message);
+            }
             return Ok(new LoginResponse()
             {
                 AccessToken = token,
-                RefreshToken = refToken
+                RefreshToken = refToken,
+                Message = "Tạo refresh token mới thành công."
             });
         }
 
@@ -130,26 +147,32 @@ namespace GHCW_BE.Controllers
 
             if (!int.TryParse(rawUserID, out int id))
             {
-                return Unauthorized();
+                return Unauthorized("ID không hợp lệ.");
             }
 
             var a = await _service.GetUserProfileById(id);
+            if (a == null)
+            {
+                return NotFound("không tìm thấy tài khoản tương ứng.");
+            }
             await _service.DeleteRefToken(a);
-            return Ok();
+            return Ok("Đăng xuất thành công.");
         }
 
         [HttpPost("activate/{email}/{code}")]
         public async Task<IActionResult> ActivateAccount(string email, string code)
         {
+            var decodeEmail = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(email));
+            var decodeActivationCode = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(code));
             var activeCode = new ActivationCode()
             {
-                Email = email,
-                Code = code
+                Email = decodeEmail,
+                Code = decodeActivationCode
             };
             var check = await _service.RedemActivationCode(activeCode);
             if (!check)
             {
-                return BadRequest("Không có gì xảy ra");
+                return BadRequest("Tài khoản chưa được kích hoạt.");
             }
             return Ok("Tài khoản của bạn đã được kích hoạt. Bạn có thể đăng nhập.");
         }
@@ -168,65 +191,104 @@ namespace GHCW_BE.Controllers
                 {
                     return StatusCode(500, "Không thể gửi email đặt lại mật khẩu.");
                 }
-                await _service.UpdateProfile(user);
+                await _service.ChangePassword(user.Id,newPass);
                 return Ok("Gửi thành công, vui lòng kiểm tra email để lấy tài khoản mới của bạn!");
             }
             return BadRequest("Không có tài khoản nào khớp với email đã nhập");
         }
 
         [Authorize]
+        [HttpPost("ChangePassword")]
+        public async Task<IActionResult> ChangePassword(ChangePassRequest cp)
+        {
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "ID");
+            if (userIdClaim == null || userIdClaim.Value != cp.Id.ToString())
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền đổi mật khẩu của người dùng khác.");
+            }
+            var success = await _service.ChangePassword(cp.Id, _helper.HashPassword(cp.NewPassword));
+            if (success)
+            {
+                return Ok("Đổi mật khẩu thành công");
+            }
+            return BadRequest("Đổi mật khẩu thất bại.");
+        }
+
+        [Authorize]
         [HttpGet("profile")]
         public async Task<IActionResult> GetUserProfile()
         {
-            string token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "").Trim();
-
-            if (string.IsNullOrEmpty(token))
-                return BadRequest("Token is required.");
-
-            int userIdHeader = _helper.GetIdInHeader(token);
-            var user = await _service.GetUserProfileById(userIdHeader);
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "ID");
+            if (userIdClaim == null)
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền xem hồ sơ của người dùng khác.");
+            }
+            var user = await _service.GetUserProfileById(int.Parse(userIdClaim.Value));
 
             if (user == null)
+            {
                 return NotFound("Không tìm thấy người dùng này");
+            }
 
             return Ok(user);
         }
 
-        [Authorize(Roles = "0")]
+        [Authorize]
         [HttpGet("userlist")]
         public async Task<IActionResult> GetUserList()
         {
-            var acc = await _service.GetUserList();
-            if (acc == null)
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var roleClaim = identity?.FindFirst("Role");
+
+            if (roleClaim != null && int.Parse(roleClaim.Value) == 0)
             {
-                return NotFound("Danh sách người dùng trống");
+                var acc = await _service.GetUserList();
+                if (acc == null)
+                {
+                    return NotFound("Danh sách người dùng trống");
+                }
+                return Ok(acc);
             }
-            return Ok(acc);
+            return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền xem thông tin này.");
         }
 
-        [Authorize(Roles = "0, 1")]
+        [Authorize]
         [HttpGet("employeelist")]
         public async Task<IActionResult> GetEmployeeList()
         {
-            var acc = await _service.GetEmployeeList();
-            if (acc == null)
-            {
-                return NotFound("Danh sách nhân viên trống");
-            }
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var roleClaim = identity?.FindFirst("Role");
 
-            return Ok(acc);
+            if (roleClaim != null && int.Parse(roleClaim.Value) <= 1)
+            {
+                var acc = await _service.GetEmployeeList();
+                if (acc == null)
+                {
+                    return NotFound("Danh sách nhân viên trống");
+                }
+
+                return Ok(acc);
+            }
+            return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền xem thông tin này.");
         }
 
-        [Authorize(Roles = "0, 1, 2, 3")]
-        [HttpGet("customerlist")]
-        public async Task<IActionResult> GetCustomerList()
+        [Authorize]
+        [HttpGet("customerAcclist")]
+        public async Task<IActionResult> GetCustomerAccList()
         {
-            var acc = await _service.GetCustomerList();
-            if (acc == null)
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var roleClaim = identity?.FindFirst("Role");
+
+            if (roleClaim != null && int.Parse(roleClaim.Value) <= 4)
             {
-                return NotFound("Danh sách khách hàng trống");
+                var acc = await _service.GetCustomerAccountList();
+                if (acc == null)
+                {
+                    return NotFound("Danh sách khách hàng trống");
+                }
+                return Ok(acc);
             }
-            return Ok(acc);
+            return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền xem thông tin này.");
         }
 
         [Authorize]
@@ -234,63 +296,228 @@ namespace GHCW_BE.Controllers
         public async Task<IActionResult> GetUserProfileById(int id)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var roleClaim = identity?.FindFirst("Role");
 
-            if (identity != null)
+            if (roleClaim != null && int.TryParse(roleClaim.Value, out int userRole))
             {
-                var roleClaim = identity.FindFirst("Role");
-
-                if (roleClaim != null)
+                var requestedAcc = await _service.GetUserProfileById(id);
+                if (requestedAcc == null)
                 {
-                    switch (int.Parse(roleClaim.Value))
-                    {
-                        case 0:
-                            var acc = await _service.GetUserProfileById(id);
-                            return Ok(acc);
-                        case 1:
-                            var em = await _service.GetEmployeeProfileById(id);
-                            return Ok(em);
-                        case 2:
-                            var cus = await _service.GetCustomerProfileById(id);
-                            return Ok(cus);
-                        case 3:
-                            var cust = await _service.GetCustomerProfileById(id);
-                            return Ok(cust);
-                        default:
-                            return BadRequest("Bạn không có quyền xem thông tin người dùng này");
-                    }
+                    return NotFound("Tài khoản không tồn tại.");
+                }
+                switch (userRole)
+                {
+                    case 0: // Vai trò 0 có quyền xem tất cả tài khoản
+                        return Ok(requestedAcc);
+
+                    case 1: // Vai trò 1 có quyền xem tất cả trừ các tài khoản có vai trò 0
+                        if (requestedAcc.Role != 0)
+                        {
+                            return Ok(requestedAcc);
+                        }
+                        return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền xem thông tin tài khoản này.");
+
+                    case 2:
+                    case 3:
+                    case 4: // Vai trò 2, 3 và 4 chỉ có quyền xem tài khoản có vai trò 5
+                        if (requestedAcc.Role == 5)
+                        {
+                            return Ok(requestedAcc);
+                        }
+                        return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền xem thông tin tài khoản này.");
+
+                    default:
+                        return BadRequest("Vai trò của bạn không được hỗ trợ.");
                 }
             }
-            return BadRequest("Bạn phải đăng nhập để sử dụng tính năng này");
+            return BadRequest("Không thể lấy role của tài khoản đăng nhập, vui lòng kiểm tra lại.");
         }
 
         [Authorize]
         [HttpPost("adduser")]
-        public async Task<IActionResult> AddNewUser(Account a)
+        public async Task<IActionResult> AddNewUser(AddRequest a)
         {
-            return Ok(a);
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var roleClaim = identity?.FindFirst("Role");
+
+            if (roleClaim != null && int.Parse(roleClaim.Value) == 0)
+            {
+                var checkAccExist = await _service.CheckAccountExsit(a.Email);
+                if (checkAccExist != null)
+                {
+                    return Conflict("Email đã được sử dụng, vui lòng dùng email khác để đăng ký");
+                }
+                checkAccExist = await _service.CheckPhoneExsit(a.PhoneNumber);
+                if (checkAccExist != null)
+                {
+                    return Conflict("Số điện thoại đã được sử dụng, vui lòng dùng số khác để đăng ký");
+                }
+                a.Password = _helper.HashPassword(a.Password);
+                var (isSuccess, message) = await _service.AddNewUser(a);
+                if (!isSuccess)
+                {
+                    return BadRequest(message);
+                }
+
+                return Ok(message);
+            }
+            return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền thực hiện hành động này.");
         }
 
         [Authorize]
         [HttpPut("edituser")]
-        public async Task<IActionResult> EditUser(Account a)
+        public async Task<IActionResult> EditUser(EditRequest r)
         {
-            var user = await _service.GetUserProfileById(a.Id);
-            return Ok(a);
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var roleClaim = identity?.FindFirst("Role");
+
+            if (roleClaim != null && int.Parse(roleClaim.Value) == 0)
+            {
+                var checkAccExist = await _service.CheckPhoneExsit(r.PhoneNumber);
+                if (checkAccExist != null)
+                {
+                    return Conflict("Số điện thoại đã được sử dụng, vui lòng dùng số khác để đăng ký");
+                }
+                var (isSuccess, message) = await _service.EditProfile(r);
+                if (!isSuccess)
+                {
+                    return BadRequest(message);
+                }
+                return Ok(message);
+            }
+            return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền thực hiện hành động này.");
         }
 
         [Authorize]
         [HttpPut("updateprofile")]
-        public async Task<IActionResult> UpdateProfile(Account a)
+        public async Task<IActionResult> UpdateProfile(UpdateRequest r)
         {
-            return Ok(a);
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "ID");
+            if (userIdClaim == null || userIdClaim.Value != r.Id.ToString())
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền cập nhật hồ sơ của người dùng khác.");
+            }
+            var checkAccExist = await _service.CheckPhoneExsit(r.PhoneNumber);
+            if (checkAccExist != null)
+            {
+                return Conflict("Số điện thoại đã được sử dụng, vui lòng dùng số khác để đăng ký");
+            }
+            var (isSuccess, message) = await _service.UpdateProfile(r);
+            if (!isSuccess)
+            {
+                return BadRequest(message);
+            }
+            return Ok(message);
         }
 
         [Authorize]
         [HttpDelete("useractivation")]
         public async Task<IActionResult> UserActivation(int uid)
         {
-            await _service.UserActivation(uid);
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var roleClaim = identity?.FindFirst("Role");
+
+            if (roleClaim != null && int.Parse(roleClaim.Value) == 0)
+            {
+                var (isSuccess, message) = await _service.UserActivation(uid);
+                if (!isSuccess)
+                {
+                    return BadRequest(message);
+                }
+
+                return Ok(message);
+            }
+            return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền thực hiện hành động này.");
+        }
+
+        [Authorize]
+        [HttpGet("bookinghistory")]
+        public async Task<IActionResult> BookingList(int uid)
+        {
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "ID");
+            if (userIdClaim == null || userIdClaim.Value != uid.ToString())
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền xem lịch sử của người dùng khác.");
+            }
             return Ok();
+        }
+
+        [Authorize]
+        [HttpPost("CustomerList")]
+        public async Task<IActionResult> GetCustomerList()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var roleClaim = identity?.FindFirst("Role");
+
+            if (roleClaim != null && int.Parse(roleClaim.Value) <= 4)
+            {
+                var acc = await _service.GetCustomerList();
+                if (acc == null)
+                {
+                    return NotFound("Danh sách khách hàng trống");
+                }
+                return Ok(acc);
+            }
+            return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền xem thông tin này.");
+        }
+
+        [Authorize]
+        [HttpPost("addcustomer")]
+        public async Task<IActionResult> AddNewCustomer(AddCustomerRequest a)
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var roleClaim = identity?.FindFirst("Role");
+
+            if (roleClaim != null && int.Parse(roleClaim.Value) <= 4)
+            {
+                var checkAccExist = await _service.CheckAccountExsit(a.Email);
+                if (checkAccExist != null)
+                {
+                    return Conflict("Email đã được sử dụng, vui lòng dùng email khác để đăng ký");
+                }
+                checkAccExist = await _service.CheckPhoneExsit(a.PhoneNumber);
+                if (checkAccExist != null)
+                {
+                    return Conflict("Số điện thoại đã được sử dụng, vui lòng dùng số khác để đăng ký");
+                }
+                var (isSuccess, message) = await _service.AddNewCustomer(a);
+                if (!isSuccess)
+                {
+                    return BadRequest(message);
+                }
+
+                return Ok(message);
+            }
+            return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền thực hiện hành động này.");
+        }
+
+        [Authorize]
+        [HttpPut("editcustomer")]
+        public async Task<IActionResult> EditCustomer(CustomerDTO c)
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var roleClaim = identity?.FindFirst("Role");
+
+            if (roleClaim != null && int.Parse(roleClaim.Value) <= 4)
+            {
+                var checkAccExist = await _service.CheckAccountExsit(c.Email);
+                if (checkAccExist != null)
+                {
+                    return Conflict("Email đã được sử dụng, vui lòng dùng email khác để đăng ký");
+                }
+                checkAccExist = await _service.CheckPhoneExsit(c.PhoneNumber);
+                if (checkAccExist != null)
+                {
+                    return Conflict("Số điện thoại đã được sử dụng, vui lòng dùng số khác để đăng ký");
+                }
+                var (isSuccess, message) = await _service.EditCustomer(c);
+                if (!isSuccess)
+                {
+                    return BadRequest(message);
+                }
+                return Ok(message);
+            }
+            return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền thực hiện hành động này.");
         }
     }
 }

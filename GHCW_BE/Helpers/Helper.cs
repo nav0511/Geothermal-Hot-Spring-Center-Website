@@ -12,68 +12,6 @@ namespace GHCW_BE.Helpers
 {
     public class Helper
     {
-        public string GetTypeInHeader(string token)
-        {
-            var handler = new JwtSecurityTokenHandler();
-            try
-            {
-                var jwtToken = handler.ReadJwtToken(token);
-                // Lấy "Role" từ token
-                var userIdClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "Role");
-                if (userIdClaim == null)
-                {
-                    Console.WriteLine("Invalid token: ID claim is missing.");
-                    return null;
-                }
-                if (userIdClaim.Value != null)
-                {
-                    return userIdClaim.Value.ToString();
-                }
-                else
-                {
-                    Console.WriteLine("Invalid token: Type claim is missing.");
-                    return null;
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Exception while reading token: {ex.Message}");
-                return null;
-            }
-        }
-
-        public int GetIdInHeader(string token)
-        {
-            var handler = new JwtSecurityTokenHandler();
-            try
-            {
-                var jwtToken = handler.ReadJwtToken(token);
-                // Lấy "ID" từ token
-                var userIdClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "ID");
-                if (userIdClaim == null)
-                {
-                    Console.WriteLine("Invalid token: ID claim is missing.");
-                    return -1;
-                }
-
-                // Chuyển đổi id từ string sang int
-                if (int.TryParse(userIdClaim.Value, out int userId))
-                {
-                    return userId;
-                }
-                else
-                {
-                    Console.WriteLine("Invalid token: ID claim is not a valid integer.");
-                    return -1;
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Exception while reading token: {ex.Message}");
-                return -1;
-            }
-        }
-
         public string HashPassword(string password)
         {
             return BCrypt.Net.BCrypt.HashPassword(password);
@@ -132,7 +70,7 @@ namespace GHCW_BE.Helpers
             const string upperChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; // Ký tự hoa
             const string lowerChars = "abcdefghijklmnopqrstuvwxyz"; // Ký tự thường
             const string digits = "0123456789"; // Ký tự số
-            const string specialChars = "!@#$%^&*()_-+=<>?"; // Ký tự đặc biệt
+            const string specialChars = "@$#^!%*?&"; // Ký tự đặc biệt
 
             // Đảm bảo ít nhất 1 ký tự từ mỗi loại
             StringBuilder password = new StringBuilder();
@@ -180,5 +118,6 @@ namespace GHCW_BE.Helpers
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
     }
 }

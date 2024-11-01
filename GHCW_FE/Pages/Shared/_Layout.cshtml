@@ -1,4 +1,4 @@
-﻿@using GHCW_FE.Models
+﻿@using GHCW_FE.DTOs
 @using System.Text.Json
 @using Microsoft.AspNetCore.Http
 <!DOCTYPE html>
@@ -71,12 +71,16 @@
                             <a asp-page="/About" class="nav-item nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/About" ? "active" : "")">Giới thiệu</a>
                             @if (Context.Session.GetString("acc") != null)
                             {
-                                var account = JsonSerializer.Deserialize<Account>(Context.Session.GetString("acc"));
+                                var account = JsonSerializer.Deserialize<AccountDTO>(Context.Session.GetString("acc"));
                                 <div class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown">
                                         @account.Name
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right">
+                                        @if (account.Role <= 1)
+                                        {
+                                            <a class="dropdown-item" asp-page="/Admin/Dashboard">Trang quản lý</a>
+                                        }
                                         <a class="dropdown-item" asp-page="/User/Profile">Thông tin cá nhân</a>
                                         <form method="post" class="dropdown-item" asp-page="/Authentications/Login" asp-page-handler="LogOut" style="width:100%">
                                             <button type="submit" style="border:none; background:none; padding:0; text-align:left;">Đăng xuất</button>
