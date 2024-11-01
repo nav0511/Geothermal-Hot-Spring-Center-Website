@@ -469,11 +469,11 @@ namespace GHCW_BE.Controllers
         public async Task<IActionResult> BookingList(int uid)
         {
             var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "ID");
-            if (userIdClaim == null || userIdClaim.Value != uid.ToString())
+            if (userIdClaim != null || userIdClaim?.Value == uid.ToString())
             {
-                return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền xem lịch sử của người dùng khác.");
+                return Ok();
             }
-            return Ok();
+            return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền xem lịch sử của người dùng khác.");
         }
 
         [Authorize]
