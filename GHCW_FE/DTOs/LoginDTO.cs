@@ -21,4 +21,10 @@ namespace GHCW_FE.DTOs
         public string AccessToken { get; set; }
         public string RefreshToken { get; set; }
     }
+
+    public class RefreshRequest
+    {
+        [Required]
+        public string RefreshToken { get; set; }
+    }
 }

@@ -287,8 +287,15 @@
 
                         <div>
                             <label for="size">Kích thước:</label>
-                            <input type="text" id="size" name="size" required />
+                            <select id="size" name="size" required>
+                                <option value="">Lựa chọn kích thước</option>
+                                @foreach (var size in Model.Sizes)
+                                {
+                                    <option value="@size">@size</option>
+                                }
+                            </select>
                         </div>
+
 
                         <div>
                             <label for="quantity">Số lượng:</label>

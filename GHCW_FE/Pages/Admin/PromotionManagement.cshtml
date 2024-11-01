@@ -1,5 +1,5 @@
 ﻿@page
-@model GHCW_FE.Pages.Admin.DiscountManagementModel
+@model GHCW_FE.Pages.Admin.PromotionManagementModel
 @{
     Layout = null;
 }
@@ -266,9 +266,9 @@
                     <li><a href="https://localhost:7260/Admin/Dashboard"><i class="fas fa-chart-line"></i> Dashboard</a></li>
                     <li><a href="https://localhost:7260/Admin/ServiceManagement"><i class="fas fa-cogs"></i> Quản lý dịch vụ</a></li>
                     <li><a href="https://localhost:7260/Admin/UserManagement"><i class="fas fa-users"></i> Quản lý người dùng</a></li>
-                    <li class="active"><a href="https://localhost:7260/Admin/DiscountManagement"><i class="fas fa-ticket-alt"></i> Quản lý phiếu giảm giá</a></li>
+                    <li><a href="https://localhost:7260/Admin/DiscountManagement"><i class="fas fa-ticket-alt"></i> Quản lý phiếu giảm giá</a></li>
                     <li><a href="https://localhost:7260/Admin/NewsManagement"><i class="fas fa-newspaper"></i> Quản lý tin tức</a></li>
-                    <li><a href="#"><i class="fas fa-bullhorn"></i> Quản lý tin khuyến mãi</a></li>
+                    <li class="active"><a href="https://localhost:7260/Admin/PromotionManagement"><i class="fas fa-bullhorn"></i> Quản lý tin khuyến mãi</a></li>
                     <li><a href="https://localhost:7260/Admin/ProductManagement"><i class="fas fa-boxes"></i> Quản lý sản phẩm</a></li>
                 </ul>
             </nav>
@@ -277,8 +277,8 @@
         <!-- Main Content -->
         <main class="main-content">
             <header class="page-header">
-                <h2>Quản lý phiếu giảm giá</h2>
-                <button class="btn-add" onclick="window.location.href='/Admin/AddDiscount'">+ Thêm phiếu giảm giá mới</button>
+                <h2>Quản lý tin khuyến mãi</h2>
+                <button class="btn-add" onclick="window.location.href='#'">+ Thêm tin khuyến mãi mới</button>
             </header>
 
             <div class="search-container">
@@ -295,28 +295,26 @@
             <table class="user-table">
                 <thead>
                     <tr>
-                        <th>Mã giảm giá</th>
-                        <th>Tên phiếu giảm giá</th>
-                        <th>Ngày bắt đầu</th>
-                        <th>Ngày kết thúc</th>
+                        <th>Id</th>
+                        <th>Tiêu đề</th>
+                        <th>Ngày đăng</th>
                         <th>Trạng thái</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var discount in Model.DiscountDTOs)
+                    @foreach (var news in Model.NewsDTOs)
                     {
                         <tr>
-                            <td>@discount.Code</td>
-                            <td>@discount.Name</td>
-                            <td>@discount.StartDate</td>
-                            <td>@discount.EndDate</td>
-                            <td>@discount.IsAvailable</td>
+                            <td>@news.Id</td>
+                            <td>@news.Title</td>
+                            <td>@news.UploadDate</td>
+                            <td>@news.IsActive</td>
 
                             <td>
-                                <button class="status active" onclick="window.location.href='/Admin/EditDiscount?code=@discount.Code'">Sửa</button>
-                                <form method="post" asp-page-handler="DeleteDiscount" asp-route-id="@discount.Code" style="display:inline;">
-                                    <button type="submit" class="status inactive" onclick="return confirm('Bạn có chắc chắn muốn xóa phiếu giảm giá này?');">Xóa</button>
+                                <button class="status active" onclick="window.location.href='/Admin/EditNews?id=@news.Id'">Sửa</button>
+                                <form method="post" asp-page-handler="DeleteNews" asp-route-id="@news.Id" style="display:inline;">
+                                    <button type="submit" class="status inactive" onclick="return confirm('Bạn có chắc chắn muốn xóa tin tức này?');">Xóa</button>
                                 </form>
                             </td>
                         </tr>
@@ -362,4 +360,4 @@
         });
     </script>
 </body>
-</html> 
+</html>

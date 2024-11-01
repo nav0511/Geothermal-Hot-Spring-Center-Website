@@ -28,7 +28,7 @@ namespace GHCW_BE.Models
         public virtual DbSet<Service> Services { get; set; } = null!;
         public virtual DbSet<Ticket> Tickets { get; set; } = null!;
         public virtual DbSet<TicketDetail> TicketDetails { get; set; } = null!;
-
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Account>(entity =>

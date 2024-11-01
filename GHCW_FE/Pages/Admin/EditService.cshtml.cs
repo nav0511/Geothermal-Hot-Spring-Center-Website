@@ -14,7 +14,7 @@ namespace GHCW_FE.Pages.Admin
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            Service = await _servicesService.GetServiceByID(id);
+            Service = await _servicesService.GetServiceById(id);
 
             if (Service == null)
             {
@@ -33,7 +33,7 @@ namespace GHCW_FE.Pages.Admin
                 return Page();
             }
 
-            Service = await _servicesService.GetServiceByID(id);
+            Service = await _servicesService.GetServiceById(id);
             if (Service == null)
             {
                 ModelState.AddModelError(string.Empty, "Dịch vụ không tồn tại.");

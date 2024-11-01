@@ -1,4 +1,5 @@
 ﻿using GHCW_BE.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace GHCW_BE.Services
 {
@@ -15,6 +16,7 @@ namespace GHCW_BE.Services
         {
             return _context.Products.AsQueryable();
         }
+
 
         public async Task UpdateProduct(Product product)
         {
