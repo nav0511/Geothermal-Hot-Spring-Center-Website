@@ -2,11 +2,8 @@
 
 namespace GHCW_FE.Services
 {
-    public class AccountService : Controller
+    public class AccountService : BaseService
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
+
     }
 }

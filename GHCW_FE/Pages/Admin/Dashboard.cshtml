@@ -3,6 +3,9 @@
 @{
     Layout = null;
 }
+@using GHCW_FE.DTOs
+@using System.Text.Json
+@using Microsoft.AspNetCore.Http
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -196,7 +199,7 @@
         .dropdown-content {
             display: none;
             position: absolute;
-            right: 0; 
+            right: 0;
             background-color: white;
             min-width: 120px;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
@@ -215,6 +218,17 @@
                     background-color: #f1f1f1;
                 }
 
+            .dropdown-content form {
+                color: black;
+                padding: 12px 16px;
+                text-decoration: none;
+                display: block;
+            }
+
+                .dropdown-content form:hover {
+                    background-color: #f1f1f1;
+                }
+
         /* Show the dropdown when clicked */
         .profile-menu.show .dropdown-content {
             display: block;
@@ -224,13 +238,23 @@
 </head>
 <body>
     <!-- Profile Menu HTML -->
-    <div class="profile-menu">
-        <img src="https://www.w3schools.com/w3images/avatar2.png" alt="Profile" id="profileIcon" class="profile-icon">
-        <div id="dropdownMenu" class="dropdown-content">
-            <a href="#">Profile</a>
-            <a href="#">Logout</a>
+    @if (HttpContext.Session.GetString("acc") != null)
+    {
+        var account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
+        <div class="profile-menu">
+            <div id="profileIcon">
+                <label>@account.Name</label>
+                <img src="https://www.w3schools.com/w3images/avatar2.png" alt="Profile" class="profile-icon">
+            </div>
+            <div id="dropdownMenu" class="dropdown-content">
+                <a class="dropdown-item" asp-page="/Index">Trang chủ</a>
+                <a class="dropdown-item" asp-page="/User/Profile">Thông tin cá nhân</a>
+                <form method="post" class="dropdown-item" asp-page="/Authentications/Login" asp-page-handler="LogOut" style="width:100%">
+                    <button type="submit" style="border:none; background:none; padding:0; text-align:left;">Đăng xuất</button>
+                </form>
+            </div>
         </div>
-    </div>
+    }
 
     <div class="admin-container">
         <!-- Sidebar -->
@@ -339,8 +363,8 @@
 
         // Toggle dropdown when the profile icon is clicked
         profileIcon.addEventListener("click", function (event) {
-            event.stopPropagation(); 
-            profileMenu.classList.toggle("show"); 
+            event.stopPropagation();
+            profileMenu.classList.toggle("show");
         });
 
         // Close the dropdown if user clicks outside

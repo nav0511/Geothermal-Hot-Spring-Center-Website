@@ -4,21 +4,21 @@ namespace GHCW_BE.DTOs
 {
     public class RegisterDTO
     {
-        [Required(ErrorMessage = "Email is required.")]
-        [EmailAddress(ErrorMessage = "Invalid email format.")]
+        [Required(ErrorMessage = "Yêu cầu nhập email.")]
+        [EmailAddress(ErrorMessage = "Không đúng định dạng email.")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Password is required.")]
-        [MinLength(8, ErrorMessage = "Password must be at least 8 characters.")]
-        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$",
-        ErrorMessage = "Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character.")]
+        [Required(ErrorMessage = "Yêu cầu nhập mật khẩu.")]
+        [MinLength(8, ErrorMessage = "Mật khẩu phải dài ít nhất 8 kí tự.")]
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$#^!%*?&])[A-Za-z\d@$#^!%*?&]{8,}$", ErrorMessage = "Mật khẩu phải chứa ít nhất 1 kí tự thường, 1 kí tự hoa, 1 kí tự đặc biệt (@$#^!%*?&) và 1 kí tự số.")]
         public string Password { get; set; }
 
-        [Required(ErrorMessage = "Full name is required.")]
+        [Required(ErrorMessage = "Yêu cầu nhập họ tên.")]
+        [RegularExpression(@"^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơưƯẠ-ỹ\s]+$", ErrorMessage = "Họ tên chỉ được chứa chữ cái và khoảng trắng.")]
         public string FullName { get; set; }
 
-        [Required(ErrorMessage = "Phone number is required.")]
-        [RegularExpression(@"^\d{10}$", ErrorMessage = "Phone number must be exactly 10 digits.")]
+        [Required(ErrorMessage = "Yêu cầu nhập số điện thoại.")]
+        [RegularExpression(@"^(0[3|5|7|8|9])\d{8}$", ErrorMessage = "Số điện thoại chưa đúng định dạng.")]
         public string PhoneNumber { get; set; }
     }
     public class SendEmailDTO

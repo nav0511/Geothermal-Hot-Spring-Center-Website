@@ -1,5 +1,4 @@
 ﻿using GHCW_FE.DTOs;
-using GHCW_FE.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
@@ -20,10 +19,10 @@ namespace GHCW_FE.Pages.Authentications
             _configuration = configuration;
             _client = client;
             _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            var baseUrlAPI = _configuration.GetValue<string>("API:Url");
-            _authorApiUrl = $"{baseUrlAPI}api/Authentication/login";
-            _getUserInfoApiUrl = $"{baseUrlAPI}api/Authentication/profile";
-            _logoutApiUrl = $"{baseUrlAPI}api/Authentication/logout";
+            var baseUrlAPI = _configuration.GetValue<string>("ApiUrls:MyApi");
+            _authorApiUrl = $"{baseUrlAPI}Authentication/login";
+            _getUserInfoApiUrl = $"{baseUrlAPI}Authentication/profile";
+            _logoutApiUrl = $"{baseUrlAPI}Authentication/logout";
         }
         [BindProperty]
         public LoginDTO Account { get; set; }
@@ -70,7 +69,7 @@ namespace GHCW_FE.Pages.Authentications
                     if (response.IsSuccessStatusCode)
                     {
                         var content = await response.Content.ReadAsStringAsync();
-                        var userAccount = JsonConvert.DeserializeObject<Account>(content);
+                        var userAccount = JsonConvert.DeserializeObject<AccountDTO>(content);
 
                         // Lưu thông tin tài khoản vào session
                         HttpContext.Session.SetString("acc", System.Text.Json.JsonSerializer.Serialize(userAccount));
@@ -78,7 +77,7 @@ namespace GHCW_FE.Pages.Authentications
                         // Điều hướng người dùng dựa trên loại tài khoản
                         return userAccount.Role switch
                         {
-                            0 => RedirectToPage(""),
+                            0 => RedirectToPage("/Admin/Dashboard"),
                             1 => RedirectToPage(""),
                             2 => Redirect("../Index"),
                             3 => Redirect("../Index"),
