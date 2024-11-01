@@ -4,21 +4,21 @@ namespace GHCW_FE.DTOs
 {
     public class RegisterDTO
     {
-        [Required(ErrorMessage = "Email is required.")]
-        [EmailAddress(ErrorMessage = "Invalid email format.")]
+        [Required(ErrorMessage = "Yêu cầu nhập email.")]
+        [EmailAddress(ErrorMessage = "Không đúng định dạng email.")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Password is required.")]
-        [MinLength(8, ErrorMessage = "Password must be at least 8 characters.")]
+        [Required(ErrorMessage = "Yêu cầu nhập Mật khẩu.")]
+        [MinLength(8, ErrorMessage = "Mật khẩu phải có ít nhất 8 kí tự.")]
         [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$",
-        ErrorMessage = "Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character.")]
+        ErrorMessage = "Mật khẩu phải chứa ít nhất 1 kí tự thường, 1 kí tự hoa, 1 kí tự số và 1 kí tự đặc biệt.")]
         public string Password { get; set; }
 
-        [Required(ErrorMessage = "Full name is required.")]
+        [Required(ErrorMessage = "Yêu cầu nhập Họ tên.")]
         public string FullName { get; set; }
 
-        [Required(ErrorMessage = "Phone number is required.")]
-        [RegularExpression(@"^\d{10}$", ErrorMessage = "Phone number must be exactly 10 digits.")]
+        [Required(ErrorMessage = "Yêu cầu nhập Số điện thoại.")]
+        [RegularExpression(@"^\d{10}$", ErrorMessage = "Số điện thoại phải có đúng 10 chữ số.")]
         public string PhoneNumber { get; set; }
     }
     public class SendEmailDTO

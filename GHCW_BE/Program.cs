@@ -1,4 +1,4 @@
-using GHCW_BE.DTOs;
+﻿using GHCW_BE.DTOs;
 using GHCW_BE.Helpers;
 using GHCW_BE.Mapper;
 using GHCW_BE.Models;
@@ -40,6 +40,17 @@ builder.Services.AddAuthentication(opt =>
         ValidAudience = builder.Configuration["JWT:Audience"],
         RoleClaimType = "Type",
         ClockSkew = TimeSpan.Zero
+    };
+    opt.Events = new JwtBearerEvents
+    {
+        OnChallenge = context =>
+        {
+            context.HandleResponse();
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            context.Response.ContentType = "application/json";
+            var result = System.Text.Json.JsonSerializer.Serialize(new { message = "Bạn phải đăng nhập để sử dụng tính năng này" });
+            return context.Response.WriteAsync(result);
+        }
     };
 });
 builder.Services.AddSwaggerGen(c =>
@@ -97,6 +108,7 @@ builder.Services.AddScoped<ServicesService>();
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<CategoryService>();
 
+builder.Services.Configure<CloudinarySetting>(builder.Configuration.GetSection("CloudinarySettings"));
 
 
 var app = builder.Build();

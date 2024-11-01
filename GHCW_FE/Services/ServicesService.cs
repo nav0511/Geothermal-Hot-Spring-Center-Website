@@ -35,8 +35,8 @@ namespace GHCW_FE.Services
 
         public async Task<HttpStatusCode> CreateService(ServiceDTO service)
         {
-            string url = "Service"; 
-            return await PushData(url, service); 
+            string url = "Service";
+            return await PushData(url, service);
         }
 
 

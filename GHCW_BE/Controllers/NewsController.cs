@@ -5,6 +5,7 @@ using GHCW_BE.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace GHCW_BE.Controllers
 {
@@ -33,11 +34,38 @@ namespace GHCW_BE.Controllers
             return Ok(result);
         }
 
-        [HttpGet("Total")]
-        public async Task<IActionResult> GetTotalNews()
+        [HttpGet("Total/{hasDiscount}")]
+        public async Task<IActionResult> GetTotalNews(bool hasDiscount)
         {
             var list = _newsService.GetListNews();
-            return Ok(list.Count());
+            if (hasDiscount)
+            {
+                var result = list.Where(n => n.DiscountId != null);
+                return Ok(await result.CountAsync());
+            }
+            else
+            {
+                var result = list.Where(n => n.DiscountId == null);
+                return Ok(await result.CountAsync());
+            }
+        }
+
+        [HttpGet("GetById/{id}")]
+        public async Task<IActionResult> GetNewsById(int id)
+        {
+            var news = await _newsService.GetNewsById(id);
+            if (news == null) return NotFound();
+            var result = _mapper.Map<NewsDTO>(news);
+            return Ok(result);
+        }
+
+        [HttpGet("GetByDiscountCode/{code}")]
+        public async Task<IActionResult> GetNewsByDiscountCode(string code)
+        {
+            var news = await _newsService.GetNewsByDiscountCode(code);
+            if (news == null) return NotFound();
+            var result = _mapper.Map<NewsDTO>(news);
+            return Ok(result);
         }
 
         [HttpGet("Reguler")]

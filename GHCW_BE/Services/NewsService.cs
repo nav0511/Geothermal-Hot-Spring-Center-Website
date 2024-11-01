@@ -18,6 +18,16 @@ namespace GHCW_BE.Services
             return _context.News.Include(n => n.Discount).AsQueryable();
         }
 
+        public async Task<News> GetNewsById(int id)
+        {
+            return await _context.News.Include(n => n.Discount).FirstOrDefaultAsync(n => n.Id == id);
+        }
+
+        public async Task<News> GetNewsByDiscountCode(string code)
+        {
+            return await _context.News.Include(n => n.Discount).FirstOrDefaultAsync(n => n.DiscountId == code);
+        }
+
         public async Task UpdateNews(News news)
         {
             _context.News.Update(news);

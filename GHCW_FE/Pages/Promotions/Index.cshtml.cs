@@ -7,9 +7,9 @@ namespace GHCW_FE.Pages.Promotions
 {
     public class IndexModel : PageModel
     {
-        private DiscountService _discountService = new DiscountService();
+        private NewsService _newsService = new NewsService();
 
-        public List<DiscountDTO> DiscountDTOs { get; set; } = new List<DiscountDTO>();
+        public List<NewsDTO> NewsDtos { get; set; } = new List<NewsDTO>();
 
         public int CurrentPage { get; set; }
         public int TotalPages { get; set; }
@@ -20,10 +20,10 @@ namespace GHCW_FE.Pages.Promotions
             CurrentPage = pageNumber;
             int skip = (pageNumber - 1) * PageSize;
 
-            int totalNewsCount = _discountService.GetTotalDiscounts().Result;
+            int totalNewsCount = _newsService.GetTotalNews(true).Result;
             TotalPages = (int)Math.Ceiling((double)totalNewsCount / PageSize);
 
-            DiscountDTOs = _discountService.GetDiscounts($"Discount?$top={PageSize}&$skip={skip}").Result;
+            NewsDtos = _newsService.GetNews($"News?$orderby=UploadDate desc&$top={PageSize}&$skip={skip}&$filter=DiscountId ne null").Result;
         }
     }
 }

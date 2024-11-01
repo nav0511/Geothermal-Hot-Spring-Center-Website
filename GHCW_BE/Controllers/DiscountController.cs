@@ -35,7 +35,7 @@ namespace GHCW_BE.Controllers
         public async Task<IActionResult> GetTotalDiscount()
         {
             var list = _discountService.GetListDiscounts();
-            return Ok(list.Count());
+            return Ok(await list.CountAsync());
         }
 
         [HttpGet("{code}")]

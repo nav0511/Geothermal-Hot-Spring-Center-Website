@@ -26,7 +26,7 @@ namespace GHCW_FE.Pages.Admin
                 return Page();
             }
 
-            var product = new ProductDTO
+            var product = new ProductDTOImg
             {
                 Name = Request.Form["name"],
                 Price = Convert.ToDouble(Request.Form["price"]),
@@ -36,11 +36,12 @@ namespace GHCW_FE.Pages.Admin
                 Size = Request.Form["size"],
                 IsForRent = Request.Form["isForRent"] == "on",
                 Quantity = Convert.ToInt32(Request.Form["quantity"]),
-                IsAvailable = Request.Form["isAvailable"] == "on"
+                IsAvailable = Request.Form["isAvailable"] == "on",
+                Img = Request.Form.Files["image"]
             };
 
 
-            var response = await _poductService.CreateProduct(product);
+            var response = await _poductService.CreateProduct(product, "multipart/form-data");
 
             if (response == HttpStatusCode.OK)
             {

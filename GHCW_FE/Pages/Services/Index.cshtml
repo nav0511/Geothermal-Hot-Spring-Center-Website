@@ -14,11 +14,15 @@
                     <div class="col-md-4 mb-4 pb-2">
                         <div class="blog-item">
                             <div class="position-relative">
-                                <img class="img-fluid w-100" src="@s.Image" alt="">
+                                <img class="img-fluid w-100 service-image" src="@s.Image" alt="">
                             </div>
                             <div class="bg-white p-4">
+                                <div class="d-flex justify-content-between mb-3">
+                                    <small class="m-0"><i class="fa fa-clock text-primary mr-2"></i>@s.Time</small>
+                                    <h5 class="m-0">@(s.Price * 1000)₫</h5>
+                                </div>
                                 <div class="d-flex mb-2">
-                                    <a class="text-primary text-uppercase text-decoration-none" asp-page="./Detail">@s.Name</a>
+                                    <a class="text-primary text-uppercase text-decoration-none" asp-page="./Detail" asp-route-Id="@s.Id">@s.Name</a>
                                 </div>
                                 <p class="h5 m-0 text-decoration-none service-description">@s.Description</p>
                             </div>
@@ -88,5 +92,10 @@
         overflow: hidden;
         text-overflow: ellipsis;
         max-height: 4.5em;
+    }
+
+    .service-image {
+        min-height: 150px;
+        max-height: 200px;
     }
 </style>

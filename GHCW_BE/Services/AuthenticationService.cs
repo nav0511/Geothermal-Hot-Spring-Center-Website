@@ -1,4 +1,5 @@
-﻿using GHCW_BE.DTOs;
+﻿using AutoMapper;
+using GHCW_BE.DTOs;
 using GHCW_BE.Helpers;
 using GHCW_BE.Models;
 using Microsoft.EntityFrameworkCore;
@@ -15,12 +16,14 @@ namespace GHCW_BE.Services
         private readonly GHCWContext _context;
         private readonly IConfiguration _configuration;
         private Helper _helper;
+        private IMapper _mapper;
 
-        public AuthenticationService(GHCWContext context, IConfiguration configuration, Helper helper)
+        public AuthenticationService(GHCWContext context, IConfiguration configuration, Helper helper, IMapper mapper)
         {
             _context = context;
             _helper = helper;
             _configuration = configuration;
+            _mapper = mapper;
         }
 
         public async Task Register(Account user)
@@ -34,6 +37,12 @@ namespace GHCW_BE.Services
         public async Task<Account?> CheckAccountExsit(string email)
         {
             var checkUser = await _context.Accounts.FirstOrDefaultAsync(x => x.Email.Equals(email));
+            return checkUser;
+        }
+
+        public async Task<Account?> CheckPhoneExsit(string phone)
+        {
+            var checkUser = await _context.Accounts.FirstOrDefaultAsync(x => x.PhoneNumber.Equals(phone));
             return checkUser;
         }
 
@@ -165,28 +174,6 @@ namespace GHCW_BE.Services
             return null;
         }
 
-        //lấy thông tin nhân viên bằng ID
-        public async Task<Account?> GetEmployeeProfileById(int eID)
-        {
-            var employee = await _context.Accounts.FirstOrDefaultAsync(e => e.Id == eID && e.Role >= 1);
-            if (employee != null)
-            {
-                return employee;
-            }
-            return null;
-        }
-
-        //lấy thông tin khách hàng bằng ID
-        public async Task<Account?> GetCustomerProfileById(int cID)
-        {
-            var customer = await _context.Accounts.FirstOrDefaultAsync(c => c.Id == cID && c.Role == 5);
-            if (customer != null)
-            {
-                return customer;
-            }
-            return null;
-        }
-
         //lấy danh sách user
         public async Task<IEnumerable<Account>> GetUserList()
         {
@@ -201,49 +188,25 @@ namespace GHCW_BE.Services
         }
 
         //lấy danh sách khách hàng role = 5
-        public async Task<IEnumerable<Account>> GetCustomerList()
+        public async Task<IEnumerable<Account>> GetCustomerAccountList()
         {
             return await _context.Accounts.Where(a => a.Role == 5).ToListAsync();
         }
 
-
-        //cập nhật profile của user
-        public async Task UpdateProfile(Account a)
-        {
-            var user = await _context.Accounts.FirstOrDefaultAsync(u => u.Id == a.Id);
-            if (user != null)
-            {
-                user.Name = a.Name;
-                user.Address = a.Address;
-                user.PhoneNumber = a.PhoneNumber;
-                user.DoB = a.DoB;
-                user.Gender = a.Gender;
-                _context.Accounts.Update(user);
-                await _context.SaveChangesAsync();
-            }
-            else
-            {
-                throw new KeyNotFoundException("User not found.");
-            }
-        }
-
         //Đổi password
-        public async Task<bool> UpdatePassword(Account user)
+        public async Task<bool> ChangePassword(int uId, string newPassword)
         {
+            var user = await GetUserProfileById(uId);
             if (user != null)
             {
-                var acc = await _context.Accounts.FirstOrDefaultAsync(a => a.Email.Equals(user.Email));
-                if (acc != null)
-                {
-                    acc.Password = user.Password;
-                    await _context.SaveChangesAsync();
-                    return true;
-                }
+                user.Password = newPassword;
+                await _context.SaveChangesAsync();
+                return true;
             }
             return false;
         }
 
-        public async Task<Account> GetAccountByRefreshToken(string refreshToken)
+        public async Task<Account?> GetAccountByRefreshToken(string refreshToken)
         {
             var acc = await _context.Accounts.FirstOrDefaultAsync(a => a.RefreshToken == refreshToken);
             return acc;
@@ -255,17 +218,142 @@ namespace GHCW_BE.Services
             _context.Accounts.Update(a);
             await _context.SaveChangesAsync();
         }
-
-        public async Task UserActivation(int uid)
+        public async Task<(bool isSuccess, string message)> UpdateRefreshToken(Account a)
         {
-            var acc = await _context.Accounts.FirstOrDefaultAsync(x => x.Id == uid);
+            var user = await _context.Accounts.FirstOrDefaultAsync(u => u.Id == a.Id);
+            if (user == null)
+            {
+                return (false, "Không tìm thấy tài khoản.");
+            }
+            user.RefreshToken = a.RefreshToken;
+            try
+            {
+                _context.Accounts.Update(user);
+                await _context.SaveChangesAsync();
+                return (true, "Cập nhật thông tin thành công.");
+            }
+            catch (Exception)
+            {
+                return (false, "Cập nhật thông tin thất bại, vui lòng kiểm tra lại.");
+            }
+        }
+        public async Task<(bool isSuccess, string message)> UserActivation(int uid)
+        {
+            var acc = await GetUserProfileById(uid);
             if (acc == null)
             {
-                return;
+                return (false, "Tài khoản không tồn tại.");
             }
-            acc.IsActive = !acc.IsActive;
+            try
+            {
+                acc.IsActive = !acc.IsActive;
+                await _context.SaveChangesAsync();
 
-            await _context.SaveChangesAsync();
+                return (true, "Thay đổi trạng thái tài khoản thành công.");
+            }   
+            catch (Exception)
+            {
+                return (false, "Thay đổi trạng thái tài khoản thất bại, vui lòng thử lại.");
+            }
+        }
+
+        public async Task<(bool isSuccess, string message)> AddNewUser(AddRequest a)
+        {
+            try
+            {
+                var user = _mapper.Map<AddRequest, Account>(a);
+                _context.Accounts.Add(user);
+                await _context.SaveChangesAsync();
+                return (true, "Thêm tài khoản mới thành công.");
+            }
+            catch (Exception)
+            {
+                return (false, "Có lỗi trong quá trình thêm tài khoản, vui lòng thử lại.");
+            }
+        }
+
+        //user tự chỉnh sửa profile của mình
+        public async Task<(bool isSuccess, string message)> UpdateProfile(UpdateRequest r)
+        {
+            var user = await _context.Accounts.FirstOrDefaultAsync(u => u.Id == r.Id);
+            if (user == null)
+            {
+                return (false, "Không tìm thấy tài khoản.");
+            }
+            try
+            {
+                _mapper.Map(r, user);
+                _context.Accounts.Update(user);
+                await _context.SaveChangesAsync();
+                return (true, "Cập nhật thông tin thành công.");
+            }
+            catch (Exception)
+            {
+                return (false, "Cập nhật thông tin thất bại, vui lòng kiểm tra lại.");
+            }
+        }
+
+        //admin chỉnh sửa thông tin của user
+        public async Task<(bool isSuccess, string message)> EditProfile(EditRequest r)
+        {
+            var user = await _context.Accounts.FirstOrDefaultAsync(u => u.Id == r.Id);
+            if (user == null)
+            {
+                return (false, "Không tìm thấy tài khoản.");
+            }
+            try
+            {
+                _mapper.Map(r, user);
+                _context.Accounts.Update(user);
+                await _context.SaveChangesAsync();
+                return (true, "Cập nhật thông tin thành công.");
+            }
+            catch (Exception)
+            {
+                return (false, "Cập nhật thông tin thất bại, vui lòng kiểm tra lại.");
+            }
+        }
+
+        public async Task<IEnumerable<CustomerDTO>> GetCustomerList()
+        {
+            var customers = await _context.Customers.ToListAsync();
+            var customerDTOs = _mapper.Map<List<Customer>, List<CustomerDTO>>(customers);
+            return customerDTOs;
+        }
+
+        public async Task<(bool isSuccess, string message)> AddNewCustomer(AddCustomerRequest a)
+        {
+            try
+            {
+                var customer = _mapper.Map<AddCustomerRequest, Customer>(a);
+                _context.Customers.Add(customer);
+                await _context.SaveChangesAsync();
+                return (true, "Thêm khách hàng mới thành công.");
+            }
+            catch (Exception)
+            {
+                return (false, "Có lỗi trong quá trình thêm khách hàng mới, vui lòng thử lại.");
+            }
+        }
+
+        public async Task<(bool isSuccess, string message)> EditCustomer(CustomerDTO c)
+        {
+            var customer = await _context.Customers.FirstOrDefaultAsync(u => u.Id == c.Id);
+            if (customer == null)
+            {
+                return (false, "Không tìm thấy khách hàng.");
+            }
+            try
+            {
+                _mapper.Map(c, customer);
+                _context.Customers.Update(customer);
+                await _context.SaveChangesAsync();
+                return (true, "Cập nhật thông tin thành công.");
+            }
+            catch (Exception)
+            {
+                return (false, "Cập nhật thông tin thất bại, vui lòng kiểm tra lại.");
+            }
         }
     }
 }
