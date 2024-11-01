@@ -275,11 +275,14 @@
             <div class="form-container">
                 <form method="post" asp-page-handler="Update">
                     <div class="form-group">
-                        <input type="hidden" id="code" name="code" value="@Model.Discount.Code" />
-
                         <div>
                             <label for="name">Tên giảm giá:</label>
                             <input type="text" id="name" name="name" value="@Model.Discount.Name" />
+                        </div>
+
+                        <div>
+                            <label for="code">Mã giảm giá:</label>
+                            <input type="text" id="code" name="code" value="@Model.Discount.Code" readonly/>
                         </div>
 
                         <div>
@@ -305,7 +308,8 @@
 
                     <div class="form-group checkbox-group">
                         <div class="checkbox-item">
-                            <input type="checkbox" id="isAvailable" name="isAvailable" @(Model.Discount.IsAvailable == true ? "checked" : "") />                            <label for="isAvailable">IsAvailable</label>
+                            <input type="checkbox" id="isAvailable" name="isAvailable" @(Model.Discount.IsAvailable == true ? "checked" : "") />                            
+                            <label for="isAvailable">IsAvailable</label>
                         </div>
                     </div>
 

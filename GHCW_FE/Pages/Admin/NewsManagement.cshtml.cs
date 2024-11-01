@@ -1,7 +1,8 @@
-using GHCW_FE.DTOs;
+﻿using GHCW_FE.DTOs;
 using GHCW_FE.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Net;
 
 namespace GHCW_FE.Pages.Admin
 {
@@ -24,6 +25,21 @@ namespace GHCW_FE.Pages.Admin
             TotalPages = (int)Math.Ceiling((double)totalNewsCount / PageSize);
 
             NewsDTOs = await _newsService.GetNews($"News?$filter=DiscountId eq null&top={PageSize}&$skip={skip}");
+        }
+
+        public async Task<IActionResult> OnPostDeleteNews(int id)
+        {
+            var responseStatus = await _newsService.DeleteNews(id);
+            if (responseStatus == HttpStatusCode.NoContent)
+            {
+
+                return RedirectToPage();
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Lỗi khi xóa tin tức.");
+                return Page();
+            }
         }
     }
 }

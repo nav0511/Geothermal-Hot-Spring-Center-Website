@@ -1,4 +1,5 @@
 ﻿using GHCW_FE.DTOs;
+using System.Net;
 
 namespace GHCW_FE.Services
 {
@@ -25,6 +26,30 @@ namespace GHCW_FE.Services
         {
             string url = "News/Promotion";
             return await GetData<int>(url);
+        }
+
+        public async Task<NewsDTO?> GetNewsById(int id)
+        {
+            string url = $"News/{id}";
+            return await GetData<NewsDTO>(url);
+        }
+
+        public async Task<HttpStatusCode> UpdateNews(NewsDTO news)
+        {
+            string url = $"News/{news.Id}";
+            return await PutData(url, news);
+        }
+
+        public async Task<HttpStatusCode> DeleteNews(int id)
+        {
+            string url = $"News/{id}";
+            return await DeleteData(url);
+        }
+
+        public async Task<HttpStatusCode> CreateNews(NewsDTO news)
+        {
+            string url = "News";
+            return await PushData(url, news);
         }
     }
 }

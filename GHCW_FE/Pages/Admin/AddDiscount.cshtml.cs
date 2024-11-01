@@ -25,6 +25,7 @@ namespace GHCW_FE.Pages.Admin
 
             var discount = new DiscountDTO
             {
+                Code = Request.Form["code"],
                 Name = Request.Form["name"],
                 Value = Convert.ToInt32(Request.Form["value"]),
                 StartDate = Convert.ToDateTime(Request.Form["startDate"]),

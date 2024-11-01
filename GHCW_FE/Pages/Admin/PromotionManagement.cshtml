@@ -278,7 +278,7 @@
         <main class="main-content">
             <header class="page-header">
                 <h2>Quản lý tin khuyến mãi</h2>
-                <button class="btn-add" onclick="window.location.href='#'">+ Thêm tin khuyến mãi mới</button>
+                <button class="btn-add" onclick="window.location.href='/Admin/AddPromotion'">+ Thêm tin khuyến mãi mới</button>
             </header>
 
             <div class="search-container">
@@ -312,8 +312,8 @@
                             <td>@news.IsActive</td>
 
                             <td>
-                                <button class="status active" onclick="window.location.href='/Admin/EditNews?id=@news.Id'">Sửa</button>
-                                <form method="post" asp-page-handler="DeleteNews" asp-route-id="@news.Id" style="display:inline;">
+                                <button class="status active" onclick="window.location.href='/Admin/EditPromotion?id=@news.Id'">Sửa</button>
+                                <form method="post" asp-page-handler="DeletePromotion" asp-route-id="@news.Id" style="display:inline;">
                                     <button type="submit" class="status inactive" onclick="return confirm('Bạn có chắc chắn muốn xóa tin tức này?');">Xóa</button>
                                 </form>
                             </td>
