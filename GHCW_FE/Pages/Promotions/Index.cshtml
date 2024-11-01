@@ -9,18 +9,21 @@
     <div class="container py-5">
         <div class="row">
             <div class="row pb-3">
-                @foreach (DiscountDTO d in Model.DiscountDTOs)
+                @foreach (NewsDTO n in Model.NewsDtos)
                 {
                     <div class="col-md-4 mb-4 pb-2">
                         <div class="blog-item">
+                            <div class="position-relative">
+                                <img class="img-fluid w-100 service-image" src="@n.Image" alt="">
+                                <div class="blog-date">
+                                    <h6 class="font-weight-bold text-white mb-n1">@n.UploadDate.Value.ToString("dd/MM")</h6>
+                                </div>
+                            </div>
                             <div class="bg-white p-4">
                                 <div class="d-flex mb-2">
-                                    <a class="text-primary text-uppercase text-decoration-none" asp-page="./Detail" asp-route-Code="@d.Code">@d.Name</a>
+                                    <a class="text-primary text-uppercase text-decoration-none" asp-page="./Detail" asp-route-Id="@n.Id">@n.Title</a>
                                 </div>
-                                <p class="h5 m-0 text-decoration-none service-description">@d.Description</p>
-                                <small class="text-primary text-uppercase">
-                                    @d.StartDate.Value.ToString("dd/MM") - @d.EndDate.Value.ToString("dd/MM")
-                                </small>
+                                <p class="h5 m-0 text-decoration-none service-description">@n.Description</p>
                             </div>
                         </div>
                     </div>
@@ -88,5 +91,10 @@
         overflow: hidden;
         text-overflow: ellipsis;
         max-height: 4.5em;
+    }
+
+    .service-image {
+        min-height: 150px;
+        max-height: 200px;
     }
 </style>

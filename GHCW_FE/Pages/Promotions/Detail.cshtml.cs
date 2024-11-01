@@ -7,32 +7,29 @@ namespace GHCW_FE.Pages.Promotions
 {
     public class DetailModel : PageModel
     {
-        private readonly DiscountService _discountService = new DiscountService();
         private readonly NewsService _newsService = new NewsService();
 
-        public DiscountDTO Discount { get; set; }
         public NewsDTO News { get; set; }
-        public List<DiscountDTO> DiscountDtos { get; set; } = new List<DiscountDTO>();
+        public List<NewsDTO> NewsDtos { get; set; } = new List<NewsDTO>();
         public string Message { get; set; }
 
-        public async Task<IActionResult> OnGet(string code)
+        public async Task<IActionResult> OnGet(int id)
         {
             try
             {
-                Discount = await _discountService.GetDiscountByCode(code);
-                if (Discount == null)
+                News = await _newsService.GetNewsById(id);
+                if (News == null || News.DiscountId == null)
                 {
                     throw new Exception();
                 }
-                News = await _newsService.GetNewsByDiscountCode(code);
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 Message = "Khuyến mãi không có hoặc đã hết hiệu lực";
             }
 
-            DiscountDtos = _discountService.GetDiscounts($"Discount?$top=5&$orderBy=StartDate desc&$filter=code ne '{code}'").Result;
+            NewsDtos = _newsService.GetNews($"News?$orderby=UploadDate desc&$top=5&$filter=Id ne {id} and DiscountId ne null").Result;
 
             return Page();
         }

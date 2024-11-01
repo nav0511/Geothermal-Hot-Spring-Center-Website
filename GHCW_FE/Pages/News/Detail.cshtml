@@ -4,13 +4,13 @@
 @{
 }
 
-@if (Model.News != null)
-{
-    <!-- News Start -->
-    <div class="container-fluid py-5">
-        <div class="container py-5">
-            <div class="row">
-                <div class="col-md-8">
+<!-- News Start -->
+<div class="container-fluid py-5">
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-md-8">
+                @if (Model.News != null)
+                {
                     <!-- News Detail Start -->
                     <div class="pb-3">
                         <div class="">
@@ -36,26 +36,33 @@
                         </div>
                     </div>
                     <!-- News Detail End -->
-                </div>
-                <div class="col-lg-4 mt-5 mt-lg-0">
-                    <div class="mb-5">
-                        <h4 class="text-uppercase mb-4" style="letter-spacing: 5px; padding-top: 3rem;">Các tin tức khác</h4>
-                        @foreach (NewsDTO n in Model.NewsDtos)
-                        {
-                            <a class="d-flex align-items-center text-decoration-none bg-white mb-3" asp-route-Id="@n.Id">
-                                <img class="img-fluid" src="@n.Image" alt="" style="max-width: 100px; max-height: 100px;">
-                                <div class="pl-3 m-1">
-                                    <h6>@n.Title</h6>
-                                    <small>
-                                        @n.UploadDate.Value.ToString("dd/MM/yyyy");
-                                    </small>
-                                </div>
-                            </a>
-                        }
-                    </div>
+                }
+
+                else
+                {
+                    <h2 class="text-primary">
+                        @Model.Message
+                    </h2>
+                }
+            </div>
+            <div class="col-lg-4 mt-5 mt-lg-0">
+                <div class="mb-5">
+                    <h4 class="text-uppercase mb-4" style="letter-spacing: 5px; padding-top: 3rem;">Các tin tức khác</h4>
+                    @foreach (NewsDTO n in Model.NewsDtos)
+                    {
+                        <a class="d-flex align-items-center text-decoration-none bg-white mb-3" asp-route-Id="@n.Id">
+                            <img class="img-fluid" src="@n.Image" alt="" style="width: 100px; height: 80px;">
+                            <div class="pl-3 m-1">
+                                <h6>@n.Title</h6>
+                                <small>
+                                    @n.UploadDate.Value.ToString("dd/MM/yyyy");
+                                </small>
+                            </div>
+                        </a>
+                    }
                 </div>
             </div>
         </div>
     </div>
-    <!-- News End -->
-}
+</div>
+<!-- News End -->

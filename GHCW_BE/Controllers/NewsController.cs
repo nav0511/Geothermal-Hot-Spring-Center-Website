@@ -4,6 +4,7 @@ using GHCW_BE.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace GHCW_BE.Controllers
 {
@@ -32,11 +33,20 @@ namespace GHCW_BE.Controllers
             return Ok(result);
         }
 
-        [HttpGet("Total")]
-        public async Task<IActionResult> GetTotalNews()
+        [HttpGet("Total/{hasDiscount}")]
+        public async Task<IActionResult> GetTotalNews(bool hasDiscount)
         {
             var list = _newsService.GetListNews();
-            return Ok(await list.CountAsync());
+            if (hasDiscount)
+            {
+                var result = list.Where(n => n.DiscountId != null);
+                return Ok(await result.CountAsync());
+            }
+            else
+            {
+                var result = list.Where(n => n.DiscountId == null);
+                return Ok(await result.CountAsync());
+            }
         }
 
         [HttpGet("GetById/{id}")]
