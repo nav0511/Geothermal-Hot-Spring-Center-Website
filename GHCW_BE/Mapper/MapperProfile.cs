@@ -9,7 +9,7 @@ namespace GHCW_BE.Mapper
         public MapperProfile()
         {
             CreateMap<News, NewsDTO>();
-            CreateMap<News, NewsDTO2>();
+            //CreateMap<News, NewsDTO2>();
             CreateMap<Discount, DiscountDTO>();
             CreateMap<Service, ServiceDTO>();
             CreateMap<Service, ServiceDTO2>();
@@ -20,7 +20,7 @@ namespace GHCW_BE.Mapper
 
 
             CreateMap<NewsDTO, News>();
-            CreateMap<NewsDTO2, News>();
+            //CreateMap<NewsDTO2, News>();
             CreateMap<DiscountDTO, Discount>();
             CreateMap<ServiceDTO, Service>();
             CreateMap<ServiceDTO2, Service>();
@@ -76,6 +76,10 @@ namespace GHCW_BE.Mapper
                 .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role))
                 .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive))
                 .ForMember(dest => dest.IsEmailNotify, opt => opt.MapFrom(src => src.IsEmailNotify));
+
+            CreateMap<EditRequest, CustomerDTO>()
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber));
         }
     }
 }

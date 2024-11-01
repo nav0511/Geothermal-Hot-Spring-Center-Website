@@ -1,4 +1,5 @@
-﻿using GHCW_BE.DTOs;
+﻿using AutoMapper;
+using GHCW_BE.DTOs;
 using GHCW_BE.Helpers;
 using GHCW_BE.Models;
 using GHCW_BE.Services;
@@ -34,11 +35,6 @@ namespace GHCW_BE.Controllers
                 {
                     return Conflict("Email đã được sử dụng, vui lòng dùng email khác để đăng ký");
                 }
-                checkAccExist = await _service.CheckPhoneExsit(registerDTO.PhoneNumber);
-                if (checkAccExist != null)
-                {
-                    return Conflict("Số điện thoại đã được sử dụng, vui lòng dùng số khác để đăng ký");
-                }
 
                 var activeCode = await _helper.GenerateVerificationCode(6);
                 Account a = new()
@@ -49,7 +45,8 @@ namespace GHCW_BE.Controllers
                     PhoneNumber = registerDTO.PhoneNumber,
                     IsActive = false,
                     ActivationCode = activeCode,
-                    Role = 5
+                    Role = 5,
+                    IsEmailNotify = true
                 };
                 var encodedEmail = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(a.Email));
                 var encodedActivationCode = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(a.ActivationCode));
@@ -62,7 +59,36 @@ namespace GHCW_BE.Controllers
                 }
 
                 await _service.Register(a);
-                return Ok("Đăng ký thành công, vui lòng kiểm tra email để kích hoạt tài khoản!");
+
+                var existCustomer = await _service.CheckPhoneExsit(a.PhoneNumber);
+                if (existCustomer != null)
+                {
+                    existCustomer.Email = a.Email;
+                    existCustomer.FullName = a.Name;
+                    existCustomer.AccountId = a.Id;
+                    var (isSuccess,message) = await _service.EditCustomer(existCustomer);
+                    if (!isSuccess)
+                    {
+                        return BadRequest(message);
+                    }
+                    return Ok("Đăng ký thành công, vui lòng kiểm tra email để kích hoạt tài khoản!");
+                }
+                else
+                {
+                    var addCustomer = new AddCustomerRequest()
+                    {
+                        FullName = a.Name,
+                        Email = a.Email,
+                        PhoneNumber = a.PhoneNumber,
+                        AccountId = a.Id
+                    };
+                    var (isSuccess, message) = await _service.AddNewCustomer(addCustomer);
+                    if (!isSuccess)
+                    {
+                        return BadRequest(message);
+                    }
+                    return Ok("Đăng ký thành công, vui lòng kiểm tra email để kích hoạt tài khoản!");
+                }
             }
             return BadRequest("Thông tin đăng ký không hợp lệ.");
         }
@@ -347,11 +373,6 @@ namespace GHCW_BE.Controllers
                 {
                     return Conflict("Email đã được sử dụng, vui lòng dùng email khác để đăng ký");
                 }
-                checkAccExist = await _service.CheckPhoneExsit(a.PhoneNumber);
-                if (checkAccExist != null)
-                {
-                    return Conflict("Số điện thoại đã được sử dụng, vui lòng dùng số khác để đăng ký");
-                }
                 a.Password = _helper.HashPassword(a.Password);
                 var (isSuccess, message) = await _service.AddNewUser(a);
                 if (!isSuccess)
@@ -373,17 +394,24 @@ namespace GHCW_BE.Controllers
 
             if (roleClaim != null && int.Parse(roleClaim.Value) == 0)
             {
-                var checkAccExist = await _service.CheckPhoneExsit(r.PhoneNumber);
-                if (checkAccExist != null)
+                var checkExistCustomer = await _service.CheckCustomerExsit(r.Id);
+                if (checkExistCustomer != null)
                 {
-                    return Conflict("Số điện thoại đã được sử dụng, vui lòng dùng số khác để đăng ký");
-                }
-                var (isSuccess, message) = await _service.EditProfile(r);
-                if (!isSuccess)
-                {
+                    checkExistCustomer.FullName = r.Name;
+                    checkExistCustomer.PhoneNumber = r.PhoneNumber;
+
+                    var (isSuccess, message) = await _service.EditCustomer(checkExistCustomer);
+                    if (isSuccess)
+                    {
+                        (isSuccess, message) = await _service.EditProfile(r);
+                        if (!isSuccess)
+                        {
+                            return BadRequest(message);
+                        }
+                        return Ok(message);
+                    }
                     return BadRequest(message);
                 }
-                return Ok(message);
             }
             return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền thực hiện hành động này.");
         }
@@ -393,21 +421,27 @@ namespace GHCW_BE.Controllers
         public async Task<IActionResult> UpdateProfile(UpdateRequest r)
         {
             var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "ID");
-            if (userIdClaim == null || userIdClaim.Value != r.Id.ToString())
+            if (userIdClaim != null || userIdClaim?.Value == r.Id.ToString())
             {
-                return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền cập nhật hồ sơ của người dùng khác.");
+                var checkExistCustomer = await _service.CheckCustomerExsit(r.Id);
+                if (checkExistCustomer != null)
+                {
+                    checkExistCustomer.FullName = r.Name;
+                    checkExistCustomer.PhoneNumber = r.PhoneNumber;
+                    var (isSuccess, message) = await _service.EditCustomer(checkExistCustomer);
+                    if (isSuccess)
+                    {
+                        (isSuccess, message) = await _service.UpdateProfile(r);
+                        if (!isSuccess)
+                        {
+                            return BadRequest(message);
+                        }
+                        return Ok(message);
+                    }
+                    return BadRequest(message);
+                }
             }
-            var checkAccExist = await _service.CheckPhoneExsit(r.PhoneNumber);
-            if (checkAccExist != null)
-            {
-                return Conflict("Số điện thoại đã được sử dụng, vui lòng dùng số khác để đăng ký");
-            }
-            var (isSuccess, message) = await _service.UpdateProfile(r);
-            if (!isSuccess)
-            {
-                return BadRequest(message);
-            }
-            return Ok(message);
+            return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền cập nhật hồ sơ của người dùng khác.");
         }
 
         [Authorize]
@@ -475,11 +509,7 @@ namespace GHCW_BE.Controllers
                 {
                     return Conflict("Email đã được sử dụng, vui lòng dùng email khác để đăng ký");
                 }
-                checkAccExist = await _service.CheckPhoneExsit(a.PhoneNumber);
-                if (checkAccExist != null)
-                {
-                    return Conflict("Số điện thoại đã được sử dụng, vui lòng dùng số khác để đăng ký");
-                }
+
                 var (isSuccess, message) = await _service.AddNewCustomer(a);
                 if (!isSuccess)
                 {
@@ -498,19 +528,20 @@ namespace GHCW_BE.Controllers
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             var roleClaim = identity?.FindFirst("Role");
 
-            if (roleClaim != null && int.Parse(roleClaim.Value) <= 4)
+            if (roleClaim != null && int.Parse(roleClaim.Value) == 0)
             {
-                var checkAccExist = await _service.CheckAccountExsit(c.Email);
-                if (checkAccExist != null)
+                UpdateRequest ur = new UpdateRequest()
                 {
-                    return Conflict("Email đã được sử dụng, vui lòng dùng email khác để đăng ký");
-                }
-                checkAccExist = await _service.CheckPhoneExsit(c.PhoneNumber);
-                if (checkAccExist != null)
+                    Id = c.AccountId ?? 0,
+                    Name = c.FullName,
+                    PhoneNumber = c.PhoneNumber
+                };
+                var (isSuccess, message) = await _service.UpdateProfile(ur);
+                if (!isSuccess)
                 {
-                    return Conflict("Số điện thoại đã được sử dụng, vui lòng dùng số khác để đăng ký");
+                    return BadRequest(message);
                 }
-                var (isSuccess, message) = await _service.EditCustomer(c);
+                (isSuccess, message) = await _service.EditCustomer(c);
                 if (!isSuccess)
                 {
                     return BadRequest(message);
