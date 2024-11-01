@@ -40,11 +40,11 @@ namespace GHCW_FE.Services
             return await GetData<int>(url);
         }
 
-        public async Task<NewsDTO?> GetNewsById(int id)
-        {
-            string url = $"News/{id}";
-            return await GetData<NewsDTO>(url);
-        }
+        //public async Task<NewsDTO?> GetNewsById(int id)
+        //{
+        //    string url = $"News/{id}";
+        //    return await GetData<NewsDTO>(url);
+        //}
 
         public async Task<HttpStatusCode> UpdateNews(NewsDTO news)
         {
