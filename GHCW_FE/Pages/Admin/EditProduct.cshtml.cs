@@ -14,6 +14,8 @@ namespace GHCW_FE.Pages.Admin
         private ProductService _productService = new ProductService();
         private CategoryService _categoryService = new CategoryService();
         public List<CategoryDTO> Categories { get; set; } = new List<CategoryDTO>();
+        public List<string> Sizes { get; } = new List<string> { "XS", "S", "M", "L", "XL", "XXL" };
+
 
         public ProductDTO Product { get; set; }
 
@@ -21,6 +23,7 @@ namespace GHCW_FE.Pages.Admin
         {
             Product = await _productService.GetProductByID(id);
             Categories = await _categoryService.GetCategory("Category");
+
 
             if (Product == null)
             {

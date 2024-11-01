@@ -10,6 +10,8 @@ namespace GHCW_FE.Pages.Admin
     {
         private ProductService _poductService = new ProductService();
         private CategoryService _categoryService = new CategoryService();
+        public List<string> Sizes { get; } = new List<string> { "XS", "S", "M", "L", "XL", "XXL" };
+
         public List<CategoryDTO> Categories { get; set; } = new List<CategoryDTO>();
 
         public async Task OnGetAsync()
