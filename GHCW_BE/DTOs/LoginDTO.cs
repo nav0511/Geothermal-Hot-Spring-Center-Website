@@ -12,7 +12,6 @@ namespace GHCW_BE.DTOs
         [MinLength(8, ErrorMessage = "Mật khẩu phải dài ít nhất 8 kí tự.")]
         [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$#^!%*?&])[A-Za-z\d@$#^!%*?&]{8,}$", ErrorMessage = "Mật khẩu phải chứa ít nhất 1 kí tự thường, 1 kí tự hoa, 1 kí tự đặc biệt (@$#^!%*?&) và 1 kí tự số.")]
         public string Password { get; set; } = null!;
-        public string? Type { get; set; }
     }
 
     public class LoginResponse

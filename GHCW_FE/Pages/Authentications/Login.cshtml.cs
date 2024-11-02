@@ -45,7 +45,8 @@ namespace GHCW_FE.Pages.Authentications
                 // Lưu token vào session nếu có
                 if (!string.IsNullOrEmpty(token?.AccessToken))
                 {
-                    HttpContext.Session.SetString("token", token.AccessToken.Replace("\n", ""));
+                    HttpContext.Session.SetString("accessToken", token.AccessToken.Replace("\n", ""));
+                    HttpContext.Session.SetString("refreshToken", token.RefreshToken.Replace("\n",""));
                     return true;
                 }
             }
@@ -54,11 +55,15 @@ namespace GHCW_FE.Pages.Authentications
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid) return Page();
+            if (!ModelState.IsValid)
+            {
+                TempData["ErrorMessage"] = "Thông tin đăng nhập không hợp lệ, vui lòng thử lại.";
+                return Page();
+            }
 
             if (await AuthenticateUserAsync(Account.Email, Account.Password))
             {
-                var token = HttpContext.Session.GetString("token");
+                var token = HttpContext.Session.GetString("accessToken");
                 if (token != null)
                 {
                     // Thêm token vào Authorization header
@@ -88,14 +93,13 @@ namespace GHCW_FE.Pages.Authentications
                 }
             }
 
-            // Thông báo lỗi khi đăng nhập thất bại
-            ViewData["error"] = "Email hoặc mật khẩu không chính xác! Vui lòng thử lại!";
+            TempData["ErrorMessage"] = "Đăng nhập thất bại, vui lòng kiểm tra lại email hoặc mật khẩu.";
             return Page();
         }
 
         public async Task<IActionResult> OnPostLogoutAsync()
         {
-            var token = HttpContext.Session.GetString("token");
+            var token = HttpContext.Session.GetString("accessToken");
 
             if (token != null)
             {

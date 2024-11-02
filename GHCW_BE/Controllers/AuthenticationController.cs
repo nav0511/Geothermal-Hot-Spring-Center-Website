@@ -204,20 +204,20 @@ namespace GHCW_BE.Controllers
         }
 
         [HttpPost("ForgotPassword")]
-        public async Task<IActionResult> ForgotPassword(string email)
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPassRequest email)
         {
-            var user = await _service.CheckAccountExsit(email);
+            var user = await _service.CheckAccountExsit(email.Email);
 
             if (user != null)
             {
                 var newPass = await _helper.GeneratePassword(16);
                 user.Password = _helper.HashPassword(newPass);
-                var emailSent = await _service.SendNewPasswordEmail(email, newPass);
+                var emailSent = await _service.SendNewPasswordEmail(email.Email, newPass);
                 if (!emailSent)
                 {
                     return StatusCode(500, "Không thể gửi email đặt lại mật khẩu.");
                 }
-                await _service.ChangePassword(user.Id,newPass);
+                await _service.ChangePassword(user.Id,user.Password);
                 return Ok("Gửi thành công, vui lòng kiểm tra email để lấy tài khoản mới của bạn!");
             }
             return BadRequest("Không có tài khoản nào khớp với email đã nhập");
@@ -232,6 +232,16 @@ namespace GHCW_BE.Controllers
             {
                 return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền đổi mật khẩu của người dùng khác.");
             }
+            var user = await _service.GetUserProfileById(cp.Id);
+            if (user == null)
+            {
+                return NotFound("Người dùng không tồn tại.");
+            }
+            if (!_helper.VerifyPassword(cp.OldPassword, user.Password))
+            {
+                return Conflict("Mật khẩu cũ không chính xác.");
+            }
+
             var success = await _service.ChangePassword(cp.Id, _helper.HashPassword(cp.NewPassword));
             if (success)
             {
@@ -471,7 +481,12 @@ namespace GHCW_BE.Controllers
             var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "ID");
             if (userIdClaim != null || userIdClaim?.Value == uid.ToString())
             {
-                return Ok();
+                var bookings = await _service.GetBookingListById(uid);
+                if (bookings == null)
+                {
+                    return NotFound("Danh sách đặt vé trống.");
+                }
+                return Ok(bookings);
             }
             return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền xem lịch sử của người dùng khác.");
         }

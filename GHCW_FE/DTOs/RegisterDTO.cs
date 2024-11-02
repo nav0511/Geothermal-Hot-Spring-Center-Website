@@ -8,19 +8,20 @@ namespace GHCW_FE.DTOs
         [EmailAddress(ErrorMessage = "Không đúng định dạng email.")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Yêu cầu nhập Mật khẩu.")]
-        [MinLength(8, ErrorMessage = "Mật khẩu phải có ít nhất 8 kí tự.")]
-        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$",
-        ErrorMessage = "Mật khẩu phải chứa ít nhất 1 kí tự thường, 1 kí tự hoa, 1 kí tự số và 1 kí tự đặc biệt.")]
+        [Required(ErrorMessage = "Yêu cầu nhập mật khẩu.")]
+        [MinLength(8, ErrorMessage = "Mật khẩu phải dài ít nhất 8 kí tự.")]
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$#^!%*?&])[A-Za-z\d@$#^!%*?&]{8,}$", ErrorMessage = "Mật khẩu phải chứa ít nhất 1 kí tự thường, 1 kí tự hoa, 1 kí tự đặc biệt (@$#^!%*?&) và 1 kí tự số.")]
         public string Password { get; set; }
 
-        [Required(ErrorMessage = "Yêu cầu nhập Họ tên.")]
+        [Required(ErrorMessage = "Yêu cầu nhập họ tên.")]
+        [RegularExpression(@"^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơưƯẠ-ỹ\s]+$", ErrorMessage = "Họ tên chỉ được chứa chữ cái và khoảng trắng.")]
         public string FullName { get; set; }
 
-        [Required(ErrorMessage = "Yêu cầu nhập Số điện thoại.")]
-        [RegularExpression(@"^\d{10}$", ErrorMessage = "Số điện thoại phải có đúng 10 chữ số.")]
+        [Required(ErrorMessage = "Yêu cầu nhập số điện thoại.")]
+        [RegularExpression(@"^(0[3||5||7||8||9])\d{8}$", ErrorMessage = "Số điện thoại chưa đúng định dạng.")]
         public string PhoneNumber { get; set; }
     }
+
     public class SendEmailDTO
     {
         public string FromEmail { get; set; }
