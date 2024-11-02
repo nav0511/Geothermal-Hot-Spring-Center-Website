@@ -34,6 +34,7 @@ namespace GHCW_FE.Pages.Admin
                 return NotFound();
             }
 
+            Discount.Code = Request.Form["code"];
             Discount.Name = Request.Form["name"];
             Discount.Value = Convert.ToInt32(Request.Form["value"]);
             Discount.StartDate = Convert.ToDateTime(Request.Form["startDate"]);

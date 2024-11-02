@@ -82,6 +82,21 @@ namespace GHCW_BE.Controllers
             return Ok(list.Count());
         }
 
+        //[HttpGet("{id}")]
+        //public async Task<IActionResult> GetNewsById(int id)
+        //{
+        //    var news = await _newsService.GetListNews()
+        //                                        .FirstOrDefaultAsync(n => n.Id == id);
+
+        //    if (news == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var newsDTO = _mapper.Map<NewsDTO>(news);
+        //    return Ok(newsDTO);
+        //}
+
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateNews(int id, [FromBody] NewsDTO newsDto)
         {

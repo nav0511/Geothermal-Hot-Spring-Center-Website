@@ -106,18 +106,17 @@ namespace GHCW_BE.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateDiscount([FromBody] DiscountDTO2 discountDto)
+        public async Task<IActionResult> CreateDiscount([FromBody] DiscountDTO discountDto)
         {
             if (discountDto == null)
             {
                 return BadRequest("Dữ liệu mã giảm giá không hợp lệ.");
             }
 
-            var discountCode = await _discountService.GenerateUniqueDiscountCode();
 
             var discount = new Discount
             {
-                Code = discountCode,
+                Code = discountDto.Code,
                 Name = discountDto.Name,
                 Value = discountDto.Value ?? 0, 
                 StartDate = discountDto.StartDate ?? DateTime.Now,

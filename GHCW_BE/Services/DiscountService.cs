@@ -46,20 +46,20 @@ namespace GHCW_BE.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<string> GenerateUniqueDiscountCode()
-        {
-            string code;
-            var random = new Random();
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        //public async Task<string> GenerateUniqueDiscountCode()
+        //{
+        //    string code;
+        //    var random = new Random();
+        //    const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
-            do
-            {
-                code = new string(Enumerable.Repeat(chars, 6)
-                  .Select(s => s[random.Next(s.Length)]).ToArray());
-            }
-            while (await _context.Discounts.AnyAsync(d => d.Code == code));
+        //    do
+        //    {
+        //        code = new string(Enumerable.Repeat(chars, 6)
+        //          .Select(s => s[random.Next(s.Length)]).ToArray());
+        //    }
+        //    while (await _context.Discounts.AnyAsync(d => d.Code == code));
 
-            return code;
-        }
+        //    return code;
+        //}
     }
 }
