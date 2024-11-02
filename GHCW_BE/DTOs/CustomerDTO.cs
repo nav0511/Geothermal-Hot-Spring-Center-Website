@@ -18,7 +18,7 @@ namespace GHCW_BE.DTOs
         public string Email { get; set; } = null!;
 
         [Required(ErrorMessage = "Yêu cầu nhập số điện thoại.")]
-        [RegularExpression(@"^(0[3|5|7|8|9])\d{8}$", ErrorMessage = "Số điện thoại chưa đúng định dạng.")]
+        [RegularExpression(@"^(0[3||5||7||8||9])\d{8}$", ErrorMessage = "Số điện thoại chưa đúng định dạng.")]
         public string PhoneNumber { get; set; } = null!;
     }
 
@@ -35,7 +35,7 @@ namespace GHCW_BE.DTOs
         public string Email { get; set; } = null!;
 
         [Required(ErrorMessage = "Yêu cầu nhập số điện thoại.")]
-        [RegularExpression(@"^(0[3|5|7|8|9])\d{8}$", ErrorMessage = "Số điện thoại chưa đúng định dạng.")]
+        [RegularExpression(@"^(0[3||5||7||8||9])\d{8}$", ErrorMessage = "Số điện thoại chưa đúng định dạng.")]
         public string PhoneNumber { get; set; } = null!;
     }
 }

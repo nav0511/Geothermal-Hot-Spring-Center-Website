@@ -39,11 +39,25 @@ namespace GHCW_BE.Services
             var checkUser = await _context.Accounts.FirstOrDefaultAsync(x => x.Email.Equals(email));
             return checkUser;
         }
-
-        public async Task<Account?> CheckPhoneExsit(string phone)
+        public async Task<CustomerDTO?> CheckCustomerExsit(int aId)
         {
-            var checkUser = await _context.Accounts.FirstOrDefaultAsync(x => x.PhoneNumber.Equals(phone));
-            return checkUser;
+            var checkCustomer = await _context.Customers.FirstOrDefaultAsync(x => x.AccountId == aId);
+            if (checkCustomer == null)
+            {
+                return null;
+            }
+            var customerDTO = _mapper.Map<Customer, CustomerDTO>(checkCustomer);
+            return customerDTO;
+        }
+        public async Task<CustomerDTO?> CheckPhoneExsit(string phone)
+        {
+            var checkCustomer = await _context.Customers.FirstOrDefaultAsync(x => x.PhoneNumber.Equals(phone));
+            if (checkCustomer == null)
+            {
+                return null;
+            }
+            var customerDTO = _mapper.Map<Customer, CustomerDTO>(checkCustomer);
+            return customerDTO;
         }
 
         //kiem tra nguoi dung co ton tai va dang hoat dong hay khong
@@ -354,6 +368,12 @@ namespace GHCW_BE.Services
             {
                 return (false, "Cập nhật thông tin thất bại, vui lòng kiểm tra lại.");
             }
+        }
+
+        public async Task<IEnumerable<Ticket?>> GetBookingListById(int uid)
+        {
+            var tickets = await _context.Tickets.Where(t => t.CustomerId == uid).ToListAsync();
+            return tickets;
         }
     }
 }
