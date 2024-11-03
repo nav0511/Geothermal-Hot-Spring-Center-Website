@@ -10,11 +10,20 @@ namespace GHCW_FE.Pages.Admin
         private readonly ScheduleService _scheduleService = new ScheduleService();
 
         public DateTime StartDate { get; set; }
-        public string[,] ScheduleArray { get; set; } = new string[7, 2]; 
+        public string[,] ScheduleArray { get; set; } = new string[7, 2];
+        public List<int> AvailableYears { get; set; }
+        public List<string> WeeksOfSelectedYear { get; set; }
 
-        public async Task OnGetAsync(DateTime? selectedDate)
+
+        public async Task OnGetAsync(int? year = null)
         {
-            DateTime referenceDate = selectedDate ?? DateTime.Today;
+            int selectedYear = year ?? DateTime.Now.Year;
+
+            AvailableYears = Enumerable.Range(DateTime.Now.Year - 1, 3).ToList();
+
+            WeeksOfSelectedYear = GetWeeksOfYear(selectedYear);
+
+            DateTime referenceDate = DateTime.Today;
             StartDate = referenceDate.AddDays(-(int)referenceDate.DayOfWeek + (int)DayOfWeek.Monday);
 
             var schedules = await _scheduleService.GetWeeklySchedule(StartDate);
@@ -28,6 +37,24 @@ namespace GHCW_FE.Pages.Admin
                 }
             }
         }
+
+        public List<string> GetWeeksOfYear(int year)
+        {
+            var weeks = new List<string>();
+            DateTime firstDayOfYear = new DateTime(year, 1, 1);
+            DateTime startOfWeek = firstDayOfYear;
+
+            while (startOfWeek.Year == year)
+            {
+                DateTime endOfWeek = startOfWeek.AddDays(6);
+                weeks.Add($"{startOfWeek:dd/MM} - {endOfWeek:dd/MM}");
+                startOfWeek = startOfWeek.AddDays(7);
+            }
+
+            return weeks;
+        }
+
+
 
         public async Task<IActionResult> OnPostDeleteSchedule(int id)
         {
