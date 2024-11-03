@@ -1,9 +1,9 @@
 ﻿@page
-@model GHCW_FE.Pages.Authentications.ForgotPasswordModel
+@model GHCW_FE.Pages.Authentications.EmailActivationModel
 @{
-    ViewData["Title"] = "Quên mật khẩu";
+    ViewData["Title"] = "Kích hoạt tài khoản";
 }
-
+<!-- Carousel Start -->
 <div class="container-fluid p-0">
     <div id="header-carousel" class="carousel slide" data-ride="carousel">
         <div class="carousel-inner">
@@ -14,7 +14,7 @@
                         <div class="row justify-content-center">
                             <div class="col-md-4">
                                 <div class="bg-white-opacity p-4 rounded">
-                                    <h2 class="text-center mt-5">Quên mật khẩu</h2>
+                                    <h2 class="text-center mt-5">Kích hoạt tài khoản</h2>
 
                                     @if (TempData["SuccessMessage"] != null)
                                     {
@@ -22,6 +22,7 @@
                                             @TempData["SuccessMessage"]
                                         </div>
                                     }
+
                                     @if (TempData["ErrorMessage"] != null)
                                     {
                                         <div class="alert alert-danger mt-3">
@@ -29,16 +30,7 @@
                                         </div>
                                     }
 
-                                    <form method="POST">
-                                        <div class="form-group">
-                                            <label for="email" style="text-align: center">Vui lòng nhập email đăng nhập của bạn. Chúng tôi sẽ gửi mật khẩu mới.</label>
-                                            <input type="email" class="form-control" id="email" name="email" placeholder="Nhập email" required>
-                                        </div>
-                                        <button type="submit" class="btn btn-primary btn-block">Gửi Email</button>
-                                    </form>
-                                    <p class="text-center mt-3">
-                                        <a href="/Authentications/Login" style="color:black">Quay lại cửa sổ đăng nhập</a>
-                                    </p>
+                                    <button onclick="location.href='@Url.Page("/Authentications/Login")'" class="btn btn-primary mt-3">Đăng nhập</button>
                                 </div>
                             </div>
                         </div>
@@ -62,4 +54,15 @@
         color: black;
         text-align: left;
     }
+
+    .btn-black {
+        background-color: black;
+        color: white;
+        border: none;
+    }
+
+        .btn-black:hover {
+            background-color: #333;
+            color: white;
+        }
 </style>

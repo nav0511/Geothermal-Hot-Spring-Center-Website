@@ -116,7 +116,7 @@
                 background-color: #37a58d;
             }
 
-      
+
 
         /* Pagination */
         .pagination {
@@ -265,51 +265,77 @@
             </header>
 
             <div class="filter-container">
-                <select id="yearFilter">
-                    <option value="2024">2024</option>
-                    <option value="2023">2023</option>
+                <select id="yearFilter" onchange="updateWeekDropdown()">
+                    @foreach (var year in Model.AvailableYears)
+                    {
+                        <option value="@year" selected="@(year == DateTime.Now.Year)">@year</option>
+                    }
                 </select>
                 <select id="weekFilter">
-                    <option value="1">Tuần 1</option>
-                    <option value="2">Tuần 2</option>
-                    <!-- Thêm các tuần khác theo yêu cầu -->
+                    @foreach (var week in Model.WeeksOfSelectedYear)
+                    {
+                        <option value="@week">@week</option>
+                    }
                 </select>
             </div>
+
+
 
             <div class="schedule-title">Lịch trình</div>
 
             <!-- Bảng lịch tuần -->
             <table class="schedule-table">
-                <tr>
-                    <th>Ca/Ngày</th>
-                    <th>Thứ 2<br>07/10</th>
-                    <th>Thứ 3<br>08/10</th>
-                    <th>Thứ 4<br>09/10</th>
-                    <th>Thứ 5<br>10/10</th>
-                    <th>Thứ 6<br>11/10</th>
-                    <th>Thứ 7<br>12/10</th>
-                    <th>Chủ Nhật<br>13/10</th>
-                </tr>
-                <tr>
-                    <td><b>Ca 1</b><br>(7:00 - 15:00)</td>
-                    <td>Nguyen Minh K<br><a href="#">Sửa</a> | <a href="#">Xóa</a></td>
-                    <td>Quang Thi Quynh N<br><a href="#">Sửa</a> | <a href="#">Xóa</a></td>
-                    <td>Nguyen Minh K<br><a href="#">Sửa</a> | <a href="#">Xóa</a></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td><b>Ca 2</b><br>(15:00 - 22:00)</td>
-                    <td>Quang Thi Quynh N<br><a href="#">Sửa</a> | <a href="#">Xóa</a></td>
-                    <td>Nguyen Minh K<br><a href="#">Sửa</a> | <a href="#">Xóa</a></td>
-                    <td>Quang Thi Quynh N<br><a href="#">Sửa</a> | <a href="#">Xóa</a></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
+                <thead>
+                    <tr>
+                        <th>Ca/Ngày</th>
+                        @for (int i = 0; i < 7; i++)
+                        {
+                            var date = Model.StartDate.AddDays(i);
+                            <th>@date.ToString("dddd")<br>@date.ToString("dd/MM/yyyy")</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><b>Ca 1</b><br>(7:00 - 15:00)</td>
+                        @for (int i = 0; i < 7; i++)
+                        {
+                            <td>
+                                @if (!string.IsNullOrEmpty(Model.ScheduleArray[i, 0]))
+                                {
+                                    @Model.ScheduleArray[i, 0]
+
+                                    <br />
+                                    <a href="#">Sửa</a> <a href="#">Xóa</a>
+                                }
+                                else
+                                {
+                                    <span>Trống</span>
+                                }
+                            </td>
+                        }
+                    </tr>
+
+                    <tr>
+                        <td><b>Ca 2</b><br>(15:00 - 22:00)</td>
+                        @for (int i = 0; i < 7; i++)
+                        {
+                            <td>
+                                @if (!string.IsNullOrEmpty(Model.ScheduleArray[i, 1]))
+                                {
+                                    @Model.ScheduleArray[i, 1]
+
+                                    <br />
+                                    <a href="#">Sửa</a> <a href="#">Xóa</a>
+                                }
+                                else
+                                {
+                                    <span>Trống</span>
+                                }
+                            </td>
+                        }
+                    </tr>
+                </tbody>
             </table>
         </main>
     </div>
@@ -331,6 +357,8 @@
                 profileMenu.classList.remove('show');
             }
         });
+
+        
     </script>
 </body>
 </html> 

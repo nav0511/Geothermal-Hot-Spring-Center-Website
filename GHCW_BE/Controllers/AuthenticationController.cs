@@ -50,7 +50,7 @@ namespace GHCW_BE.Controllers
                 };
                 var encodedEmail = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(a.Email));
                 var encodedActivationCode = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(a.ActivationCode));
-                var activationLink = $"https://localhost:7226/api/Authentication/activate/{encodedEmail}/{encodedActivationCode}";
+                var activationLink = $"https://localhost:7260/Authentications/EmailActivation?email={encodedEmail}&code={encodedActivationCode}";
 
                 var emailSent = await _service.SendActivationEmail(registerDTO, activationLink);
                 if (!emailSent)
@@ -185,17 +185,14 @@ namespace GHCW_BE.Controllers
             return Ok("Đăng xuất thành công.");
         }
 
-        [HttpPost("activate/{email}/{code}")]
-        public async Task<IActionResult> ActivateAccount(string email, string code)
+        [HttpPost("activate")]
+        public async Task<IActionResult> ActivateAccount([FromBody] ActivationCode ac)
         {
-            var decodeEmail = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(email));
-            var decodeActivationCode = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(code));
-            var activeCode = new ActivationCode()
-            {
-                Email = decodeEmail,
-                Code = decodeActivationCode
-            };
-            var check = await _service.RedemActivationCode(activeCode);
+            var decodeEmail = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(ac.Email));
+            var decodeActivationCode = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(ac.Code));
+            ac.Email = decodeEmail;
+            ac.Code = decodeActivationCode;
+            var check = await _service.RedemActivationCode(ac);
             if (!check)
             {
                 return BadRequest("Tài khoản chưa được kích hoạt.");
@@ -204,20 +201,20 @@ namespace GHCW_BE.Controllers
         }
 
         [HttpPost("ForgotPassword")]
-        public async Task<IActionResult> ForgotPassword(string email)
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPassRequest email)
         {
-            var user = await _service.CheckAccountExsit(email);
+            var user = await _service.CheckAccountExsit(email.Email);
 
             if (user != null)
             {
                 var newPass = await _helper.GeneratePassword(16);
                 user.Password = _helper.HashPassword(newPass);
-                var emailSent = await _service.SendNewPasswordEmail(email, newPass);
+                var emailSent = await _service.SendNewPasswordEmail(email.Email, newPass);
                 if (!emailSent)
                 {
                     return StatusCode(500, "Không thể gửi email đặt lại mật khẩu.");
                 }
-                await _service.ChangePassword(user.Id,newPass);
+                await _service.ChangePassword(user.Id,user.Password);
                 return Ok("Gửi thành công, vui lòng kiểm tra email để lấy tài khoản mới của bạn!");
             }
             return BadRequest("Không có tài khoản nào khớp với email đã nhập");
@@ -232,6 +229,16 @@ namespace GHCW_BE.Controllers
             {
                 return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền đổi mật khẩu của người dùng khác.");
             }
+            var user = await _service.GetUserProfileById(cp.Id);
+            if (user == null)
+            {
+                return NotFound("Người dùng không tồn tại.");
+            }
+            if (!_helper.VerifyPassword(cp.OldPassword, user.Password))
+            {
+                return Conflict("Mật khẩu cũ không chính xác.");
+            }
+
             var success = await _service.ChangePassword(cp.Id, _helper.HashPassword(cp.NewPassword));
             if (success)
             {
@@ -471,7 +478,12 @@ namespace GHCW_BE.Controllers
             var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "ID");
             if (userIdClaim != null || userIdClaim?.Value == uid.ToString())
             {
-                return Ok();
+                var bookings = await _service.GetBookingListById(uid);
+                if (bookings == null)
+                {
+                    return NotFound("Danh sách đặt vé trống.");
+                }
+                return Ok(bookings);
             }
             return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền xem lịch sử của người dùng khác.");
         }

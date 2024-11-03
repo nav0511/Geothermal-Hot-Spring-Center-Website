@@ -107,6 +107,7 @@ builder.Services.AddScoped<DiscountService>();
 builder.Services.AddScoped<ServicesService>();
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<CategoryService>();
+builder.Services.AddScoped<ScheduleService>();
 
 builder.Services.Configure<CloudinarySetting>(builder.Configuration.GetSection("CloudinarySettings"));
 builder.Services.AddScoped<CloudinaryService>();
