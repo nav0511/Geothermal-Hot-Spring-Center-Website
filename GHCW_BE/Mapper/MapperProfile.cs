@@ -10,6 +10,7 @@ namespace GHCW_BE.Mapper
         {
             CreateMap<News, NewsDTO>();
             CreateMap<News, NewsDTO2>();
+            CreateMap<News, NewsDTOForAdd>();
             CreateMap<Discount, DiscountDTO>();
             CreateMap<Service, ServiceDTO>();
             CreateMap<Service, ServiceDTO2>();
@@ -21,6 +22,7 @@ namespace GHCW_BE.Mapper
 
             CreateMap<NewsDTO, News>();
             CreateMap<NewsDTO2, News>();
+            CreateMap<NewsDTOForAdd, News>();
             CreateMap<DiscountDTO, Discount>();
             CreateMap<ServiceDTO, Service>();
             CreateMap<ServiceDTO2, Service>();

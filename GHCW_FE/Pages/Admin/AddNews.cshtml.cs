@@ -23,17 +23,17 @@ namespace GHCW_FE.Pages.Admin
                 return Page();
             }
 
-            var news = new NewsDTO
+            var news = new NewsDTOForAdd
             {
                 Title = Request.Form["title"],
-                UploadDate = Convert.ToDateTime(Request.Form["uploadDate"]),
+                UploadDate = DateTime.Now,
                 IsActive = Request.Form["isActive"] == "on",
                 Description = Request.Form["description"],
-                Image = "/images/" + Request.Form["image"].ToString(),
+                Image = Request.Form.Files["image"]
             };
 
 
-            var response = await _newsService.CreateNews(news);
+            var response = await _newsService.CreateNews(news, "multipart/form-data");
 
             if (response == HttpStatusCode.OK)
             {
