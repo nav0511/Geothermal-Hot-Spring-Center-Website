@@ -50,7 +50,7 @@ namespace GHCW_BE.Controllers
                 };
                 var encodedEmail = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(a.Email));
                 var encodedActivationCode = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(a.ActivationCode));
-                var activationLink = $"https://localhost:7226/api/Authentication/activate/{encodedEmail}/{encodedActivationCode}";
+                var activationLink = $"https://localhost:7260/Authentications/EmailActivation?email={encodedEmail}&code={encodedActivationCode}";
 
                 var emailSent = await _service.SendActivationEmail(registerDTO, activationLink);
                 if (!emailSent)
@@ -185,17 +185,14 @@ namespace GHCW_BE.Controllers
             return Ok("Đăng xuất thành công.");
         }
 
-        [HttpPost("activate/{email}/{code}")]
-        public async Task<IActionResult> ActivateAccount(string email, string code)
+        [HttpPost("activate")]
+        public async Task<IActionResult> ActivateAccount([FromBody] ActivationCode ac)
         {
-            var decodeEmail = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(email));
-            var decodeActivationCode = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(code));
-            var activeCode = new ActivationCode()
-            {
-                Email = decodeEmail,
-                Code = decodeActivationCode
-            };
-            var check = await _service.RedemActivationCode(activeCode);
+            var decodeEmail = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(ac.Email));
+            var decodeActivationCode = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(ac.Code));
+            ac.Email = decodeEmail;
+            ac.Code = decodeActivationCode;
+            var check = await _service.RedemActivationCode(ac);
             if (!check)
             {
                 return BadRequest("Tài khoản chưa được kích hoạt.");

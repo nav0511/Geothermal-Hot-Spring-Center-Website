@@ -1,6 +1,7 @@
 ﻿using GHCW_FE.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using System.Net.Http.Headers;
 
 namespace GHCW_FE.Services
 {
@@ -18,9 +19,15 @@ namespace GHCW_FE.Services
             return statusCode;
         }
 
-        public async Task<HttpStatusCode> ChangePassword(ChangePassRequest changePassRequest)
+        public async Task<HttpStatusCode> ChangePassword(ChangePassRequest changePassRequest, string accessToken)
         {
-            var statusCode = await PushData("Authentication/ChangePassword", changePassRequest);
+            var statusCode = await PushData("Authentication/ChangePassword", changePassRequest, null, accessToken);
+            return statusCode;
+        }
+
+        public async Task<HttpStatusCode> AccountActivation(ActivationCode ac)
+        {
+            var statusCode = await PushData("Authentication/activate", ac);
             return statusCode;
         }
     }
