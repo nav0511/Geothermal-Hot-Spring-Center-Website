@@ -83,7 +83,7 @@ namespace GHCW_FE.Pages.Authentications
                         return userAccount.Role switch
                         {
                             0 => RedirectToPage("/Admin/Dashboard"),
-                            1 => RedirectToPage(""),
+                            1 => RedirectToPage("/Admin/Dashboard"),
                             2 => Redirect("../Index"),
                             3 => Redirect("../Index"),
                             4 => Redirect("../Index"),
