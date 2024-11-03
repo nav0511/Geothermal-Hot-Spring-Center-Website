@@ -1,5 +1,6 @@
-﻿using GHCW_FE.DTOs;
+﻿
 using System.Net;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 
@@ -7,17 +8,37 @@ namespace GHCW_FE.Services
 {
     public class BaseService
     {
-        private string? _rootUrl;
+        protected readonly string? _rootUrl;
         public BaseService()
         {
             var config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
             _rootUrl = config.GetSection("ApiUrls")["MyApi"];
         }
-        public async Task<T?> GetData<T>(string url, string? accepttype = null)
+
+        public void SetAccessToken(string? accessToken)
+        {
+            HttpClient client = new HttpClient();
+            if (!string.IsNullOrEmpty(accessToken))
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            }
+            else
+            {
+                client.DefaultRequestHeaders.Authorization = null; // Xóa header nếu không có accessToken
+            }
+        }
+
+        public async Task<T?> GetData<T>(string url, string? accepttype = null, string? accessToken = null)
         {
             T? result = default(T);
             HttpClient client = new HttpClient();
             url = _rootUrl + url;
+
+            if (!string.IsNullOrEmpty(accessToken))
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            }
+
             HttpResponseMessage responseMessage = await client.GetAsync(url);
             if (responseMessage.StatusCode == System.Net.HttpStatusCode.OK)
             {
@@ -28,10 +49,16 @@ namespace GHCW_FE.Services
             else throw new Exception(responseMessage.StatusCode.ToString());
         }
 
-        public async Task<HttpStatusCode> PushData<T>(string url, T value, string? accepttype = null)
+        public async Task<HttpStatusCode> PushData<T>(string url, T value, string? accepttype = null, string? accessToken = null)
         {
             url = _rootUrl + url;
             HttpClient client = new HttpClient();
+
+            if (!string.IsNullOrEmpty(accessToken))
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            }
+
             if (accepttype == "multipart/form-data")
             {
                 // Create multipart content
@@ -52,9 +79,9 @@ namespace GHCW_FE.Services
                         var fileContent = new StreamContent(file.OpenReadStream())
                         {
                             Headers =
-                    {
-                        ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(file.ContentType)
-                    }
+                            {
+                                ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(file.ContentType)
+                            }
                         };
                         multipartContent.Add(fileContent, property.Name, file.FileName);
                     }
@@ -79,7 +106,7 @@ namespace GHCW_FE.Services
             }
         }
 
-        public async Task<HttpStatusCode> PutData<T>(string url, T value, string? accepttype = null)
+        public async Task<HttpStatusCode> PutData<T>(string url, T value, string? accepttype = null, string? accessToken = null)
         {
             url = _rootUrl + url;
             HttpClient client = new HttpClient();
@@ -89,7 +116,7 @@ namespace GHCW_FE.Services
             return responseMessage.StatusCode;
         }
 
-        public async Task<HttpStatusCode> DeleteData(string url)
+        public async Task<HttpStatusCode> DeleteData(string url, string? accessToken = null)
         {
             url = _rootUrl + url;
             HttpClient client = new HttpClient();
