@@ -1,5 +1,6 @@
 ﻿using GHCW_FE.DTOs;
 using GHCW_FE.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -17,7 +18,8 @@ namespace GHCW_FE.Pages.Promotions
         {
             try
             {
-                News = await _newsService.GetNewsById(id);
+                var (statusCode, news) = await _newsService.GetNewsById(id);
+                News = news;
                 if (News == null || News.DiscountId == null)
                 {
                     throw new Exception();
@@ -28,8 +30,8 @@ namespace GHCW_FE.Pages.Promotions
             {
                 Message = "Khuyến mãi không có hoặc đã hết hiệu lực";
             }
-
-            NewsDtos = _newsService.GetNews($"News?$orderby=UploadDate desc&$top=5&$filter=Id ne {id} and DiscountId ne null").Result;
+            var(statusCode2, newsDtos) = _newsService.GetNews($"News?$orderby=UploadDate desc&$top=5&$filter=Id ne {id} and DiscountId ne null").Result;
+            NewsDtos = newsDtos;
 
             return Page();
         }

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using GHCW_FE.DTOs;
 using GHCW_FE.Services;
+using Microsoft.AspNetCore.Http;
 
 namespace GHCW_FE.Pages.Services
 {
@@ -20,10 +21,12 @@ namespace GHCW_FE.Pages.Services
             CurrentPage = pageNumber;
             int skip = (pageNumber - 1) * PageSize;
 
-            int totalNewsCount = _servicesService.GetTotalServices().Result;
+            var(statusCode, TotalNewsCount) = _servicesService.GetTotalServices().Result;
+            int totalNewsCount = TotalNewsCount;
             TotalPages = (int)Math.Ceiling((double)totalNewsCount / PageSize);
 
-            ServiceDTOs = await _servicesService.GetServices($"Service?$top={PageSize}&$skip={skip}");
+            var(statusCode2, serviceDTOs) = await _servicesService.GetServices($"Service?$top={PageSize}&$skip={skip}");
+            ServiceDTOs = serviceDTOs;
         }
     }
 }

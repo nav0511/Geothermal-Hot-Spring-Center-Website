@@ -1,5 +1,6 @@
 using GHCW_FE.DTOs;
 using GHCW_FE.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -20,10 +21,12 @@ namespace GHCW_FE.Pages.Promotions
             CurrentPage = pageNumber;
             int skip = (pageNumber - 1) * PageSize;
 
-            int totalNewsCount = _newsService.GetTotalNews(true).Result;
+            var(statusCode, TotalNewsCount) = _newsService.GetTotalNews(true).Result;
+            int totalNewsCount = TotalNewsCount;
             TotalPages = (int)Math.Ceiling((double)totalNewsCount / PageSize);
 
-            NewsDtos = _newsService.GetNews($"News?$orderby=UploadDate desc&$top={PageSize}&$skip={skip}&$filter=DiscountId ne null").Result;
+            var (statusCode2, newsDTOs) = _newsService.GetNews($"News?$orderby=UploadDate desc&$top={PageSize}&$skip={skip}&$filter=DiscountId ne null").Result;
+            NewsDtos = newsDTOs;
         }
     }
 }

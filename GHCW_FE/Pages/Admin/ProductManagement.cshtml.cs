@@ -1,5 +1,6 @@
 ﻿using GHCW_FE.DTOs;
 using GHCW_FE.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Net;
@@ -21,10 +22,12 @@ namespace GHCW_FE.Pages.Admin
             CurrentPage = pageNumber;
             int skip = (pageNumber - 1) * PageSize;
 
-            int totalNewsCount = _productService.GetTotalProducts().Result;
+            var(statusCode, TotalNewsCount) = _productService.GetTotalProducts().Result;
+            int totalNewsCount = TotalNewsCount;
             TotalPages = (int)Math.Ceiling((double)totalNewsCount / PageSize);
 
-            ProductDTOs = await _productService.GetProducts($"Product?$top={PageSize}&$skip={skip}");
+            var (statusCode2, productDTOs) = await _productService.GetProducts($"Product?$top={PageSize}&$skip={skip}");
+            ProductDTOs = productDTOs;
         }
 
         public async Task<IActionResult> OnPostDeleteProduct(int id)
