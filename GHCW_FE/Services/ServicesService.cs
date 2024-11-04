@@ -33,10 +33,11 @@ namespace GHCW_FE.Services
             return await DeleteData(url);
         }
 
-        public async Task<HttpStatusCode> CreateService(ServiceDTO service)
+        public async Task<HttpStatusCode> CreateService(ServiceDTO2 service, string? accepttype = null)
         {
             string url = "Service";
-            return await PushData(url, service);
+            if (accepttype != null) return await PushData(url, service, accepttype);
+            else return await PushData(url, service);
         }
 
 

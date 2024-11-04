@@ -10,6 +10,7 @@ namespace GHCW_BE.Mapper
         {
             CreateMap<News, NewsDTO>();
             CreateMap<News, NewsDTO2>();
+            CreateMap<News, NewsDTOForAdd>();
             CreateMap<Discount, DiscountDTO>();
             CreateMap<Service, ServiceDTO>();
             CreateMap<Service, ServiceDTO2>();
@@ -17,10 +18,13 @@ namespace GHCW_BE.Mapper
             CreateMap<Product, ProductDTO2>();
             CreateMap<Product, ProductDTOImg>();
             CreateMap<Category, CategoryDTO>();
+            CreateMap<Schedule, ScheduleDTO>();
+            
 
 
             CreateMap<NewsDTO, News>();
             CreateMap<NewsDTO2, News>();
+            CreateMap<NewsDTOForAdd, News>();
             CreateMap<DiscountDTO, Discount>();
             CreateMap<ServiceDTO, Service>();
             CreateMap<ServiceDTO2, Service>();
@@ -28,6 +32,7 @@ namespace GHCW_BE.Mapper
             CreateMap<ProductDTO2, Product>();
             CreateMap<ProductDTOImg, Product>();
             CreateMap<CategoryDTO, Category>();
+            CreateMap<ScheduleDTO, Schedule>();
 
             CreateMap<Customer, CustomerDTO>()
                 .ForMember(dest => dest.AccountId, opt => opt.MapFrom(src => src.AccountId))

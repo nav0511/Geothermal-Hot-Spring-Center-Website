@@ -16,11 +16,12 @@ namespace GHCW_BE.Controllers
     {
         private IMapper _mapper;
         private ServicesService _servicesService;
-
-        public ServiceController(IMapper mapper, ServicesService servicesService)
+        private CloudinaryService _cloudinary;
+        public ServiceController(IMapper mapper, ServicesService servicesService, CloudinaryService cloudinary)
         {
             _mapper = mapper;
             _servicesService = servicesService;
+            _cloudinary = cloudinary;
         }
 
         [HttpGet]
@@ -111,22 +112,15 @@ namespace GHCW_BE.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateService([FromBody] ServiceDTO2 serviceDto)
+        public async Task<IActionResult> CreateService([FromForm] ServiceDTO2 serviceDto)
         {
             if (serviceDto == null)
             {
                 return BadRequest("Dữ liệu dịch vụ không hợp lệ.");
             }
 
-            //var service = _mapper.Map<Service>(serviceDto);
-            var service = new Service
-            {
-                Name = serviceDto.Name,
-                Price = serviceDto.Price ?? 0,
-                Time = serviceDto.Time,
-                Description = serviceDto.Description,
-                Image = serviceDto.Image
-            };
+            var service = _mapper.Map<Service>(serviceDto);
+            service.Image = await _cloudinary.UploadImageResult(serviceDto.Image);
 
            
            await _servicesService.AddService(service);

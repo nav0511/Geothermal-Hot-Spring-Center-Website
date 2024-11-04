@@ -16,12 +16,14 @@ namespace GHCW_BE.Controllers
         private IMapper _mapper;
         private NewsService _newsService;
         private DiscountService _discountService;
+        private CloudinaryService _cloudinaryService;
 
-        public NewsController(IMapper mapper, NewsService newsService, DiscountService discountService)
+        public NewsController(IMapper mapper, NewsService newsService, DiscountService discountService, CloudinaryService cloudinaryService)
         {
             _mapper = mapper;
             _newsService = newsService;
             _discountService = discountService;
+            _cloudinaryService = cloudinaryService;
         }
 
         [HttpGet]
@@ -153,7 +155,7 @@ namespace GHCW_BE.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateNews([FromBody] NewsDTO2 newsDto)
+        public async Task<IActionResult> CreateNews([FromForm] NewsDTOForAdd newsDto)
         {
             if (newsDto == null)
             {
@@ -162,7 +164,7 @@ namespace GHCW_BE.Controllers
 
             var news = _mapper.Map<News>(newsDto);
 
-
+            news.Image = await _cloudinaryService.UploadImageResult(newsDto.Image);
 
             await _newsService.AddNews(news);
 

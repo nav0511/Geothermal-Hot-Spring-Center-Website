@@ -25,18 +25,18 @@ namespace GHCW_FE.Pages.Admin
                 return Page();
             }
 
-            var promotion = new NewsDTO
+            var promotion = new NewsDTOForAdd
             {
                 Title = Request.Form["title"],
                 DiscountId = Request.Form["discountId"],
-                UploadDate = Convert.ToDateTime(Request.Form["uploadDate"]),
+                UploadDate = DateTime.Now,
                 IsActive = Request.Form["isActive"] == "on",
                 Description = Request.Form["description"],
-                Image = "/images/" + Request.Form["image"].ToString(),
+                Image = Request.Form.Files["image"],
             };
 
 
-            var response = await _newsService.CreateNews(promotion);
+            var response = await _newsService.CreateNews(promotion, "multipart/form-data");
 
             if (response == HttpStatusCode.OK)
             {

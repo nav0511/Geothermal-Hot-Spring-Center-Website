@@ -58,10 +58,11 @@ namespace GHCW_FE.Services
             return await DeleteData(url);
         }
 
-        public async Task<HttpStatusCode> CreateNews(NewsDTO news)
+        public async Task<HttpStatusCode> CreateNews(NewsDTOForAdd news, string? accepttype = null)
         {
             string url = "News";
-            return await PushData(url, news);
+            if (accepttype != null) return await PushData(url, news, accepttype);
+            else return await PushData(url, news);
         }
     }
 }

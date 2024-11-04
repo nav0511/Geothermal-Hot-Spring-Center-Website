@@ -10,16 +10,12 @@ namespace GHCW_BE.Services
     public class ProductService
     {
         private readonly GHCWContext _context;
-        private readonly Cloudinary _cloudinary;
+        private readonly CloudinaryService _cloudinary;
 
-        public ProductService(GHCWContext context, IOptions<CloudinarySetting> config)
+        public ProductService(GHCWContext context, CloudinaryService cloudinaryService)
         {
             _context = context;
-            var account = new CloudinaryDotNet.Account(
-                config.Value.CloudName,
-                config.Value.ApiKey,
-                config.Value.ApiSecret);
-            _cloudinary = new Cloudinary(account);
+            _cloudinary = cloudinaryService;
         }
 
         public IQueryable<Product> GetListProducts()
@@ -57,25 +53,7 @@ namespace GHCW_BE.Services
 
         public async Task<string> UploadImageResult(IFormFile r)
         {
-            if (r == null || r.Length == 0)
-                throw new Exception("No file uploaded.");
-            var uploadResult = new ImageUploadResult();
-            string folderName = "TestPRM";
-
-            if (r.Length > 0)
-            {
-                await using var stream = r.OpenReadStream();
-                var uploadParams = new ImageUploadParams
-                {
-                    File = new FileDescription(r.FileName, stream),
-                    Folder = folderName
-                };
-                uploadResult = await _cloudinary.UploadAsync(uploadParams);
-            }
-            if (uploadResult.Error != null)
-                throw new Exception(uploadResult.Error.Message);
-
-            return uploadResult.SecureUrl.ToString();
+            return await _cloudinary.UploadImageResult(r);
         }
     }
 }

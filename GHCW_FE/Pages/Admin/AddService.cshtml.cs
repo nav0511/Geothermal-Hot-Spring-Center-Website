@@ -23,17 +23,17 @@ namespace GHCW_FE.Pages.Admin
                 return Page();
             }
 
-            var service = new ServiceDTO
+            var service = new ServiceDTO2
             {
                 Name = Request.Form["name"],
                 Price = Convert.ToDouble(Request.Form["price"]),
                 Time = Request.Form["time"],
                 Description = Request.Form["description"],
-                Image = "/images/" + Request.Form["image"].ToString(),
+                Image = Request.Form.Files["image"],
             };
 
             
-            var response = await _servicesService.CreateService(service);
+            var response = await _servicesService.CreateService(service, "multipart/form-data");
 
             if (response == HttpStatusCode.OK)
             {
