@@ -5,17 +5,17 @@ namespace GHCW_FE.Services
 {
     public class ProductService : BaseService
     {
-        public async Task<List<ProductDTO>?> GetProducts(string url)
+        public async Task<(HttpStatusCode StatusCode, List<ProductDTO>? Products)> GetProducts(string url)
         {
             return await GetData<List<ProductDTO>>(url);
         }
-        public async Task<int> GetTotalProducts()
+        public async Task<(HttpStatusCode StatusCode, int TotalProducts)> GetTotalProducts()
         {
             string url = "Product/Total";
             return await GetData<int>(url);
         }
 
-        public async Task<ProductDTO?> GetProductByID(int id)
+        public async Task<(HttpStatusCode StatusCode, ProductDTO? Product)> GetProductByID(int id)
         {
             string url = $"Product/{id}";
             return await GetData<ProductDTO>(url);

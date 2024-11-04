@@ -15,7 +15,8 @@ namespace GHCW_FE.Pages.Admin
 
         public async Task OnGetAsync()
         {
-            Discounts = await _discountService.GetDiscounts("Discount");
+            var (statusCode, discounts) = await _discountService.GetDiscounts("Discount");
+            Discounts = discounts;
         }
 
         public async Task<IActionResult> OnPostCreateAsync()

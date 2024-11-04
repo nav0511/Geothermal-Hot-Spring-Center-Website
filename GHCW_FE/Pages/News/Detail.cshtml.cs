@@ -17,7 +17,8 @@ namespace GHCW_FE.Pages.News
         {
             try
             {
-                News = await _newsService.GetNewsById(id);
+                var (statusCode2, news) = await _newsService.GetNewsById(id);
+                News = news;
                 if (News == null)
                 {
                     throw new Exception();
@@ -27,7 +28,8 @@ namespace GHCW_FE.Pages.News
             {
                 Message = "Không có tin tức";
             }
-            NewsDtos = _newsService.GetNews($"News?$orderby=UploadDate desc&$top=5&$filter=Id ne {id} and DiscountId eq null").Result;
+            var (statusCode, newsDTOs) = _newsService.GetNews($"News?$orderby=UploadDate desc&$top=5&$filter=Id ne {id} and DiscountId eq null").Result;
+            NewsDtos = newsDTOs;
             return Page();
         }
     }

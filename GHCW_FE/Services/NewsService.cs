@@ -5,36 +5,36 @@ namespace GHCW_FE.Services
 {
     public class NewsService : BaseService
     {
-        public async Task<List<NewsDTO>?> GetNews(string url)
+        public async Task<(HttpStatusCode StatusCode, List<NewsDTO>? News)> GetNews(string url)
         {
             return await GetData<List<NewsDTO>>(url);
         }
 
-        public async Task<int> GetTotalNews(bool hasDiscount)
+        public async Task<(HttpStatusCode StatusCode, int TotalNews)> GetTotalNews(bool hasDiscount)
         {
             string url = $"News/Total/{hasDiscount}";
             return await GetData<int>(url);
         }
 
-        public async Task<NewsDTO> GetNewsById(int id)
+        public async Task<(HttpStatusCode StatusCode, NewsDTO? News)> GetNewsById(int id)
         {
             string url = $"News/GetById/{id}";
             return await GetData<NewsDTO>(url);
         }
 
-        public async Task<NewsDTO> GetNewsByDiscountCode(string code)
+        public async Task<(HttpStatusCode StatusCode, NewsDTO? News)> GetNewsByDiscountCode(string code)
         {
             string url = $"News/GetByDiscountCode/{code}";
             return await GetData<NewsDTO>(url);
         }
 
-        public async Task<int> GetTotalRegularNews()
+        public async Task<(HttpStatusCode StatusCode, int TotalRegularNews)> GetTotalRegularNews()
         {
             string url = "News/Reguler";
             return await GetData<int>(url);
         }
 
-        public async Task<int> GetTotalPromotionNews()
+        public async Task<(HttpStatusCode StatusCode, int TotalPromotionNews)> GetTotalPromotionNews()
         {
             string url = "News/Promotion";
             return await GetData<int>(url);

@@ -28,7 +28,7 @@ namespace GHCW_FE.Services
             }
         }
 
-        public async Task<T?> GetData<T>(string url, string? accepttype = null, string? accessToken = null)
+        public async Task<(HttpStatusCode StatusCode, T? Data)> GetData<T>(string url, string? accepttype = null, string? accessToken = null)
         {
             T? result = default(T);
             HttpClient client = new HttpClient();
@@ -40,13 +40,15 @@ namespace GHCW_FE.Services
             }
 
             HttpResponseMessage responseMessage = await client.GetAsync(url);
+            var statusCode = responseMessage.StatusCode;
+
             if (responseMessage.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 if (responseMessage.Content is not null)
-                    result = responseMessage.Content.ReadFromJsonAsync<T>().Result;
-                return result;
+                    result = await responseMessage.Content.ReadFromJsonAsync<T>();
+                return (statusCode, result);
             }
-            else throw new Exception(responseMessage.StatusCode.ToString());
+            return (statusCode, result);
         }
 
         public async Task<HttpStatusCode> PushData<T>(string url, T value, string? accepttype = null, string? accessToken = null)

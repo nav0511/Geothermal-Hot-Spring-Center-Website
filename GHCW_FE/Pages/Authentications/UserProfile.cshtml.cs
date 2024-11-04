@@ -22,7 +22,7 @@ namespace GHCW_FE.Pages.Authentications
         [BindProperty]
         public UpdateRequest UpdateRequest { get; set; } = new UpdateRequest();
         [BindProperty]
-        public AccountDTO UserProfile { get; set; }
+        public AccountDTO? UserProfile { get; set; }
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -32,7 +32,23 @@ namespace GHCW_FE.Pages.Authentications
                 TempData["ErrorMessage"] = "Bạn cần đăng nhập để xem hồ sơ.";
                 return RedirectToPage("/Authentications/Login");
             }
-            UserProfile = await _accService.UserProfile(accessToken);
+            var (statusCode, userProfile) = await _accService.UserProfile(accessToken);
+            if (statusCode == HttpStatusCode.Forbidden)
+            {
+                TempData["ErrorMessage"] = "Bạn không có quyền truy cập hồ sơ này.";
+                return RedirectToPage("/Authentications/Login");
+            }
+            else if (statusCode == HttpStatusCode.NotFound)
+            {
+                TempData["ErrorMessage"] = "Không tìm thấy người dùng này.";
+                return RedirectToPage("/Authentications/Login");
+            }
+            else if (statusCode != HttpStatusCode.OK)
+            {
+                TempData["ErrorMessage"] = "Đã xảy ra lỗi khi lấy thông tin người dùng.";
+                return RedirectToPage("/Authentications/Login");
+            }
+            UserProfile = userProfile;
             return Page();
         }
 
