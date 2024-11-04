@@ -4,390 +4,327 @@
 @using Microsoft.AspNetCore.Http
 @model GHCW_FE.Pages.Admin.DiscountManagementModel
 @{
-    Layout = null;
+    ViewData["Title"] = "Quản lý Mã giảm giá";
+    Layout = "_LayoutManagement";
+    ViewData["ActivePage"] = "/Admin/DiscountManagement";
 }
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý người dùng</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+
+<header class="page-header">
+    <h2>Quản lý phiếu giảm giá</h2>
+    <button class="btn-add" onclick="window.location.href='/Admin/AddDiscount'">+ Thêm phiếu giảm giá mới</button>
+</header>
+
+<div class="search-container">
+    <input type="text" placeholder="Tìm kiếm...">
+    <select>
+        <option value="0">Sắp xếp: chọn tùy chọn</option>
+        <option value="1">A-Z</option>
+        <option value="2">Z-A</option>
+        <option value="3">Active</option>
+        <option value="4">Inactive</option>
+    </select>
+</div>
+
+<table class="user-table">
+    <thead>
+        <tr>
+            <th>Mã giảm giá</th>
+            <th>Tên phiếu giảm giá</th>
+            <th>Ngày bắt đầu</th>
+            <th>Ngày kết thúc</th>
+            <th>Trạng thái</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var discount in Model.DiscountDTOs)
+        {
+            <tr>
+                <td>@discount.Code</td>
+                <td>@discount.Name</td>
+                <td>@discount.StartDate</td>
+                <td>@discount.EndDate</td>
+                <td>@discount.IsAvailable</td>
+
+                <td>
+                    <button class="status active" onclick="window.location.href='/Admin/EditDiscount?code=@discount.Code'">Sửa</button>
+                    <form method="post" asp-page-handler="DeleteDiscount" asp-route-id="@discount.Code" style="display:inline;">
+                        <button type="submit" class="status inactive" onclick="return confirm('Bạn có chắc chắn muốn xóa phiếu giảm giá này?');">Xóa</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="pagination">
+    @if (Model.CurrentPage > 1)
+    {
+        <a href="?pageNumber=@(Model.CurrentPage - 1)">«</a>
+    }
+
+    @for (int i = 1; i <= Model.TotalPages; i++)
+    {
+        <a href="?pageNumber=@i" class="@(i == Model.CurrentPage ? "active" : "")">@i</a>
+    }
+
+    @if (Model.CurrentPage < Model.TotalPages)
+    {
+        <a href="?pageNumber=@(Model.CurrentPage + 1)">»</a>
+    }
+</div>
+
+<script>
+    // Get the profile icon and dropdown elements
+    var profileIcon = document.getElementById("profileIcon");
+    var dropdownMenu = document.getElementById("dropdownMenu");
+    var profileMenu = document.querySelector(".profile-menu");
+
+    // Toggle dropdown when the profile icon is clicked
+    profileIcon.addEventListener("click", function (event) {
+        event.stopPropagation();
+        profileMenu.classList.toggle("show");
+    });
+
+    // Close the dropdown if user clicks outside
+    window.addEventListener("click", function (event) {
+        if (!event.target.matches('.profile-icon') && profileMenu.classList.contains('show')) {
+            profileMenu.classList.remove('show');
+        }
+    });
+</script>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f7f7f7;
+        height: 100vh;
+        display: flex;
+    }
+
+    .admin-container {
+        display: flex;
+        width: 100%;
+    }
+
+    /* Sidebar */
+    .sidebar {
+        width: 240px;
+        background-color: white;
+        padding: 20px;
+        height: 100vh;
+        color: black;
+        position: fixed;
+        top: 0;
+        left: 0;
+    }
+
+    .sidebar-header h2 {
+        margin: 0;
+        padding: 0;
+        font-size: 24px;
+        color: #000;
+    }
+
+    .sidebar nav ul {
+        list-style: none;
+        padding: 0;
+    }
+
+        .sidebar nav ul li a i {
+            margin-right: 15px;
         }
 
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f7f7f7;
-            height: 100vh;
+        .sidebar nav ul li a {
+            color: #008767;
+            text-decoration: none;
             display: flex;
+            align-items: center;
+            padding: 10px;
+            border-radius: 4px;
         }
 
-        .admin-container {
-            display: flex;
-            width: 100%;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            width: 240px;
-            background-color: white;
-            padding: 20px;
-            height: 100vh;
-            color: black;
-            position: fixed;
-            top: 0;
-            left: 0;
-        }
-
-        .sidebar-header h2 {
-            margin: 0;
-            padding: 0;
-            font-size: 24px;
-            color: #000;
-        }
-
-        .sidebar nav ul {
-            list-style: none;
-            padding: 0;
-        }
-
-            .sidebar nav ul li a i {
-                margin-right: 15px;
-            }
-
-            .sidebar nav ul li a {
-                color: #008767;
-                text-decoration: none;
-                display: flex;
-                align-items: center;
-                padding: 10px;
-                border-radius: 4px;
-            }
-
-            .sidebar nav ul li.active a {
-                background-color: #00b894;
-                color: white;
-            }
-
-            .sidebar nav ul li a:hover {
-                background-color: #e0f7fa;
-            }
-
-        /* Main content */
-        .main-content {
-            margin-left: 240px;
-            flex-grow: 1;
-            padding: 20px;
-        }
-
-        /* Header Section */
-        .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: end;
-            background-color: #D6F6F1;
-            border-radius: 15px;
-            padding: 20px;
-            margin-top: 60px;
-            margin-bottom: 20px;
-            min-height: 200px;
-        }
-
-            .page-header h2 {
-                margin: 0;
-                font-size: 24px;
-                color: #333;
-                font-weight: bold;
-            }
-
-        .btn-add {
-            background-color: #42C2A8;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-            .btn-add:hover {
-                background-color: #37a58d;
-            }
-
-        /* Search container */
-        .search-container {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-
-            .search-container input {
-                padding: 10px;
-                width: 80%;
-                border: 1px solid #ccc;
-                border-radius: 8px;
-            }
-
-            .search-container select {
-                padding: 10px;
-                border: 1px solid #ccc;
-                border-radius: 8px; /* Rounded select */
-            }
-
-        /* User table */
-        .user-table {
-            width: 100%;
-            font-size: 12px;
-            border-collapse: collapse;
-            margin-top: 20px;
-            background-color: white;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-            .user-table th, .user-table td {
-                padding: 15px;
-                text-align: left;
-            }
-
-            .user-table th {
-                background-color: #f1f1f1;
-            }
-
-            .user-table td {
-                border-bottom: 1px solid #ddd;
-            }
-
-            .user-table .status {
-                padding: 5px 10px;
-                border-radius: 4px;
-                font-size: 14px;
-            }
-
-        .status.active {
+        .sidebar nav ul li.active a {
             background-color: #00b894;
             color: white;
         }
 
-        .status.inactive {
-            background-color: #ff6b6b;
-            color: white;
+        .sidebar nav ul li a:hover {
+            background-color: #e0f7fa;
         }
 
-        /* Pagination */
-        .pagination {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-            .pagination a {
-                padding: 10px 15px;
-                margin: 0 5px;
-                background-color: #e0f7fa;
-                text-decoration: none;
-                color: black;
-                border-radius: 4px;
-            }
-
-                .pagination a.active {
-                    background-color: #00b894;
-                    color: white;
-                }
-
-                .pagination a:hover {
-                    background-color: #019875;
-                    color: white;
-                }
-        /* Profile Icon Styling */
-        .profile-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 2px solid #42C2A8;
-        }
-
-        /* Dropdown Menu Styling */
-        .profile-menu {
-            position: absolute;
-            top: 2%;
-            right: 2%;
-            z-index: 10;
-        }
-
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            right: 0;
-            background-color: white;
-            min-width: 120px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            z-index: 1;
-        }
-
-            .dropdown-content a {
-                color: black;
-                padding: 12px 16px;
-                text-decoration: none;
-                display: block;
-            }
-
-                .dropdown-content a:hover {
-                    background-color: #f1f1f1;
-                }
-
-        /* Show the dropdown when clicked */
-        .profile-menu.show .dropdown-content {
-            display: block;
-        }
-    </style>
-</head>
-<body>
-    <!-- Profile Menu HTML -->
-    @if (HttpContext.Session.GetString("acc") != null)
-    {
-        var account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
-        <div class="profile-menu">
-            <div id="profileIcon">
-                <label>@account.Name</label>
-                <img src="https://www.w3schools.com/w3images/avatar2.png" alt="Profile" class="profile-icon">
-            </div>
-            <div id="dropdownMenu" class="dropdown-content">
-                <a class="dropdown-item" asp-page="/Index">Trang chủ</a>
-                <a class="dropdown-item" asp-page="/Authentications/UserProfile">Thông tin cá nhân</a>
-                <form method="post" class="dropdown-item" asp-page="/Authentications/Login" asp-page-handler="LogOut" style="width:100%">
-                    <button type="submit" style="border:none; background:none; padding:0; text-align:left;">Đăng xuất</button>
-                </form>
-            </div>
-        </div>
+    /* Main content */
+    .main-content {
+        margin-left: 240px;
+        flex-grow: 1;
+        padding: 20px;
     }
 
-    <div class="admin-container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <h2>GH<span style="color: green">CW</span></h2>
-            </div>
-            <br />
-            <nav>
-                <ul>
-                    <li class="@(ViewData["ActivePage"] as string == "/Admin/Dashboard" ? "active" : "")">
-                        <a asp-page="/Admin/Dashboard"><i class="fas fa-chart-line"></i> Dashboard</a>
-                    </li>
-                    <li class="@(ViewData["ActivePage"] as string == "/Admin/ServiceManagement" ? "active" : "")">
-                        <a asp-page="/Admin/ServiceManagement"><i class="fas fa-cogs"></i> Quản lý dịch vụ</a>
-                    </li>
-                    <li class="@(ViewData["ActivePage"] as string == "/Admin/UserManagement" ? "active" : "")">
-                        <a asp-page="/Admin/UserManagement"><i class="fas fa-users"></i> Quản lý người dùng</a>
-                    </li>
-                    <li class="@(ViewData["ActivePage"] as string == "/Admin/DiscountManagement" ? "active" : "")">
-                        <a asp-page="/Admin/DiscountManagement"><i class="fas fa-ticket-alt"></i> Quản lý phiếu giảm giá</a>
-                    </li>
-                    <li class="@(ViewData["ActivePage"] as string == "/Admin/NewsManagement" ? "active" : "")">
-                        <a asp-page="/Admin/NewsManagement"><i class="fas fa-newspaper"></i> Quản lý tin tức</a>
-                    </li>
-                    <li class="@(ViewData["ActivePage"] as string == "/Admin/PromotionManagement" ? "active" : "")">
-                        <a asp-page="/Admin/PromotionManagement"><i class="fas fa-bullhorn"></i> Quản lý tin khuyến mãi</a>
-                    </li>
-                    <li class="@(ViewData["ActivePage"] as string == "/Admin/ProductManagement" ? "active" : "")">
-                        <a asp-page="/Admin/ProductManagement"><i class="fas fa-boxes"></i> Quản lý sản phẩm</a>
-                    </li>
-                </ul>
-            </nav>
-        </aside>
+    /* Header Section */
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        background-color: #D6F6F1;
+        border-radius: 15px;
+        padding: 20px;
+        margin-top: 60px;
+        margin-bottom: 20px;
+        min-height: 200px;
+    }
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <header class="page-header">
-                <h2>Quản lý phiếu giảm giá</h2>
-                <button class="btn-add" onclick="window.location.href='/Admin/AddDiscount'">+ Thêm phiếu giảm giá mới</button>
-            </header>
+        .page-header h2 {
+            margin: 0;
+            font-size: 24px;
+            color: #333;
+            font-weight: bold;
+        }
 
-            <div class="search-container">
-                <input type="text" placeholder="Tìm kiếm...">
-                <select>
-                    <option value="0">Sắp xếp: chọn tùy chọn</option>
-                    <option value="1">A-Z</option>
-                    <option value="2">Z-A</option>
-                    <option value="3">Active</option>
-                    <option value="4">Inactive</option>
-                </select>
-            </div>
+    .btn-add {
+        background-color: #42C2A8;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 16px;
+    }
 
-            <table class="user-table">
-                <thead>
-                    <tr>
-                        <th>Mã giảm giá</th>
-                        <th>Tên phiếu giảm giá</th>
-                        <th>Ngày bắt đầu</th>
-                        <th>Ngày kết thúc</th>
-                        <th>Trạng thái</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var discount in Model.DiscountDTOs)
-                    {
-                        <tr>
-                            <td>@discount.Code</td>
-                            <td>@discount.Name</td>
-                            <td>@discount.StartDate</td>
-                            <td>@discount.EndDate</td>
-                            <td>@discount.IsAvailable</td>
+        .btn-add:hover {
+            background-color: #37a58d;
+        }
 
-                            <td>
-                                <button class="status active" onclick="window.location.href='/Admin/EditDiscount?code=@discount.Code'">Sửa</button>
-                                <form method="post" asp-page-handler="DeleteDiscount" asp-route-id="@discount.Code" style="display:inline;">
-                                    <button type="submit" class="status inactive" onclick="return confirm('Bạn có chắc chắn muốn xóa phiếu giảm giá này?');">Xóa</button>
-                                </form>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+    /* Search container */
+    .search-container {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
 
-            <div class="pagination">
-                @if (Model.CurrentPage > 1)
-                {
-                    <a href="?pageNumber=@(Model.CurrentPage - 1)">«</a>
-                }
+        .search-container input {
+            padding: 10px;
+            width: 80%;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
 
-                @for (int i = 1; i <= Model.TotalPages; i++)
-                {
-                    <a href="?pageNumber=@i" class="@(i == Model.CurrentPage ? "active" : "")">@i</a>
-                }
+        .search-container select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px; /* Rounded select */
+        }
 
-                @if (Model.CurrentPage < Model.TotalPages)
-                {
-                    <a href="?pageNumber=@(Model.CurrentPage + 1)">»</a>
-                }
-            </div>
-        </main>
-    </div>
-    <script>
-        // Get the profile icon and dropdown elements
-        var profileIcon = document.getElementById("profileIcon");
-        var dropdownMenu = document.getElementById("dropdownMenu");
-        var profileMenu = document.querySelector(".profile-menu");
+    /* User table */
+    .user-table {
+        width: 100%;
+        font-size: 12px;
+        border-collapse: collapse;
+        margin-top: 20px;
+        background-color: white;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
 
-        // Toggle dropdown when the profile icon is clicked
-        profileIcon.addEventListener("click", function (event) {
-            event.stopPropagation();
-            profileMenu.classList.toggle("show");
-        });
+        .user-table th, .user-table td {
+            padding: 15px;
+            text-align: left;
+        }
 
-        // Close the dropdown if user clicks outside
-        window.addEventListener("click", function (event) {
-            if (!event.target.matches('.profile-icon') && profileMenu.classList.contains('show')) {
-                profileMenu.classList.remove('show');
+        .user-table th {
+            background-color: #f1f1f1;
+        }
+
+        .user-table td {
+            border-bottom: 1px solid #ddd;
+        }
+
+        .user-table .status {
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+    .status.active {
+        background-color: #00b894;
+        color: white;
+    }
+
+    .status.inactive {
+        background-color: #ff6b6b;
+        color: white;
+    }
+
+    /* Pagination */
+    .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+        .pagination a {
+            padding: 10px 15px;
+            margin: 0 5px;
+            background-color: #e0f7fa;
+            text-decoration: none;
+            color: black;
+            border-radius: 4px;
+        }
+
+            .pagination a.active {
+                background-color: #00b894;
+                color: white;
             }
-        });
-    </script>
-</body>
-</html> 
+
+            .pagination a:hover {
+                background-color: #019875;
+                color: white;
+            }
+    /* Profile Icon Styling */
+    .profile-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+        border: 2px solid #42C2A8;
+    }
+
+    /* Dropdown Menu Styling */
+    .profile-menu {
+        position: absolute;
+        top: 2%;
+        right: 2%;
+        z-index: 10;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        right: 0;
+        background-color: white;
+        min-width: 120px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        z-index: 1;
+    }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+            .dropdown-content a:hover {
+                background-color: #f1f1f1;
+            }
+
+    /* Show the dropdown when clicked */
+    .profile-menu.show .dropdown-content {
+        display: block;
+    }
+</style>

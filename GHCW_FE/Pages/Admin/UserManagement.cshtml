@@ -6,6 +6,7 @@
 @{
     ViewData["Title"] = "Quản lý tài khoản";
     Layout = "_LayoutManagement";
+    ViewData["ActivePage"] = "/Admin/UserManagement";
 }
 
 <header class="page-header">
@@ -43,6 +44,14 @@
                     <th>Địa chỉ</th>
                     <th>Nhận thông báo qua email</th>
                     <th>Trạng thái</th>
+                    @if (HttpContext.Session.GetString("acc") != null)
+                    {
+                        var account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
+                        @if (account.Role == 0)
+                        {
+                            <th>Tùy chọn</th>
+                        }
+                    }
                 </tr>
             </thead>
             <tbody>
@@ -92,6 +101,28 @@
                                 <span class="status inactive">Không hoạt động</span>
                             }
                         </td>
+                        @if (HttpContext.Session.GetString("acc") != null)
+                        {
+                            var account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
+                            @if (account.Role == 0)
+                            {
+                                <td>
+                                    <button onclick="window.location.href='/Admin/UserDetails'">Chỉnh sửa</button>
+                                    @if (acc.IsActive == true)
+                                    {
+                                        <form method="post" asp-page-handler="DeactivateStudent">
+                                            <button type="submit" name="StudentID" value="@acc.Id">Vô hiệu hóa</button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <form method="post" asp-page-handler="ActivateStudent">
+                                            <button type="submit" name="StudentID" value="@acc.Id">Kích hoạt</button>
+                                        </form>
+                                    }
+                                </td>
+                            }
+                        }
                     </tr>
                 }
             </tbody>
