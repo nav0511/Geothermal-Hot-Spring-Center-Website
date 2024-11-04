@@ -60,6 +60,9 @@
                     <li class="@(ViewData["ActivePage"] as string == "/Admin/ProductManagement" ? "active" : "")">
                         <a asp-page="/Admin/ProductManagement"><i class="fas fa-boxes"></i> Quản lý sản phẩm</a>
                     </li>
+                    <li class="@(ViewData["ActivePage"] as string == "/Admin/ScheduleManagement" ? "active" : "")">
+                        <a asp-page="/Admin/ScheduleManagement"><i class="fas fa-calendar"></i> Quản lý lịch trình</a>
+                    </li>
                 </ul>
             </nav>
         </aside>

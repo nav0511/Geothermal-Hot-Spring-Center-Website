@@ -9,11 +9,13 @@ namespace GHCW_FE.Pages.Admin
     public class AddNewsModel : PageModel
     {
         private NewsService _newsService = new NewsService();
+        private DiscountService _discountService = new DiscountService();
 
-        public NewsDTO News { get; set; }
+        public List<DiscountDTO> Discounts { get; set; } = new List<DiscountDTO>();
 
-        public void OnGet()
+        public async Task OnGetAsync()
         {
+            Discounts = await _discountService.GetDiscounts("Discount");
         }
 
         public async Task<IActionResult> OnPostCreateAsync()
@@ -23,17 +25,18 @@ namespace GHCW_FE.Pages.Admin
                 return Page();
             }
 
-            var news = new NewsDTOForAdd
+            var promotion = new NewsDTOForAdd
             {
                 Title = Request.Form["title"],
+                DiscountId = Request.Form["discountId"],
                 UploadDate = DateTime.Now,
                 IsActive = Request.Form["isActive"] == "on",
                 Description = Request.Form["description"],
-                Image = Request.Form.Files["image"]
+                Image = Request.Form.Files["image"],
             };
 
 
-            var response = await _newsService.CreateNews(news, "multipart/form-data");
+            var response = await _newsService.CreateNews(promotion, "multipart/form-data");
 
             if (response == HttpStatusCode.OK)
             {
@@ -41,7 +44,7 @@ namespace GHCW_FE.Pages.Admin
             }
             else
             {
-                ModelState.AddModelError("", "Có lỗi xảy ra khi thêm dịch vụ.");
+                ModelState.AddModelError("", "Có lỗi xảy ra khi thêm tin tức.");
                 return Page();
             }
         }
