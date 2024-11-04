@@ -10,12 +10,17 @@ namespace GHCW_FE.Pages.Admin
     public class EditNewsModel : PageModel
     {
         private NewsService _newsService = new NewsService();
+        private DiscountService _discountService = new DiscountService();
+        public List<DiscountDTO> Discounts { get; set; } = new List<DiscountDTO>();
+
 
         public NewsDTO News { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
             News = await _newsService.GetNewsById(id);
+            Discounts = await _discountService.GetDiscounts("Discount");
+
 
             if (News == null)
             {
@@ -42,29 +47,29 @@ namespace GHCW_FE.Pages.Admin
             }
 
             News.Title = Request.Form["title"];
+            News.DiscountId = Request.Form["discountId"];
             News.UploadDate = Convert.ToDateTime(Request.Form["uploadDate"]);
             News.IsActive = Request.Form["isActive"] == "on";
             News.Description = Request.Form["description"];
             News.Image = "/images/" + Request.Form["image"].ToString();
-
-
 
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            var newsDto = new NewsDTO
+            var promotion = new NewsDTO
             {
                 Id = News.Id,
                 Title = News.Title,
-                UploadDate= News.UploadDate,
+                DiscountId = News.DiscountId,
+                UploadDate = News.UploadDate,
                 IsActive = News.IsActive,
                 Description = News.Description,
                 Image = News.Image,
             };
 
-            var statusCode = await _newsService.UpdateNews(newsDto);
+            var statusCode = await _newsService.UpdateNews(promotion);
 
             if (statusCode == HttpStatusCode.NoContent)
             {

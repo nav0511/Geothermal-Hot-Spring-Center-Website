@@ -4,7 +4,7 @@
 @using Microsoft.AspNetCore.Http
 @model GHCW_FE.Pages.Admin.ScheduleManagementModel
 @{
-    ViewData["Title"] = "Thông tin tài khoản";
+    ViewData["Title"] = "Quản lý lịch trình";
     Layout = "_LayoutManagement";
     ViewData["ActivePage"] = "/Admin/ScheduleManagement";
 }
@@ -83,220 +83,87 @@
     });
 </script>
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+<style>
+    .btn-add {
+        background-color: #42C2A8;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+        .btn-add:hover {
+            background-color: #37a58d;
         }
 
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f7f7f7;
-            height: 100vh;
-            display: flex;
-        }
 
-        .admin-container {
-            display: flex;
-            width: 100%;
-        }
 
-        /* Sidebar */
-        .sidebar {
-            width: 240px;
-            background-color: white;
-            padding: 20px;
-            height: 100vh;
+    /* Pagination */
+    .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+        .pagination a {
+            padding: 10px 15px;
+            margin: 0 5px;
+            background-color: #e0f7fa;
+            text-decoration: none;
             color: black;
-            position: fixed;
-            top: 0;
-            left: 0;
+            border-radius: 4px;
         }
 
-        .sidebar-header h2 {
-            margin: 0;
-            padding: 0;
-            font-size: 24px;
-            color: #000;
-        }
-
-        .sidebar nav ul {
-            list-style: none;
-            padding: 0;
-        }
-
-            .sidebar nav ul li a i {
-                margin-right: 15px;
-            }
-
-            .sidebar nav ul li a {
-                color: #008767;
-                text-decoration: none;
-                display: flex;
-                align-items: center;
-                padding: 10px;
-                border-radius: 4px;
-            }
-
-            .sidebar nav ul li.active a {
+            .pagination a.active {
                 background-color: #00b894;
                 color: white;
             }
 
-            .sidebar nav ul li a:hover {
-                background-color: #e0f7fa;
+            .pagination a:hover {
+                background-color: #019875;
+                color: white;
             }
 
-        /* Main content */
-        .main-content {
-            margin-left: 240px;
-            flex-grow: 1;
-            padding: 20px;
-        }
+    /* CSS cho bảng lịch tuần */
+    .schedule-table {
+        width: 100%;
+        margin-top: 20px;
+        border-collapse: collapse;
+        background-color: white;
+    }
 
-        /* Header Section */
-        .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: end;
-            background-color: #D6F6F1;
-            border-radius: 15px;
-            padding: 20px;
-            margin-top: 60px;
-            margin-bottom: 20px;
-            min-height: 200px;
-        }
-
-            .page-header h2 {
-                margin: 0;
-                font-size: 24px;
-                color: #333;
-                font-weight: bold;
-            }
-
-        .btn-add {
-            background-color: #42C2A8;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-            .btn-add:hover {
-                background-color: #37a58d;
-            }
-
-
-
-        /* Pagination */
-        .pagination {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-            .pagination a {
-                padding: 10px 15px;
-                margin: 0 5px;
-                background-color: #e0f7fa;
-                text-decoration: none;
-                color: black;
-                border-radius: 4px;
-            }
-
-                .pagination a.active {
-                    background-color: #00b894;
-                    color: white;
-                }
-
-                .pagination a:hover {
-                    background-color: #019875;
-                    color: white;
-                }
-        /* Profile Icon Styling */
-        .profile-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 2px solid #42C2A8;
-        }
-
-        /* Dropdown Menu Styling */
-        .profile-menu {
-            position: absolute;
-            top: 2%;
-            right: 2%;
-            z-index: 10;
-        }
-
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            right: 0;
-            background-color: white;
-            min-width: 120px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            z-index: 1;
-        }
-
-            .dropdown-content a {
-                color: black;
-                padding: 12px 16px;
-                text-decoration: none;
-                display: block;
-            }
-
-                .dropdown-content a:hover {
-                    background-color: #f1f1f1;
-                }
-
-        /* Show the dropdown when clicked */
-        .profile-menu.show .dropdown-content {
-            display: block;
-        }
-        /* CSS cho bảng lịch tuần */
-        .schedule-table {
-            width: 100%;
-            margin-top: 20px;
-            border-collapse: collapse;
-            background-color: white;
-        }
-
-            .schedule-table th, .schedule-table td {
-                border: 1px solid #ddd;
-                padding: 15px;
-                text-align: center;
-            }
-
-            .schedule-table th {
-                background-color: #f1f1f1;
-                color: #333;
-            }
-
-        /* Dropdown cho năm và tuần */
-        .filter-container {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-            .filter-container select {
-                padding: 8px;
-                border-radius: 8px;
-            }
-
-        .schedule-title {
-            color: #28a745; /* Màu xanh */
-            font-size: 24px;
-            font-weight: bold;
+        .schedule-table th, .schedule-table td {
+            border: 1px solid #ddd;
+            padding: 15px;
             text-align: center;
-            margin-bottom: 10px;
         }
-    </style>
+
+        .schedule-table th {
+            background-color: #f1f1f1;
+            color: #333;
+        }
+
+    /* Dropdown cho năm và tuần */
+    .filter-container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+        .filter-container select {
+            padding: 8px;
+            border-radius: 8px;
+        }
+
+    .schedule-title {
+        color: #28a745; /* Màu xanh */
+        font-size: 24px;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+</style>

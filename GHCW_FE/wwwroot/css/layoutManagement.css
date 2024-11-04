@@ -1,4 +1,6 @@
-﻿* {
+﻿
+
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -89,14 +91,33 @@ body {
 }
 
 /* Page header with background and padding for title and cards */
-.page-header {
+/* .page-header {
     background-color: #D6F6F1;
     border-radius: 15px;
     padding: 20px;
     margin-bottom: 20px;
     margin-top: 60px;
     min-height: 200px;
+} */
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    background-color: #D6F6F1;
+    border-radius: 15px;
+    padding: 20px;
+    margin-top: 60px;
+    margin-bottom: 20px;
+    min-height: 200px;
 }
+
+    .page-header h2 {
+        margin: 0;
+        font-size: 24px;
+        color: #333;
+        font-weight: bold;
+    }
 
 .header-content {
     display: flex;
@@ -217,3 +238,4 @@ body {
 .profile-menu.show .dropdown-content {
     display: block;
 }
+
