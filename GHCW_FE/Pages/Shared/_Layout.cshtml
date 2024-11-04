@@ -33,14 +33,14 @@
         <div class="container-fluid bg-light pt-3 d-none d-lg-block">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-6 text-center text-lg-left mb-2 mb-lg-0">
+                    <div class="col-lg-7 text-center text-lg-left mb-2 mb-lg-0">
                         <div class="d-inline-flex align-items-center">
-                            <p><i class="fa fa-envelope mr-2"></i>email@email.com</p>
-                            <p class="text-body px-3">|</p>
+                            <p><i class="fa fa-envelope mr-2"></i>trungtamkhoangnongdiachat@email.com</p>
+                            <p class="text-body px-1">|</p>
                             <p><i class="fa fa-phone-alt mr-2"></i>02033 860 669 - 0969 365 916</p>
                         </div>
                     </div>
-                    <div class="col-lg-6 text-center text-lg-right">
+                    <div class="col-lg-5 text-center text-lg-right">
                         <div class="d-inline-flex align-items-center">
                             <a class="text-primary px-3" href="https://www.facebook.com/p/Trung-t%C3%A2m-kho%C3%A1ng-n%C3%B3ng-%C4%90%E1%BB%8Ba-ch%E1%BA%A5t-100089380076299/?locale=vi_VN">
                                 <i class="fab fa-facebook-f"></i>
@@ -73,15 +73,15 @@
                             {
                                 var account = JsonSerializer.Deserialize<AccountDTO>(Context.Session.GetString("acc"));
                                 <div class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown">
+                                    <span class="nav-link dropdown-toggle" id="userDropdown" role="button" data-toggle="dropdown" style="cursor: pointer;">
                                         @account.Name
-                                    </a>
+                                    </span>
                                     <div class="dropdown-menu dropdown-menu-right">
                                         @if (account.Role <= 1)
                                         {
                                             <a class="dropdown-item" asp-page="/Admin/Dashboard">Trang quản lý</a>
                                         }
-                                        <a class="dropdown-item" asp-page="/User/Profile">Thông tin cá nhân</a>
+                                        <a class="dropdown-item" asp-page="/Authentications/UserProfile">Thông tin cá nhân</a>
                                         <form method="post" class="dropdown-item" asp-page="/Authentications/Login" asp-page-handler="LogOut" style="width:100%">
                                             <button type="submit" style="border:none; background:none; padding:0; text-align:left;">Đăng xuất</button>
                                         </form>
@@ -113,12 +113,8 @@
                     <a href="" class="navbar-brand">
                         <h1 class="text-primary"><span class="text-white">GH</span>CW</h1>
                     </a>
-                    @* <p>Sed ipsum clita tempor ipsum ipsum amet sit ipsum lorem amet labore rebum lorem ipsum dolor. No sed vero lorem dolor dolor</p> *@
                     <h6 class="text-white text-uppercase mt-4 mb-3" style="letter-spacing: 5px;">Kết nối với chúng tôi</h6>
                     <div class="d-flex justify-content-start">
-                        @* <a class="btn btn-outline-primary btn-square mr-2" href="#"><i class="fab fa-twitter"></i></a>
-                        <a class="btn btn-outline-primary btn-square mr-2" href="#"><i class="fab fa-linkedin-in"></i></a>
-                        <a class="btn btn-outline-primary btn-square" href="#"><i class="fab fa-instagram"></i></a> *@
                         <a class="btn btn-outline-primary btn-square mr-2" href="https://www.facebook.com/p/Trung-t%C3%A2m-kho%C3%A1ng-n%C3%B3ng-%C4%90%E1%BB%8Ba-ch%E1%BA%A5t-100089380076299/?locale=vi_VN"><i class="fab fa-facebook-f"></i></a>
                     </div>
                 </div>
@@ -136,7 +132,7 @@
                     <h5 class="text-white text-uppercase mb-4" style="letter-spacing: 5px;">Liên hệ</h5>
                     <p><i class="fa fa-map-marker-alt mr-2"></i>Km4, tổ 1, khu Long Thạch A, phường Cẩm Thạch, thành phố Cẩm Phả, tỉnh Quảng Ninh</p>
                     <p><i class="fa fa-phone-alt mr-2"></i>02033 860 669 - 0969 365 916</p>
-                    <p><i class="fa fa-envelope mr-2"></i>email@email.com</p>
+                    <p><i class="fa fa-envelope mr-2"></i>trungtamkhoangnongdiachat@email.com</p>
                     <h6 class="text-white text-uppercase mt-4 mb-3" style="letter-spacing: 5px;">Đăng ký nhận thông tin ưu đãi</h6>
                     <div class="w-100">
                         <div class="input-group">
@@ -149,16 +145,6 @@
                 </div>
             </div>
         </div>
-        @* <div class="container-fluid bg-dark text-white border-top py-4 px-sm-3 px-md-5" style="border-color: rgba(256, 256, 256, .1) !important;">
-            <div class="row">
-                <div class="col-lg-6 text-center text-md-left mb-3 mb-md-0">
-                    <p class="m-0 text-white-50">
-                        All Rights Reserved.
-                    </p>
-                </div>
-            </div>
-        </div> *@
-        <!-- Footer End -->
     </footer>
 
 

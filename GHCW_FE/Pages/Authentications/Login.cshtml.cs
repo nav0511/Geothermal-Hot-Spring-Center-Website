@@ -99,22 +99,20 @@ namespace GHCW_FE.Pages.Authentications
 
         public async Task<IActionResult> OnPostLogoutAsync()
         {
-            var token = HttpContext.Session.GetString("accessToken");
-
-            if (token != null)
+            var refreshToken = HttpContext.Session.GetString("refreshToken");
+            if (!string.IsNullOrEmpty(refreshToken))
             {
-                // Gọi đến API logout
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-                HttpResponseMessage response = await _client.DeleteAsync(_logoutApiUrl);
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    ViewData["error"] = "Có lỗi xảy ra khi đăng xuất. Vui lòng thử lại sau.";
-                    return Page();
-                }
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", refreshToken);
+                var response = await _client.PostAsync(_logoutApiUrl, null); // Assuming your logout API does not need a body
             }
-            HttpContext.Session.Clear();
-            return RedirectToPage("../Index");
+
+            // Clear session data
+            HttpContext.Session.Remove("accessToken");
+            HttpContext.Session.Remove("refreshToken");
+            HttpContext.Session.Remove("acc");
+
+            // Redirect to the login page or home page
+            return RedirectToPage("/Authentications/Login");
         }
     }
 }

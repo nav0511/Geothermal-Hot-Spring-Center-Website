@@ -427,6 +427,8 @@ namespace GHCW_BE.Controllers
         [HttpPut("updateprofile")]
         public async Task<IActionResult> UpdateProfile(UpdateRequest r)
         {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var roleClaim = identity?.FindFirst("Role");
             var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "ID");
             if (userIdClaim != null || userIdClaim?.Value == r.Id.ToString())
             {
@@ -446,6 +448,15 @@ namespace GHCW_BE.Controllers
                         return Ok(message);
                     }
                     return BadRequest(message);
+                }
+                else if (checkExistCustomer == null && roleClaim != null && int.Parse(roleClaim.Value) != 5)
+                {
+                    var (isSuccess, message) = await _service.UpdateProfile(r);
+                    if (!isSuccess)
+                    {
+                        return BadRequest(message);
+                    }
+                    return Ok(message);
                 }
             }
             return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền cập nhật hồ sơ của người dùng khác.");

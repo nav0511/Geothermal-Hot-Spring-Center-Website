@@ -1,4 +1,151 @@
 ﻿@page
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@removeTagHelper Microsoft.AspNetCore.Mvc.TagHelpers.OptionTagHelper, Microsoft.AspNetCore.Mvc.TagHelpers 
 @model GHCW_FE.Pages.Authentications.UserProfileModel
 @{
+    ViewData["Title"] = "Hồ sơ người dùng";
 }
+
+<!-- Carousel Start -->
+<div class="container-fluid p-0">
+    <div id="header-carousel" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img class="w-100" src="/img/carousel-1.jpg" alt="Banner Image">
+                <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-md-6">
+                                <div class="bg-white-opacity p-4 rounded">
+                                    <h2 class="text-center mt-5">Thông tin cá nhân</h2>
+
+                                    @if (TempData["SuccessMessage"] != null)
+                                    {
+                                        <div class="alert alert-success mt-3">
+                                            @TempData["SuccessMessage"]
+                                        </div>
+                                    }
+
+                                    @if (TempData["ErrorMessage"] != null)
+                                    {
+                                        <div class="alert alert-danger mt-3">
+                                            @TempData["ErrorMessage"]
+                                        </div>
+                                    }
+                                    <form method="POST" onsubmit="return validateForm()">
+                                        <input name="UpdateRequest.Id" value="@Model.UserProfile.Id" readonly hidden/>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6 mb-3">
+                                                <label for="name">Họ Tên</label>
+                                                <input type="text" class="form-control" id="name" name="UpdateRequest.Name" value="@Model.UserProfile.Name"
+                                                       title="Vui lòng nhập họ tên không chứa số và kí tự đặc biệt" placeholder="Nhập họ tên" required>
+                                            </div>
+
+                                            <div class="form-group col-md-6 mb-3">
+                                                <label for="dob">Ngày Sinh</label>
+                                                <input type="date" class="form-control" id="dob" name="UpdateRequest.DoB" value="@Model.UserProfile.DoB?.ToString("yyyy-MM-dd")">
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6 mb-3">
+                                                <label for="phone">Số Điện Thoại</label>
+                                                <input type="tel" class="form-control" id="phone" name="UpdateRequest.PhoneNumber" value="@Model.UserProfile.PhoneNumber"
+                                                       pattern="^(0[3|5|7|8|9])[0-9]{8}$" maxlength="10" title="Số điện thoại phải gồm 10 chữ số" placeholder="Nhập số điện thoại" required>
+                                            </div>
+
+                                            <div class="form-group col-md-6 mb-3">
+                                                <label for="gender">Giới Tính</label>
+                                                <select class="form-control" id="gender" name="UpdateRequest.Gender">
+                                                    <option value="true" @(Model.UserProfile.Gender == true ? "selected" : "")>Nam</option>
+                                                    <option value="false" @(Model.UserProfile.Gender == false ? "selected" : "")>Nữ</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="address">Địa Chỉ</label>
+                                            <input type="text" class="form-control" id="address" name="UpdateRequest.Address" value="@Model.UserProfile.Address" placeholder="Nhập địa chỉ">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="email">Email</label>
+                                            <input type="text" class="form-control" id="email" value="@Model.UserProfile.Email" readonly>
+                                        </div>
+
+                                        <div class="form-group form-check">
+                                            <input type="checkbox" class="form-check-input" id="isEmailNotify" name="UpdateRequest.IsEmailNotify" @(Model.UserProfile.IsEmailNotify ? "checked" : "")>
+                                            <label class="form-check-label" for="isEmailNotify">Nhận thông báo qua Email</label>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary btn-block">Cập Nhật</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Carousel End -->
+
+<style>
+    /* CSS cho nền màu trắng với opacity 50% */
+    .bg-white-opacity {
+        background-color: rgba(255, 255, 255, 0.9); /* Nền trắng với độ trong suốt 50% */
+        border-radius: 10px;
+        padding: 20px;
+    }
+
+    .form-group {
+        color: black;
+        text-align: left;
+    }
+
+    .btn-black {
+        background-color: black;
+        color: white;
+        border: none;
+    }
+
+        .btn-black:hover {
+            background-color: #333;
+            color: white;
+        }
+</style>
+
+<script>
+    function validatePhoneNumber() {
+        const phoneInput = document.getElementById('phone');
+        const phoneNumber = phoneInput.value.trim();
+        const phonePattern = /^(0[3,5,7,8,9])\d{8}$/;
+
+        if (!phonePattern.test(phoneNumber)) {
+            phoneInput.setCustomValidity("Số điện thoại phải gồm 10 chữ số và bắt đầu bằng 03, 05, 07, 08 hoặc 09.");
+        } else {
+            phoneInput.setCustomValidity(""); // Xóa thông báo lỗi nếu hợp lệ
+        }
+    }
+
+    // Hàm kiểm tra tên hợp lệ
+    function validateName() {
+        const nameInput = document.getElementById('name');
+        const namePattern = /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơưƯẠ-ỹ\s]+$/;
+
+        if (!namePattern.test(nameInput.value.trim())) {
+            nameInput.setCustomValidity("Vui lòng nhập tên không chứa chữ số và kí tự đặc biệt.");
+        } else {
+            nameInput.setCustomValidity(""); // Xóa thông báo lỗi nếu hợp lệ
+        }
+    }
+
+    function validateForm() {
+        validatePhoneNumber();
+        validateName();
+
+        return true;
+    }
+
+    // Thêm sự kiện cho input để kiểm tra ngay khi người dùng nhập liệu
+    document.getElementById('phone').addEventListener('input', validatePhoneNumber);
+    document.getElementById('name').addEventListener('input', validateName);
+</script>
