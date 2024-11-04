@@ -50,11 +50,9 @@ namespace GHCW_FE.Pages.Authentications
                 TempData["ErrorMessage"] = "Thông tin đã nhập không hợp lệ, vui lòng thử lại";
                 return Page();
             }
-
-            string accessToken;
             try
             {
-                accessToken = await _tokenService.CheckAndRefreshTokenAsync();
+                var accessToken = await _tokenService.CheckAndRefreshTokenAsync();
                 _accService.SetAccessToken(accessToken);
                 var statusCode = await _accService.ChangePassword(changePassRequest, accessToken);
                 if (statusCode == HttpStatusCode.OK)

@@ -7,6 +7,7 @@ namespace GHCW_FE.Pages.Admin
     {
         public void OnGet()
         {
+            ViewData["ActivePage"] = "/Admin/Dashboard";
         }
     }
 }

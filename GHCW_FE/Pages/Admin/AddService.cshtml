@@ -1,15 +1,10 @@
 ﻿@page
 @model GHCW_FE.Pages.Admin.AddServiceModel
 @{
-    Layout = null;
+    ViewData["Title"] = "Thêm dịch vụ";
+    Layout = "_LayoutManagement";
 }
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thêm dịch vụ mới</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
     <style>
         * {
             margin: 0;
@@ -236,38 +231,7 @@
         }
 
     </style>
-</head>
-<body>
-    <!-- Profile Menu HTML -->
-    <div class="profile-menu">
-        <img src="https://www.w3schools.com/w3images/avatar2.png" alt="Profile" id="profileIcon" class="profile-icon">
-        <div id="dropdownMenu" class="dropdown-content">
-            <a href="#">Profile</a>
-            <a href="#">Logout</a>
-        </div>
-    </div>
-    <div class="admin-container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <h2>GH<span style="color: green">CW</span></h2>
-            </div>
-            <br />
-            <nav>
-                <ul>
-                    <li><a href="https://localhost:7260/Admin/Dashboard"><i class="fas fa-chart-line"></i> Dashboard</a></li>
-                    <li class="active"><a href="https://localhost:7260/Admin/ServiceManagement"><i class="fas fa-cogs"></i>Quản lý dịch vụ</a></li>
-                    <li><a href="https://localhost:7260/Admin/UserManagement"><i class="fas fa-users"></i> Quản lý người dùng</a></li>
-                    <li><a href="https://localhost:7260/Admin/DiscountManagement"><i class="fas fa-ticket-alt"></i> Quản lý phiếu giảm giá</a></li>
-                    <li><a href="https://localhost:7260/Admin/NewsManagement"><i class="fas fa-newspaper"></i> Quản lý tin tức</a></li>
-                    <li><a href="#"><i class="fas fa-bullhorn"></i> Quản lý tin khuyến mãi</a></li>
-                    <li><a href="https://localhost:7260/Admin/ProductManagement"><i class="fas fa-boxes"></i> Quản lý sản phẩm</a></li>
-                </ul>
-            </nav>
-        </aside>
 
-        <!-- Main Content -->
-        <main class="main-content">
             <header class="page-header">
                 <h2><span style="color:#9197B3">Quản lý dịch vụ > </span>Thêm dịch vụ mới</h2>
             </header>
@@ -307,8 +271,6 @@
                 </form>
             </div>
 
-        </main>
-    </div>
     <script>
         // Get the profile icon and dropdown elements
         var profileIcon = document.getElementById("profileIcon");
@@ -344,5 +306,3 @@
             }
         }
     </script>
-</body>
-</html>

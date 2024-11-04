@@ -30,5 +30,23 @@ namespace GHCW_FE.Services
             var statusCode = await PushData("Authentication/activate", ac);
             return statusCode;
         }
+
+        public async Task<HttpStatusCode> UpdateProfile(UpdateRequest ur, string accessToken)
+        {
+            var statusCode = await PutData("Authentication/updateprofile", ur, null, accessToken);
+            return statusCode;
+        }
+
+        public async Task<AccountDTO> UserProfile(string accessToken)
+        {
+            var user = await GetData<AccountDTO>("Authentication/profile", null, accessToken);
+            return user;
+        }
+
+        public async Task<List<AccountDTO>> ListAccount(string accessToken)
+        {
+            var user = await GetData<List<AccountDTO>>("Authentication/userlist", null, accessToken);
+            return user;
+        }
     }
 }

@@ -110,6 +110,10 @@ namespace GHCW_FE.Services
         {
             url = _rootUrl + url;
             HttpClient client = new HttpClient();
+            if (!string.IsNullOrEmpty(accessToken))
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            }
             var jsonStr = JsonSerializer.Serialize(value);
             HttpContent content = new StringContent(jsonStr, Encoding.UTF8, "application/json");
             HttpResponseMessage responseMessage = await client.PutAsync(url, content);
@@ -120,6 +124,11 @@ namespace GHCW_FE.Services
         {
             url = _rootUrl + url;
             HttpClient client = new HttpClient();
+            if (!string.IsNullOrEmpty(accessToken))
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            }
+
             HttpResponseMessage responseMessage = await client.DeleteAsync(url);
             return responseMessage.StatusCode;
         }
