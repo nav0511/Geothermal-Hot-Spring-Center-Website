@@ -16,7 +16,8 @@ namespace GHCW_FE.Pages.Admin
 
         public async Task OnGetAsync()
         {
-            Categories = await _categoryService.GetCategory("Category");
+            var (statusCode, categories) = await _categoryService.GetCategory("Category");
+            Categories = categories;
         }
 
         public async Task<IActionResult> OnPostCreateAsync()

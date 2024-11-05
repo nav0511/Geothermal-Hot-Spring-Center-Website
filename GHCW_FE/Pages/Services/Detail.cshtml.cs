@@ -1,5 +1,6 @@
 using GHCW_FE.DTOs;
 using GHCW_FE.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -14,13 +15,14 @@ namespace GHCW_FE.Pages.Services
 
         public async Task<IActionResult> OnGet(int id)
         {
-            Service = await _servicesService.GetServiceById(id);
+            var(statusCode, service) = await _servicesService.GetServiceById(id);
+            Service = service;
             if (Service == null)
             {
                 return NotFound();
             }
-            ServiceDTOs = await _servicesService.GetServices($"Service?$top=5&$filter=Id ne {id}");
-
+            var(statusCode2, serviceDTOs) = await _servicesService.GetServices($"Service?$top=5&$filter=Id ne {id}");
+            ServiceDTOs = serviceDTOs;
             return Page();
         }
     }

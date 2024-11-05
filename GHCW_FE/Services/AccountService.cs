@@ -37,13 +37,13 @@ namespace GHCW_FE.Services
             return statusCode;
         }
 
-        public async Task<AccountDTO> UserProfile(string accessToken)
+        public async Task<(HttpStatusCode StatusCode, AccountDTO? UserProfile)> UserProfile(string accessToken)
         {
-            var user = await GetData<AccountDTO>("Authentication/profile", null, accessToken);
-            return user;
+            var (statusCode,user) = await GetData<AccountDTO>("Authentication/profile", null, accessToken);
+            return (statusCode, user);
         }
 
-        public async Task<List<AccountDTO>> ListAccount(string accessToken)
+        public async Task<(HttpStatusCode StatusCode, List<AccountDTO>? ListAccount)> ListAccount(string accessToken)
         {
             var user = await GetData<List<AccountDTO>>("Authentication/userlist", null, accessToken);
             return user;

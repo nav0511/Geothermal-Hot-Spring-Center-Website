@@ -21,8 +21,10 @@ namespace GHCW_FE.Pages.Admin
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            Product = await _productService.GetProductByID(id);
-            Categories = await _categoryService.GetCategory("Category");
+            var (statusCode, product) = await _productService.GetProductByID(id);
+            Product = product;
+            var (statusCode2, categories) = await _categoryService.GetCategory("Category");
+            Categories = categories;
 
 
             if (Product == null)
@@ -42,7 +44,8 @@ namespace GHCW_FE.Pages.Admin
                 return Page();
             }
 
-            Product = await _productService.GetProductByID(id);
+            var (statusCode, product) = await _productService.GetProductByID(id);
+            Product = product;
             if (Product == null)
             {
                 ModelState.AddModelError(string.Empty, "Dịch vụ không tồn tại.");
@@ -78,7 +81,7 @@ namespace GHCW_FE.Pages.Admin
                 IsAvailable = Product.IsAvailable
             };
 
-            var statusCode = await _productService.UpdateProduct(productDto);
+            statusCode = await _productService.UpdateProduct(productDto);
 
             if (statusCode == HttpStatusCode.NoContent)
             {

@@ -29,7 +29,12 @@
 <div>
     @if (Model.Accounts == null || Model.Accounts.Count == 0)
     {
-        <p>Danh sách trống</p>
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger mt-3">
+                @TempData["ErrorMessage"]
+            </div>
+        }
     }
     else
     {

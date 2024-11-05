@@ -18,8 +18,10 @@ namespace GHCW_FE.Pages.Admin
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            News = await _newsService.GetNewsById(id);
-            Discounts = await _discountService.GetDiscounts("Discount");
+            var (statusCode, news) = await _newsService.GetNewsById(id);
+            News = news;
+            var (statusCode2, discounts) = await _discountService.GetDiscounts("Discount");
+            Discounts = discounts;
 
 
             if (News == null)
@@ -39,7 +41,8 @@ namespace GHCW_FE.Pages.Admin
                 return Page();
             }
 
-            News = await _newsService.GetNewsById(id);
+            var (statusCode, news) = await _newsService.GetNewsById(id);
+            News = news;
             if (News == null)
             {
                 ModelState.AddModelError(string.Empty, "Tin tức không tồn tại.");
@@ -69,7 +72,7 @@ namespace GHCW_FE.Pages.Admin
                 Image = News.Image,
             };
 
-            var statusCode = await _newsService.UpdateNews(promotion);
+            statusCode = await _newsService.UpdateNews(promotion);
 
             if (statusCode == HttpStatusCode.NoContent)
             {

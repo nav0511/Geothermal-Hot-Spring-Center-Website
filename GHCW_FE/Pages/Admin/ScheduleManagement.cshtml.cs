@@ -26,7 +26,8 @@ namespace GHCW_FE.Pages.Admin
             DateTime referenceDate = DateTime.Today;
             StartDate = referenceDate.AddDays(-(int)referenceDate.DayOfWeek + (int)DayOfWeek.Monday);
 
-            var schedules = await _scheduleService.GetWeeklySchedule(StartDate);
+            var (statusCode, Schedules) = await _scheduleService.GetWeeklySchedule(StartDate);
+            var schedules = Schedules;
 
             foreach (var schedule in schedules)
             {
