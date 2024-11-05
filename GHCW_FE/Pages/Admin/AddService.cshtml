@@ -96,6 +96,26 @@
         align-items: center;
     }
 
+    .back-button-container {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 20px;
+    }
+
+    .btn-back {
+        background-color: #42A5F5;
+        color: white;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+        .btn-back:hover {
+            background-color: #1E88E5;
+        }
+
 </style>
 
 <header class="page-header">
@@ -135,6 +155,10 @@
             <button type="submit">Thêm dịch vụ</button>
         </div>
     </form>
+</div>
+
+<div class="back-button-container">
+    <button class="btn-back" onclick="window.history.back()"> << Quay lại</button>
 </div>
 
 <script>

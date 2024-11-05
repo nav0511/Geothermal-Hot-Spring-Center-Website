@@ -28,6 +28,11 @@ namespace GHCW_BE.Controllers
         public async Task<IActionResult> GetBookingList()
         {
             var list = _ticketService.GetListBooking();
+            if (list == null)
+            {
+                return NotFound("Không có danh sách vé nào.");
+            }
+
             var projectedQuery = _mapper.ProjectTo<TicketDTO>(list);
             var result = await projectedQuery.ToListAsync();
             return Ok(result);
@@ -37,7 +42,13 @@ namespace GHCW_BE.Controllers
         public async Task<IActionResult> GetTotalBooking()
         {
             var list = _ticketService.GetListBooking();
-            return Ok(list.Count());
+            if (list == null)
+            {
+                return Ok(0); // Trả về 0 nếu không có dữ liệu
+            }
+
+            var count = await list.CountAsync();
+            return Ok(count);
         }
 
         //[HttpGet("{id}")]

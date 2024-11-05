@@ -1,12 +1,12 @@
 ﻿@page
-@model GHCW_FE.Pages.Admin.ReservationListModel
+@model GHCW_FE.Pages.Admin.CheckInModel
 @{
-    ViewData["Title"] = "Danh sách đặt trước";
+    ViewData["Title"] = "Check-In";
     Layout = "_LayoutReceptionist";
-    ViewData["ActivePage"] = "/Admin/ReservationList";
+    ViewData["ActivePage"] = "/Admin/CheckIn";
 }
 <header class="page-header">
-    <h2>Danh sách đặt trước</h2>
+    <h2><span style="color:#9197B3">Danh sách đặt trước > </span>CheckIn > @Model.TicketId</h2>
     @*     <button class="btn-add" onclick="window.location.href='#'"></button>
     *@
 </header>
@@ -26,59 +26,36 @@
     <thead>
         <tr>
             <th>Id</th>
-            <th>Tên NV lễ tân</th>
-            <th>Tên khách hàng</th>
-            <th>Ngày xuất vé</th>
-            <th>Trạng thái thanh toán</th>
-            <th>Check-In</th>
-            <th></th>
+            <th>Dịch Vụ</th>
+            <th>Thời gian sử dụng</th>
+            <th>Số lượng</th>
+            <th>Giá</th>
+            <th>Tổng giá</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var ticket in Model.TicketDTOs)
+        @foreach (var ticketDetail in Model.TicketDetails)
         {
             <tr>
-                <td>@ticket.Id</td>
-                <td>@ticket.ReceptionistId</td>
-                <td>@ticket.CustomerId</td>
-                <td>@ticket.BookDate.ToString("dd/MM/yyyy")</td>
-                <td class="@(ticket.PaymentStatus == 1 ? "status-paid" : "status-unpaid")">
-                    @(ticket.PaymentStatus == 1 ? "Đã thanh toán" : "Chưa thanh toán")
-                </td>
-
-                <td>
-                    <select>
-                        <option value="1" selected="@(ticket.CheckIn == 1)">Chưa đến</option>
-                        <option value="2" selected="@(ticket.CheckIn == 2)">Đã check-in</option>
-                        <option value="3" selected="@(ticket.CheckIn == 3)">Hoàn tất</option>
-                    </select>
-                </td>
-
-                <td>
-                    <button class="status active" onclick="window.location.href='/Admin/CheckIn?id=@ticket.Id'">Chi tiết</button>
-
-                </td>
+                <td>@ticketDetail.TicketId</td>
+                <td>@ticketDetail.ServiceId</td>
+                <td>@ticketDetail.Ticket.BookDate.ToString("dd/MM/yyyy")</td>
+                <td>@ticketDetail.Quantity</td>
+                <td>@ticketDetail.Price</td>
+                <td>@ticketDetail.Total</td>
             </tr>
         }
+        <tr>
+            <td colspan="5" style="text-align: right; font-weight: bold;">Tổng cộng:</td>
+            <td style="font-weight: bold;">@Model.TotalAmount.ToString("F2")</td>
+        </tr>
     </tbody>
 </table>
 
-<div class="pagination">
-    @if (Model.CurrentPage > 1)
-    {
-        <a href="?pageNumber=@(Model.CurrentPage - 1)">«</a>
-    }
-
-    @for (int i = 1; i <= Model.TotalPages; i++)
-    {
-        <a href="?pageNumber=@i" class="@(i == Model.CurrentPage ? "active" : "")">@i</a>
-    }
-
-    @if (Model.CurrentPage < Model.TotalPages)
-    {
-        <a href="?pageNumber=@(Model.CurrentPage + 1)">»</a>
-    }
+<div class="back-button-container">
+    <button class="btn-back" onclick="window.history.back()"> << Quay lại</button>
 </div>
+
 
 <style>
     .btn-add {
@@ -188,6 +165,25 @@
         color: #ff6b6b;
     }
 
+    .back-button-container {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 20px;
+    }
+
+    .btn-back {
+        background-color: #42A5F5;
+        color: white;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+        .btn-back:hover {
+            background-color: #1E88E5;
+        }
 </style>
 
 <script>

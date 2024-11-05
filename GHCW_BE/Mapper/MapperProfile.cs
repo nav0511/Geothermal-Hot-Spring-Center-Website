@@ -20,8 +20,8 @@ namespace GHCW_BE.Mapper
             CreateMap<Category, CategoryDTO>();
             CreateMap<Schedule, ScheduleDTO>();
             CreateMap<Ticket, TicketDTO>();
+            CreateMap<TicketDetail, TicketDetailDTO>();
             
-
 
             CreateMap<NewsDTO, News>();
             CreateMap<NewsDTO2, News>();
@@ -35,6 +35,7 @@ namespace GHCW_BE.Mapper
             CreateMap<CategoryDTO, Category>();
             CreateMap<ScheduleDTO, Schedule>();
             CreateMap<TicketDTO, TicketDTO>();
+            CreateMap<TicketDetailDTO, TicketDetail>();
 
             CreateMap<Customer, CustomerDTO>()
                 .ForMember(dest => dest.AccountId, opt => opt.MapFrom(src => src.AccountId))
