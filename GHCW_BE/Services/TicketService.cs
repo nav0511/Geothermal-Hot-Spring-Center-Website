@@ -25,5 +25,10 @@ namespace GHCW_BE.Services
             var tickets = await _context.Tickets.Include(c => c.Customer).Include(td => td.TicketDetails).Where(t => t.CustomerId == uid).ToListAsync();
             return tickets;
         }
+
+        public IQueryable<Ticket> GetListBooking()
+        {
+            return _context.Tickets.AsQueryable();
+        }
     }
 }
