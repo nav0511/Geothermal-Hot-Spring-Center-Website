@@ -58,7 +58,7 @@ namespace GHCW_FE.DTOs
         public string Password { get; set; } = null!;
 
         [Required(ErrorMessage = "Yêu cầu nhập họ tên.")]
-        [RegularExpression(@"^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơưƯẠ-ỹ\s]+$", ErrorMessage = "Họ tên chỉ được chứa chữ cái và khoảng trắng.")]
+        [RegularExpression(@"^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠƯÝàáâãèéêìíòóôõùúăđĩũơưýẠ-ỹ\s]+$", ErrorMessage = "Họ tên chỉ được chứa chữ cái và khoảng trắng.")]
         public string Name { get; set; }
 
         public string? Address { get; set; }
@@ -84,7 +84,7 @@ namespace GHCW_FE.DTOs
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Yêu cầu nhập họ tên.")]
-        [RegularExpression(@"^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơưƯẠ-ỹ\s]+$", ErrorMessage = "Họ tên chỉ được chứa chữ cái và khoảng trắng.")]
+        [RegularExpression(@"^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠƯÝàáâãèéêìíòóôõùúăđĩũơưýẠ-ỹ\s]+$", ErrorMessage = "Họ tên chỉ được chứa chữ cái và khoảng trắng.")]
         public string Name { get; set; }
 
         public string Address { get; set; }
@@ -106,7 +106,7 @@ namespace GHCW_FE.DTOs
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Yêu cầu nhập họ tên.")]
-        [RegularExpression(@"^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơưƯẠ-ỹ\s]+$", ErrorMessage = "Họ tên chỉ được chứa chữ cái và khoảng trắng.")]
+        [RegularExpression(@"^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠƯÝàáâãèéêìíòóôõùúăđĩũơưýẠ-ỹ\s]+$", ErrorMessage = "Họ tên chỉ được chứa chữ cái và khoảng trắng.")]
         public string Name { get; set; }
 
         public string Address { get; set; }
