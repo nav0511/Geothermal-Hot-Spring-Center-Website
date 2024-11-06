@@ -401,23 +401,35 @@ namespace GHCW_BE.Controllers
 
             if (roleClaim != null && int.Parse(roleClaim.Value) == 0)
             {
-                var checkExistCustomer = await _service.CheckCustomerExsit(r.Id);
-                if (checkExistCustomer != null)
+                if(r.Role == 5)
                 {
-                    checkExistCustomer.FullName = r.Name;
-                    checkExistCustomer.PhoneNumber = r.PhoneNumber;
-
-                    var (isSuccess, message) = await _service.EditCustomer(checkExistCustomer);
-                    if (isSuccess)
+                    var checkExistCustomer = await _service.CheckCustomerExsit(r.Id);
+                    if (checkExistCustomer != null)
                     {
-                        (isSuccess, message) = await _service.EditProfile(r);
-                        if (!isSuccess)
+                        checkExistCustomer.FullName = r.Name;
+                        checkExistCustomer.PhoneNumber = r.PhoneNumber;
+
+                        var (isSuccess, message) = await _service.EditCustomer(checkExistCustomer);
+                        if (isSuccess)
                         {
-                            return BadRequest(message);
+                            (isSuccess, message) = await _service.EditProfile(r);
+                            if (!isSuccess)
+                            {
+                                return BadRequest(message);
+                            }
+                            return Ok(message);
                         }
-                        return Ok(message);
+                        return BadRequest(message);
                     }
-                    return BadRequest(message);
+                }
+                else
+                {
+                    var (isSuccess, message) = await _service.EditProfile(r);
+                    if (!isSuccess)
+                    {
+                        return BadRequest(message);
+                    }
+                    return Ok(message);
                 }
             }
             return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền thực hiện hành động này.");
@@ -432,24 +444,27 @@ namespace GHCW_BE.Controllers
             var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "ID");
             if (userIdClaim != null || userIdClaim?.Value == r.Id.ToString())
             {
-                var checkExistCustomer = await _service.CheckCustomerExsit(r.Id);
-                if (checkExistCustomer != null)
+                if (roleClaim != null && int.Parse(roleClaim.Value) == 5)
                 {
-                    checkExistCustomer.FullName = r.Name;
-                    checkExistCustomer.PhoneNumber = r.PhoneNumber;
-                    var (isSuccess, message) = await _service.EditCustomer(checkExistCustomer);
-                    if (isSuccess)
+                    var checkExistCustomer = await _service.CheckCustomerExsit(r.Id);
+                    if (checkExistCustomer != null)
                     {
-                        (isSuccess, message) = await _service.UpdateProfile(r);
-                        if (!isSuccess)
+                        checkExistCustomer.FullName = r.Name;
+                        checkExistCustomer.PhoneNumber = r.PhoneNumber;
+                        var (isSuccess, message) = await _service.EditCustomer(checkExistCustomer);
+                        if (isSuccess)
                         {
-                            return BadRequest(message);
+                            (isSuccess, message) = await _service.UpdateProfile(r);
+                            if (!isSuccess)
+                            {
+                                return BadRequest(message);
+                            }
+                            return Ok(message);
                         }
-                        return Ok(message);
+                        return BadRequest(message);
                     }
-                    return BadRequest(message);
                 }
-                else if (checkExistCustomer == null && roleClaim != null && int.Parse(roleClaim.Value) != 5)
+                else
                 {
                     var (isSuccess, message) = await _service.UpdateProfile(r);
                     if (!isSuccess)
@@ -463,7 +478,7 @@ namespace GHCW_BE.Controllers
         }
 
         [Authorize]
-        [HttpDelete("useractivation")]
+        [HttpDelete("useractivation/{uid}")]
         public async Task<IActionResult> UserActivation(int uid)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
