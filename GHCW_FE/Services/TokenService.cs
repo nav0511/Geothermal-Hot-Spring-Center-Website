@@ -23,7 +23,7 @@ namespace GHCW_FE.Services
             return jwtToken == null || jwtToken.ValidTo < DateTime.UtcNow;
         }
 
-        public async Task<string> CheckAndRefreshTokenAsync()
+        public async Task<string?> CheckAndRefreshTokenAsync()
         {
             var accessToken = _httpContextAccessor.HttpContext.Session.GetString("accessToken");
 
@@ -32,12 +32,11 @@ namespace GHCW_FE.Services
                 var refreshToken = _httpContextAccessor.HttpContext.Session.GetString("refreshToken");
                 if (string.IsNullOrEmpty(refreshToken))
                 {
-                    throw new UnauthorizedAccessException("No valid refresh token found.");
+                    return null;
                 }
-
-                // Call the API to refresh the token
+                var refreshRequest = new RefreshRequest { RefreshToken = refreshToken };
                 var refreshTokenUrl = $"{_rootUrl}Authentication/refresh";
-                var response = await _client.PostAsJsonAsync(refreshTokenUrl, new { RefreshToken = refreshToken });
+                var response = await _client.PostAsJsonAsync(refreshTokenUrl, refreshRequest);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -52,7 +51,7 @@ namespace GHCW_FE.Services
                 }
                 else
                 {
-                    throw new UnauthorizedAccessException("Failed to refresh token. Please log in again.");
+                    return null;
                 }
             }
 

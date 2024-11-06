@@ -26,75 +26,73 @@
     </div>
 }
 <div class="form-container">
-    <form>
+    <form method="post" onsubmit="return validateForm()">
         <div class="form-group">
             <div>
                 <label for="id">ID:</label>
-                <input type="text" name="fullname" value="" required />
+                <input type="text" name="id" value="@Model.UserProfile.Id" readonly />
             </div>
 
             <div>
-                <label for="fullname">Họ và tên:</label>
-                <input type="text" id="fullname" name="fullname" required />
+                <label for="name">Họ và tên:</label>
+                <input type="text" id="name" name="name" value="@Model.UserProfile.Name" required />
             </div>
 
             <div>
                 <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required />
+                <input type="email" id="email" name="email" value="@Model.UserProfile.Email" readonly />
             </div>
 
             <div>
                 <label for="gender">Giới tính:</label>
                 <select id="gender" name="gender">
-                    <option value="0">Lựa chọn giới tính</option>
-                    <option value="male">Nam</option>
-                    <option value="female">Nữ</option>
-                    <option value="other">Khác</option>
+                    <option value="true" @(Model.UserProfile.Gender == true ? "selected" : "")>Nam</option>
+                    <option value="false" @(Model.UserProfile.Gender == false ? "selected" : "")>Nữ</option>
                 </select>
             </div>
 
             <div>
-                <label for="birthday">Ngày sinh:</label>
-                <input type="date" id="birthday" name="birthday" required />
+                <label for="dob">Ngày sinh:</label>
+                <input type="date" id="dob" name="dob" value="@Model.UserProfile.DoB?.ToString("yyyy-MM-dd")" />
             </div>
 
             <div>
-                <label for="phone">Số điện thoại:</label>
-                <input type="text" id="phone" name="phone" required />
+                <label for="phonenumber">Số điện thoại:</label>
+                <input type="text" id="phonenumber" name="phonenumber" value="@Model.UserProfile.PhoneNumber" required />
             </div>
 
             <div>
                 <label for="address">Địa chỉ:</label>
-                <input type="text" id="address" name="address" required />
+                <input type="text" id="address" name="address" value="@Model.UserProfile.Address" />
             </div>
 
             <div>
                 <label for="role">Vai trò:</label>
                 <select id="role" name="role">
-                    <option value="0">Lựa chọn vai trò</option>
-                    <option value="1">Admin</option>
-                    <option value="2">Customer</option>
-                    <option value="3">Sale</option>
+                    <option value="0" @(Model.UserProfile.Role == 0 ? "selected" : "")>Quản trị viên</option>
+                    <option value="1" @(Model.UserProfile.Role == 1 ? "selected" : "")>Quản lý</option>
+                    <option value="2" @(Model.UserProfile.Role == 2 ? "selected" : "")>Marketing</option>
+                    <option value="3" @(Model.UserProfile.Role == 3 ? "selected" : "")>Sale</option>
+                    <option value="4" @(Model.UserProfile.Role == 4 ? "selected" : "")>Lễ tân</option>
+                    <option value="5" @(Model.UserProfile.Role == 5 ? "selected" : "")>Khách hàng</option>
                 </select>
-            </div>
-
-            <div>
-                <label for="password">Mật khẩu:</label>
-                <input type="password" id="password" name="password" required />
             </div>
         </div>
 
         <div class="form-group checkbox-group">
             <div class="checkbox-item">
-                <input type="checkbox" id="isActive" name="isActive">
-                <label for="isActive">IsActive</label>
+                <input type="checkbox" id="isActive" name="isActive" value="true" @(Model.UserProfile.IsActive ? "checked" : "")>
+                <label for="isActive">Đang hoạt động</label>
             </div>
             <div class="checkbox-item">
-                <input type="checkbox" id="isEmailNotify" name="isEmailNotify">
-                <label for="isEmailNotify">IsEmailNotify</label>
+                <input type="checkbox" id="isEmailNotify" name="isEmailNotify" value="true" @(Model.UserProfile.IsEmailNotify ? "checked" : "")>
+                <label for="isEmailNotify">Nhận thông báo qua Email</label>
             </div>
         </div>
-
+        <div class="button-container">
+            <button type="button" class="btn-back" onclick="window.location.href='/Admin/UserManagement'">Trở lại danh sách tài khoản</button>
+            <button type="submit" class="btn-update">Cập Nhật</button>
+        </div>
     </form>
 </div>
 
@@ -116,9 +114,80 @@
             profileMenu.classList.remove('show');
         }
     });
+
+    // Hàm kiểm tra số điện thoại
+    function validatePhoneNumber() {
+        const phoneInput = document.getElementById('phonenumber');
+        const phoneNumber = phoneInput.value.trim();
+        const phonePattern = /^(0[3,5,7,8,9])\d{8}$/;
+
+        if (!phonePattern.test(phoneNumber)) {
+            phoneInput.setCustomValidity("Số điện thoại phải gồm 10 chữ số và bắt đầu bằng 03, 05, 07, 08 hoặc 09.");
+        } else {
+            phoneInput.setCustomValidity(""); // Xóa thông báo lỗi nếu hợp lệ
+        }
+    }
+
+    // Hàm kiểm tra tên hợp lệ
+    function validateName() {
+        const nameInput = document.getElementById('name');
+        const namePattern = /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠÝàáâãèéêìíòóôõùúăđĩũơưƯẠ-ỹ\s]+$/;
+
+        if (!namePattern.test(nameInput.value.trim())) {
+            nameInput.setCustomValidity("Vui lòng nhập tên không chứa chữ số và kí tự đặc biệt.");
+        } else {
+            nameInput.setCustomValidity(""); // Xóa thông báo lỗi nếu hợp lệ
+        }
+    }
+
+    // Hàm tổng kiểm tra form
+    function validateForm() {
+        validatePhoneNumber();
+        validateName();
+
+        return true;
+    }
+
+    // Thêm sự kiện cho input để kiểm tra ngay khi người dùng nhập liệu
+    document.getElementById('phonenumber').addEventListener('input', validatePhoneNumber);
+    document.getElementById('name').addEventListener('input', validateName);
 </script>
 
 <style>
+    .btn-update, .btn-back {
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 5px;
+        cursor: pointer;
+        border: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-update {
+        background-color: #007bff;
+        color: #ffffff;
+    }
+
+        .btn-update:hover {
+            background-color: #0056b3;
+        }
+
+    .btn-back {
+        background-color: #6c757d;
+        color: #ffffff;
+    }
+
+        .btn-back:hover {
+            background-color: #5a6268;
+        }
+
+    .button-container {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+
     .btn-add {
         background-color: #42C2A8;
         color: white;
@@ -194,18 +263,23 @@
                 background-color: #37a58d;
             }
 
-    /* Ensure the container aligns everything in a single row */
     .checkbox-group {
         display: flex;
         justify-content: flex-start;
         align-items: center;
-        gap: 44%;
+        gap: 39%;
+        flex-wrap: nowrap;
     }
 
-    /* Make sure each checkbox and its label are aligned properly */
     .checkbox-item {
         display: flex;
         align-items: center;
+        white-space: nowrap;
     }
+
+        .checkbox-item label {
+            margin-bottom: -1px;
+            margin-left: 5px;
+        }
 
 </style>

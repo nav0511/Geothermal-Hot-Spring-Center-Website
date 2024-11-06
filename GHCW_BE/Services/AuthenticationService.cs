@@ -233,10 +233,11 @@ namespace GHCW_BE.Services
         //Đổi password
         public async Task<bool> ChangePassword(int uId, string newPassword)
         {
-            var user = await GetUserProfileById(uId);
+            var user = await _context.Accounts.FindAsync(uId);
             if (user != null)
             {
                 user.Password = newPassword;
+                _context.Accounts.Update(user);
                 await _context.SaveChangesAsync();
                 return true;
             }
@@ -252,10 +253,13 @@ namespace GHCW_BE.Services
 
         public async Task DeleteRefToken(AccountDTO a)
         {
-            a.RefreshToken = null;
-            var acc = _mapper.Map<AccountDTO, Account>(a);
-            _context.Accounts.Update(acc);
-            await _context.SaveChangesAsync();
+            var user = await _context.Accounts.FirstOrDefaultAsync(u => u.Id == a.Id);
+            if (user != null)
+            {
+                user.RefreshToken = null;
+                _context.Accounts.Update(user);
+                await _context.SaveChangesAsync();
+            }
         }
         public async Task<(bool isSuccess, string message)> UpdateRefreshToken(AccountDTO a)
         {
@@ -278,7 +282,7 @@ namespace GHCW_BE.Services
         }
         public async Task<(bool isSuccess, string message)> UserActivation(int uid)
         {
-            var acc = await GetUserProfileById(uid);
+            var acc = await _context.Accounts.FindAsync(uid);
             if (acc == null)
             {
                 return (false, "Tài khoản không tồn tại.");
@@ -286,6 +290,7 @@ namespace GHCW_BE.Services
             try
             {
                 acc.IsActive = !acc.IsActive;
+                _context.Accounts.Update(acc);
                 await _context.SaveChangesAsync();
 
                 return (true, "Thay đổi trạng thái tài khoản thành công.");
