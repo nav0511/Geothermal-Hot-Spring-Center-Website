@@ -8,8 +8,20 @@ namespace GHCW_FE.Pages.Admin
 {
     public class ReservationListModel : PageModel
     {
-        private TicketService _ticketService = new TicketService();
+        private readonly TicketService _ticketService;
+        private readonly TokenService _tokenService;
+        private readonly AuthenticationService _authService;
+        private readonly AccountService _accService;
 
+        public ReservationListModel(TokenService tokenService, AuthenticationService authService, TicketService ticketService, AccountService accService)
+        {
+            _authService = authService;
+            _ticketService = ticketService;
+            _tokenService = tokenService;
+            _accService = accService;
+        }
+
+        public int ReceptionistID { get; set; }
         public List<TicketDTO> TicketDTOs { get; set; } = new List<TicketDTO>();
 
         public int CurrentPage { get; set; }
@@ -21,8 +33,8 @@ namespace GHCW_FE.Pages.Admin
             CurrentPage = pageNumber;
             int skip = (pageNumber - 1) * PageSize;
 
-            var (statusCode, totalNewsCount) = await _ticketService.GetTotalBooking();
-            if (statusCode != HttpStatusCode.OK)
+            var (statusCode2, totalNewsCount) = await _ticketService.GetTotalBooking();
+            if (statusCode2 != HttpStatusCode.OK)
             {
                 TempData["ErrorMessage"] = "Đã xảy ra lỗi khi lấy tổng số vé đặt chỗ.";
                 return RedirectToPage("/Authentications/Login");
@@ -49,12 +61,50 @@ namespace GHCW_FE.Pages.Admin
             }
 
             TicketDTOs = list?.ToList() ?? new List<TicketDTO>();
+
+            var accessToken = await _tokenService.CheckAndRefreshTokenAsync();
+            if (string.IsNullOrEmpty(accessToken))
+            {
+                await _authService.LogoutAsync();
+                TempData["ErrorMessage"] = "Bạn cần đăng nhập để xem hồ sơ.";
+                return RedirectToPage("/Authentications/Login");
+            }
+            _accService.SetAccessToken(accessToken);
+            var (statusCode, userProfile) = await _accService.UserProfile(accessToken);
+            if (statusCode == HttpStatusCode.Forbidden)
+            {
+                await _authService.LogoutAsync();
+                TempData["ErrorMessage"] = "Bạn không có quyền truy cập hồ sơ này.";
+                return RedirectToPage("/Authentications/Login");
+            }
+            else if (statusCode == HttpStatusCode.NotFound)
+            {
+                await _authService.LogoutAsync();
+                TempData["ErrorMessage"] = "Không tìm thấy người dùng này.";
+                return RedirectToPage("/Authentications/Login");
+            }
+            else if (statusCode != HttpStatusCode.OK)
+            {
+                await _authService.LogoutAsync();
+                TempData["ErrorMessage"] = "Đã xảy ra lỗi khi lấy thông tin người dùng.";
+                return RedirectToPage("/Authentications/Login");
+            }
+            ReceptionistID = userProfile.Id;
             return Page();
         }
 
-        public async Task<IActionResult> OnPostUpdateCheckIn(int ticketId, int checkInStatus, int paymentStatus)
+        public async Task<IActionResult> OnPostUpdateCheckIn(int receptionistID, int ticketId, int checkInStatus, int paymentStatus)
         {
-            int receptionistId;
+            //var accessToken = await _tokenService.CheckAndRefreshTokenAsync();
+            //if (string.IsNullOrEmpty(accessToken))
+            //{
+            //    await _authService.LogoutAsync();
+            //    TempData["ErrorMessage"] = "Bạn cần đăng nhập để xem thông tin.";
+            //    return RedirectToPage("/Authentications/Login");
+            //}
+            //_tokenService.SetAccessToken(accessToken);
+
+            //int receptionistId;
             //var userAccountJson = HttpContext.Session.GetString("acc");
             //if (!string.IsNullOrEmpty(userAccountJson))
             //{
@@ -66,9 +116,9 @@ namespace GHCW_FE.Pages.Admin
             //    TempData["ErrorMessage"] = "Bạn cần đăng nhập.";
             //    return RedirectToPage("/Authentications/Login");
             //}
-            //Fix cứng Id lễ tân bằng 1 để test vì chưa đăng nhập bằng tài khoản lễ tân.
-            receptionistId = 1;
-            if (receptionistId == null)
+
+            //if (receptionistId == null)
+            if (receptionistID == null)
             {
                 TempData["ErrorMessage"] = "Bạn cần đăng nhập lại.";
                 return RedirectToPage("/Authentications/Login");
@@ -83,7 +133,7 @@ namespace GHCW_FE.Pages.Admin
             {
                 Id = ticketId,
                 CheckIn = (byte)checkInStatus,
-                ReceptionistId = receptionistId,
+                ReceptionistId = receptionistID,
                 PaymentStatus = (byte)paymentStatus
             };
 

@@ -1,4 +1,5 @@
 using GHCW_FE.Services;
+using System.Transactions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,7 @@ builder.Services.AddHttpClient();
 builder.Services.AddScoped<AccountService>();
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<AuthenticationService>();
+builder.Services.AddScoped<TicketService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSession(options =>
 {

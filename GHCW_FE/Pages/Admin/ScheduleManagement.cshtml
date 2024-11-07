@@ -16,14 +16,11 @@
 </header>
 
 <div class="filter-container">
-    <select id="yearFilter">
-        <option value="2024">2024</option>
-        <option value="2023">2023</option>
+    <select id="yearFilter" onchange="updateDateRange()">
+        <!-- Năm sẽ được cập nhật tự động trong JavaScript -->
     </select>
-    <select id="weekFilter">
-        <option value="1">Tuần 1</option>
-        <option value="2">Tuần 2</option>
-        <!-- Thêm các tuần khác theo yêu cầu -->
+    <select id="weekFilter" onchange="updateDateRange()">
+        <!-- Các tuần sẽ được cập nhật khi chọn năm -->
     </select>
 </div>
 
@@ -81,6 +78,105 @@
             profileMenu.classList.remove('show');
         }
     });
+
+    // Hàm cập nhật các năm trong dropdown
+    function updateYearOptions() {
+        const currentYear = new Date().getFullYear(); // Lấy năm hiện tại
+        const yearFilter = document.getElementById("yearFilter");
+
+        // Xóa các tùy chọn cũ trong dropdown
+        yearFilter.innerHTML = "";
+
+        // Thêm các năm cần hiển thị
+        const startYear = currentYear - 1;  // Hiển thị một năm trước
+        const endYear = currentYear + 1;    // Hiển thị một năm sau
+
+        // Thêm năm trước và năm sau vào dropdown
+        for (let year = startYear; year <= endYear; year++) {
+            const option = document.createElement("option");
+            option.value = year;
+            option.textContent = year;
+            if (year === currentYear) {
+                option.selected = true;  // Đánh dấu năm hiện tại là đã chọn
+            }
+            yearFilter.appendChild(option);
+        }
+    }
+
+    // Hàm cập nhật các tuần của năm đã chọn
+    function updateDateRange() {
+        const year = parseInt(document.getElementById("yearFilter").value, 10);
+        const weekFilter = document.getElementById("weekFilter");
+        const totalWeeks = getISOWeeksInYear(year);
+
+        // Xóa các tùy chọn cũ trong dropdown tuần
+        weekFilter.innerHTML = "";
+
+        // Thêm các tuần vào dropdown
+        for (let week = 1; week <= totalWeeks; week++) {
+            const { start, end } = getWeekStartEndDates(year, week);
+            const startDate = `${start.getDate().toString().padStart(2, '0')}/${(start.getMonth() + 1).toString().padStart(2, '0')}`;
+            const endDate = `${end.getDate().toString().padStart(2, '0')}/${(end.getMonth() + 1).toString().padStart(2, '0')}`;
+            const option = document.createElement("option");
+            option.value = week;
+            option.textContent = `Tuần ${week} (${startDate} - ${endDate})`;
+            weekFilter.appendChild(option);
+        }
+
+        // Lấy tuần hiện tại và chọn tuần đó
+        const currentWeek = getCurrentWeek(year);
+        console.log(currentWeek);
+        if (currentWeek <= totalWeeks) {
+            weekFilter.value = currentWeek; // Chọn tuần hiện tại nếu có
+        }
+    }
+
+    function getISOWeeksInYear(year) {
+        const lastDayOfYear = new Date(year, 11, 31);
+        const lastWeekNumber = getISOWeekNumber(lastDayOfYear);
+
+        // Nếu ngày cuối cùng của năm là thứ 4 trở đi, thêm 1 tuần (ISO chuẩn)
+        if ((lastDayOfYear.getDay() === 4) ||
+            (lastDayOfYear.getDay() === 5 && lastWeekNumber === 53) ||
+            (lastDayOfYear.getDay() === 6 && lastWeekNumber === 52)) {
+            return 53;
+        }
+        return 52;
+    }
+
+    // Hàm lấy tuần hiện tại của năm
+    function getCurrentWeek(year) {
+        const currentDate = new Date();
+        return getISOWeekNumber(currentDate);
+    }
+
+    function getISOWeekNumber(date) {
+        const target = new Date(date.valueOf());
+        const dayNum = (date.getDay() + 6) % 7;  // Đảm bảo thứ Hai là ngày đầu tuần
+        target.setDate(target.getDate() - dayNum + 3);  // Thiết lập đến thứ Tư tuần đó
+        const firstThursday = target.valueOf();
+        target.setMonth(0, 1);  // Ngày 1 tháng 1
+        if (target.getDay() !== 4) {  // Nếu ngày đầu tiên của năm không phải là thứ Tư
+            target.setMonth(0, 1 + ((4 - target.getDay()) + 7) % 7);  // Đặt ngày đầu tiên là thứ Tư
+        }
+        return 1 + Math.ceil((firstThursday - target) / 604800000);  // Chia số mili giây cho một tuần
+    }
+
+    function getWeekStartEndDates(year, weekNumber) {
+        const january4 = new Date(year, 0, 4);
+        const dayOfWeek = january4.getDay() || 7;
+        const weekStart = new Date(january4);
+        weekStart.setDate(january4.getDate() - dayOfWeek + 1 + (weekNumber - 1) * 7);
+        const weekEnd = new Date(weekStart);
+        weekEnd.setDate(weekStart.getDate() + 6);
+        return {
+            start: weekStart,
+            end: weekEnd
+        };
+    }
+
+    updateYearOptions();
+    updateDateRange();
 </script>
 
 <style>
