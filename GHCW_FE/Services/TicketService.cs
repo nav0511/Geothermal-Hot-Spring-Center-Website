@@ -15,5 +15,11 @@ namespace GHCW_FE.Services
             string url = "Ticket/Total";
             return await GetData<int>(url);
         }
+
+        public async Task<HttpStatusCode> UpdateCheckinStatus(TicketDTO2 ticket)
+        {
+            string url = "Ticket/Update-Checkin";
+            return await PutData(url, ticket);
+        }
     }
 }

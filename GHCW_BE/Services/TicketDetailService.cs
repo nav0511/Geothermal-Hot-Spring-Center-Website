@@ -29,6 +29,7 @@ namespace GHCW_BE.Services
         {
             return await _context.TicketDetails
                 .Include(t => t.Ticket) 
+                .Include(s => s.Service)
                 .Where(t => t.TicketId == id)
                 .ToListAsync(); 
         }

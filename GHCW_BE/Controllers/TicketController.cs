@@ -51,93 +51,27 @@ namespace GHCW_BE.Controllers
             return Ok(count);
         }
 
-        //[HttpGet("{id}")]
-        //public async Task<IActionResult> GetServiceByID(int id)
-        //{
-        //    var service = await _servicesService.GetListServices()
-        //                                        .FirstOrDefaultAsync(s => s.Id == id);
+        [HttpPut("Update-Checkin")]
+        public async Task<IActionResult> UpdateCheckIn([FromBody] TicketDTO2 request)
+        {
+            if (request == null || request.Id == 0 || request.ReceptionistId == 0)
+            {
+                return BadRequest("Dữ liệu không hợp lệ.");
+            }
 
-        //    if (service == null)
-        //    {
-        //        return NotFound();
-        //    }
+            var ticket = await _ticketService.GetTicketById(request.Id);
+            if (ticket == null)
+            {
+                return NotFound("Không tìm thấy vé.");
+            }
 
-        //    var serviceDTO = _mapper.Map<ServiceDTO>(service);
-        //    return Ok(serviceDTO);
-        //}
+            ticket.CheckIn = request.CheckIn;
+            ticket.ReceptionistId = request.ReceptionistId;
+            ticket.PaymentStatus = request.PaymentStatus;
 
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> UpdateService(int id, [FromBody] ServiceDTO serviceDto)
-        //{
-        //    if (id != serviceDto.Id)
-        //    {
-        //        return BadRequest("ID không khớp.");
-        //    }
+            await _ticketService.UpdateTicket(ticket);
 
-        //    var existingService = await _servicesService.GetListServices()
-        //                                                .FirstOrDefaultAsync(s => s.Id == id);
-        //    if (existingService == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    _mapper.Map(serviceDto, existingService);
-
-        //    try
-        //    {
-        //        await _servicesService.UpdateService(existingService);
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (existingService == null)
-        //        {
-        //            return NotFound("Dịch vụ không tồn tại.");
-        //        }
-        //        throw;
-        //    }
-
-        //    return NoContent();
-        //}
-
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteService(int id)
-        //{
-        //    var existingService = await _servicesService.GetListServices()
-        //                                                .FirstOrDefaultAsync(s => s.Id == id);
-        //    if (existingService == null)
-        //    {
-        //        return NotFound("Dịch vụ không tồn tại.");
-        //    }
-
-        //    try
-        //    {
-        //        await _servicesService.DeleteService(existingService);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(StatusCodes.Status500InternalServerError, $"Lỗi khi xóa dịch vụ: {ex.Message}");
-        //    }
-
-        //    return NoContent();
-        //}
-
-        //[HttpPost]
-        //public async Task<IActionResult> CreateService([FromForm] ServiceDTO2 serviceDto)
-        //{
-        //    if (serviceDto == null)
-        //    {
-        //        return BadRequest("Dữ liệu dịch vụ không hợp lệ.");
-        //    }
-
-        //    var service = _mapper.Map<Service>(serviceDto);
-        //    service.Image = await _cloudinary.UploadImageResult(serviceDto.Image);
-
-
-        //    await _servicesService.AddService(service);
-
-
-        //    return Ok("Add Success");
-
-        //}
+            return Ok("Cập nhật trạng thái Check-In thành công.");
+        }
     }
 }

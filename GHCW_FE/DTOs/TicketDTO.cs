@@ -12,5 +12,17 @@
         public DateTime BookDate { get; set; }
         public byte PaymentStatus { get; set; }
         public byte CheckIn { get; set; }
+
+        public virtual CustomerDTO Customer { get; set; } = null!;
+        public virtual AccountDTO? Receptionist { get; set; }
+    }
+
+    public class TicketDTO2
+    {
+        public int Id { get; set; }
+        public int? ReceptionistId { get; set; }
+        public byte CheckIn { get; set; }
+        public byte PaymentStatus { get; set; }
+
     }
 }

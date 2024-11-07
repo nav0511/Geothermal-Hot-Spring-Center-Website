@@ -16,23 +16,11 @@ namespace GHCW_FE.Pages.Admin
         public int TotalPages { get; set; }
         private const int PageSize = 6;
 
-        //public async Task OnGet(int pageNumber = 1)
-        //{
-        //    CurrentPage = pageNumber;
-        //    int skip = (pageNumber - 1) * PageSize;
-
-        //    int totalNewsCount = _ticketService.GetTotalBooking().Result;
-        //    TotalPages = (int)Math.Ceiling((double)totalNewsCount / PageSize);
-
-        //    TicketDTOs = await _ticketService.GetBookingList($"Ticket?$top={PageSize}&$skip={skip}");
-        //}
-
         public async Task<IActionResult> OnGetAsync(int pageNumber = 1)
         {
             CurrentPage = pageNumber;
             int skip = (pageNumber - 1) * PageSize;
 
-            // Lấy tổng số vé đặt chỗ
             var (statusCode, totalNewsCount) = await _ticketService.GetTotalBooking();
             if (statusCode != HttpStatusCode.OK)
             {
@@ -40,10 +28,8 @@ namespace GHCW_FE.Pages.Admin
                 return RedirectToPage("/Authentications/Login");
             }
 
-            // Tính toán số trang
             TotalPages = (int)Math.Ceiling((double)totalNewsCount / PageSize);
 
-            // Lấy danh sách vé
             var (statusCode1, list) = await _ticketService.GetBookingList($"Ticket?$top={PageSize}&$skip={skip}");
 
             if (statusCode1 == HttpStatusCode.Forbidden)
@@ -62,11 +48,57 @@ namespace GHCW_FE.Pages.Admin
                 return RedirectToPage("/Authentications/Login");
             }
 
-            // Chuyển danh sách vé vào biến TicketDTOs nếu thành công
             TicketDTOs = list?.ToList() ?? new List<TicketDTO>();
             return Page();
         }
 
+        public async Task<IActionResult> OnPostUpdateCheckIn(int ticketId, int checkInStatus, int paymentStatus)
+        {
+            int receptionistId;
+            //var userAccountJson = HttpContext.Session.GetString("acc");
+            //if (!string.IsNullOrEmpty(userAccountJson))
+            //{
+            //    var userAccount = System.Text.Json.JsonSerializer.Deserialize<AccountDTO>(userAccountJson);
+            //    receptionistId = userAccount.Id;
+            //}
+            //else
+            //{
+            //    TempData["ErrorMessage"] = "Bạn cần đăng nhập.";
+            //    return RedirectToPage("/Authentications/Login");
+            //}
+            //Fix cứng Id lễ tân bằng 1 để test vì chưa đăng nhập bằng tài khoản lễ tân.
+            receptionistId = 1;
+            if (receptionistId == null)
+            {
+                TempData["ErrorMessage"] = "Bạn cần đăng nhập lại.";
+                return RedirectToPage("/Authentications/Login");
+            }
+
+            if (paymentStatus == 0 && checkInStatus != 0)
+            {
+                paymentStatus = 1;
+            }
+
+            var ticketDto = new TicketDTO2
+            {
+                Id = ticketId,
+                CheckIn = (byte)checkInStatus,
+                ReceptionistId = receptionistId,
+                PaymentStatus = (byte)paymentStatus
+            };
+
+            var statusCode = await _ticketService.UpdateCheckinStatus(ticketDto);
+            if (statusCode != HttpStatusCode.OK)
+            {
+                TempData["ErrorMessage"] = "Cập nhật trạng thái check-in thất bại.";
+            }
+            else
+            {
+                TempData["SuccessMessage"] = "Cập nhật trạng thái check-in thành công.";
+            }
+
+            return RedirectToPage();
+        }
 
     }
 }

@@ -11,6 +11,7 @@ namespace GHCW_BE.DTOs
         public decimal Total { get; set; }
 
         public virtual TicketDTO Ticket { get; set; } = null!;
+        public virtual ServiceDTO Service { get; set; } = null!;
 
     }
 }

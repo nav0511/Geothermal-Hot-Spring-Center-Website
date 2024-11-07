@@ -30,23 +30,30 @@
             <th>Thời gian sử dụng</th>
             <th>Số lượng</th>
             <th>Giá</th>
+            <th>Giảm giá</th>
             <th>Tổng giá</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var ticketDetail in Model.TicketDetails)
         {
+            var discountCode = ticketDetail.Ticket.DiscountCode;
+            var discount = Model.DiscountDTOs.FirstOrDefault(d => d.Code == discountCode);
+            decimal discountValue = discount?.Value ?? 0;
+
+            var total = ticketDetail.Total - (ticketDetail.Total * discountValue / 100);
             <tr>
                 <td>@ticketDetail.TicketId</td>
-                <td>@ticketDetail.ServiceId</td>
+                <td>@ticketDetail.Service.Name</td>
                 <td>@ticketDetail.Ticket.BookDate.ToString("dd/MM/yyyy")</td>
                 <td>@ticketDetail.Quantity</td>
                 <td>@ticketDetail.Price</td>
-                <td>@ticketDetail.Total</td>
+                <td>@discountValue%</td>
+                <td>@total</td>
             </tr>
         }
         <tr>
-            <td colspan="5" style="text-align: right; font-weight: bold;">Tổng cộng:</td>
+            <td colspan="6" style="text-align: right; font-weight: bold;">Tổng cộng:</td>
             <td style="font-weight: bold;">@Model.TotalAmount.ToString("F2")</td>
         </tr>
     </tbody>
