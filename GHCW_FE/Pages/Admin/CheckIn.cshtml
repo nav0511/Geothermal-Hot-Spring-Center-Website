@@ -1,17 +1,14 @@
 ﻿@page
-@using GHCW_FE.DTOs
-@using System.Text.Json
-@using Microsoft.AspNetCore.Http
-@model GHCW_FE.Pages.Admin.NewsManagementModel
+@model GHCW_FE.Pages.Admin.CheckInModel
 @{
-    ViewData["Title"] = "Quản lý Tin tức";
-    Layout = "_LayoutManagement";
-    ViewData["ActivePage"] = "/Admin/NewsManagement";
+    ViewData["Title"] = "Check-In";
+    Layout = "_LayoutReceptionist";
+    ViewData["ActivePage"] = "/Admin/CheckIn";
 }
-
 <header class="page-header">
-    <h2>Quản lý tin tức</h2>
-    <button class="btn-add" onclick="window.location.href='/Admin/AddNews'">+ Thêm tin tức mới</button>
+    <h2><span style="color:#9197B3">Danh sách đặt trước > </span>CheckIn > @Model.TicketId</h2>
+    @*     <button class="btn-add" onclick="window.location.href='#'"></button>
+    *@
 </header>
 
 <div class="search-container">
@@ -29,48 +26,43 @@
     <thead>
         <tr>
             <th>Id</th>
-            <th>Tiêu đề</th>
-            <th>Ngày đăng</th>
-            <th>Trạng thái</th>
-            <th></th>
+            <th>Dịch Vụ</th>
+            <th>Thời gian sử dụng</th>
+            <th>Số lượng</th>
+            <th>Giá</th>
+            <th>Giảm giá</th>
+            <th>Tổng giá</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var news in Model.NewsDTOs)
+        @foreach (var ticketDetail in Model.TicketDetails)
         {
-            <tr>
-                <td>@news.Id</td>
-                <td>@news.Title</td>
-                <td>@news.UploadDate?.ToString("dd/MM/yyyy")</td>
-                <td>@news.IsActive</td>
+            var discountCode = ticketDetail.Ticket.DiscountCode;
+            var discount = Model.DiscountDTOs.FirstOrDefault(d => d.Code == discountCode);
+            decimal discountValue = discount?.Value ?? 0;
 
-                <td>
-                    <button class="status active" onclick="window.location.href='/Admin/EditNews?id=@news.Id'">Sửa</button>
-                    <form method="post" asp-page-handler="DeleteNews" asp-route-id="@news.Id" style="display:inline;">
-                        <button type="submit" class="status inactive" onclick="return confirm('Bạn có chắc chắn muốn xóa tin tức này?');">Xóa</button>
-                    </form>
-                </td>
+            var total = ticketDetail.Total - (ticketDetail.Total * discountValue / 100);
+            <tr>
+                <td>@ticketDetail.TicketId</td>
+                <td>@ticketDetail.Service.Name</td>
+                <td>@ticketDetail.Ticket.BookDate.ToString("dd/MM/yyyy")</td>
+                <td>@ticketDetail.Quantity</td>
+                <td>@ticketDetail.Price</td>
+                <td>@discountValue%</td>
+                <td>@total</td>
             </tr>
         }
+        <tr>
+            <td colspan="6" style="text-align: right; font-weight: bold;">Tổng cộng:</td>
+            <td style="font-weight: bold;">@Model.TotalAmount.ToString("F2")</td>
+        </tr>
     </tbody>
 </table>
 
-<div class="pagination">
-    @if (Model.CurrentPage > 1)
-    {
-        <a href="?pageNumber=@(Model.CurrentPage - 1)">«</a>
-    }
-
-    @for (int i = 1; i <= Model.TotalPages; i++)
-    {
-        <a href="?pageNumber=@i" class="@(i == Model.CurrentPage ? "active" : "")">@i</a>
-    }
-
-    @if (Model.CurrentPage < Model.TotalPages)
-    {
-        <a href="?pageNumber=@(Model.CurrentPage + 1)">»</a>
-    }
+<div class="back-button-container">
+    <button class="btn-back" onclick="window.history.back()"> << Quay lại</button>
 </div>
+
 
 <style>
     .btn-add {
@@ -171,6 +163,34 @@
                 background-color: #019875;
                 color: white;
             }
+
+    .status-paid {
+        color: #00b894;
+    }
+
+    .status-unpaid {
+        color: #ff6b6b;
+    }
+
+    .back-button-container {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 20px;
+    }
+
+    .btn-back {
+        background-color: #42A5F5;
+        color: white;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+        .btn-back:hover {
+            background-color: #1E88E5;
+        }
 </style>
 
 <script>

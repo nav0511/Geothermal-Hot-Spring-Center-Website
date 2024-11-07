@@ -8,8 +8,7 @@
     Layout = "_LayoutManagement";
 }
 
-<div class="page-header">
-    <!-- Wrapper for both title and cards to align vertically -->
+<div class="dashboard-page-header">
     <div class="header-content">
         <header class="dashboard-header">
             <h2>Dashboard</h2>
@@ -57,8 +56,17 @@
     </div>
     <canvas id="salesChart"></canvas>
 </section>
+<style>
+    .dashboard-page-header {
+        background-color: #D6F6F1;
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 20px;
+        margin-top: 60px;
+        min-height: 200px;
+    }
+</style>
 
-<!-- Chart.js and Script -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     var ctx = document.getElementById('salesChart').getContext('2d');

@@ -42,7 +42,7 @@
             <tr>
                 <td>@news.Id</td>
                 <td>@news.Title</td>
-                <td>@news.UploadDate</td>
+                <td>@news.UploadDate?.ToString("dd/MM/yyyy")</td>
                 <td>@news.IsActive</td>
 
                 <td>
