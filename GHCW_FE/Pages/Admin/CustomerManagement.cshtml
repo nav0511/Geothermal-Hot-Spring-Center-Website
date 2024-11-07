@@ -1,0 +1,285 @@
+﻿@page
+@using GHCW_FE.DTOs
+@using System.Text.Json
+@using Microsoft.AspNetCore.Http
+@model GHCW_FE.Pages.Admin.CustomerManagementModel
+@{
+    ViewData["Title"] = "Quản lý tài khoản";
+    Layout = "_LayoutManagement";
+    ViewData["ActivePage"] = "/Admin/CustomerManagement";
+}
+
+<header class="page-header" style="">
+    <h2>Quản lý khách hàng</h2>
+    <button class="btn-add" onclick="window.location.href='/Admin/AddCustomer'">+ Thêm khách hàng mới</button>
+</header>
+
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success mt-3">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger mt-3">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+
+<div class="search-container">
+    @* <h3>Tất cả người dùng</h3> *@
+    <input type="text" placeholder="Tìm kiếm...">
+    <select>
+        <option value="0">Sắp xếp: chọn tùy chọn</option>
+        <option value="1">A-Z</option>
+        <option value="2">Z-A</option>
+        <option value="3">Active</option>
+        <option value="4">Inactive</option>
+    </select>
+</div>
+
+<div>
+    @if (Model.Customers == null || Model.Customers.Count == 0)
+    {
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger mt-3">
+                @TempData["ErrorMessage"]
+            </div>
+        }
+    }
+    else
+    {
+        <table class="user-table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Họ và tên</th>
+                    <th>Số điện thoại</th>
+                    <th>Email</th>
+                    <th>Địa chỉ</th>
+                    <th>Thông báo qua email</th>
+                    <th>Trạng thái</th>
+                    @if (HttpContext.Session.GetString("acc") != null)
+                    {
+                        var account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
+                        @if (account.Role == 0)
+                        {
+                            <th>Tùy chọn</th>
+                        }
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var cus in Model.Customers)
+                {
+                    <tr onclick="window.location.href='/Admin/UserDetails/?id=@cus.Id'">
+                        <td>@cus.Id</td>
+                        <td>@cus.PhoneNumber</td>
+                        <td>@cus.Email</td>
+                        @if (HttpContext.Session.GetString("acc") != null)
+                        {
+                            var account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+<div class="pagination">
+    <a href="#">«</a>
+    <a href="#" class="active">1</a>
+    <a href="#">2</a>
+    <a href="#">3</a>
+    <a href="#">»</a>
+</div>
+
+
+<script>
+    // Get the profile icon and dropdown elements
+    var profileIcon = document.getElementById("profileIcon");
+    var dropdownMenu = document.getElementById("dropdownMenu");
+    var profileMenu = document.querySelector(".profile-menu");
+
+    // Toggle dropdown when the profile icon is clicked
+    profileIcon.addEventListener("click", function (event) {
+        event.stopPropagation();
+        profileMenu.classList.toggle("show");
+    });
+
+    // Close the dropdown if user clicks outside
+    window.addEventListener("click", function (event) {
+        if (!event.target.matches('.profile-icon') && profileMenu.classList.contains('show')) {
+            profileMenu.classList.remove('show');
+        }
+    });
+</script>
+
+<style>
+    .btn-update, .btn-active, .btn-deactive {
+        padding: 6px;
+        font-size: 14px;
+        font-weight: bold;
+        border-radius: 5px;
+        cursor: pointer;
+        border: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-update {
+        background-color: #007bff;
+        color: #ffffff;
+    }
+
+        .btn-update:hover {
+            background-color: #0056b3;
+        }
+
+    .btn-active {
+        background-color: #00b894;
+        color: #ffffff;
+    }
+
+        .btn-active:hover {
+            background-color: #029274;
+        }
+
+    .btn-deactive {
+        background-color: #ff6b6b;
+        color: #ffffff;
+    }
+
+        .btn-deactive:hover {
+            background-color: #D65D5D;
+        }
+
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        background-color: #D6F6F1;
+        border-radius: 15px;
+        padding: 20px;
+        margin-top: 60px;
+        margin-bottom: 20px;
+        min-height: 100px;
+    }
+
+    .btn-add {
+        background-color: #42C2A8;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+        .btn-add:hover {
+            background-color: #37a58d;
+        }
+
+    /* Search container */
+    .search-container {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+
+        .search-container input {
+            padding: 10px;
+            width: 80%;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        .search-container select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px; /* Rounded select */
+        }
+
+    /* User table */
+    .user-table {
+        width: 100%;
+        font-size: 12px;
+        border-collapse: collapse;
+        margin-top: 20px;
+        background-color: white;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+        .user-table th, .user-table td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        .user-table th {
+            background-color: #f1f1f1;
+        }
+
+        .user-table td {
+            border-bottom: 1px solid #ddd;
+        }
+
+        .user-table .status {
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        .user-table td.address-cell {
+            max-width: 100px; /* Đặt giới hạn độ rộng */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .user-table .options-cell {
+            display: flex;
+            gap: 5px; /* Khoảng cách giữa các nút */
+        }
+
+    .status.active {
+        background-color: #00b894;
+        color: white;
+    }
+
+    .status.inactive {
+        background-color: #ff6b6b;
+        color: white;
+    }
+
+    /* Pagination */
+    .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+        .pagination a {
+            padding: 10px 15px;
+            margin: 0 5px;
+            background-color: #e0f7fa;
+            text-decoration: none;
+            color: black;
+            border-radius: 4px;
+        }
+
+            .pagination a.active {
+                background-color: #00b894;
+                color: white;
+            }
+
+            .pagination a:hover {
+                background-color: #019875;
+                color: white;
+            }
+</style>
