@@ -10,6 +10,7 @@ builder.Services.AddScoped<AccountService>();
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddScoped<TicketService>();
+builder.Services.AddScoped<ScheduleService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSession(options =>
 {

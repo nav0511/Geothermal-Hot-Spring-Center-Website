@@ -4,80 +4,113 @@
 @using Microsoft.AspNetCore.Http
 @model GHCW_FE.Pages.Admin.ScheduleManagementModel
 @{
-    ViewData["Title"] = "Quản lý lịch trình";
+    ViewData["Title"] = "Quản lý lịch làm việc";
     Layout = "_LayoutManagement";
     ViewData["ActivePage"] = "/Admin/ScheduleManagement";
 }
 
 <!-- Main Content -->
 <header class="page-header">
-    <h2>Quản lý lịch trình</h2>
-    <button class="btn-add" onclick="window.location.href='#'">+ Thêm lịch trình mới</button>
+    <h2>Quản lý lịch làm việc</h2>
+    <button class="btn-add" onclick="window.location.href='#'">+ Thêm lịch</button>
 </header>
 
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success mt-3">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger mt-3">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+
 <div class="filter-container">
-    <select id="yearFilter" onchange="updateDateRange()">
+    <select id="yearFilter">
         <!-- Năm sẽ được cập nhật tự động trong JavaScript -->
     </select>
-    <select id="weekFilter" onchange="updateDateRange()">
+    <select id="weekFilter">
         <!-- Các tuần sẽ được cập nhật khi chọn năm -->
     </select>
 </div>
 
-<div class="schedule-title">Lịch trình</div>
+<div class="schedule-title">Lịch làm việc</div>
 
 <!-- Bảng lịch tuần -->
 <table class="schedule-table">
-    <tr>
+    <tr id="scheduleHeaderRow">
         <th>Ca/Ngày</th>
-        <th>Thứ 2<br>07/10</th>
-        <th>Thứ 3<br>08/10</th>
-        <th>Thứ 4<br>09/10</th>
-        <th>Thứ 5<br>10/10</th>
-        <th>Thứ 6<br>11/10</th>
-        <th>Thứ 7<br>12/10</th>
-        <th>Chủ Nhật<br>13/10</th>
+        <th>Thứ 2</th>
+        <th>Thứ 3</th>
+        <th>Thứ 4</th>
+        <th>Thứ 5</th>
+        <th>Thứ 6</th>
+        <th>Thứ 7</th>
+        <th>Chủ Nhật</th>
     </tr>
-    <tr>
-        <td><b>Ca 1</b><br>(7:00 - 15:00)</td>
-        <td>Nguyen Minh K<br><a href="#">Sửa</a> | <a href="#">Xóa</a></td>
-        <td>Quang Thi Quynh N<br><a href="#">Sửa</a> | <a href="#">Xóa</a></td>
-        <td>Nguyen Minh K<br><a href="#">Sửa</a> | <a href="#">Xóa</a></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><b>Ca 2</b><br>(15:00 - 22:00)</td>
-        <td>Quang Thi Quynh N<br><a href="#">Sửa</a> | <a href="#">Xóa</a></td>
-        <td>Nguyen Minh K<br><a href="#">Sửa</a> | <a href="#">Xóa</a></td>
-        <td>Quang Thi Quynh N<br><a href="#">Sửa</a> | <a href="#">Xóa</a></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
+    @foreach (var shift in new[] { 1, 2 })
+    {
+        <tr>
+            <td>
+                <b>Ca @shift</b><br>
+                @(shift == 1 ? "(7:00 - 15:00)" : "(15:00 - 22:00)")
+            </td>
+
+            @for (int i = 0; i < 7; i++)
+            {
+                var currentDate = Model.SW.StartDate.AddDays(i); // Calculate the current day
+                var scheduledEmployee = Model.Schedules.FirstOrDefault(schedule => 
+                    schedule.Date.Date == currentDate.Date && schedule.Shift == shift);
+                
+                <td>
+                    @if (scheduledEmployee != null)
+                    {
+                        <span>@scheduledEmployee.ReceptionistName</span><br>
+                        <a href="#">Sửa</a>
+                        <span class="separator">|</span>
+                        <a href="#">Xóa</a>
+                    }
+                    else
+                    {
+                        <span>--</span>
+                    }
+                </td>
+            }
+        </tr>
+    }
 </table>
 
+<form id="scheduleForm" method="get" asp-page-handler="OnGet">
+    <input type="hidden" id="startDateInput" name="startDate" />
+    <input type="hidden" id="endDateInput" name="endDate" />
+</form>
+
 <script>
-    // Get the profile icon and dropdown elements
-    var profileIcon = document.getElementById("profileIcon");
-    var dropdownMenu = document.getElementById("dropdownMenu");
-    var profileMenu = document.querySelector(".profile-menu");
+    function updateScheduleTableHeader() {
+        const year = parseInt(document.getElementById("yearFilter").value, 10);
+        const weekNumber = parseInt(document.getElementById("weekFilter").value, 10);
+        const headerRow = document.getElementById("scheduleHeaderRow");
 
-    // Toggle dropdown when the profile icon is clicked
-    profileIcon.addEventListener("click", function (event) {
-        event.stopPropagation();
-        profileMenu.classList.toggle("show");
-    });
-
-    // Close the dropdown if user clicks outside
-    window.addEventListener("click", function (event) {
-        if (!event.target.matches('.profile-icon') && profileMenu.classList.contains('show')) {
-            profileMenu.classList.remove('show');
+        // Lấy ngày bắt đầu và kết thúc của tuần đã chọn
+        const { start, end } = getWeekStartEndDates(year, weekNumber);
+        // Cập nhật từng ngày trong tiêu đề của bảng
+        for (let i = 1; i <= 7; i++) {
+            const th = headerRow.children[i]; // Lấy th thứ 2 đến Chủ Nhật
+            const day = new Date(start);
+            day.setDate(start.getDate() + i - 1);
+            const dayOfWeek = `Thứ ${i < 7 ? i + 1 : 'CN'}`; // Hiển thị 'Thứ 2', ..., 'Chủ Nhật'
+            const formattedDate = `${day.getDate().toString().padStart(2, '0')}/${(day.getMonth() + 1).toString().padStart(2, '0')}`;
+            th.innerHTML = `${dayOfWeek}<br>${formattedDate}`;
         }
-    });
+
+        document.getElementById("startDateInput").value = `${start.getFullYear()}-${(start.getMonth() + 1).toString().padStart(2, '0')}-${start.getDate().toString().padStart(2, '0')}`;
+        document.getElementById("endDateInput").value = `${end.getFullYear()}-${(end.getMonth() + 1).toString().padStart(2, '0')}-${end.getDate().toString().padStart(2, '0')}`;
+    }
 
     // Hàm cập nhật các năm trong dropdown
     function updateYearOptions() {
@@ -175,8 +208,42 @@
         };
     }
 
-    updateYearOptions();
-    updateDateRange();
+    document.addEventListener("DOMContentLoaded", function () {
+        // Khởi tạo danh sách năm và tuần khi trang được tải
+        updateYearOptions();
+        updateDateRange();
+        updateScheduleTableHeader();
+    });
+
+    // Thêm sự kiện thay đổi cho yearFilter và weekFilter
+    document.getElementById("yearFilter").addEventListener("change", function () {
+        updateDateRange(); // Cập nhật danh sách tuần cho năm mới
+        updateScheduleTableHeader(); // Cập nhật ngày trong bảng
+    });
+
+    document.getElementById("weekFilter").addEventListener("change", function () {
+        updateScheduleTableHeader(); // Cập nhật ngày trong bảng khi tuần thay đổi
+        document.getElementById("scheduleForm").submit();
+    });
+
+    // Get the profile icon and dropdown elements
+    var profileIcon = document.getElementById("profileIcon");
+    var dropdownMenu = document.getElementById("dropdownMenu");
+    var profileMenu = document.querySelector(".profile-menu");
+
+    // Toggle dropdown when the profile icon is clicked
+    profileIcon.addEventListener("click", function (event) {
+        event.stopPropagation();
+        profileMenu.classList.toggle("show");
+    });
+
+    // Close the dropdown if user clicks outside
+    window.addEventListener("click", function (event) {
+        if (!event.target.matches('.profile-icon') && profileMenu.classList.contains('show')) {
+            profileMenu.classList.remove('show');
+        }
+    });
+
 </script>
 
 <style>

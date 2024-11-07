@@ -7,10 +7,11 @@ namespace GHCW_FE.Services
 {
     public class ScheduleService : BaseService
     {
-        public async Task<(HttpStatusCode StatusCode, List<ScheduleDTO>? Schedule)> GetWeeklySchedule(DateTime startDate)
+        public async Task<(HttpStatusCode StatusCode, List<ScheduleDTO>? Schedule)> GetWeeklySchedule(ScheduleByWeek sw)
         {
-            string url = $"Schedule/Weekly?startDate={startDate:yyyy-MM-dd}";
-            return await GetData<List<ScheduleDTO>>(url);
+            var queryString = $"Schedule/Weekly?startDate={sw.StartDate:yyyy-MM-dd}&endDate={sw.EndDate:yyyy-MM-dd}";
+            var (statusCode, Schedules) = await GetData<List<ScheduleDTO>>(queryString);
+            return (statusCode, Schedules);
         }
 
         public async Task<HttpStatusCode> UpdateSchedule(ScheduleDTO schedule)

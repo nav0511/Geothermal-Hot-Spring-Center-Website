@@ -22,11 +22,14 @@ namespace GHCW_BE.Controllers
         }
 
         [HttpGet("Weekly")]
-        public async Task<IActionResult> GetWeeklySchedule(DateTime startDate)
+        public async Task<IActionResult> GetWeeklySchedule([FromQuery] ScheduleByWeek sw)
         {
-            var schedules = await _scheduleService.GetWeeklySchedule(startDate);
-            var result = _mapper.Map<List<ScheduleDTO>>(schedules);
-            return Ok(result);
+            var schedules = await _scheduleService.GetWeeklySchedule(sw.StartDate, sw.EndDate);
+            if (schedules == null)
+            {
+                return NotFound("Không tìm thấy lịch làm việc nào trong tuần này.");
+            }
+            return Ok(schedules);
         }
 
         [HttpGet("{id}")]
