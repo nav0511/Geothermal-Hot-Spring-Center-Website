@@ -2,7 +2,7 @@
 @using GHCW_FE.DTOs
 @using System.Text.Json
 @using Microsoft.AspNetCore.Http
-@model GHCW_FE.Pages.Admin.UserManagementModel
+@model GHCW_FE.Pages.Admin.AddAccountModel
 @{
     ViewData["Title"] = "Thêm tài khoản";
     Layout = "_LayoutManagement";
@@ -29,7 +29,7 @@
         <div class="form-group">
             <div>
                 <label for="name">Họ và tên:</label>
-                <input type="text" id="name" name="name" title="Vui lòng nhập họ tên không chứa số và kí tự đặc biệt" placeholder="Nhập họ tên" required />
+                <input type="text" id="name" name="name" title="Vui lòng nhập họ tên không chứa số và kí tự đặc biệt" placeholder="Nhập họ tên" required/>
             </div>
 
             <div>
@@ -47,7 +47,7 @@
 
             <div>
                 <label for="dob">Ngày sinh:</label>
-                <input type="date" id="dob" name="dob"/>
+                <input type="date" id="dob" name="dob" />
             </div>
 
             <div>
@@ -75,7 +75,7 @@
 
             <div>
                 <label for="password">Mật Khẩu</label>
-                <div class="input-group" style="display:inline-flex">
+                <div class="input-group" style="display:flex">
                     <input type="password" class="form-control" name="Password" id="password" placeholder="Nhập mật khẩu" required>
                     <div class="input-group-append">
                         <button type="button" class="btn btn-black" id="togglePassword" style="width:40px">
@@ -102,10 +102,6 @@
             <button type="submit" class="btn-add">Thêm</button>
         </div>
     </form>
-</div>
-
-<div class="back-button-container">
-    <button class="btn-back" onclick="window.history.back()"> << Quay lại</button>
 </div>
 
 <script>
@@ -332,7 +328,7 @@
         display: flex;
         justify-content: flex-start;
         align-items: center;
-        gap: 39%;
+        gap: 42%;
         flex-wrap: nowrap;
     }
 
@@ -341,6 +337,11 @@
         align-items: center;
         white-space: nowrap;
     }
+
+        .checkbox-item label {
+            margin-bottom: -1px;
+            margin-left: 5px;
+        }
 
     .back-button-container {
         display: flex;
