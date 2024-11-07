@@ -11,76 +11,96 @@
 <header class="page-header">
     <h2><span style="color:#9197B3">Quản lý người dùng > </span>Thêm tài khoản mới</h2>
 </header>
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success mt-3">
+        @TempData["SuccessMessage"]
+    </div>
+}
 
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger mt-3">
+        @TempData["ErrorMessage"]
+    </div>
+}
 <div class="form-container">
-    <form>
+    <form method="post" onsubmit="return validateForm()">
         <div class="form-group">
             <div>
-                <label for="fullname">Họ và tên:</label>
-                <input type="text" id="fullname" name="fullname" required />
+                <label for="name">Họ và tên:</label>
+                <input type="text" id="name" name="name" title="Vui lòng nhập họ tên không chứa số và kí tự đặc biệt" placeholder="Nhập họ tên" required />
             </div>
 
             <div>
                 <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required />
+                <input type="email" id="email" name="email" title="Vui lòng nhập đúng định dạng email" placeholder="Nhập email" required />
             </div>
 
             <div>
                 <label for="gender">Giới tính:</label>
                 <select id="gender" name="gender">
-                    <option value="0">Lựa chọn giới tính</option>
-                    <option value="male">Nam</option>
-                    <option value="female">Nữ</option>
-                    <option value="other">Khác</option>
+                    <option value="true">Nam</option>
+                    <option value="false">Nữ</option>
                 </select>
             </div>
 
             <div>
-                <label for="birthday">Ngày sinh:</label>
-                <input type="date" id="birthday" name="birthday" required />
+                <label for="dob">Ngày sinh:</label>
+                <input type="date" id="dob" name="dob"/>
             </div>
 
             <div>
-                <label for="phone">Số điện thoại:</label>
-                <input type="text" id="phone" name="phone" required />
+                <label for="phonenumber">Số điện thoại:</label>
+                <input type="text" id="phonenumber" name="phonenumber" placeholder="Nhập số điện thoại"
+                       pattern="[0-9]{10}" maxlength="10" title="Số điện thoại phải gồm 10 chữ số" required />
             </div>
 
             <div>
                 <label for="address">Địa chỉ:</label>
-                <input type="text" id="address" name="address" required />
+                <input type="text" id="address" name="address" />
             </div>
 
             <div>
                 <label for="role">Vai trò:</label>
                 <select id="role" name="role">
-                    <option value="0">Lựa chọn vai trò</option>
-                    <option value="1">Admin</option>
-                    <option value="2">Customer</option>
+                    <option value="0">Quản trị viên</option>
+                    <option value="1">Quản lý</option>
+                    <option value="2">Marketing</option>
                     <option value="3">Sale</option>
+                    <option value="4">Lễ tân</option>
+                    <option value="5">Khách hàng</option>
                 </select>
             </div>
 
             <div>
-                <label for="password">Mật khẩu:</label>
-                <input type="password" id="password" name="password" required />
+                <label for="password">Mật Khẩu</label>
+                <div class="input-group" style="display:inline-flex">
+                    <input type="password" class="form-control" name="Password" id="password" placeholder="Nhập mật khẩu" required>
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-black" id="togglePassword" style="width:40px">
+                            <i class="fa fa-eye" id="eyeIcon"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
 
         <div class="form-group checkbox-group">
             <div class="checkbox-item">
-                <input type="checkbox" id="isActive" name="isActive">
-                <label for="isActive">IsActive</label>
+                <input type="checkbox" id="isActive" name="isActive" value="true">
+                <label for="isActive">Đang hoạt động</label>
             </div>
             <div class="checkbox-item">
-                <input type="checkbox" id="isEmailNotify" name="isEmailNotify">
-                <label for="isEmailNotify">IsEmailNotify</label>
+                <input type="checkbox" id="isEmailNotify" name="isEmailNotify" value="true">
+                <label for="isEmailNotify">Nhận thông báo qua Email</label>
             </div>
         </div>
 
-        <div class="form-group">
-            <button type="submit" class="btn-add">Thêm tài khoản</button>
+        <div class="button-container">
+            <button type="button" class="btn-back" onclick="window.location.href='/Admin/UserManagement'">Trở lại danh sách tài khoản</button>
+            <button type="submit" class="btn-add">Thêm</button>
         </div>
-
     </form>
 </div>
 
@@ -106,99 +126,132 @@
             profileMenu.classList.remove('show');
         }
     });
+
+    document.getElementById('togglePassword').addEventListener('click', function () {
+        const passwordInput = document.getElementById('password');
+        const eyeIcon = document.getElementById('eyeIcon');
+
+        // Toggle the type attribute
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+
+        // Toggle the eye icon
+        eyeIcon.classList.toggle('fa-eye');
+        eyeIcon.classList.toggle('fa-eye-slash');
+    });
+
+    function validatePassword() {
+        const passwordInput = document.getElementById('password');
+        const password = passwordInput.value.trim();
+
+        const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@@$#^!%*?&])[A-Za-z\d@@$#^!%*?&]{8,}$/;
+
+        if (!passwordPattern.test(password)) {
+            passwordInput.setCustomValidity("Mật khẩu phải dài ít nhất 8 kí tự, bao gồm ít nhất 1 kí tự thường, 1 kí tự hoa, 1 kí tự đặc biệt (@@$#^!%*?&) và 1 kí tự số.");
+        } else {
+            passwordInput.setCustomValidity(""); // Xóa thông báo lỗi nếu hợp lệ
+        }
+    }
+
+    // Hàm kiểm tra số điện thoại
+    function validatePhoneNumber() {
+        const phoneInput = document.getElementById('phonenumber');
+        const phoneNumber = phoneInput.value.trim();
+        const phonePattern = /^(0[3,5,7,8,9])\d{8}$/;
+
+        if (!phonePattern.test(phoneNumber)) {
+            phoneInput.setCustomValidity("Số điện thoại phải gồm 10 chữ số và bắt đầu bằng 03, 05, 07, 08 hoặc 09.");
+        } else {
+            phoneInput.setCustomValidity(""); // Xóa thông báo lỗi nếu hợp lệ
+        }
+    }
+
+    // Hàm kiểm tra email hợp lệ
+    function validateEmail() {
+        const emailInput = document.getElementById('email');
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+        if (!emailPattern.test(emailInput.value.trim())) {
+            emailInput.setCustomValidity("Vui lòng nhập đúng định dạng email.");
+        } else {
+            emailInput.setCustomValidity(""); // Xóa thông báo lỗi nếu hợp lệ
+        }
+    }
+
+    // Hàm kiểm tra tên hợp lệ
+    function validateName() {
+        const nameInput = document.getElementById('name');
+        const namePattern = /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠÝàáâãèéêìíòóôõùúăđĩũơưƯẠ-ỹ\s]+$/;
+
+        if (!namePattern.test(nameInput.value.trim())) {
+            nameInput.setCustomValidity("Vui lòng nhập tên không chứa chữ số và kí tự đặc biệt.");
+        } else {
+            nameInput.setCustomValidity(""); // Xóa thông báo lỗi nếu hợp lệ
+        }
+    }
+
+    // Hàm tổng kiểm tra form
+    function validateForm() {
+        validatePhoneNumber();
+        validateEmail();
+        validatePassword();
+        validateName();
+
+        return true;
+    }
+
+    // Thêm sự kiện cho input để kiểm tra ngay khi người dùng nhập liệu
+    document.getElementById('phonenumber').addEventListener('input', validatePhoneNumber);
+    document.getElementById('email').addEventListener('input', validateEmail);
+    document.getElementById('password').addEventListener('input', validatePassword);
+    document.getElementById('name').addEventListener('input', validateName);
 </script>
 
 <style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
+    .form-group .btn-black {
+        background-color: black;
+        color: white;
+        border: none;
     }
 
-    body {
-        font-family: 'Arial', sans-serif;
-        background-color: #f7f7f7;
-        height: 100vh;
-        display: flex;
-    }
-
-    .admin-container {
-        display: flex;
-        width: 100%;
-    }
-
-    /* Sidebar */
-    .sidebar {
-        width: 240px;
-        background-color: white;
-        padding: 20px;
-        height: 100vh;
-        color: black;
-        position: fixed;
-        top: 0;
-        left: 0;
-    }
-
-    .sidebar-header h2 {
-        margin: 0;
-        padding: 0;
-        font-size: 24px;
-        color: #000;
-    }
-
-    .sidebar nav ul {
-        list-style: none;
-        padding: 0;
-    }
-
-        .sidebar nav ul li a i {
-            margin-right: 15px;
-        }
-
-        .sidebar nav ul li a {
-            color: #008767;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            padding: 10px;
-            border-radius: 4px;
-        }
-
-        .sidebar nav ul li.active a {
-            background-color: #00b894;
+        .form-group .btn-black:hover {
+            background-color: #333;
             color: white;
         }
 
-        .sidebar nav ul li a:hover {
-            background-color: #e0f7fa;
-        }
-
-    /* Main content */
-    .main-content {
-        margin-left: 240px;
-        flex-grow: 1;
-        padding: 20px;
+    .btn-update, .btn-back {
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 5px;
+        cursor: pointer;
+        border: none;
+        transition: background-color 0.3s ease;
     }
 
-    /* Header Section */
-    .page-header {
+    .btn-update {
+        background-color: #007bff;
+        color: #ffffff;
+    }
+
+        .btn-update:hover {
+            background-color: #0056b3;
+        }
+
+    .btn-back {
+        background-color: #6c757d;
+        color: #ffffff;
+    }
+
+        .btn-back:hover {
+            background-color: #5a6268;
+        }
+
+    .button-container {
         display: flex;
         justify-content: space-between;
-        align-items: end;
-        background-color: #D6F6F1;
-        border-radius: 15px;
-        padding: 20px;
-        margin-top: 60px;
-        margin-bottom: 20px;
-        min-height: 200px;
+        margin-top: 20px;
     }
-
-        .page-header h2 {
-            margin: 0;
-            font-size: 24px;
-            color: #333;
-            font-weight: bold;
-        }
 
     .btn-add {
         background-color: #42C2A8;
@@ -275,62 +328,18 @@
                 background-color: #37a58d;
             }
 
-    /* Profile Icon Styling */
-    .profile-icon {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        cursor: pointer;
-        border: 2px solid #42C2A8;
-    }
-
-    /* Dropdown Menu Styling */
-    .profile-menu {
-        position: absolute;
-        top: 2%;
-        right: 2%;
-        z-index: 10;
-    }
-
-    .dropdown-content {
-        display: none;
-        position: absolute;
-        right: 0;
-        background-color: white;
-        min-width: 120px;
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
-        z-index: 1;
-    }
-
-        .dropdown-content a {
-            color: black;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-        }
-
-            .dropdown-content a:hover {
-                background-color: #f1f1f1;
-            }
-
-    /* Show the dropdown when clicked */
-    .profile-menu.show .dropdown-content {
-        display: block;
-    }
-
-    /* Ensure the container aligns everything in a single row */
     .checkbox-group {
         display: flex;
         justify-content: flex-start;
         align-items: center;
-        gap: 44%;
+        gap: 39%;
+        flex-wrap: nowrap;
     }
 
-    /* Make sure each checkbox and its label are aligned properly */
     .checkbox-item {
         display: flex;
         align-items: center;
+        white-space: nowrap;
     }
 
     .back-button-container {

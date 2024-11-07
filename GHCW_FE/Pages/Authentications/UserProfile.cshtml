@@ -72,7 +72,7 @@
                                         </div>
 
                                         <div class="form-group form-check">
-                                            <input type="checkbox" class="form-check-input" id="isEmailNotify" name="UpdateRequest.IsEmailNotify" @(Model.UserProfile.IsEmailNotify ? "checked" : "")>
+                                            <input type="checkbox" class="form-check-input" id="isEmailNotify" value="true" name="UpdateRequest.IsEmailNotify" @(Model.UserProfile.IsEmailNotify ? "checked" : "")>
                                             <label class="form-check-label" for="isEmailNotify">Nhận thông báo qua Email</label>
                                         </div>
                                         <button type="submit" class="btn btn-primary btn-block">Cập Nhật</button>
@@ -129,7 +129,7 @@
     // Hàm kiểm tra tên hợp lệ
     function validateName() {
         const nameInput = document.getElementById('name');
-        const namePattern = /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơưƯẠ-ỹ\s]+$/;
+        const namePattern = /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠÝàáâãèéêìíòóôõùúăđĩũơưƯẠ-ỹ\s]+$/;
 
         if (!namePattern.test(nameInput.value.trim())) {
             nameInput.setCustomValidity("Vui lòng nhập tên không chứa chữ số và kí tự đặc biệt.");

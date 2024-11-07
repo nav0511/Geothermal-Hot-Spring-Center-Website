@@ -8,12 +8,10 @@ namespace GHCW_FE.Pages.Authentications
 {
     public class RegisterModel : PageModel
     {
-        private readonly HttpClient _httpClient;
         private readonly AccountService _accService;
 
-        public RegisterModel(HttpClient httpClient, AccountService accService)
+        public RegisterModel(AccountService accService)
         {
-            _httpClient = httpClient;
             _accService = accService;
         }
 

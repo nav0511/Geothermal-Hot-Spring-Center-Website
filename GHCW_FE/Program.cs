@@ -7,6 +7,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<AccountService>();
 builder.Services.AddScoped<TokenService>();
+builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSession(options =>
 {
