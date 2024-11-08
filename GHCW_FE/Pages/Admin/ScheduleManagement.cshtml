@@ -1,364 +1,332 @@
 ﻿@page
+@using GHCW_FE.DTOs
+@using System.Text.Json
+@using Microsoft.AspNetCore.Http
 @model GHCW_FE.Pages.Admin.ScheduleManagementModel
 @{
-    Layout = null;
+    ViewData["Title"] = "Quản lý lịch làm việc";
+    Layout = "_LayoutManagement";
+    ViewData["ActivePage"] = "/Admin/ScheduleManagement";
 }
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý lịch trình</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+
+<!-- Main Content -->
+<header class="page-header">
+    <h2>Quản lý lịch làm việc</h2>
+    <button class="btn-add" onclick="window.location.href='#'">+ Thêm lịch</button>
+</header>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success mt-3">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger mt-3">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+
+<div class="filter-container">
+    <select id="yearFilter">
+        <!-- Năm sẽ được cập nhật tự động trong JavaScript -->
+    </select>
+    <select id="weekFilter">
+        <!-- Các tuần sẽ được cập nhật khi chọn năm -->
+    </select>
+</div>
+
+<div class="schedule-title">Lịch làm việc</div>
+
+<!-- Bảng lịch tuần -->
+<table class="schedule-table">
+    <tr id="scheduleHeaderRow">
+        <th>Ca/Ngày</th>
+        <th>Thứ 2</th>
+        <th>Thứ 3</th>
+        <th>Thứ 4</th>
+        <th>Thứ 5</th>
+        <th>Thứ 6</th>
+        <th>Thứ 7</th>
+        <th>Chủ Nhật</th>
+    </tr>
+    @foreach (var shift in new[] { 1, 2 })
+    {
+        <tr>
+            <td>
+                <b>Ca @shift</b><br>
+                @(shift == 1 ? "(7:00 - 15:00)" : "(15:00 - 22:00)")
+            </td>
+
+            @for (int i = 0; i < 7; i++)
+            {
+                var currentDate = Model.SW.StartDate.AddDays(i); // Calculate the current day
+                var scheduledEmployee = Model.Schedules.FirstOrDefault(schedule => 
+                    schedule.Date.Date == currentDate.Date && schedule.Shift == shift);
+                
+                <td>
+                    @if (scheduledEmployee != null)
+                    {
+                        <span>@scheduledEmployee.ReceptionistName</span><br>
+                        <a href="#">Sửa</a>
+                        <span class="separator">|</span>
+                        <a href="#">Xóa</a>
+                    }
+                    else
+                    {
+                        <span>--</span>
+                    }
+                </td>
+            }
+        </tr>
+    }
+</table>
+
+<form id="scheduleForm" method="get" asp-page-handler="OnGet">
+    <input type="hidden" id="startDateInput" name="startDate" />
+    <input type="hidden" id="endDateInput" name="endDate" />
+</form>
+
+<script>
+    function updateScheduleTableHeader() {
+        const year = parseInt(document.getElementById("yearFilter").value, 10);
+        const weekNumber = parseInt(document.getElementById("weekFilter").value, 10);
+        const headerRow = document.getElementById("scheduleHeaderRow");
+
+        // Lấy ngày bắt đầu và kết thúc của tuần đã chọn
+        const { start, end } = getWeekStartEndDates(year, weekNumber);
+        // Cập nhật từng ngày trong tiêu đề của bảng
+        for (let i = 1; i <= 7; i++) {
+            const th = headerRow.children[i]; // Lấy th thứ 2 đến Chủ Nhật
+            const day = new Date(start);
+            day.setDate(start.getDate() + i - 1);
+            const dayOfWeek = `Thứ ${i < 7 ? i + 1 : 'CN'}`; // Hiển thị 'Thứ 2', ..., 'Chủ Nhật'
+            const formattedDate = `${day.getDate().toString().padStart(2, '0')}/${(day.getMonth() + 1).toString().padStart(2, '0')}`;
+            th.innerHTML = `${dayOfWeek}<br>${formattedDate}`;
         }
 
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f7f7f7;
-            height: 100vh;
-            display: flex;
+        document.getElementById("startDateInput").value = `${start.getFullYear()}-${(start.getMonth() + 1).toString().padStart(2, '0')}-${start.getDate().toString().padStart(2, '0')}`;
+        document.getElementById("endDateInput").value = `${end.getFullYear()}-${(end.getMonth() + 1).toString().padStart(2, '0')}-${end.getDate().toString().padStart(2, '0')}`;
+    }
+
+    // Hàm cập nhật các năm trong dropdown
+    function updateYearOptions() {
+        const currentYear = new Date().getFullYear(); // Lấy năm hiện tại
+        const yearFilter = document.getElementById("yearFilter");
+
+        // Xóa các tùy chọn cũ trong dropdown
+        yearFilter.innerHTML = "";
+
+        // Thêm các năm cần hiển thị
+        const startYear = currentYear - 1;  // Hiển thị một năm trước
+        const endYear = currentYear + 1;    // Hiển thị một năm sau
+
+        // Thêm năm trước và năm sau vào dropdown
+        for (let year = startYear; year <= endYear; year++) {
+            const option = document.createElement("option");
+            option.value = year;
+            option.textContent = year;
+            if (year === currentYear) {
+                option.selected = true;  // Đánh dấu năm hiện tại là đã chọn
+            }
+            yearFilter.appendChild(option);
+        }
+    }
+
+    // Hàm cập nhật các tuần của năm đã chọn
+    function updateDateRange() {
+        const year = parseInt(document.getElementById("yearFilter").value, 10);
+        const weekFilter = document.getElementById("weekFilter");
+        const totalWeeks = getISOWeeksInYear(year);
+
+        // Xóa các tùy chọn cũ trong dropdown tuần
+        weekFilter.innerHTML = "";
+
+        // Thêm các tuần vào dropdown
+        for (let week = 1; week <= totalWeeks; week++) {
+            const { start, end } = getWeekStartEndDates(year, week);
+            const startDate = `${start.getDate().toString().padStart(2, '0')}/${(start.getMonth() + 1).toString().padStart(2, '0')}`;
+            const endDate = `${end.getDate().toString().padStart(2, '0')}/${(end.getMonth() + 1).toString().padStart(2, '0')}`;
+            const option = document.createElement("option");
+            option.value = week;
+            option.textContent = `Tuần ${week} (${startDate} - ${endDate})`;
+            weekFilter.appendChild(option);
         }
 
-        .admin-container {
-            display: flex;
-            width: 100%;
+        // Lấy tuần hiện tại và chọn tuần đó
+        const currentWeek = getCurrentWeek(year);
+        console.log(currentWeek);
+        if (currentWeek <= totalWeeks) {
+            weekFilter.value = currentWeek; // Chọn tuần hiện tại nếu có
+        }
+    }
+
+    function getISOWeeksInYear(year) {
+        const lastDayOfYear = new Date(year, 11, 31);
+        const lastWeekNumber = getISOWeekNumber(lastDayOfYear);
+
+        // Nếu ngày cuối cùng của năm là thứ 4 trở đi, thêm 1 tuần (ISO chuẩn)
+        if ((lastDayOfYear.getDay() === 4) ||
+            (lastDayOfYear.getDay() === 5 && lastWeekNumber === 53) ||
+            (lastDayOfYear.getDay() === 6 && lastWeekNumber === 52)) {
+            return 53;
+        }
+        return 52;
+    }
+
+    // Hàm lấy tuần hiện tại của năm
+    function getCurrentWeek(year) {
+        const currentDate = new Date();
+        return getISOWeekNumber(currentDate);
+    }
+
+    function getISOWeekNumber(date) {
+        const target = new Date(date.valueOf());
+        const dayNum = (date.getDay() + 6) % 7;  // Đảm bảo thứ Hai là ngày đầu tuần
+        target.setDate(target.getDate() - dayNum + 3);  // Thiết lập đến thứ Tư tuần đó
+        const firstThursday = target.valueOf();
+        target.setMonth(0, 1);  // Ngày 1 tháng 1
+        if (target.getDay() !== 4) {  // Nếu ngày đầu tiên của năm không phải là thứ Tư
+            target.setMonth(0, 1 + ((4 - target.getDay()) + 7) % 7);  // Đặt ngày đầu tiên là thứ Tư
+        }
+        return 1 + Math.ceil((firstThursday - target) / 604800000);  // Chia số mili giây cho một tuần
+    }
+
+    function getWeekStartEndDates(year, weekNumber) {
+        const january4 = new Date(year, 0, 4);
+        const dayOfWeek = january4.getDay() || 7;
+        const weekStart = new Date(january4);
+        weekStart.setDate(january4.getDate() - dayOfWeek + 1 + (weekNumber - 1) * 7);
+        const weekEnd = new Date(weekStart);
+        weekEnd.setDate(weekStart.getDate() + 6);
+        return {
+            start: weekStart,
+            end: weekEnd
+        };
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        // Khởi tạo danh sách năm và tuần khi trang được tải
+        updateYearOptions();
+        updateDateRange();
+        updateScheduleTableHeader();
+    });
+
+    // Thêm sự kiện thay đổi cho yearFilter và weekFilter
+    document.getElementById("yearFilter").addEventListener("change", function () {
+        updateDateRange(); // Cập nhật danh sách tuần cho năm mới
+        updateScheduleTableHeader(); // Cập nhật ngày trong bảng
+    });
+
+    document.getElementById("weekFilter").addEventListener("change", function () {
+        updateScheduleTableHeader(); // Cập nhật ngày trong bảng khi tuần thay đổi
+        document.getElementById("scheduleForm").submit();
+    });
+
+    // Get the profile icon and dropdown elements
+    var profileIcon = document.getElementById("profileIcon");
+    var dropdownMenu = document.getElementById("dropdownMenu");
+    var profileMenu = document.querySelector(".profile-menu");
+
+    // Toggle dropdown when the profile icon is clicked
+    profileIcon.addEventListener("click", function (event) {
+        event.stopPropagation();
+        profileMenu.classList.toggle("show");
+    });
+
+    // Close the dropdown if user clicks outside
+    window.addEventListener("click", function (event) {
+        if (!event.target.matches('.profile-icon') && profileMenu.classList.contains('show')) {
+            profileMenu.classList.remove('show');
+        }
+    });
+
+</script>
+
+<style>
+    .btn-add {
+        background-color: #42C2A8;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+        .btn-add:hover {
+            background-color: #37a58d;
         }
 
-        /* Sidebar */
-        .sidebar {
-            width: 240px;
-            background-color: white;
-            padding: 20px;
-            height: 100vh;
+
+
+    /* Pagination */
+    .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+        .pagination a {
+            padding: 10px 15px;
+            margin: 0 5px;
+            background-color: #e0f7fa;
+            text-decoration: none;
             color: black;
-            position: fixed;
-            top: 0;
-            left: 0;
+            border-radius: 4px;
         }
 
-        .sidebar-header h2 {
-            margin: 0;
-            padding: 0;
-            font-size: 24px;
-            color: #000;
-        }
-
-        .sidebar nav ul {
-            list-style: none;
-            padding: 0;
-        }
-
-            .sidebar nav ul li a i {
-                margin-right: 15px;
-            }
-
-            .sidebar nav ul li a {
-                color: #008767;
-                text-decoration: none;
-                display: flex;
-                align-items: center;
-                padding: 10px;
-                border-radius: 4px;
-            }
-
-            .sidebar nav ul li.active a {
+            .pagination a.active {
                 background-color: #00b894;
                 color: white;
             }
 
-            .sidebar nav ul li a:hover {
-                background-color: #e0f7fa;
+            .pagination a:hover {
+                background-color: #019875;
+                color: white;
             }
 
-        /* Main content */
-        .main-content {
-            margin-left: 240px;
-            flex-grow: 1;
-            padding: 20px;
-        }
+    /* CSS cho bảng lịch tuần */
+    .schedule-table {
+        width: 100%;
+        margin-top: 20px;
+        border-collapse: collapse;
+        background-color: white;
+    }
 
-        /* Header Section */
-        .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: end;
-            background-color: #D6F6F1;
-            border-radius: 15px;
-            padding: 20px;
-            margin-top: 60px;
-            margin-bottom: 20px;
-            min-height: 200px;
-        }
-
-            .page-header h2 {
-                margin: 0;
-                font-size: 24px;
-                color: #333;
-                font-weight: bold;
-            }
-
-        .btn-add {
-            background-color: #42C2A8;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-            .btn-add:hover {
-                background-color: #37a58d;
-            }
-
-
-
-        /* Pagination */
-        .pagination {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-            .pagination a {
-                padding: 10px 15px;
-                margin: 0 5px;
-                background-color: #e0f7fa;
-                text-decoration: none;
-                color: black;
-                border-radius: 4px;
-            }
-
-                .pagination a.active {
-                    background-color: #00b894;
-                    color: white;
-                }
-
-                .pagination a:hover {
-                    background-color: #019875;
-                    color: white;
-                }
-        /* Profile Icon Styling */
-        .profile-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 2px solid #42C2A8;
-        }
-
-        /* Dropdown Menu Styling */
-        .profile-menu {
-            position: absolute;
-            top: 2%;
-            right: 2%;
-            z-index: 10;
-        }
-
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            right: 0;
-            background-color: white;
-            min-width: 120px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            z-index: 1;
-        }
-
-            .dropdown-content a {
-                color: black;
-                padding: 12px 16px;
-                text-decoration: none;
-                display: block;
-            }
-
-                .dropdown-content a:hover {
-                    background-color: #f1f1f1;
-                }
-
-        /* Show the dropdown when clicked */
-        .profile-menu.show .dropdown-content {
-            display: block;
-        }
-        /* CSS cho bảng lịch tuần */
-        .schedule-table {
-            width: 100%;
-            margin-top: 20px;
-            border-collapse: collapse;
-            background-color: white;
-        }
-
-            .schedule-table th, .schedule-table td {
-                border: 1px solid #ddd;
-                padding: 15px;
-                text-align: center;
-            }
-
-            .schedule-table th {
-                background-color: #f1f1f1;
-                color: #333;
-            }
-
-        /* Dropdown cho năm và tuần */
-        .filter-container {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-            .filter-container select {
-                padding: 8px;
-                border-radius: 8px;
-            }
-
-        .schedule-title {
-            color: #28a745; /* Màu xanh */
-            font-size: 24px;
-            font-weight: bold;
+        .schedule-table th, .schedule-table td {
+            border: 1px solid #ddd;
+            padding: 15px;
             text-align: center;
-            margin-bottom: 10px;
         }
-    </style>
-</head>
-<body>
-    <!-- Profile Menu HTML -->
-    <div class="profile-menu">
-        <img src="https://www.w3schools.com/w3images/avatar2.png" alt="Profile" id="profileIcon" class="profile-icon">
-        <div id="dropdownMenu" class="dropdown-content">
-            <a href="#">Profile</a>
-            <a href="#">Logout</a>
-        </div>
-    </div>
-    <div class="admin-container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <h2>GH<span style="color: green">CW</span></h2>
-            </div>
-            <br />
-            <nav>
-                <ul>
-                    <li><a href="https://localhost:7260/Admin/Dashboard"><i class="fas fa-chart-line"></i> Dashboard</a></li>
-                    <li><a href="https://localhost:7260/Admin/ServiceManagement"><i class="fas fa-cogs"></i> Quản lý dịch vụ</a></li>
-                    <li><a href="https://localhost:7260/Admin/UserManagement"><i class="fas fa-users"></i> Quản lý người dùng</a></li>
-                    <li><a href="https://localhost:7260/Admin/DiscountManagement"><i class="fas fa-ticket-alt"></i> Quản lý phiếu giảm giá</a></li>
-                    <li><a href="https://localhost:7260/Admin/NewsManagement"><i class="fas fa-newspaper"></i> Quản lý tin tức</a></li>
-                    <li><a href="#"><i class="fas fa-bullhorn"></i> Quản lý tin khuyến mãi</a></li>
-                    <li><a href="https://localhost:7260/Admin/ProductManagement"><i class="fas fa-boxes"></i> Quản lý sản phẩm</a></li>
-                </ul>
-            </nav>
-        </aside>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <header class="page-header">
-                <h2>Quản lý lịch trình</h2>
-                <button class="btn-add" onclick="window.location.href='#'">+ Thêm lịch trình mới</button>
-            </header>
+        .schedule-table th {
+            background-color: #f1f1f1;
+            color: #333;
+        }
 
-            <div class="filter-container">
-                <select id="yearFilter" onchange="updateWeekDropdown()">
-                    @foreach (var year in Model.AvailableYears)
-                    {
-                        <option value="@year" selected="@(year == DateTime.Now.Year)">@year</option>
-                    }
-                </select>
-                <select id="weekFilter">
-                    @foreach (var week in Model.WeeksOfSelectedYear)
-                    {
-                        <option value="@week">@week</option>
-                    }
-                </select>
-            </div>
+    /* Dropdown cho năm và tuần */
+    .filter-container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
 
+        .filter-container select {
+            padding: 8px;
+            border-radius: 8px;
+        }
 
-
-            <div class="schedule-title">Lịch trình</div>
-
-            <!-- Bảng lịch tuần -->
-            <table class="schedule-table">
-                <thead>
-                    <tr>
-                        <th>Ca/Ngày</th>
-                        @for (int i = 0; i < 7; i++)
-                        {
-                            var date = Model.StartDate.AddDays(i);
-                            <th>@date.ToString("dddd")<br>@date.ToString("dd/MM/yyyy")</th>
-                        }
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><b>Ca 1</b><br>(7:00 - 15:00)</td>
-                        @for (int i = 0; i < 7; i++)
-                        {
-                            <td>
-                                @if (!string.IsNullOrEmpty(Model.ScheduleArray[i, 0]))
-                                {
-                                    @Model.ScheduleArray[i, 0]
-
-                                    <br />
-                                    <a href="#">Sửa</a> <a href="#">Xóa</a>
-                                }
-                                else
-                                {
-                                    <span>Trống</span>
-                                }
-                            </td>
-                        }
-                    </tr>
-
-                    <tr>
-                        <td><b>Ca 2</b><br>(15:00 - 22:00)</td>
-                        @for (int i = 0; i < 7; i++)
-                        {
-                            <td>
-                                @if (!string.IsNullOrEmpty(Model.ScheduleArray[i, 1]))
-                                {
-                                    @Model.ScheduleArray[i, 1]
-
-                                    <br />
-                                    <a href="#">Sửa</a> <a href="#">Xóa</a>
-                                }
-                                else
-                                {
-                                    <span>Trống</span>
-                                }
-                            </td>
-                        }
-                    </tr>
-                </tbody>
-            </table>
-        </main>
-    </div>
-    <script>
-        // Get the profile icon and dropdown elements
-        var profileIcon = document.getElementById("profileIcon");
-        var dropdownMenu = document.getElementById("dropdownMenu");
-        var profileMenu = document.querySelector(".profile-menu");
-
-        // Toggle dropdown when the profile icon is clicked
-        profileIcon.addEventListener("click", function (event) {
-            event.stopPropagation();
-            profileMenu.classList.toggle("show");
-        });
-
-        // Close the dropdown if user clicks outside
-        window.addEventListener("click", function (event) {
-            if (!event.target.matches('.profile-icon') && profileMenu.classList.contains('show')) {
-                profileMenu.classList.remove('show');
-            }
-        });
-
-        
-    </script>
-</body>
-</html> 
+    .schedule-title {
+        color: #28a745; /* Màu xanh */
+        font-size: 24px;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+</style>

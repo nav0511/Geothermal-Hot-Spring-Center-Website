@@ -1,4 +1,6 @@
-﻿using GHCW_BE.Models;
+﻿using AutoMapper;
+using GHCW_BE.DTOs;
+using GHCW_BE.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace GHCW_BE.Services
@@ -6,19 +8,26 @@ namespace GHCW_BE.Services
     public class ScheduleService
     {
         private readonly GHCWContext _context;
+        private readonly IMapper _mapper;
 
-        public ScheduleService(GHCWContext context)
+        public ScheduleService(GHCWContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
-        public async Task<List<Schedule>> GetWeeklySchedule(DateTime startDate)
+        public async Task<List<ScheduleDTO>?> GetWeeklySchedule(DateTime startDate, DateTime endDate)
         {
-            var endDate = startDate.AddDays(7); 
-            return await _context.Schedules
-                                 .Where(s => s.Date >= startDate && s.Date < endDate)
-                                 .Include(s => s.Receptionist) 
+            var schedules = await _context.Schedules
+                                 .Where(s => s.Date >= startDate && s.Date < endDate && s.IsActive == true)
+                                 .Include(s => s.Receptionist)
                                  .ToListAsync();
+            if (schedules != null)
+            {
+                var result = _mapper.Map<List<ScheduleDTO>>(schedules);
+                return result;
+            }
+            return null;
         }
 
         public async Task<Schedule?> GetScheduleById(int id)

@@ -19,6 +19,20 @@ namespace GHCW_BE.DTOs
         public string? RefreshToken { get; set; }
     }
 
+    public class UserProfile
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = null!;
+        public bool? Gender { get; set; }
+        public string? Address { get; set; }
+        public string PhoneNumber { get; set; } = null!;
+        public DateTime? DoB { get; set; }
+        public int Role { get; set; }
+        public string Email { get; set; } = null!;
+        public bool IsEmailNotify { get; set; }
+        public bool IsActive { get; set; }
+    }
+
     public class ForgotPassRequest
     {
         [Required(ErrorMessage = "Yêu cầu nhập email.")]
@@ -58,7 +72,7 @@ namespace GHCW_BE.DTOs
         public string Password { get; set; } = null!;
 
         [Required(ErrorMessage = "Yêu cầu nhập họ tên.")]
-        [RegularExpression(@"^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơưƯẠ-ỹ\s]+$", ErrorMessage = "Họ tên chỉ được chứa chữ cái và khoảng trắng.")]
+        [RegularExpression(@"^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠƯÝàáâãèéêìíòóôõùúăđĩũơưýẠ-ỹẠ-ỹ\s]+$", ErrorMessage = "Họ tên chỉ được chứa chữ cái và khoảng trắng.")]
         public string Name { get; set; }
 
         public string? Address { get; set; }
@@ -84,7 +98,7 @@ namespace GHCW_BE.DTOs
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Yêu cầu nhập họ tên.")]
-        [RegularExpression(@"^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơưƯẠ-ỹ\s]+$", ErrorMessage = "Họ tên chỉ được chứa chữ cái và khoảng trắng.")]
+        [RegularExpression(@"^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠƯÝàáâãèéêìíòóôõùúăđĩũơưýẠ-ỹẠ-ỹ\s]+$", ErrorMessage = "Họ tên chỉ được chứa chữ cái và khoảng trắng.")]
         public string Name { get; set; }
 
         public string Address { get; set; }
@@ -106,7 +120,7 @@ namespace GHCW_BE.DTOs
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Yêu cầu nhập họ tên.")]
-        [RegularExpression(@"^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơưƯẠ-ỹ\s]+$", ErrorMessage = "Họ tên chỉ được chứa chữ cái và khoảng trắng.")]
+        [RegularExpression(@"^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠƯÝàáâãèéêìíòóôõùúăđĩũơưýẠ-ỹẠ-ỹ\s]+$", ErrorMessage = "Họ tên chỉ được chứa chữ cái và khoảng trắng.")]
         public string Name { get; set; }
 
         public string Address { get; set; }

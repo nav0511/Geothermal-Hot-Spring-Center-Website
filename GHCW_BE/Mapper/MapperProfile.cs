@@ -18,9 +18,14 @@ namespace GHCW_BE.Mapper
             CreateMap<Product, ProductDTO2>();
             CreateMap<Product, ProductDTOImg>();
             CreateMap<Category, CategoryDTO>();
-            CreateMap<Schedule, ScheduleDTO>();
-            
 
+            CreateMap<Schedule, ScheduleDTO>()
+                .ForMember(dest => dest.ReceptionistId, opt => opt.MapFrom(src => src.Receptionist.Id))
+                .ForMember(dest => dest.ReceptionistName, opt => opt.MapFrom(src => src.Receptionist.Name));
+
+            CreateMap<Ticket, TicketDTO>();
+            CreateMap<TicketDetail, TicketDetailDTO>();
+            
 
             CreateMap<NewsDTO, News>();
             CreateMap<NewsDTO2, News>();
@@ -33,6 +38,8 @@ namespace GHCW_BE.Mapper
             CreateMap<ProductDTOImg, Product>();
             CreateMap<CategoryDTO, Category>();
             CreateMap<ScheduleDTO, Schedule>();
+            CreateMap<TicketDTO, TicketDTO>();
+            CreateMap<TicketDetailDTO, TicketDetail>();
 
             CreateMap<Customer, CustomerDTO>()
                 .ForMember(dest => dest.AccountId, opt => opt.MapFrom(src => src.AccountId))
@@ -51,6 +58,34 @@ namespace GHCW_BE.Mapper
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
                 .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber))
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FullName));
+
+            CreateMap<Account, AccountDTO>()
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+                .ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.Password))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))
+                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber))
+                .ForMember(dest => dest.DoB, opt => opt.MapFrom(src => src.DoB))
+                .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.Gender))
+                .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role))
+                .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive))
+                .ForMember(dest => dest.IsEmailNotify, opt => opt.MapFrom(src => src.IsEmailNotify))
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.RefreshToken, opt => opt.MapFrom(src => src.RefreshToken));
+
+            CreateMap<AccountDTO, Account>()
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+                .ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.Password))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))
+                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber))
+                .ForMember(dest => dest.DoB, opt => opt.MapFrom(src => src.DoB))
+                .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.Gender))
+                .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role))
+                .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive))
+                .ForMember(dest => dest.IsEmailNotify, opt => opt.MapFrom(src => src.IsEmailNotify))
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.RefreshToken, opt => opt.MapFrom(src => src.RefreshToken));
 
             CreateMap<AddRequest, Account>()
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))

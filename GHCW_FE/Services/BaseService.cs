@@ -1,5 +1,4 @@
-﻿
-using System.Net;
+﻿using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
@@ -28,7 +27,7 @@ namespace GHCW_FE.Services
             }
         }
 
-        public async Task<T?> GetData<T>(string url, string? accepttype = null, string? accessToken = null)
+        public async Task<(HttpStatusCode StatusCode, T? Data)> GetData<T>(string url, string? accepttype = null, string? accessToken = null)
         {
             T? result = default(T);
             HttpClient client = new HttpClient();
@@ -40,13 +39,15 @@ namespace GHCW_FE.Services
             }
 
             HttpResponseMessage responseMessage = await client.GetAsync(url);
+            var statusCode = responseMessage.StatusCode;
+
             if (responseMessage.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 if (responseMessage.Content is not null)
-                    result = responseMessage.Content.ReadFromJsonAsync<T>().Result;
-                return result;
+                    result = await responseMessage.Content.ReadFromJsonAsync<T>();
+                return (statusCode, result);
             }
-            else throw new Exception(responseMessage.StatusCode.ToString());
+            return (statusCode, result);
         }
 
         public async Task<HttpStatusCode> PushData<T>(string url, T value, string? accepttype = null, string? accessToken = null)
@@ -110,6 +111,10 @@ namespace GHCW_FE.Services
         {
             url = _rootUrl + url;
             HttpClient client = new HttpClient();
+            if (!string.IsNullOrEmpty(accessToken))
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            }
             var jsonStr = JsonSerializer.Serialize(value);
             HttpContent content = new StringContent(jsonStr, Encoding.UTF8, "application/json");
             HttpResponseMessage responseMessage = await client.PutAsync(url, content);
@@ -120,6 +125,11 @@ namespace GHCW_FE.Services
         {
             url = _rootUrl + url;
             HttpClient client = new HttpClient();
+            if (!string.IsNullOrEmpty(accessToken))
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            }
+
             HttpResponseMessage responseMessage = await client.DeleteAsync(url);
             return responseMessage.StatusCode;
         }

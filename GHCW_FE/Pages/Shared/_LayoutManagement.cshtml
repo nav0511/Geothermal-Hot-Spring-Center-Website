@@ -1,0 +1,95 @@
+﻿@using GHCW_FE.DTOs
+@using System.Text.Json
+@using Microsoft.AspNetCore.Http
+@{
+    AccountDTO? account = null;
+    if (Context.Session.GetString("acc") != null)
+    {
+        account = JsonSerializer.Deserialize<AccountDTO>(Context.Session.GetString("acc"));
+    }
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - Trung tâm khoáng nóng địa chất</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="~/css/layoutManagement.css" asp-append-version="true" />
+</head>
+<body>
+    <!-- Profile Menu HTML -->
+    @if (account != null)
+    {
+        <div class="profile-menu">
+            <div id="profileIcon">
+                <label>@account.Name</label>
+                <img src="https://www.w3schools.com/w3images/avatar2.png" alt="Profile" class="profile-icon">
+            </div>
+            <div id="dropdownMenu" class="dropdown-content">
+                <a class="dropdown-item" asp-page="/Index">Trang chủ</a>
+                <a class="dropdown-item" asp-page="/Authentications/UserProfile">Thông tin cá nhân</a>
+                <a class="dropdown-item" asp-page="/Authentications/ChangePassword">Đổi mật khẩu</a>
+                <form method="post" class="dropdown-item" asp-page="/Authentications/Login" asp-page-handler="LogOut" style="width:100%">
+                    <button type="submit" style="border:none; background:none; padding:0; text-align:left;">Đăng xuất</button>
+                </form>
+            </div>
+        </div>
+    }
+
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>GH<span style="color: green">CW</span></h2>
+            </div>
+            <br />
+            <nav>
+                <ul>
+                    @if (account?.Role <= 1)
+                    {
+                        <li class="@(ViewData["ActivePage"] as string == "/Admin/Dashboard" ? "active" : "")">
+                            <a asp-page="/Admin/Dashboard"><i class="fas fa-chart-line"></i> Dashboard</a>
+                        </li>
+                        <li class="@(ViewData["ActivePage"] as string == "/Admin/ScheduleManagement" ? "active" : "")">
+                            <a asp-page="/Admin/ScheduleManagement"><i class="fas fa-calendar"></i> Quản lý lịch trình</a>
+                        </li>
+                        <li class="@(ViewData["ActivePage"] as string == "/Admin/PromotionManagement" ? "active" : "")">
+                            <a asp-page="/Admin/PromotionManagement"><i class="fas fa-bullhorn"></i> Quản lý tin khuyến mãi</a>
+                        </li>
+                        <li class="@(ViewData["ActivePage"] as string == "/Admin/ProductManagement" ? "active" : "")">
+                            <a asp-page="/Admin/ProductManagement"><i class="fas fa-boxes"></i> Quản lý sản phẩm</a>
+                        </li>
+                        <li class="@(ViewData["ActivePage"] as string == "/Admin/ServiceManagement" ? "active" : "")">
+                            <a asp-page="/Admin/ServiceManagement"><i class="fas fa-cogs"></i> Quản lý dịch vụ</a>
+                        </li>
+                    }
+                    @if (account?.Role == 0)
+                    {
+                        <li class="@(ViewData["ActivePage"] as string == "/Admin/UserManagement" ? "active" : "")">
+                            <a asp-page="/Admin/UserManagement"><i class="fas fa-users"></i> Quản lý người dùng</a>
+                        </li>
+                    }
+                    
+                    @if (account?.Role <= 3)
+                    {
+                        <li class="@(ViewData["ActivePage"] as string == "/Admin/CustomerManagemnet" ? "active" : "")">
+                            <a asp-page="/Admin/CustomerManagemnet"><i class="fas fa-users"></i> Quản lý khách hàng</a>
+                        </li>
+                        <li class="@(ViewData["ActivePage"] as string == "/Admin/DiscountManagement" ? "active" : "")">
+                            <a asp-page="/Admin/DiscountManagement"><i class="fas fa-ticket-alt"></i> Quản lý phiếu giảm giá</a>
+                        </li>
+                        <li class="@(ViewData["ActivePage"] as string == "/Admin/NewsManagement" ? "active" : "")">
+                            <a asp-page="/Admin/NewsManagement"><i class="fas fa-newspaper"></i> Quản lý tin tức</a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            @RenderBody()
+        </main>
+    </div>
+</body>
+</html>

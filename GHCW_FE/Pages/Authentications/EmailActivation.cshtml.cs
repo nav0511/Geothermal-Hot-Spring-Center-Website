@@ -23,10 +23,8 @@ namespace GHCW_FE.Pages.Authentications
                 Code = code
             };
 
-            // Call the API to activate the account
             var statusCode = await _accService.AccountActivation(activationRequest);
 
-            // Check the response and set the appropriate message
             if (statusCode == HttpStatusCode.OK)
             {
                 TempData["SuccessMessage"] = "Kích hoạt tài khoản thành công, vui lòng đăng nhập.";

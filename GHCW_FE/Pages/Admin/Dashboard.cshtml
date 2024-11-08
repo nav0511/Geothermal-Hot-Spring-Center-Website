@@ -1,378 +1,112 @@
 ﻿@page
-@model GHCW_FE.Pages.Admin.DashboardModel
-@{
-    Layout = null;
-}
 @using GHCW_FE.DTOs
 @using System.Text.Json
 @using Microsoft.AspNetCore.Http
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+@model GHCW_FE.Pages.Admin.DashboardModel
+@{
+    ViewData["Title"] = "Quản lý";
+    Layout = "_LayoutManagement";
+}
 
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            background-color: #f7f7f7;
-            height: 100vh;
-            display: flex;
-        }
+<div class="dashboard-page-header">
+    <div class="header-content">
+        <header class="dashboard-header">
+            <h2>Dashboard</h2>
+        </header>
 
-        .admin-container {
-            display: flex;
-            width: 100%;
-            position: relative; /* Thêm position relative để cho profile-menu có thể được định vị chính xác */
-        }
-
-        /* Sidebar */
-        .sidebar {
-            width: 240px;
-            background-color: white;
-            padding: 20px;
-            height: 100vh;
-            color: black;
-            position: fixed;
-            top: 0;
-            left: 0;
-        }
-
-        .sidebar-header h2 {
-            margin: 0;
-            padding: 0;
-            font-size: 24px;
-            color: #000;
-        }
-
-        .sidebar nav ul {
-            list-style: none;
-            padding: 0;
-        }
-
-            .sidebar nav ul li a i {
-                margin-right: 15px;
-            }
-
-            .sidebar nav ul li a {
-                color: #008767;
-                text-decoration: none;
-                display: flex;
-                align-items: center;
-                padding: 10px;
-                border-radius: 4px;
-            }
-
-            .sidebar nav ul li.active a {
-                background-color: #00b894;
-                color: white;
-            }
-
-                .sidebar nav ul li.active a i {
-                    color: white;
-                }
-
-            .sidebar nav ul li a:hover {
-                background-color: #e0f7fa;
-            }
-
-        /* Main content */
-        .main-content {
-            margin-left: 240px;
-            flex-grow: 1;
-            padding: 20px;
-        }
-
-        /* Adjusted styling for the header and stats section */
-        .dashboard-header h2 {
-            margin: 0;
-            font-size: 24px;
-            display: inline-block;
-        }
-
-        .dashboard-stats {
-            display: flex;
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        /* Page header with background and padding for title and cards */
-        .page-header {
-            background-color: #D6F6F1;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-            margin-top: 60px;
-            min-height: 200px;
-        }
-
-        .header-content {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .card {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            flex: 1;
-            text-align: center;
-        }
-
-            .card h3 {
-                margin-bottom: 10px;
-                font-size: 16px;
-            }
-
-            .card p {
-                font-size: 24px;
-                margin-bottom: 10px;
-            }
-
-            .card span {
-                font-size: 12px;
-                color: #555;
-            }
-
-            .card .negative {
-                color: red;
-            }
-
-            .card .positive {
-                color: green;
-            }
-
-        /* Sales Chart */
-        .sales-chart {
-            margin-top: 40px;
-        }
-
-            .sales-chart canvas {
-                max-width: 100%;
-                height: 400px;
-            }
-
-        .chart-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-
-            .chart-header h3 {
-                margin: 0;
-                font-size: 20px;
-            }
-
-            .chart-header select {
-                padding: 5px 10px;
-                font-size: 16px;
-            }
-
-        /* Profile Icon Styling */
-        .profile-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 2px solid #42C2A8;
-        }
-
-        /* Dropdown Menu Styling */
-        .profile-menu {
-            position: absolute;
-            top: 2%;
-            right: 2%;
-            z-index: 10;
-        }
-
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            right: 0;
-            background-color: white;
-            min-width: 120px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            z-index: 1;
-        }
-
-            .dropdown-content a {
-                color: black;
-                padding: 12px 16px;
-                text-decoration: none;
-                display: block;
-            }
-
-                .dropdown-content a:hover {
-                    background-color: #f1f1f1;
-                }
-
-            .dropdown-content form {
-                color: black;
-                padding: 12px 16px;
-                text-decoration: none;
-                display: block;
-            }
-
-                .dropdown-content form:hover {
-                    background-color: #f1f1f1;
-                }
-
-        /* Show the dropdown when clicked */
-        .profile-menu.show .dropdown-content {
-            display: block;
-        }
-
-    </style>
-</head>
-<body>
-    <!-- Profile Menu HTML -->
-    @if (HttpContext.Session.GetString("acc") != null)
-    {
-        var account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
-        <div class="profile-menu">
-            <div id="profileIcon">
-                <label>@account.Name</label>
-                <img src="https://www.w3schools.com/w3images/avatar2.png" alt="Profile" class="profile-icon">
+        <section class="dashboard-stats">
+            <div class="card">
+                <h3>Tổng số người dùng</h3>
+                <p>4,689</p>
+                <span class="positive">Tăng 1.5% so với ngày hôm qua</span>
             </div>
-            <div id="dropdownMenu" class="dropdown-content">
-                <a class="dropdown-item" asp-page="/Index">Trang chủ</a>
-                <a class="dropdown-item" asp-page="/User/Profile">Thông tin cá nhân</a>
-                <form method="post" class="dropdown-item" asp-page="/Authentications/Login" asp-page-handler="LogOut" style="width:100%">
-                    <button type="submit" style="border:none; background:none; padding:0; text-align:left;">Đăng xuất</button>
-                </form>
+            <div class="card">
+                <h3>Tổng số vé</h3>
+                <p>10,293</p>
+                <span class="positive">Tăng 1.3% so với tuần trước</span>
             </div>
-        </div>
-    }
-
-    <div class="admin-container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <h2>GH<span style="color: green">CW</span></h2>
+            <div class="card">
+                <h3>Tổng doanh số</h3>
+                <p>1,460,000 VNĐ</p>
+                <span class="negative">Giảm 0.3% so với ngày hôm qua</span>
             </div>
-            <br />
-            <nav>
-                <ul>
-                    <li class="active"><a href="https://localhost:7260/Admin/Dashboard"><i class="fas fa-chart-line"></i> Dashboard</a></li>
-                    <li><a href="https://localhost:7260/Admin/ServiceManagement"><i class="fas fa-cogs"></i> Quản lý dịch vụ</a></li>
-                    <li><a href="https://localhost:7260/Admin/UserManagement"><i class="fas fa-users"></i> Quản lý người dùng</a></li>
-                    <li><a href="https://localhost:7260/Admin/DiscountManagement"><i class="fas fa-ticket-alt"></i> Quản lý phiếu giảm giá</a></li>
-                    <li><a href="https://localhost:7260/Admin/NewsManagement"><i class="fas fa-newspaper"></i> Quản lý tin tức</a></li>
-                    <li><a href="https://localhost:7260/Admin/PromotionManagement"><i class="fas fa-bullhorn"></i> Quản lý tin khuyến mãi</a></li>
-                    <li><a href="https://localhost:7260/Admin/ProductManagement"><i class="fas fa-boxes"></i> Quản lý sản phẩm</a></li>
-                </ul>
-            </nav>
-        </aside>
-
-        <!-- Main Content -->
-        <main class="main-content">
-            <div class="page-header">
-                <!-- Wrapper for both title and cards to align vertically -->
-                <div class="header-content">
-                    <header class="dashboard-header">
-                        <h2>Dashboard</h2>
-                    </header>
-
-                    <section class="dashboard-stats">
-                        <div class="card">
-                            <h3>Tổng số người dùng</h3>
-                            <p>4,689</p>
-                            <span class="positive">Tăng 1.5% so với ngày hôm qua</span>
-                        </div>
-                        <div class="card">
-                            <h3>Tổng số vé</h3>
-                            <p>10,293</p>
-                            <span class="positive">Tăng 1.3% so với tuần trước</span>
-                        </div>
-                        <div class="card">
-                            <h3>Tổng doanh số</h3>
-                            <p>1,460,000 VNĐ</p>
-                            <span class="negative">Giảm 0.3% so với ngày hôm qua</span>
-                        </div>
-                    </section>
-                </div>
-            </div>
-
-            <section class="sales-chart">
-                <div class="chart-header">
-                    <h3>Chi tiết bán hàng</h3>
-                    <label for="month-select"></label>
-                    <select id="month-select">
-                        <option value="0">Chọn tháng</option>
-                        <option value="1">Tháng 1</option>
-                        <option value="2">Tháng 2</option>
-                        <option value="3">Tháng 3</option>
-                        <option value="4">Tháng 4</option>
-                        <option value="5">Tháng 5</option>
-                        <option value="6">Tháng 6</option>
-                        <option value="7">Tháng 7</option>
-                        <option value="8">Tháng 8</option>
-                        <option value="9">Tháng 9</option>
-                        <option value="10">Tháng 10</option>
-                        <option value="11">Tháng 11</option>
-                        <option value="12">Tháng 12</option>
-                    </select>
-                </div>
-                <canvas id="salesChart"></canvas>
-            </section>
-        </main>
+        </section>
     </div>
+</div>
 
-    <!-- Chart.js and Script -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        var ctx = document.getElementById('salesChart').getContext('2d');
-        var salesChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['5k', '10k', '15k', '20k', '25k', '30k', '35k'],
-                datasets: [{
-                    label: 'Doanh thu (VNĐ)',
-                    data: [2000000, 3000000, 5000000, 10570000, 8000000, 12000000, 9500000],
-                    borderColor: 'rgba(0, 128, 0, 1)',
-                    fill: true,
-                    backgroundColor: 'rgba(0, 128, 0, 0.1)',
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
+<section class="sales-chart">
+    <div class="chart-header">
+        <h3>Chi tiết bán hàng</h3>
+        <label for="month-select"></label>
+        <select id="month-select">
+            <option value="0">Chọn tháng</option>
+            <option value="1">Tháng 1</option>
+            <option value="2">Tháng 2</option>
+            <option value="3">Tháng 3</option>
+            <option value="4">Tháng 4</option>
+            <option value="5">Tháng 5</option>
+            <option value="6">Tháng 6</option>
+            <option value="7">Tháng 7</option>
+            <option value="8">Tháng 8</option>
+            <option value="9">Tháng 9</option>
+            <option value="10">Tháng 10</option>
+            <option value="11">Tháng 11</option>
+            <option value="12">Tháng 12</option>
+        </select>
+    </div>
+    <canvas id="salesChart"></canvas>
+</section>
+<style>
+    .dashboard-page-header {
+        background-color: #D6F6F1;
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 20px;
+        margin-top: 60px;
+        min-height: 200px;
+    }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    var ctx = document.getElementById('salesChart').getContext('2d');
+    var salesChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['5k', '10k', '15k', '20k', '25k', '30k', '35k'],
+            datasets: [{
+                label: 'Doanh thu (VNĐ)',
+                data: [2000000, 3000000, 5000000, 10570000, 8000000, 12000000, 9500000],
+                borderColor: 'rgba(0, 128, 0, 1)',
+                fill: true,
+                backgroundColor: 'rgba(0, 128, 0, 0.1)',
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
                 }
             }
-        });
+        }
+    });
 
-        // Get the profile icon and dropdown elements
-        var profileIcon = document.getElementById("profileIcon");
-        var dropdownMenu = document.getElementById("dropdownMenu");
-        var profileMenu = document.querySelector(".profile-menu");
+    // Get the profile icon and dropdown elements
+    var profileIcon = document.getElementById("profileIcon");
+    var dropdownMenu = document.getElementById("dropdownMenu");
+    var profileMenu = document.querySelector(".profile-menu");
 
-        // Toggle dropdown when the profile icon is clicked
-        profileIcon.addEventListener("click", function (event) {
-            event.stopPropagation();
-            profileMenu.classList.toggle("show");
-        });
+    // Toggle dropdown when the profile icon is clicked
+    profileIcon.addEventListener("click", function (event) {
+        event.stopPropagation();
+        profileMenu.classList.toggle("show");
+    });
 
-        // Close the dropdown if user clicks outside
-        window.addEventListener("click", function (event) {
-            if (!event.target.matches('.profile-icon') && profileMenu.classList.contains('show')) {
-                profileMenu.classList.remove('show');
-            }
-        });
-    </script>
-</body>
-</html>
+    // Close the dropdown if user clicks outside
+    window.addEventListener("click", function (event) {
+        if (!event.target.matches('.profile-icon') && profileMenu.classList.contains('show')) {
+            profileMenu.classList.remove('show');
+        }
+    });
+</script>

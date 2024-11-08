@@ -20,10 +20,12 @@ namespace GHCW_FE.Pages.Admin
             CurrentPage = pageNumber;
             int skip = (pageNumber - 1) * PageSize;
 
-            int totalNewsCount = _newsService.GetTotalPromotionNews().Result;
+            var (statusCode, TotalNewsCount) = _newsService.GetTotalPromotionNews().Result;
+            int totalNewsCount = TotalNewsCount;
             TotalPages = (int)Math.Ceiling((double)totalNewsCount / PageSize);
 
-            NewsDTOs = await _newsService.GetNews($"News?$filter=DiscountId ne null&top={PageSize}&$skip={skip}");
+            var (statusCode2, newsDTOs) = await _newsService.GetNews($"News?$filter=DiscountId ne null&top={PageSize}&$skip={skip}");
+            NewsDTOs = newsDTOs;
         }
     }
 }

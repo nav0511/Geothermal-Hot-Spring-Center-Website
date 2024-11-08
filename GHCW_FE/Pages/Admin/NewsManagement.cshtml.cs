@@ -21,10 +21,13 @@ namespace GHCW_FE.Pages.Admin
             CurrentPage = pageNumber;
             int skip = (pageNumber - 1) * PageSize;
 
-            int totalNewsCount = _newsService.GetTotalRegularNews().Result;
+            var (statusCode, TotalNewsCount) = _newsService.GetTotalRegularNews().Result;
+            int totalNewsCount = TotalNewsCount;
+
             TotalPages = (int)Math.Ceiling((double)totalNewsCount / PageSize);
 
-            NewsDTOs = await _newsService.GetNews($"News?$filter=DiscountId eq null&top={PageSize}&$skip={skip}");
+            var (statusCode2, newsDTOs) = await _newsService.GetNews($"News?$filter=DiscountId eq null&top={PageSize}&$skip={skip}");
+            NewsDTOs = newsDTOs;
         }
 
         public async Task<IActionResult> OnPostDeleteNews(int id)

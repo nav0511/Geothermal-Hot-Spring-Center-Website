@@ -62,10 +62,15 @@ namespace GHCW_BE.Services
 
         //kiem tra nguoi dung co ton tai va dang hoat dong hay khong
         //neu co tra ve account, neu khong tra ve null
-        public async Task<Account?> CheckActiveStatus(string email)
+        public async Task<AccountDTO?> CheckActiveStatus(string email)
         {
             var existUser = await _context.Accounts.FirstOrDefaultAsync(u => u.Email == email && u.IsActive == true);
-            return existUser;
+            if (existUser != null)
+            {
+                var existUserDTO = _mapper.Map<Account, AccountDTO>(existUser);
+                return existUserDTO;
+            }
+            return null;
         }
 
         //Kich hoat tai khoan, sau khi kich hoat se xoa code
@@ -117,7 +122,7 @@ namespace GHCW_BE.Services
             return await _helper.SendEmail(emailDTO);
         }
 
-        public async Task<string> Login(Account a)
+        public async Task<string> Login(AccountDTO a)
         {
             var key = _configuration["JWT:SecretKey"];
             var issuer = _configuration["JWT:Issuer"];
@@ -178,61 +183,85 @@ namespace GHCW_BE.Services
         }
 
         //lấy thông tin user bằng ID
-        public async Task<Account?> GetUserProfileById(int uID)
+        public async Task<AccountDTO?> GetUserProfileById(int uID)
         {
             var user = await _context.Accounts.FirstOrDefaultAsync(u => u.Id == uID);
             if (user != null)
             {
-                return user;
+                var userDTO = _mapper.Map<Account, AccountDTO>(user);
+                return userDTO;
             }
             return null;
         }
 
         //lấy danh sách user
-        public async Task<IEnumerable<Account>> GetUserList()
+        public async Task<List<AccountDTO>?> GetUserList()
         {
             var users = await _context.Accounts.ToListAsync();
-            return users;
+            if (users != null)
+            {
+                var userDTOs = _mapper.Map<List<Account>, List<AccountDTO>>(users);
+                return userDTOs;
+            }
+            return null;
         }
 
         //lấy danh sách nhân viên role từ 1 - 4
-        public async Task<IEnumerable<Account>> GetEmployeeList()
+        public async Task<List<AccountDTO>?> GetEmployeeList()
         {
-            return await _context.Accounts.Where(a => a.Role >= 1 && a.Role <= 4).ToListAsync();
+            var employees = await _context.Accounts.Where(a => a.Role >= 1 && a.Role <= 4).ToListAsync();
+            if (employees != null)
+            {
+                var employeeDTOs = _mapper.Map<List<Account>, List<AccountDTO>>(employees);
+                return employeeDTOs;
+            }
+            return null;
         }
 
         //lấy danh sách khách hàng role = 5
-        public async Task<IEnumerable<Account>> GetCustomerAccountList()
+        public async Task<List<AccountDTO>?> GetCustomerAccountList()
         {
-            return await _context.Accounts.Where(a => a.Role == 5).ToListAsync();
+            var customers = await _context.Accounts.Where(a => a.Role == 5).ToListAsync();
+            if (customers != null)
+            {
+                var customerDTOs = _mapper.Map<List<Account>, List<AccountDTO>>(customers);
+                return customerDTOs;
+            }
+            return null;
         }
 
         //Đổi password
         public async Task<bool> ChangePassword(int uId, string newPassword)
         {
-            var user = await GetUserProfileById(uId);
+            var user = await _context.Accounts.FindAsync(uId);
             if (user != null)
             {
                 user.Password = newPassword;
+                _context.Accounts.Update(user);
                 await _context.SaveChangesAsync();
                 return true;
             }
             return false;
         }
 
-        public async Task<Account?> GetAccountByRefreshToken(string refreshToken)
+        public async Task<AccountDTO?> GetAccountByRefreshToken(string refreshToken)
         {
             var acc = await _context.Accounts.FirstOrDefaultAsync(a => a.RefreshToken == refreshToken);
-            return acc;
+            var accDTO = _mapper.Map<Account, AccountDTO>(acc);
+            return accDTO;
         }
 
-        public async Task DeleteRefToken(Account a)
+        public async Task DeleteRefToken(AccountDTO a)
         {
-            a.RefreshToken = null;
-            _context.Accounts.Update(a);
-            await _context.SaveChangesAsync();
+            var user = await _context.Accounts.FirstOrDefaultAsync(u => u.Id == a.Id);
+            if (user != null)
+            {
+                user.RefreshToken = null;
+                _context.Accounts.Update(user);
+                await _context.SaveChangesAsync();
+            }
         }
-        public async Task<(bool isSuccess, string message)> UpdateRefreshToken(Account a)
+        public async Task<(bool isSuccess, string message)> UpdateRefreshToken(AccountDTO a)
         {
             var user = await _context.Accounts.FirstOrDefaultAsync(u => u.Id == a.Id);
             if (user == null)
@@ -253,7 +282,7 @@ namespace GHCW_BE.Services
         }
         public async Task<(bool isSuccess, string message)> UserActivation(int uid)
         {
-            var acc = await GetUserProfileById(uid);
+            var acc = await _context.Accounts.FindAsync(uid);
             if (acc == null)
             {
                 return (false, "Tài khoản không tồn tại.");
@@ -261,6 +290,7 @@ namespace GHCW_BE.Services
             try
             {
                 acc.IsActive = !acc.IsActive;
+                _context.Accounts.Update(acc);
                 await _context.SaveChangesAsync();
 
                 return (true, "Thay đổi trạng thái tài khoản thành công.");
@@ -328,7 +358,7 @@ namespace GHCW_BE.Services
             }
         }
 
-        public async Task<IEnumerable<CustomerDTO>> GetCustomerList()
+        public async Task<List<CustomerDTO>> GetCustomerList()
         {
             var customers = await _context.Customers.ToListAsync();
             var customerDTOs = _mapper.Map<List<Customer>, List<CustomerDTO>>(customers);

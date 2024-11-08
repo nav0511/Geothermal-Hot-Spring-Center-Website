@@ -14,8 +14,8 @@ namespace GHCW_FE.Pages.Admin
 
         public async Task<IActionResult> OnGetAsync(string code)
         {
-            Discount = await _discountService.GetDiscountByCode(code);
-
+            var (statusCode, discount) = await _discountService.GetDiscountByCode(code);
+            Discount = discount;
             if (Discount == null)
             {
                 ModelState.AddModelError(string.Empty, "Phiếu giảm giá không tồn tại.");
@@ -27,7 +27,8 @@ namespace GHCW_FE.Pages.Admin
 
         public async Task<IActionResult> OnPostUpdateAsync(string code)
         {
-            Discount = await _discountService.GetDiscountByCode(code);
+            var (statusCode, discount) = await _discountService.GetDiscountByCode(code);
+            Discount = discount;
             if (Discount == null)
             {
                 ModelState.AddModelError(string.Empty, "Phiếu giảm giá không tồn tại.");
@@ -58,7 +59,7 @@ namespace GHCW_FE.Pages.Admin
                 IsAvailable = Discount.IsAvailable
             };
 
-            var statusCode = await _discountService.UpdateDiscount(discountDto);
+            statusCode = await _discountService.UpdateDiscount(discountDto);
 
             if (statusCode == HttpStatusCode.NoContent)
             {

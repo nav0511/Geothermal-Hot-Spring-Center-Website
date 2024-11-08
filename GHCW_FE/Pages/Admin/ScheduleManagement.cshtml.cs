@@ -1,4 +1,5 @@
-﻿using GHCW_FE.Services;
+﻿using GHCW_FE.DTOs;
+using GHCW_FE.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Net;
@@ -7,54 +8,47 @@ namespace GHCW_FE.Pages.Admin
 {
     public class ScheduleManagementModel : PageModel
     {
-        private readonly ScheduleService _scheduleService = new ScheduleService();
+        private readonly ScheduleService _scheduleService;
 
-        public DateTime StartDate { get; set; }
-        public string[,] ScheduleArray { get; set; } = new string[7, 2];
-        public List<int> AvailableYears { get; set; }
-        public List<string> WeeksOfSelectedYear { get; set; }
-
-
-        public async Task OnGetAsync(int? year = null)
+        public ScheduleManagementModel(ScheduleService scheduleService)
         {
-            int selectedYear = year ?? DateTime.Now.Year;
-
-            AvailableYears = Enumerable.Range(DateTime.Now.Year - 1, 3).ToList();
-
-            WeeksOfSelectedYear = GetWeeksOfYear(selectedYear);
-
-            DateTime referenceDate = DateTime.Today;
-            StartDate = referenceDate.AddDays(-(int)referenceDate.DayOfWeek + (int)DayOfWeek.Monday);
-
-            var schedules = await _scheduleService.GetWeeklySchedule(StartDate);
-
-            foreach (var schedule in schedules)
-            {
-                int dayIndex = (schedule.Date.Date - StartDate.Date).Days;
-                if (dayIndex >= 0 && dayIndex < 7 && schedule.Shift >= 1 && schedule.Shift <= 2)
-                {
-                    ScheduleArray[dayIndex, schedule.Shift - 1] = schedule.ReceptionistId.ToString();
-                }
-            }
+            _scheduleService = scheduleService;
         }
 
-        public List<string> GetWeeksOfYear(int year)
+        public ScheduleByWeek SW {  get; set; } = new ScheduleByWeek();
+        public List<ScheduleDTO> Schedules { get; set; }
+        public async Task<IActionResult> OnGet(DateTime startDate, DateTime endDate)
         {
-            var weeks = new List<string>();
-            DateTime firstDayOfYear = new DateTime(year, 1, 1);
-            DateTime startOfWeek = firstDayOfYear;
-
-            while (startOfWeek.Year == year)
+            if (startDate == DateTime.MinValue && endDate == DateTime.MinValue)
             {
-                DateTime endOfWeek = startOfWeek.AddDays(6);
-                weeks.Add($"{startOfWeek:dd/MM} - {endOfWeek:dd/MM}");
-                startOfWeek = startOfWeek.AddDays(7);
+                var currentDate = DateTime.Now;
+                // Tính startDate (ngày thứ Hai của tuần hiện tại)
+                var startOfWeek = currentDate.AddDays(-((int)currentDate.DayOfWeek - (int)DayOfWeek.Monday));
+                // Tính endDate (ngày Chủ Nhật của tuần hiện tại)
+                var endOfWeek = startOfWeek.AddDays(6);
+
+                SW.StartDate = startOfWeek;
+                SW.EndDate = endOfWeek;
             }
-
-            return weeks;
+            else
+            {
+                SW.StartDate = startDate;
+                SW.EndDate = endDate;
+            }
+            var (statusCode, schedules) = await _scheduleService.GetWeeklySchedule(SW);
+            if (statusCode == HttpStatusCode.NotFound)
+            {
+                TempData["SuccessMessage"] = "Không có lịch làm việc nào trong tuần này";
+                return Page();
+            }
+            else if (statusCode != HttpStatusCode.OK && statusCode != HttpStatusCode.NotFound)
+            {
+                TempData["ErrorMessage"] = "Đã xảy ra lỗi khi lấy lịch làm việc.";
+                return Page();
+            }
+            Schedules = schedules;
+            return Page();
         }
-
-
 
         public async Task<IActionResult> OnPostDeleteSchedule(int id)
         {
