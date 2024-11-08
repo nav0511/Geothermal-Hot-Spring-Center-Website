@@ -9,7 +9,7 @@
 }
 
 <header class="page-header">
-    <h2><span style="color:#9197B3">Quản lý người dùng > </span>Thêm tài khoản mới</h2>
+    <h2><span style="color:#9197B3">Quản lý tài khoản > </span>Thêm tài khoản mới</h2>
 </header>
 @if (TempData["SuccessMessage"] != null)
 {
@@ -98,10 +98,13 @@
         </div>
 
         <div class="button-container">
-            <button type="button" class="btn-back" onclick="window.location.href='/Admin/UserManagement'">Trở lại danh sách tài khoản</button>
             <button type="submit" class="btn-add">Thêm</button>
         </div>
     </form>
+</div>
+
+<div class="back-button-container">
+    <button class="btn-back" onclick="window.location.href='/Admin/UserManagement'"> << Quay lại</button>
 </div>
 
 <script>
