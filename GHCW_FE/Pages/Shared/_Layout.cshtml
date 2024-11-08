@@ -77,9 +77,13 @@
                                         @account.Name
                                     </span>
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        @if (account.Role <= 1)
+                                        @if (account.Role <= 4)
                                         {
                                             <a class="dropdown-item" asp-page="/Admin/Dashboard">Trang quản lý</a>
+                                        }
+                                        @if (account.Role == 5)
+                                        {
+                                            <a class="dropdown-item" asp-page="/Authentications/BookingList">Lịch sử đặt vé</a>
                                         }
                                         <a class="dropdown-item" asp-page="/Authentications/UserProfile">Thông tin cá nhân</a>
                                         <a class="dropdown-item" asp-page="/Authentications/ChangePassword">Đổi mật khẩu</a>

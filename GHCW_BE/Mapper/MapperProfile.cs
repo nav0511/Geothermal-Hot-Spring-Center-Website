@@ -18,7 +18,11 @@ namespace GHCW_BE.Mapper
             CreateMap<Product, ProductDTO2>();
             CreateMap<Product, ProductDTOImg>();
             CreateMap<Category, CategoryDTO>();
-            CreateMap<Schedule, ScheduleDTO>();
+
+            CreateMap<Schedule, ScheduleDTO>()
+                .ForMember(dest => dest.ReceptionistId, opt => opt.MapFrom(src => src.Receptionist.Id))
+                .ForMember(dest => dest.ReceptionistName, opt => opt.MapFrom(src => src.Receptionist.Name));
+
             CreateMap<Ticket, TicketDTO>();
             CreateMap<TicketDetail, TicketDetailDTO>();
             
