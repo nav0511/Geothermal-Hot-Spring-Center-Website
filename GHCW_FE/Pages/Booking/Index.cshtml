@@ -2,3 +2,92 @@
 @model GHCW_FE.Pages.Booking.IndexModel
 @{
 }
+
+<div class="container py-5">
+    <!-- Date Selection -->
+    <div class="form-group">
+        <label for="bookingDate">Choose Booking Date:</label>
+        <input type="date" id="bookingDate" class="form-control" asp-for="BookingDate" value="@DateTime.Now"/>
+    </div>
+
+    <!-- Services List -->
+    <div class="row">
+        @foreach (var service in Model.AvailableServices)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="@service.Image" class="card-img-top service-image" alt="@service.Name">
+                    <div class="card-body">
+                        <h5 class="card-title">@service.Name</h5>
+                        <p class="card-text service-description">@service.Description</p>
+                        <div>
+                            <label>Quantity:</label>
+                            <input type="number" min="1" value="1" id="quantity-@service.Id" class="form-control" />
+                        </div>
+                        <button class="btn btn-primary mt-2" onclick="addToCart(@service.Id, parseInt(document.getElementById('quantity-@service.Id').value))">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Cart Summary and Payment -->
+    <div class="cart-summary mt-5">
+        <h3>Your Cart</h3>
+        <div id="cartItems"></div>
+        <button class="btn btn-success mt-3" onclick="proceedToPayment()">Thanh toán</button>
+    </div>
+</div>
+
+<script>
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    function addToCart(serviceId, quantity) {
+        const existingItem = cart.find(item => item.serviceId === serviceId);
+
+        if (existingItem) {
+            existingItem.quantity += quantity;
+        } else {
+            cart.push({ serviceId, quantity });
+        }
+
+        localStorage.setItem("cart", JSON.stringify(cart));
+
+    }
+
+    function displayCart() {
+        const cartItemsContainer = document.getElementById("cartItems");
+        cartItemsContainer.innerHTML = "";
+
+        if (cart.length === 0) {
+            cartItemsContainer.innerHTML = "<p>Your cart is empty.</p>";
+            return;
+        }
+
+        cart.forEach(item => {
+            const itemElement = document.createElement("div");
+            itemElement.classList.add("cart-item");
+            itemElement.innerHTML = `
+                    <p>${item.serviceName} (Quantity: ${item.quantity})</p>
+                `;
+            cartItemsContainer.appendChild(itemElement);
+        });
+    }
+
+</script>
+
+<style>
+    .service-description {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-height: 4.5em;
+    }
+
+    .service-image {
+        min-height: 150px;
+        max-height: 200px;
+    }
+</style>
