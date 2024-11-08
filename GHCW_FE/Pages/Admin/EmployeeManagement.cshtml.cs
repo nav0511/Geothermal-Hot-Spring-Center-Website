@@ -6,20 +6,23 @@ using System.Net;
 
 namespace GHCW_FE.Pages.Admin
 {
-    public class CustomerManagementModel : PageModel
+    public class EmployeeManagementModel : PageModel
     {
-        private readonly CustomerService _cusService;
+        private readonly AccountService _accService;
         private readonly TokenService _tokenService;
         private readonly AuthenticationService _authService;
+
         [BindProperty]
-        public List<CustomerDTO> Customers { get; set; }
-        public CustomerManagementModel(CustomerService cusService, TokenService tokenService, AuthenticationService authService)
+        public List<AccountDTO> Employees { get; set; }
+
+        public EmployeeManagementModel(AccountService accountService, TokenService tokenService, AuthenticationService authService)
         {
-            _cusService = cusService;
+            _accService = accountService;
             _tokenService = tokenService;
             _authService = authService;
         }
-        public async Task<IActionResult> OnGetAsync()
+
+        public async Task<IActionResult> OnGet()
         {
             var accessToken = await _tokenService.CheckAndRefreshTokenAsync();
             if (string.IsNullOrEmpty(accessToken))
@@ -28,9 +31,9 @@ namespace GHCW_FE.Pages.Admin
                 TempData["ErrorMessage"] = "Bạn cần đăng nhập để xem thông tin.";
                 return RedirectToPage("/Authentications/Login");
             }
-            _cusService.SetAccessToken(accessToken);
+            _accService.SetAccessToken(accessToken);
 
-            var (statusCode, customers) = await _cusService.ListCustomer(accessToken);
+            var (statusCode, employees) = await _accService.ListEmployee(accessToken);
             if (statusCode == HttpStatusCode.Forbidden)
             {
                 await _authService.LogoutAsync();
@@ -48,7 +51,7 @@ namespace GHCW_FE.Pages.Admin
                 TempData["ErrorMessage"] = "Đã xảy ra lỗi khi lấy danh sách thông tin người dùng.";
                 return Page();
             }
-            Customers = customers;
+            Employees = employees;
             return Page();
         }
     }
