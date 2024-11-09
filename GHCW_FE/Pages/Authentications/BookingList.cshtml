@@ -19,43 +19,50 @@
 }<!-- Booking History Start -->
 <div class="container-fluid py-5">
     <div class="container py-5">
-        <div class="booking-history-list">
+        <div class="booking-history-table">
             @if (Model.TicketDTOs.Any())
             {
-                @foreach (var ticket in Model.TicketDTOs)
-                {
-                    <div class="booking-item d-flex p-3 align-items-center border-bottom">
-                        <img class="img-fluid booking-image me-3" src="http://vfa.gov.vn/data/PHUNGHA_VFA/khoang%20nong.jpg" alt="Ticket Image">
-                        <div class="booking-details flex-grow-1">
-                            <h5 class="mb-1">Mã vé: @ticket.Id</h5>
-                            <p class="mb-0 text-muted">Mã giảm giá: @ticket.DiscountCode</p>
-                            <p class="mb-0 text-muted">Ngày đặt vé: @ticket.OrderDate.ToString("dd/MM/yyyy")</p>
-                            <p class="mb-0 text-muted">Ngày sử dụng: @ticket.BookDate.ToString("dd/MM/yyyy")</p>
-                            <p class="mb-0 text-muted">
-                                Trạng thái thanh toán:
-                                <span style="color: @(ticket.PaymentStatus == 1 ? "green" : "red") !important;">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Ngày đặt vé</th>
+                            <th scope="col">Ngày sử dụng</th>
+                            <th scope="col">Mã giảm giá</th>
+                            <th scope="col">Trạng thái thanh toán</th>
+                            <th scope="col">Trạng thái Check-In</th>
+                            <th scope="col">Tổng</th>
+                            <th scope="col">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var ticket in Model.TicketDTOs)
+                        {
+                            <tr>
+                                <td>@ticket.OrderDate.ToString("dd/MM/yyyy")</td>
+                                <td>@ticket.BookDate.ToString("dd/MM/yyyy")</td>
+                                <td>@ticket.DiscountCode</td>
+                                <td style="color: @(ticket.PaymentStatus == 1 ? "green" : "red") !important;">
                                     @(ticket.PaymentStatus == 1 ? "Đã thanh toán" : "Chưa thanh toán")
-                                </span>
-                            </p>
-                            <p class="mb-0 text-muted">
-                                Trạng thái Check-In:
-                                @{
-                                    string checkInStatus = ticket.CheckIn switch
-                                    {
-                                        0 => "Chưa đến",
-                                        1 => "Đã check-in",
-                                        2 => "Hoàn tất",
-                                    };
-                                }
-                                <span>@checkInStatus</span>
-                            </p>
-                        </div>
-                        <div class="booking-actions text-end">
-                            <p class="total-amount">Tổng: @String.Format("{0:N0}000 VNĐ", ticket.Total)</p>
-                            <button class="btn btn-outline-success btn-lg">Chi tiết</button>
-                        </div>
-                    </div>
-                }
+                                </td>
+                                <td>
+                                    @{
+                                        string checkInStatus = ticket.CheckIn switch
+                                        {
+                                            0 => "Chưa đến",
+                                            1 => "Đã check-in",
+                                            2 => "Hoàn tất",
+                                        };
+                                    }
+                                    <span>@checkInStatus</span>
+                                </td>
+                                <td>@String.Format("{0:N0}000 VNĐ", ticket.Total)</td>
+                                <td>
+                                    <button class="btn btn-outline-success btn-lg" onclick="window.location.href='/Authentications/BookingDetails?id=@ticket.Id'">Chi tiết</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             }
             else
             {
@@ -114,34 +121,24 @@
     </div>
 </div>
 
-
 <style>
-    .booking-history-list {
+    .booking-history-table {
         background-color: #fff;
         border: 1px solid #ddd;
     }
 
-    .booking-item {
-        display: flex;
-        align-items: center;
+    .table th, .table td {
+        vertical-align: middle;
     }
 
-    .booking-image {
-        width: 150px;
-        height: 150px;
-        object-fit: cover;
-
-    }
-
-    .booking-details {
-        flex: 1;
+    .table td{
+        color: black;
     }
 
     .total-amount {
         font-size: 17px;
         font-weight: bold;
         color: #333;
-        margin-bottom: 16px;
         text-align: right;
     }
 

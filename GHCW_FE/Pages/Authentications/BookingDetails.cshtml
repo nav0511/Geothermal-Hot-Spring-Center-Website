@@ -1,0 +1,91 @@
+﻿@page
+@model GHCW_FE.Pages.Authentications.BookingDetailsModel
+@{
+    ViewData["Title"] = "Chi tiết vé";
+}
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success mt-3">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger mt-3">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<!-- Booking Details Start -->
+<div class="container-fluid py-5">
+    <div class="container py-5">
+        <h3>Thông tin đặt vé #@Model.TicketId</h3>
+        <div class="ticket-details-table">
+            @if (Model.TicketDetails.Any())
+            {
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Dịch Vụ</th>
+                            <th>Số lượng</th>
+                            <th>Giá</th>
+                            <th>Giảm giá</th>
+                            <th>Tổng giá</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var ticketDetail in Model.TicketDetails)
+                        {
+                            var discountCode = ticketDetail.Ticket.DiscountCode;
+                            var discount = Model.DiscountDTOs.FirstOrDefault(d => d.Code == discountCode);
+                            decimal discountValue = discount?.Value ?? 0;
+
+                            <tr>
+                                <td>@ticketDetail.TicketId</td>
+                                <td>@ticketDetail.Service.Name</td>
+                                <td>@ticketDetail.Quantity</td>
+                                <td>@ticketDetail.Price</td>
+                                <td>@discountValue%</td>
+                                <td>@ticketDetail.Total</td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+
+                <div class="total-amount">
+                    <h5>Tổng cộng: @String.Format("{0:N0} VNĐ", Model.TotalBeforeDiscount)</h5>
+                    <p>Giảm giá: -@String.Format("{0:N0} VNĐ", Model.DiscountPrice)</p>
+                    <h5>Cần thanh toán: @String.Format("{0:N0} VNĐ", Model.TotalAmount)</h5>
+
+                </div>
+            }
+            else
+            {
+                <p class="text-muted">Không có chi tiết vé nào.</p>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    .ticket-details-table {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        padding: 20px;
+    }
+
+    .table th, .table td {
+        vertical-align: middle;
+    }
+
+    .total-amount {
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+        text-align: right;
+        margin-top: 20px;
+    }
+</style>
