@@ -5,6 +5,115 @@
     Layout = "_LayoutManagement";
 }
 
+<header class="page-header">
+    <h2><span style="color:#9197B3">Quản lý tin tức > </span>Cập nhật tin tức > @Model.News.Id</h2>
+</header>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success mt-3">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger mt-3">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<div class="form-container">
+    <form method="post" enctype="multipart/form-data" asp-page-handler="Update">
+        <div class="form-group">
+            <input type="hidden" id="id" name="id" value="@Model.News.Id" />
+
+            <div>
+                <label for="title">Tiêu đề:</label>
+                <input type="text" id="title" name="title" value="@Model.News.Title" required />
+            </div>
+
+            <div>
+                <label for="uploadDate">Ngày đăng:</label>
+                <input type="date" id="uploadDate" name="uploadDate" value="@Model.News.UploadDate?.ToString("yyyy-MM-dd")" />
+            </div>
+
+            <div>
+                <label for="discountId">Mã giảm giá:</label>
+                <select id="discountId" name="discountId">
+                    <option value="">Chọn mã giảm giá</option>
+                    @foreach (var discount in Model.Discounts)
+                    {
+                        <option value="@discount.Code" selected="@(discount.Code == Model.News.DiscountId)">@discount.Code</option>
+                    }
+                </select>
+            </div>
+
+            <div class="full-width">
+                <label for="description">Mô tả:</label>
+                <textarea id="description" name="description" rows="4" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">@Model.News.Description</textarea>
+            </div>
+
+            <div class="full-width">
+                <label for="image">Ảnh tin tức:</label>
+                <input type="file" id="image" name="image" accept="image/*" onchange="previewImage(event)" />
+                <img id="imagePreview" class="image-preview" src="@Model.News.Image" alt="Xem trước ảnh" style="display: @(string.IsNullOrEmpty(Model.News.Image) ? "none" : "block");" />
+            </div>
+
+            <div class="form-group checkbox-group full-width">
+                <div class="checkbox-item">
+                    <input type="checkbox" id="isActive" name="isActive" @(Model.News.IsActive == true ? "checked" : "") />
+                    <label for="isActive">Đang hoạt động</label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <button type="submit">Cập nhật tin tức</button>
+        </div>
+    </form>
+
+</div>
+
+<div class="back-button-container">
+    <button class="btn-back" onclick="window.location.href='/Admin/NewsManagement'"> << Quay lại</button>
+</div>
+
+<script>
+    // Get the profile icon and dropdown elements
+    var profileIcon = document.getElementById("profileIcon");
+    var dropdownMenu = document.getElementById("dropdownMenu");
+    var profileMenu = document.querySelector(".profile-menu");
+
+    // Toggle dropdown when the profile icon is clicked
+    profileIcon.addEventListener("click", function (event) {
+        event.stopPropagation();
+        profileMenu.classList.toggle("show");
+    });
+
+    // Close the dropdown if user clicks outside
+    window.addEventListener("click", function (event) {
+        if (!event.target.matches('.profile-icon') && profileMenu.classList.contains('show')) {
+            profileMenu.classList.remove('show');
+        }
+    });
+
+    function previewImage(event) {
+        var input = event.target;
+        var imagePreview = document.getElementById("imagePreview");
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                imagePreview.src = e.target.result;
+                imagePreview.style.display = "block";
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+
 <style>
     .btn-add {
         background-color: #42C2A8;
@@ -115,98 +224,3 @@
             background-color: #1E88E5;
         }
 </style>
-
-<header class="page-header">
-    <h2><span style="color:#9197B3">Quản lý tin tức > </span>Cập nhật tin tức > @Model.News.Id</h2>
-</header>
-
-<div class="form-container">
-    <form method="post" enctype="multipart/form-data" asp-page-handler="Update">
-        <div class="form-group">
-            <input type="hidden" id="id" name="id" value="@Model.News.Id" />
-
-            <div>
-                <label for="title">Tiêu đề:</label>
-                <input type="text" id="title" name="title" value="@Model.News.Title" required />
-            </div>
-
-            <div>
-                <label for="uploadDate">Ngày đăng:</label>
-                <input type="date" id="uploadDate" name="uploadDate" value="@Model.News.UploadDate?.ToString("yyyy-MM-dd")" />
-            </div>
-
-            <div>
-                <label for="discountId">Mã giảm giá:</label>
-                <select id="discountId" name="discountId">
-                    <option value="">Chọn mã giảm giá</option>
-                    @foreach (var discount in Model.Discounts)
-                    {
-                        <option value="@discount.Code" selected="@(discount.Code == Model.News.DiscountId)">@discount.Code</option>
-                    }
-                </select>
-            </div>
-
-            <div class="full-width">
-                <label for="description">Mô tả:</label>
-                <textarea id="description" name="description" rows="4" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">@Model.News.Description</textarea>
-            </div>
-
-            <div class="full-width">
-                <label for="image">Ảnh tin tức:</label>
-                <input type="file" id="image" name="image" accept="image/*" onchange="previewImage(event)" />
-                <img id="imagePreview" class="image-preview" src="@Model.News.Image" alt="Xem trước ảnh" style="display: @(string.IsNullOrEmpty(Model.News.Image) ? "none" : "block");" />
-            </div>
-
-            <div class="form-group checkbox-group full-width">
-                <div class="checkbox-item">
-                    <input type="checkbox" id="isActive" name="isActive" @(Model.News.IsActive == true ? "checked" : "") />
-                    <label for="isActive">IsActive</label>
-                </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <button type="submit">Cập nhật tin tức</button>
-        </div>
-    </form>
-
-</div>
-
-<div class="back-button-container">
-    <button class="btn-back" onclick="window.location.href='/Admin/NewsManagement'"> << Quay lại</button>
-</div>
-
-<script>
-    // Get the profile icon and dropdown elements
-    var profileIcon = document.getElementById("profileIcon");
-    var dropdownMenu = document.getElementById("dropdownMenu");
-    var profileMenu = document.querySelector(".profile-menu");
-
-    // Toggle dropdown when the profile icon is clicked
-    profileIcon.addEventListener("click", function (event) {
-        event.stopPropagation();
-        profileMenu.classList.toggle("show");
-    });
-
-    // Close the dropdown if user clicks outside
-    window.addEventListener("click", function (event) {
-        if (!event.target.matches('.profile-icon') && profileMenu.classList.contains('show')) {
-            profileMenu.classList.remove('show');
-        }
-    });
-
-    function previewImage(event) {
-        var input = event.target;
-        var imagePreview = document.getElementById("imagePreview");
-
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-
-            reader.onload = function (e) {
-                imagePreview.src = e.target.result;
-                imagePreview.style.display = "block";
-            };
-
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-</script>

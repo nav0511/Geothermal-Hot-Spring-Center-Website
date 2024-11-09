@@ -11,6 +11,20 @@
     *@
 </header>
 
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success mt-3">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger mt-3">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
 <div class="search-container">
     <input type="text" placeholder="Tìm kiếm...">
     <select>
@@ -27,7 +41,7 @@
         <tr>
             <th>Id</th>
             <th>Dịch Vụ</th>
-            <th>Thời gian sử dụng</th>
+            <th>Ngày sử dụng</th>
             <th>Số lượng</th>
             <th>Giá</th>
             <th>Giảm giá</th>

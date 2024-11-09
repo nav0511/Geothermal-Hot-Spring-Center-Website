@@ -37,30 +37,10 @@ namespace GHCW_FE.Pages.Admin
             if (statusCode2 != HttpStatusCode.OK)
             {
                 TempData["ErrorMessage"] = "Đã xảy ra lỗi khi lấy tổng số vé đặt chỗ.";
-                return RedirectToPage("/Authentications/Login");
+                return RedirectToPage("/Admin/ResercationList");
             }
 
             TotalPages = (int)Math.Ceiling((double)totalNewsCount / PageSize);
-
-            var (statusCode1, list) = await _ticketService.GetBookingList($"Ticket?$top={PageSize}&$skip={skip}");
-
-            if (statusCode1 == HttpStatusCode.Forbidden)
-            {
-                TempData["ErrorMessage"] = "Bạn không có quyền truy cập hồ sơ này.";
-                return RedirectToPage("/Authentications/Login");
-            }
-            else if (statusCode1 == HttpStatusCode.NotFound)
-            {
-                TempData["ErrorMessage"] = "Không tìm thấy người dùng này.";
-                return RedirectToPage("/Authentications/Login");
-            }
-            else if (statusCode1 != HttpStatusCode.OK)
-            {
-                TempData["ErrorMessage"] = "Đã xảy ra lỗi khi lấy thông tin người dùng.";
-                return RedirectToPage("/Authentications/Login");
-            }
-
-            TicketDTOs = list?.ToList() ?? new List<TicketDTO>();
 
             var accessToken = await _tokenService.CheckAndRefreshTokenAsync();
             if (string.IsNullOrEmpty(accessToken))
@@ -70,8 +50,9 @@ namespace GHCW_FE.Pages.Admin
                 return RedirectToPage("/Authentications/Login");
             }
             _accService.SetAccessToken(accessToken);
+
             var (statusCode, userProfile) = await _accService.UserProfile(accessToken);
-            if (statusCode == HttpStatusCode.Forbidden)
+            if (userProfile?.Role > 4 && userProfile?.Role == 2)
             {
                 await _authService.LogoutAsync();
                 TempData["ErrorMessage"] = "Bạn không có quyền truy cập hồ sơ này.";
@@ -90,34 +71,26 @@ namespace GHCW_FE.Pages.Admin
                 return RedirectToPage("/Authentications/Login");
             }
             ReceptionistID = userProfile.Id;
+
+            var (statusCode1, list) = await _ticketService.GetBookingList($"Ticket?$top={PageSize}&$skip={skip}", userProfile.Role, userProfile.Id);
+
+            if (statusCode1 == HttpStatusCode.NotFound)
+            {
+                TempData["ErrorMessage"] = "Không tìm thấy thông tin này này.";
+                return RedirectToPage("/Admin/ResercationList");
+            }
+            else if (statusCode1 != HttpStatusCode.OK)
+            {
+                TempData["ErrorMessage"] = "Đã xảy ra lỗi khi lấy danh sách đặt trước.";
+                return RedirectToPage("/Admin/ResercationList");
+            }
+
+            TicketDTOs = list?.ToList() ?? new List<TicketDTO>();
             return Page();
         }
 
         public async Task<IActionResult> OnPostUpdateCheckIn(int receptionistID, int ticketId, int checkInStatus, int paymentStatus)
         {
-            //var accessToken = await _tokenService.CheckAndRefreshTokenAsync();
-            //if (string.IsNullOrEmpty(accessToken))
-            //{
-            //    await _authService.LogoutAsync();
-            //    TempData["ErrorMessage"] = "Bạn cần đăng nhập để xem thông tin.";
-            //    return RedirectToPage("/Authentications/Login");
-            //}
-            //_tokenService.SetAccessToken(accessToken);
-
-            //int receptionistId;
-            //var userAccountJson = HttpContext.Session.GetString("acc");
-            //if (!string.IsNullOrEmpty(userAccountJson))
-            //{
-            //    var userAccount = System.Text.Json.JsonSerializer.Deserialize<AccountDTO>(userAccountJson);
-            //    receptionistId = userAccount.Id;
-            //}
-            //else
-            //{
-            //    TempData["ErrorMessage"] = "Bạn cần đăng nhập.";
-            //    return RedirectToPage("/Authentications/Login");
-            //}
-
-            //if (receptionistId == null)
             if (receptionistID == null)
             {
                 TempData["ErrorMessage"] = "Bạn cần đăng nhập lại.";

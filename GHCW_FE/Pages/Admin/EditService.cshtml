@@ -5,6 +5,102 @@
     Layout = "_LayoutManagement";
 }
 
+<header class="page-header">
+    <h2><span style="color:#9197B3">Quản lý dịch vụ > </span>Cập nhật dịch vụ > <span>@Model.Service.Id</span></h2>
+</header>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success mt-3">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger mt-3">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<div class="form-container">
+    <form method="post" asp-page-handler="Update">
+        <div class="form-group">
+            <input type="hidden" name="id" id="id" value="@Model.Service.Id" />
+            <div>
+                <label for="name">Tên dịch vụ:</label>
+                <input type="text" id="name" name="name" required value="@Model.Service?.Name" />
+            </div>
+
+            <div>
+                <label for="price">Giá dịch vụ:</label>
+                <input type="number" id="price" name="price" step="0.01" required value="@Model.Service?.Price" />
+            </div>
+
+            <div>
+                <label for="time">Thời gian thực hiện:</label>
+                <input type="text" id="time" name="time" required value="@Model.Service?.Time" />
+            </div>
+
+            <div class="full-width">
+                <label for="description">Mô tả:</label>
+                <textarea id="description" name="description" rows="4" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">@Model.Service?.Description</textarea>
+            </div>
+
+            <div class="full-width">
+                <label for="image">Ảnh dịch vụ:</label>
+                <input type="file" id="image" name="image" accept="image/*" onchange="previewImage(event)" />
+                <img id="imagePreview" class="image-preview" src="@Model.Service?.Image" alt="Xem trước ảnh" style="display: @(!string.IsNullOrEmpty(Model.Service?.Image) ? "block" : "none");" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn-add">Cập nhật dịch vụ</button>
+        </div>
+    </form>
+</div>
+
+<div class="back-button-container">
+    <button class="btn-back" onclick="window.location.href='/Admin/ServiceManagement'"> << Quay lại</button>
+</div>
+
+<script>
+    // Get the profile icon and dropdown elements
+    var profileIcon = document.getElementById("profileIcon");
+    var dropdownMenu = document.getElementById("dropdownMenu");
+    var profileMenu = document.querySelector(".profile-menu");
+
+    // Toggle dropdown when the profile icon is clicked
+    profileIcon.addEventListener("click", function (event) {
+        event.stopPropagation();
+        profileMenu.classList.toggle("show");
+    });
+
+    // Close the dropdown if user clicks outside
+    window.addEventListener("click", function (event) {
+        if (!event.target.matches('.profile-icon') && profileMenu.classList.contains('show')) {
+            profileMenu.classList.remove('show');
+        }
+    });
+
+
+    function previewImage(event) {
+        var input = event.target;
+        var imagePreview = document.getElementById("imagePreview");
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                imagePreview.src = e.target.result;
+                imagePreview.style.display = "block";
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+
 <style>
     .btn-add {
         background-color: #42C2A8;
@@ -117,85 +213,3 @@
         }
 
 </style>
-
-<header class="page-header">
-    <h2><span style="color:#9197B3">Quản lý dịch vụ > </span>Cập nhật dịch vụ > <span>@Model.Service.Id</span></h2>
-</header>
-
-<div class="form-container">
-    <form method="post" asp-page-handler="Update">
-        <div class="form-group">
-            <input type="hidden" name="id" id="id" value="@Model.Service.Id" />
-            <div>
-                <label for="name">Tên dịch vụ:</label>
-                <input type="text" id="name" name="name" required value="@Model.Service?.Name" />
-            </div>
-
-            <div>
-                <label for="price">Giá dịch vụ:</label>
-                <input type="number" id="price" name="price" step="0.01" required value="@Model.Service?.Price" />
-            </div>
-
-            <div>
-                <label for="time">Thời gian thực hiện:</label>
-                <input type="text" id="time" name="time" required value="@Model.Service?.Time" />
-            </div>
-
-            <div class="full-width">
-                <label for="description">Mô tả:</label>
-                <textarea id="description" name="description" rows="4" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">@Model.Service?.Description</textarea>
-            </div>
-
-            <div class="full-width">
-                <label for="image">Ảnh dịch vụ:</label>
-                <input type="file" id="image" name="image" accept="image/*" onchange="previewImage(event)" />
-                <img id="imagePreview" class="image-preview" src="@Model.Service?.Image" alt="Xem trước ảnh" style="display: @(!string.IsNullOrEmpty(Model.Service?.Image) ? "block" : "none");" />
-            </div>
-        </div>
-
-        <div class="form-group">
-            <button type="submit" class="btn-add">Cập nhật dịch vụ</button>
-        </div>
-    </form>
-</div>
-
-<div class="back-button-container">
-    <button class="btn-back" onclick="window.location.href='/Admin/ServiceManagement'"> << Quay lại</button>
-</div>
-
-<script>
-    // Get the profile icon and dropdown elements
-    var profileIcon = document.getElementById("profileIcon");
-    var dropdownMenu = document.getElementById("dropdownMenu");
-    var profileMenu = document.querySelector(".profile-menu");
-
-    // Toggle dropdown when the profile icon is clicked
-    profileIcon.addEventListener("click", function (event) {
-        event.stopPropagation();
-        profileMenu.classList.toggle("show");
-    });
-
-    // Close the dropdown if user clicks outside
-    window.addEventListener("click", function (event) {
-        if (!event.target.matches('.profile-icon') && profileMenu.classList.contains('show')) {
-            profileMenu.classList.remove('show');
-        }
-    });
-
-
-    function previewImage(event) {
-        var input = event.target;
-        var imagePreview = document.getElementById("imagePreview");
-
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-
-            reader.onload = function (e) {
-                imagePreview.src = e.target.result;
-                imagePreview.style.display = "block";
-            };
-
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-</script>
