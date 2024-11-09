@@ -16,7 +16,7 @@ namespace GHCW_FE.Pages.Admin
         }
 
         public ScheduleByWeek SW {  get; set; } = new ScheduleByWeek();
-        public List<ScheduleDTO> Schedules { get; set; }
+        public List<ScheduleDTO>? Schedules { get; set; }
         public async Task<IActionResult> OnGet(DateTime startDate, DateTime endDate)
         {
             if (startDate == DateTime.MinValue && endDate == DateTime.MinValue)

@@ -10,7 +10,7 @@
 }
 
 <header class="page-header">
-    <h2><span style="color:#9197B3">Quản lý người dùng > </span>Thông tin người dùng</h2>
+    <h2><span style="color:#9197B3">Quản lý tài khoản > </span>Thông tin tài khoản</h2>
 </header>
 @if (TempData["SuccessMessage"] != null)
 {
@@ -90,14 +90,13 @@
             </div>
         </div>
         <div class="button-container">
-            <button type="button" class="btn-back" onclick="window.location.href='/Admin/UserManagement'">Trở lại danh sách tài khoản</button>
             <button type="submit" class="btn-update">Cập Nhật</button>
         </div>
     </form>
 </div>
 
 <div class="back-button-container">
-    <button class="btn-back" onclick="window.history.back()"> << Quay lại</button>
+    <button class="btn-back" onclick="window.location.href='/Admin/UserManagement'"> << Quay lại</button>
 </div>
 
 <script>
@@ -271,7 +270,7 @@
         display: flex;
         justify-content: flex-start;
         align-items: center;
-        gap: 39%;
+        gap: 42%;
         flex-wrap: nowrap;
     }
 
@@ -280,6 +279,11 @@
         align-items: center;
         white-space: nowrap;
     }
+
+        .checkbox-item label {
+            margin-bottom: -1px;
+            margin-left: 5px;
+        }
      
     .back-button-container {
         display: flex;

@@ -4,7 +4,7 @@
 @using Microsoft.AspNetCore.Http
 @model GHCW_FE.Pages.Admin.CustomerManagementModel
 @{
-    ViewData["Title"] = "Quản lý tài khoản";
+    ViewData["Title"] = "Quản lý khách hàng";
     Layout = "_LayoutManagement";
     ViewData["ActivePage"] = "/Admin/CustomerManagement";
 }
@@ -74,9 +74,6 @@
                     <th>Họ và tên</th>
                     <th>Số điện thoại</th>
                     <th>Email</th>
-                    <th>Địa chỉ</th>
-                    <th>Thông báo qua email</th>
-                    <th>Trạng thái</th>
                     @if (HttpContext.Session.GetString("acc") != null)
                     {
                         var account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
@@ -90,13 +87,20 @@
             <tbody>
                 @foreach (var cus in Model.Customers)
                 {
-                    <tr onclick="window.location.href='/Admin/UserDetails/?id=@cus.Id'">
+                    <tr onclick="window.location.href='/Admin/CustomerDetails/?id=@cus.Id'">
                         <td>@cus.Id</td>
+                        <td>@cus.FullName</td>
                         <td>@cus.PhoneNumber</td>
                         <td>@cus.Email</td>
                         @if (HttpContext.Session.GetString("acc") != null)
                         {
                             var account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
+                            @if (account.Role == 0)
+                            {
+                                <td class="options-cell">
+                                    <button class=" btn-update" onclick="window.location.href='/Admin/CustomerDetails/?id=@cus.Id'">Chỉnh sửa</button>
+                                </td>
+                            }
                         }
                     </tr>
                 }

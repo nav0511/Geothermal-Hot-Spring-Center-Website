@@ -515,7 +515,7 @@ namespace GHCW_BE.Controllers
         }
 
         [Authorize]
-        [HttpPost("CustomerList")]
+        [HttpGet("CustomerList")]
         public async Task<IActionResult> GetCustomerList()
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;

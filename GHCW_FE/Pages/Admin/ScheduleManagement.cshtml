@@ -45,10 +45,10 @@
 
 
 <div class="filter-container">
-    <select id="yearFilter">
+    <select id="yearFilter" onchange="OnYearChange()">
         <!-- Năm sẽ được cập nhật tự động trong JavaScript -->
     </select>
-    <select id="weekFilter">
+    <select id="weekFilter" onchange="OnWeekChange()">
         <!-- Các tuần sẽ được cập nhật khi chọn năm -->
     </select>
 </div>
@@ -78,16 +78,18 @@
             @for (int i = 0; i < 7; i++)
             {
                 var currentDate = Model.SW.StartDate.AddDays(i); // Calculate the current day
-                var scheduledEmployee = Model.Schedules.FirstOrDefault(schedule => 
-                    schedule.Date.Date == currentDate.Date && schedule.Shift == shift);
-                
+                var scheduledEmployee = Model.Schedules.FirstOrDefault(schedule =>
+                schedule.Date.Date == currentDate.Date && schedule.Shift == shift);
+
                 <td>
                     @if (scheduledEmployee != null)
                     {
-                        <span>@scheduledEmployee.ReceptionistName</span><br>
-                        <a href="#">Sửa</a>
+                        <span>@scheduledEmployee.ReceptionistName</span>
+
+                        <br>
+                        <a href="/Admin/EditSchedule/?id=@scheduledEmployee.Id">Sửa</a>
                         <span class="separator">|</span>
-                        <a href="#">Xóa</a>
+                        <a href="/Admin/EditSchedule/?id=@scheduledEmployee.Id">Xóa</a>
                     }
                     else
                     {
@@ -130,21 +132,23 @@
     function updateYearOptions() {
         const currentYear = new Date().getFullYear(); // Lấy năm hiện tại
         const yearFilter = document.getElementById("yearFilter");
-
+        
         // Xóa các tùy chọn cũ trong dropdown
         yearFilter.innerHTML = "";
 
         // Thêm các năm cần hiển thị
         const startYear = currentYear - 1;  // Hiển thị một năm trước
         const endYear = currentYear + 1;    // Hiển thị một năm sau
+        const selectedYear = sessionStorage.getItem("selectedYear") ? parseInt(sessionStorage.getItem("selectedYear"), 10) : currentYear;
 
         // Thêm năm trước và năm sau vào dropdown
         for (let year = startYear; year <= endYear; year++) {
             const option = document.createElement("option");
             option.value = year;
             option.textContent = year;
-            if (year === currentYear) {
-                option.selected = true;  // Đánh dấu năm hiện tại là đã chọn
+            // Đặt năm hiện tại hoặc năm đã chọn làm mặc định
+            if (year === selectedYear) {
+                option.selected = true;
             }
             yearFilter.appendChild(option);
         }
@@ -155,9 +159,11 @@
         const year = parseInt(document.getElementById("yearFilter").value, 10);
         const weekFilter = document.getElementById("weekFilter");
         const totalWeeks = getISOWeeksInYear(year);
-
+        const currentWeek = getCurrentWeek(year);
         // Xóa các tùy chọn cũ trong dropdown tuần
         weekFilter.innerHTML = "";
+
+        const selectedWeek = sessionStorage.getItem("selectedWeek") ? parseInt(sessionStorage.getItem("selectedWeek"), 10) : currentWeek;
 
         // Thêm các tuần vào dropdown
         for (let week = 1; week <= totalWeeks; week++) {
@@ -167,14 +173,11 @@
             const option = document.createElement("option");
             option.value = week;
             option.textContent = `Tuần ${week} (${startDate} - ${endDate})`;
+            // Đặt năm hiện tại hoặc năm đã chọn làm mặc định
+            if (week === selectedWeek) {
+                option.selected = true;
+            }
             weekFilter.appendChild(option);
-        }
-
-        // Lấy tuần hiện tại và chọn tuần đó
-        const currentWeek = getCurrentWeek(year);
-        console.log(currentWeek);
-        if (currentWeek <= totalWeeks) {
-            weekFilter.value = currentWeek; // Chọn tuần hiện tại nếu có
         }
     }
 
@@ -229,16 +232,20 @@
         updateScheduleTableHeader();
     });
 
-    // Thêm sự kiện thay đổi cho yearFilter và weekFilter
-    document.getElementById("yearFilter").addEventListener("change", function () {
+    function OnYearChange() {
+        const selectedYear = document.getElementById("yearFilter").value;
+        sessionStorage.setItem("selectedYear", selectedYear);
         updateDateRange(); // Cập nhật danh sách tuần cho năm mới
         updateScheduleTableHeader(); // Cập nhật ngày trong bảng
-    });
+        document.getElementById("scheduleForm").submit();
+    }
 
-    document.getElementById("weekFilter").addEventListener("change", function () {
+    function OnWeekChange() {
+        const selectedWeek = document.getElementById("weekFilter").value;
+        sessionStorage.setItem("selectedWeek", selectedWeek);
         updateScheduleTableHeader(); // Cập nhật ngày trong bảng khi tuần thay đổi
         document.getElementById("scheduleForm").submit();
-    });
+    }
 
     // Get the profile icon and dropdown elements
     var profileIcon = document.getElementById("profileIcon");
@@ -342,5 +349,17 @@
         font-weight: bold;
         text-align: center;
         margin-bottom: 10px;
+    }
+
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        background-color: #D6F6F1;
+        border-radius: 15px;
+        padding: 20px;
+        margin-top: 60px;
+        margin-bottom: 20px;
+        min-height: 100px;
     }
 </style>

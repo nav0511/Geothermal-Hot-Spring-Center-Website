@@ -1,4 +1,4 @@
-﻿@using GHCW_FE.DTOs
+@using GHCW_FE.DTOs
 @using System.Text.Json
 @using Microsoft.AspNetCore.Http
 @{
@@ -65,14 +65,14 @@
                     @if (account?.Role == 0)
                     {
                         <li class="@(ViewData["ActivePage"] as string == "/Admin/UserManagement" ? "active" : "")">
-                            <a asp-page="/Admin/UserManagement"><i class="fas fa-users"></i> Quản lý người dùng</a>
+                            <a asp-page="/Admin/UserManagement"><i class="fas fa-users"></i> Quản lý tài khoản</a>
                         </li>
                     }
                     
                     @if (account?.Role <= 3)
                     {
-                        <li class="@(ViewData["ActivePage"] as string == "/Admin/CustomerManagemnet" ? "active" : "")">
-                            <a asp-page="/Admin/CustomerManagemnet"><i class="fas fa-users"></i> Quản lý khách hàng</a>
+                        <li class="@(ViewData["ActivePage"] as string == "/Admin/CustomerManagement" ? "active" : "")">
+                            <a asp-page="/Admin/CustomerManagement"><i class="fas fa-users"></i> Quản lý khách hàng</a>
                         </li>
                         <li class="@(ViewData["ActivePage"] as string == "/Admin/DiscountManagement" ? "active" : "")">
                             <a asp-page="/Admin/DiscountManagement"><i class="fas fa-ticket-alt"></i> Quản lý phiếu giảm giá</a>
