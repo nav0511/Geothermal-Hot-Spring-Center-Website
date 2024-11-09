@@ -7,7 +7,7 @@
     <!-- Date Selection -->
     <div class="form-group">
         <label for="bookingDate">Choose Booking Date:</label>
-        <input type="date" id="bookingDate" class="form-control" asp-for="BookingDate" value="@DateTime.Now"/>
+        <input type="date" id="bookingDate" class="form-control" asp-for="BookingDate" min="@DateTime.Now.ToString("yyyy-MM-dd")" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
     </div>
 
     <!-- Services List -->
@@ -33,9 +33,7 @@
 
     <!-- Cart Summary and Payment -->
     <div class="cart-summary mt-5">
-        <h3>Your Cart</h3>
-        <div id="cartItems"></div>
-        <button class="btn btn-success mt-3" onclick="proceedToPayment()">Thanh toán</button>
+        <a class="btn btn-success mt-3" asp-page="./Cart">Thanh toán</a>
     </div>
 </div>
 
@@ -53,25 +51,6 @@
 
         localStorage.setItem("cart", JSON.stringify(cart));
 
-    }
-
-    function displayCart() {
-        const cartItemsContainer = document.getElementById("cartItems");
-        cartItemsContainer.innerHTML = "";
-
-        if (cart.length === 0) {
-            cartItemsContainer.innerHTML = "<p>Your cart is empty.</p>";
-            return;
-        }
-
-        cart.forEach(item => {
-            const itemElement = document.createElement("div");
-            itemElement.classList.add("cart-item");
-            itemElement.innerHTML = `
-                    <p>${item.serviceName} (Quantity: ${item.quantity})</p>
-                `;
-            cartItemsContainer.appendChild(itemElement);
-        });
     }
 
 </script>

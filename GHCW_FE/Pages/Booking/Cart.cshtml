@@ -1,0 +1,92 @@
+﻿@page
+@model GHCW_FE.Pages.Booking.CartModel
+@{
+    ViewData["Title"] = "Cart";
+}
+
+<div class="container py-5">
+    <h2 style="color: #50A215">Thông tin đơn hàng</h2>
+    <table id="cart-items" class="mt-4" style="background-color: white">
+        <thead>
+            <tr>
+                <th>Dịch vụ</th>
+                <th>Số lượng</th>
+                <th>Đơn giá</th>
+                <th>Thành tiền</th>
+            </tr>
+        </thead>
+    </table>
+
+    <div class="cart-summary mt-4">
+        <button class="btn btn-success mt-3" onclick="proceedToPayment()">Thanh toán</button>
+    </div>
+</div>
+
+<script>
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let cartItemsContainer = document.getElementById("cart-items");
+    let cartTotal = 0;
+    const availableServices = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.AvailableServices));
+
+    function displayCart() {
+        cartTotal = 0;
+
+        cart.forEach(item => {
+            const serviceName = getServiceName(item.serviceId);
+            const servicePrice = getServicePrice(item.serviceId);
+
+            const itemTotal = item.quantity * servicePrice;
+            cartTotal += itemTotal;
+
+            cartItemsContainer.innerHTML += `
+                        <tbody>
+                            <tr class="cart-item">
+                                <td>${serviceName}</td>
+                                <td>${item.quantity}</td>
+                                <td>${servicePrice.toFixed(3)}</td>
+                                <td>${itemTotal.toFixed(3)}</td>
+                            </tr>
+                        </tbody>
+                    `;
+        });
+
+        cartItemsContainer.innerHTML += `
+                        <tbody>
+                            <tr class="cart-item">
+                                <th>Tổng tiền</th>
+                                <th>${cartTotal.toFixed(3)}</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </tbody>
+                        `;
+    }
+
+    function getServiceName(serviceId) {
+        const service = availableServices.find(service => service.Id === serviceId);
+        return service ? service.Name : 'Unknown Service';
+    }
+
+    function getServicePrice(serviceId) {
+        const service = availableServices.find(service => service.Id === serviceId);
+        return service ? service.Price : 0;
+    }
+
+    function proceedToPayment() {
+        window.location.href = './Index';
+    }
+
+    displayCart();
+</script>
+
+<style>
+    .cart-item {
+        padding: 10px 0;
+    }
+    th, td {
+        padding: 10px;
+    }
+    th {
+        font-size: 25px;
+    }
+</style>
