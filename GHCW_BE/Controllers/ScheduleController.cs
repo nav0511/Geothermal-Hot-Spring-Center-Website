@@ -70,7 +70,7 @@ namespace GHCW_BE.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Lỗi khi cập nhật lịch.");
             }
 
-            return NoContent();
+            return Ok("Cập nhật thành công");
         }
 
         [HttpDelete("{id}")]
@@ -88,7 +88,7 @@ namespace GHCW_BE.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Lỗi khi xóa lịch: {ex.Message}");
             }
 
-            return NoContent();
+            return Ok("Xóa thành công");
         }
     }
 }
