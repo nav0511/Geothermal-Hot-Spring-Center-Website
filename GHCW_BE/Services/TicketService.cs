@@ -26,11 +26,15 @@ namespace GHCW_BE.Services
             return tickets;
         }
 
-        public IQueryable<Ticket> GetListBooking(int? role, int? saleId)
+        public IQueryable<Ticket> GetListBooking(int? role, int? uId)
         {
             if(role == 3)
             {
-                return _context.Tickets.Include(t => t.Customer).Include(t => t.Receptionist).Where(t => t.SaleId == saleId);
+                return _context.Tickets.Include(t => t.Customer).Include(t => t.Receptionist).Where(t => t.SaleId == uId);
+            }
+            else if (role == 5)
+            {
+                return _context.Tickets.Include(t => t.Customer).Include(t => t.Receptionist).Where(t => t.Customer.AccountId == uId);
             }
             else
             {

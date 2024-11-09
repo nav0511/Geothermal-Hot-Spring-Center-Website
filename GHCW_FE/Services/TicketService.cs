@@ -6,18 +6,22 @@ namespace GHCW_FE.Services
 {
     public class TicketService : BaseService
     {
-        public async Task<(HttpStatusCode StatusCode, List<TicketDTO>?)> GetBookingList(string url, int? role, int? saleId)
+        public async Task<(HttpStatusCode StatusCode, List<TicketDTO>?)> GetBookingList(string url, int? role, int? uId)
         {
             if (role.HasValue)
             {
-                url += $"&role={role.Value}&saleId={saleId.Value}";
+                url += $"&role={role.Value}&uId={uId.Value}";
             }
             
             return await GetData<List<TicketDTO>>(url);
         }
-        public async Task<(HttpStatusCode StatusCode, int Total)> GetTotalBooking()
+        public async Task<(HttpStatusCode StatusCode, int Total)> GetTotalBooking(int? role, int? uId)
         {
             string url = "Ticket/Total";
+            if (role.HasValue)
+            {
+                url += $"?role={role.Value}&uId={uId.Value}";
+            }
             return await GetData<int>(url);
         }
 

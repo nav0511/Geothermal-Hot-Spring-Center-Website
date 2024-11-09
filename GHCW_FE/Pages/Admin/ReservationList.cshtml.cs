@@ -30,18 +30,6 @@ namespace GHCW_FE.Pages.Admin
 
         public async Task<IActionResult> OnGetAsync(int pageNumber = 1)
         {
-            CurrentPage = pageNumber;
-            int skip = (pageNumber - 1) * PageSize;
-
-            var (statusCode2, totalNewsCount) = await _ticketService.GetTotalBooking();
-            if (statusCode2 != HttpStatusCode.OK)
-            {
-                TempData["ErrorMessage"] = "Đã xảy ra lỗi khi lấy tổng số vé đặt chỗ.";
-                return RedirectToPage("/Admin/ResercationList");
-            }
-
-            TotalPages = (int)Math.Ceiling((double)totalNewsCount / PageSize);
-
             var accessToken = await _tokenService.CheckAndRefreshTokenAsync();
             if (string.IsNullOrEmpty(accessToken))
             {
@@ -72,6 +60,18 @@ namespace GHCW_FE.Pages.Admin
             }
             ReceptionistID = userProfile.Id;
 
+            CurrentPage = pageNumber;
+            int skip = (pageNumber - 1) * PageSize;
+
+            var (statusCode2, totalNewsCount) = await _ticketService.GetTotalBooking(userProfile.Role, userProfile.Id);
+            if (statusCode2 != HttpStatusCode.OK)
+            {
+                TempData["ErrorMessage"] = "Đã xảy ra lỗi khi lấy tổng số vé đặt chỗ.";
+                return RedirectToPage("/Admin/ResercationList");
+            }
+
+            TotalPages = (int)Math.Ceiling((double)totalNewsCount / PageSize);
+
             var (statusCode1, list) = await _ticketService.GetBookingList($"Ticket?$top={PageSize}&$skip={skip}", userProfile.Role, userProfile.Id);
 
             if (statusCode1 == HttpStatusCode.NotFound)
@@ -84,6 +84,8 @@ namespace GHCW_FE.Pages.Admin
                 TempData["ErrorMessage"] = "Đã xảy ra lỗi khi lấy danh sách đặt trước.";
                 return RedirectToPage("/Admin/ResercationList");
             }
+
+
 
             TicketDTOs = list?.ToList() ?? new List<TicketDTO>();
             return Page();

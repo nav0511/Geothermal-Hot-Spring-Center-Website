@@ -1,4 +1,157 @@
 ﻿@page
 @model GHCW_FE.Pages.Authentications.BookingListModel
 @{
+    ViewData["Title"] = "Lịch sử đặt vé";
 }
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success mt-3">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger mt-3">
+        @TempData["ErrorMessage"]
+    </div>
+}<!-- Booking History Start -->
+<div class="container-fluid py-5">
+    <div class="container py-5">
+        <div class="booking-history-list">
+            @if (Model.TicketDTOs.Any())
+            {
+                @foreach (var ticket in Model.TicketDTOs)
+                {
+                    <div class="booking-item d-flex p-3 align-items-center border-bottom">
+                        <img class="img-fluid booking-image me-3" src="http://vfa.gov.vn/data/PHUNGHA_VFA/khoang%20nong.jpg" alt="Ticket Image">
+                        <div class="booking-details flex-grow-1">
+                            <h5 class="mb-1">Mã vé: @ticket.Id</h5>
+                            <p class="mb-0 text-muted">Mã giảm giá: @ticket.DiscountCode</p>
+                            <p class="mb-0 text-muted">Ngày đặt vé: @ticket.OrderDate.ToString("dd/MM/yyyy")</p>
+                            <p class="mb-0 text-muted">Ngày sử dụng: @ticket.BookDate.ToString("dd/MM/yyyy")</p>
+                            <p class="mb-0 text-muted">
+                                Trạng thái thanh toán:
+                                <span style="color: @(ticket.PaymentStatus == 1 ? "green" : "red") !important;">
+                                    @(ticket.PaymentStatus == 1 ? "Đã thanh toán" : "Chưa thanh toán")
+                                </span>
+                            </p>
+                            <p class="mb-0 text-muted">
+                                Trạng thái Check-In:
+                                @{
+                                    string checkInStatus = ticket.CheckIn switch
+                                    {
+                                        0 => "Chưa đến",
+                                        1 => "Đã check-in",
+                                        2 => "Hoàn tất",
+                                    };
+                                }
+                                <span>@checkInStatus</span>
+                            </p>
+                        </div>
+                        <div class="booking-actions text-end">
+                            <p class="total-amount">Tổng: @String.Format("{0:N0}000 VNĐ", ticket.Total)</p>
+                            <button class="btn btn-outline-success btn-lg">Chi tiết</button>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p class="text-muted">Không có lịch sử đặt vé nào.</p>
+            }
+        </div>
+
+        <!-- Pagination -->
+        @if (Model.TotalPages > 1)
+        {
+            <div class="col-12">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination pagination-lg justify-content-center bg-white mb-0" style="padding: 30px;">
+                        @if (Model.CurrentPage > 1)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" asp-route-pageNumber="@(Model.CurrentPage - 1)" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="page-item disabled">
+                                <span class="page-link">&laquo;</span>
+                            </li>
+                        }
+
+                        @for (int i = 1; i <= Model.TotalPages; i++)
+                        {
+                            <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                                <a class="page-link" asp-route-pageNumber="@i">@i</a>
+                            </li>
+                        }
+
+                        @if (Model.CurrentPage < Model.TotalPages)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" asp-route-pageNumber="@(Model.CurrentPage + 1)" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="page-item disabled">
+                                <span class="page-link">&raquo;</span>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            </div>
+        }
+    </div>
+</div>
+
+
+<style>
+    .booking-history-list {
+        background-color: #fff;
+        border: 1px solid #ddd;
+    }
+
+    .booking-item {
+        display: flex;
+        align-items: center;
+    }
+
+    .booking-image {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+
+    }
+
+    .booking-details {
+        flex: 1;
+    }
+
+    .total-amount {
+        font-size: 17px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 16px;
+        text-align: right;
+    }
+
+    .booking-actions {
+        text-align: right;
+        width: 200px;
+    }
+
+        .booking-actions button {
+            width: 100%;
+            font-size: 16px;
+        }
+</style>

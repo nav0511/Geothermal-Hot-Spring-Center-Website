@@ -25,9 +25,9 @@ namespace GHCW_BE.Controllers
 
         [HttpGet]
         [EnableQuery]
-        public async Task<IActionResult> GetBookingList(int? role, int? saleId)
+        public async Task<IActionResult> GetBookingList(int? role, int? uId)
         {
-            var list = _ticketService.GetListBooking(role, saleId);
+            var list = _ticketService.GetListBooking(role, uId);
             if (list == null)
             {
                 return NotFound("Không có danh sách vé nào.");
@@ -39,9 +39,9 @@ namespace GHCW_BE.Controllers
         }
 
         [HttpGet("Total")]
-        public async Task<IActionResult> GetTotalBooking(int? role, int? saleId)
+        public async Task<IActionResult> GetTotalBooking(int? role, int? uId)
         {
-            var list = _ticketService.GetListBooking(role, saleId);
+            var list = _ticketService.GetListBooking(role, uId);
             if (list == null)
             {
                 return Ok(0); 
