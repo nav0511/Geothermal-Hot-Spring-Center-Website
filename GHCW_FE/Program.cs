@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<AccountService>();
+builder.Services.AddScoped<CustomerService>();
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<ServicesService>();
 builder.Services.AddScoped<AuthenticationService>();

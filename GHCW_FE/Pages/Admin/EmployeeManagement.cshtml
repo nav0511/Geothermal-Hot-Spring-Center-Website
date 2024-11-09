@@ -2,16 +2,16 @@
 @using GHCW_FE.DTOs
 @using System.Text.Json
 @using Microsoft.AspNetCore.Http
-@model GHCW_FE.Pages.Admin.UserManagementModel
+@model GHCW_FE.Pages.Admin.EmployeeManagementModel
 @{
-    ViewData["Title"] = "Quản lý tài khoản";
+    ViewData["Title"] = "Quản lý nhân viên";
     Layout = "_LayoutManagement";
-    ViewData["ActivePage"] = "/Admin/UserManagement";
+    ViewData["ActivePage"] = "/Admin/EmployeeManagement";
 }
 
 <header class="page-header" style="">
-    <h2>Quản lý tài khoản</h2>
-    <button class="btn-add" onclick="window.location.href='/Admin/AddAccount'">+ Thêm tài khoản mới</button>
+    <h2>Quản lý nhân viên</h2>
+    <button class="btn-add" onclick="window.location.href='/Admin/AddEmployee'">+ Thêm nhân viên mới</button>
 </header>
 
 
@@ -43,7 +43,7 @@
 </div>
 
 <div>
-    @if (Model.Accounts == null || Model.Accounts.Count == 0)
+    @if (Model.Employees == null || Model.Employees.Count == 0)
     {
         @if (TempData["ErrorMessage"] != null)
         {
@@ -77,18 +77,15 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var acc in Model.Accounts)
+                @foreach (var emp in Model.Employees)
                 {
-                    <tr onclick="window.location.href='/Admin/UserDetails/?id=@acc.Id'">
-                        <td>@acc.Id</td>
-                        <td>@acc.Name</td>
-                        <td>@(acc.Gender == true ? "Nam" : "Nữ")</td>
+                    <tr onclick="window.location.href='/Admin/EmployeeDetails/?id=@emp.Id'">
+                        <td>@emp.Id</td>
+                        <td>@emp.Name</td>
+                        <td>@(emp.Gender == true ? "Nam" : "Nữ")</td>
                         <td>
-                            @switch (acc.Role)
+                            @switch (emp.Role)
                             {
-                                case 0:
-                                    <p>Quản trị</p>
-                                    break;
                                 case 1:
                                     <p>Quản lý</p>
                                     break;
@@ -101,20 +98,17 @@
                                 case 4:
                                     <p>Lễ tân</p>
                                     break;
-                                case 5:
-                                    <p>Khách hàng</p>
-                                    break;
                                 default:
                                     <p>Unknown Role</p>
                                     break;
                             }
                         </td>
-                        <td>@acc.PhoneNumber</td>
-                        <td>@acc.Email</td>
-                        <td>@acc.Address</td>
-                        <td>@(acc.IsEmailNotify == true ? "Có" : "Không")</td>
+                        <td>@emp.PhoneNumber</td>
+                        <td>@emp.Email</td>
+                        <td>@emp.Address</td>
+                        <td>@(emp.IsEmailNotify == true ? "Có" : "Không")</td>
                         <td>
-                            @if (acc.IsActive == true)
+                            @if (emp.IsActive == true)
                             {
                                 <span class="status active">Hoạt động</span>
                             }
@@ -129,17 +123,17 @@
                             @if (account.Role == 0)
                             {
                                 <td class="options-cell">
-                                    <button class=" btn-update" onclick="window.location.href='/Admin/UserDetails/?id=@acc.Id'">Chỉnh sửa</button>
-                                    @if (acc.IsActive == true)
+                                    <button class=" btn-update" onclick="window.location.href='/Admin/EmployeeDetails/?id=@emp.Id'">Chỉnh sửa</button>
+                                    @if (emp.IsActive == true)
                                     {
                                         <form method="post" asp-page-handler="AccountActivation">
-                                            <button type="submit" class=" btn-deactive" name="UID" value="@acc.Id">Vô hiệu hóa</button>
+                                            <button type="submit" class=" btn-deactive" name="UID" value="@emp.Id">Vô hiệu hóa</button>
                                         </form>
                                     }
                                     else
                                     {
                                         <form method="post" asp-page-handler="AccountActivation">
-                                            <button type="submit" class=" btn-active" name="UID" value="@acc.Id">Kích hoạt</button>
+                                            <button type="submit" class=" btn-active" name="UID" value="@emp.Id">Kích hoạt</button>
                                         </form>
                                     }
                                 </td>
@@ -207,10 +201,10 @@
     }
 
         .btn-active:hover {
-        background-color: #029274;
+            background-color: #029274;
         }
 
-    .btn-deactive{
+    .btn-deactive {
         background-color: #ff6b6b;
         color: #ffffff;
     }
