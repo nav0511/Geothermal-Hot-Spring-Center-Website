@@ -34,16 +34,16 @@ namespace GHCW_FE.Pages.Admin
             if (string.IsNullOrEmpty(accessToken))
             {
                 await _authService.LogoutAsync();
-                TempData["ErrorMessage"] = "Bạn cần đăng nhập để xem hồ sơ.";
+                TempData["ErrorMessage"] = "Bạn cần đăng nhập để xem thông tin.";
                 return RedirectToPage("/Authentications/Login");
             }
             _accService.SetAccessToken(accessToken);
 
             var (statusCode, userProfile) = await _accService.UserProfile(accessToken);
-            if (userProfile?.Role > 4 && userProfile?.Role == 2)
+            if (userProfile?.Role > 4 || userProfile?.Role == 2)
             {
                 await _authService.LogoutAsync();
-                TempData["ErrorMessage"] = "Bạn không có quyền truy cập hồ sơ này.";
+                TempData["ErrorMessage"] = "Bạn không có quyền truy cập thông tin này.";
                 return RedirectToPage("/Authentications/Login");
             }
             else if (statusCode == HttpStatusCode.NotFound)

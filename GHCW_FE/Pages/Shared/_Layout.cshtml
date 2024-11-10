@@ -77,9 +77,17 @@
                                         @account.Name
                                     </span>
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        @if (account.Role <= 4)
+                                        @if (account.Role <= 1)
                                         {
                                             <a class="dropdown-item" asp-page="/Admin/Dashboard">Trang quản lý</a>
+                                        }
+                                        else if (account.Role > 1 && account.Role <= 3)
+                                        {
+                                            <a class="dropdown-item" asp-page="/Admin/CustomerManagement">Trang quản lý</a>
+                                        }
+                                        else if(account.Role == 4)
+                                        {
+                                            <a class="dropdown-item" asp-page="/Admin/ScheduleManagement">Trang quản lý</a>
                                         }
                                         @if (account.Role == 5)
                                         {

@@ -32,7 +32,7 @@ namespace GHCW_FE.Pages.Authentications
             if (string.IsNullOrEmpty(accessToken))
             {
                 await _authService.LogoutAsync();
-                TempData["ErrorMessage"] = "Bạn cần đăng nhập để xem hồ sơ.";
+                TempData["ErrorMessage"] = "Bạn cần đăng nhập để xem thông tin.";
                 return RedirectToPage("/Authentications/Login");
             }
             _accService.SetAccessToken(accessToken);
@@ -41,7 +41,7 @@ namespace GHCW_FE.Pages.Authentications
             if (userProfile?.Role > 5)
             {
                 await _authService.LogoutAsync();
-                TempData["ErrorMessage"] = "Bạn không có quyền truy cập hồ sơ này.";
+                TempData["ErrorMessage"] = "Bạn không có quyền truy cập thông tin này.";
                 return RedirectToPage("/Authentications/Login");
             }
             else if (statusCode == HttpStatusCode.NotFound)
