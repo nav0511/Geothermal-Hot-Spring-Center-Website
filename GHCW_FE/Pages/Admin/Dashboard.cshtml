@@ -4,8 +4,9 @@
 @using Microsoft.AspNetCore.Http
 @model GHCW_FE.Pages.Admin.DashboardModel
 @{
-    ViewData["Title"] = "Quản lý";
+    ViewData["Title"] = "Dashboard";
     Layout = "_LayoutManagement";
+    ViewData["ActivePage"] = "/Admin/Dashboard";
 }
 
 <div class="dashboard-page-header">
@@ -96,7 +97,7 @@
     var profileIcon = document.getElementById("profileIcon");
     var dropdownMenu = document.getElementById("dropdownMenu");
     var profileMenu = document.querySelector(".profile-menu");
-
+    
     // Toggle dropdown when the profile icon is clicked
     profileIcon.addEventListener("click", function (event) {
         event.stopPropagation();

@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Net;
 
-namespace GHCW_FE.Pages.Admin
+namespace GHCW_FE.Pages.Authentications
 {
-    public class CheckInModel : PageModel
+    public class BookingDetailsModel : PageModel
     {
         private TicketDetailService _ticketDetailService;
         private DiscountService _discountService;
@@ -14,7 +14,7 @@ namespace GHCW_FE.Pages.Admin
         private readonly AuthenticationService _authService;
         private readonly AccountService _accService;
 
-        public CheckInModel(TokenService tokenService, AuthenticationService authService, TicketDetailService ticketDetailService, AccountService accService, DiscountService discountService)
+        public BookingDetailsModel(TokenService tokenService, AuthenticationService authService, TicketDetailService ticketDetailService, AccountService accService, DiscountService discountService)
         {
             _authService = authService;
             _tokenService = tokenService;
@@ -22,9 +22,11 @@ namespace GHCW_FE.Pages.Admin
             _ticketDetailService = ticketDetailService;
             _discountService = discountService;
         }
-
         public int TicketId { get; set; }
-        public decimal TotalAmount { get; set; } 
+        public decimal TotalAmount { get; set; }
+        public decimal TotalBeforeDiscount { get; set; }
+        public decimal DiscountPrice { get; set; }
+
 
         public List<TicketDetailDTO> TicketDetails { get; set; } = new List<TicketDetailDTO>();
         public List<DiscountDTO> DiscountDTOs { get; set; } = new List<DiscountDTO>();
@@ -41,7 +43,7 @@ namespace GHCW_FE.Pages.Admin
             _accService.SetAccessToken(accessToken);
 
             var (statusCode, userProfile) = await _accService.UserProfile(accessToken);
-            if (userProfile?.Role > 4 || userProfile?.Role == 2)
+            if (userProfile?.Role > 5)
             {
                 await _authService.LogoutAsync();
                 TempData["ErrorMessage"] = "Bạn không có quyền truy cập thông tin này.";
@@ -78,17 +80,24 @@ namespace GHCW_FE.Pages.Admin
                 discountValue = discount?.Value ?? 0;
             }
 
-            TotalAmount = TicketDetails.Sum(td => td.Price * td.Quantity);
+            TotalBeforeDiscount = TicketDetails.Sum(td => td.Price * td.Quantity);
 
             if (discount != null)
             {
                 if (discount.Value > 0)
                 {
-                    TotalAmount -= TotalAmount * discountValue / 100;
+                    TotalBeforeDiscount = TotalBeforeDiscount;
+                    DiscountPrice = TotalBeforeDiscount * discountValue / 100;
+                    TotalAmount = TotalBeforeDiscount - (DiscountPrice);
                 }
             }
-
-            return Page();  
+            else
+            {
+                TotalBeforeDiscount = TotalBeforeDiscount;
+                DiscountPrice = 0;
+                TotalAmount = TotalBeforeDiscount;
+            }
+            return Page();
         }
     }
 }

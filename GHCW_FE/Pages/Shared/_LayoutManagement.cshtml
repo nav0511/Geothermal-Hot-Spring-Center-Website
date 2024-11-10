@@ -1,4 +1,4 @@
-﻿@using GHCW_FE.DTOs
+@using GHCW_FE.DTOs
 @using System.Text.Json
 @using Microsoft.AspNetCore.Http
 @{
@@ -51,18 +51,17 @@
                         <li class="@(ViewData["ActivePage"] as string == "/Admin/Dashboard" ? "active" : "")">
                             <a asp-page="/Admin/Dashboard"><i class="fas fa-chart-line"></i> Dashboard</a>
                         </li>
-                        <li class="@(ViewData["ActivePage"] as string == "/Admin/ScheduleManagement" ? "active" : "")">
-                            <a asp-page="/Admin/ScheduleManagement"><i class="fas fa-calendar"></i> Quản lý lịch trình</a>
-                        </li>
-                        <li class="@(ViewData["ActivePage"] as string == "/Admin/PromotionManagement" ? "active" : "")">
-                            <a asp-page="/Admin/PromotionManagement"><i class="fas fa-bullhorn"></i> Quản lý tin khuyến mãi</a>
-                        </li>
+                  
                         <li class="@(ViewData["ActivePage"] as string == "/Admin/ProductManagement" ? "active" : "")">
                             <a asp-page="/Admin/ProductManagement"><i class="fas fa-boxes"></i> Quản lý sản phẩm</a>
                         </li>
                         <li class="@(ViewData["ActivePage"] as string == "/Admin/ServiceManagement" ? "active" : "")">
                             <a asp-page="/Admin/ServiceManagement"><i class="fas fa-cogs"></i> Quản lý dịch vụ</a>
                         </li>
+                        
+                    }
+                    @if (account?.Role == 1)
+                    {
                         <li class="@(ViewData["ActivePage"] as string == "/Admin/EmployeeManagement" ? "active" : "")">
                             <a asp-page="/Admin/EmployeeManagement"><i class="fas fa-users"></i> Quản lý nhân viên</a>
                         </li>
@@ -73,7 +72,6 @@
                             <a asp-page="/Admin/UserManagement"><i class="fas fa-users"></i> Quản lý tài khoản</a>
                         </li>
                     }
-                    
                     @if (account?.Role <= 3)
                     {
                         <li class="@(ViewData["ActivePage"] as string == "/Admin/CustomerManagement" ? "active" : "")">
@@ -85,7 +83,23 @@
                         <li class="@(ViewData["ActivePage"] as string == "/Admin/NewsManagement" ? "active" : "")">
                             <a asp-page="/Admin/NewsManagement"><i class="fas fa-newspaper"></i> Quản lý tin tức</a>
                         </li>
+                        <li class="@(ViewData["ActivePage"] as string == "/Admin/PromotionManagement" ? "active" : "")">
+                            <a asp-page="/Admin/PromotionManagement"><i class="fas fa-bullhorn"></i> Quản lý tin khuyến mãi</a>
+                        </li>
                     }
+                    @if (account?.Role <= 1 || account?.Role == 4)
+                    {
+                        <li class="@(ViewData["ActivePage"] as string == "/Admin/ScheduleManagement" ? "active" : "")">
+                            <a asp-page="/Admin/ScheduleManagement"><i class="fas fa-calendar"></i> Quản lý lịch trình</a>
+                        </li>
+                    }
+                    @if (account?.Role <= 4 && account?.Role != 2)
+                    {
+                        <li class="@(ViewData["ActivePage"] as string == "/Admin/ReservationList" ? "active" : "")">
+                            <a asp-page="/Admin/ReservationList"><i class="fas fa-list"></i> Danh sách đặt trước</a>
+                        </li>
+                    }
+                    
                 </ul>
             </nav>
         </aside>

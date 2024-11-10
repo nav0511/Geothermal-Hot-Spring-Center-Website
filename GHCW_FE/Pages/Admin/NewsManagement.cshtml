@@ -14,6 +14,20 @@
     <button class="btn-add" onclick="window.location.href='/Admin/AddNews'">+ Thêm tin tức mới</button>
 </header>
 
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success mt-3">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger mt-3">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
 <div class="search-container">
     <input type="text" placeholder="Tìm kiếm...">
     <select>
@@ -42,7 +56,16 @@
                 <td>@news.Id</td>
                 <td>@news.Title</td>
                 <td>@news.UploadDate?.ToString("dd/MM/yyyy")</td>
-                <td>@news.IsActive</td>
+                <td>
+                    @if (news.IsActive == true)
+                    {
+                        <span class="status active">Hoạt động</span>
+                    }
+                    else
+                    {
+                        <span class="status inactive">Không hoạt động</span>
+                    }
+                </td>
 
                 <td>
                     <button class="status active" onclick="window.location.href='/Admin/EditNews?id=@news.Id'">Sửa</button>

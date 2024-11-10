@@ -81,7 +81,7 @@ namespace GHCW_BE.Controllers
                 throw;
             }
 
-            return NoContent();
+            return Ok("Cập nhật thành công");
         }
 
         [HttpDelete("{code}")]
@@ -102,7 +102,7 @@ namespace GHCW_BE.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Lỗi khi xóa mã giảm giá: {ex.Message}");
             }
 
-            return NoContent();
+            return Ok("Xóa thành công");
         }
 
         [HttpPost]
@@ -129,7 +129,7 @@ namespace GHCW_BE.Controllers
             await _discountService.AddDiscount(discount);
 
 
-            return Ok("Add Success");
+            return Ok("Thêm thành công");
 
         }
 
