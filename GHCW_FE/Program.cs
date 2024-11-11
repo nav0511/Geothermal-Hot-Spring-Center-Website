@@ -13,6 +13,7 @@ builder.Services.AddScoped<ServicesService>();
 builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddScoped<TicketService>();
 builder.Services.AddScoped<ScheduleService>();
+builder.Services.AddScoped<VnPayService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSession(options =>
 {

@@ -26,4 +26,16 @@ namespace GHCW_BE.DTOs
         public byte PaymentStatus { get; set; }
         public byte CheckIn { get; set; }
     }
+
+    public class TicketDTOForPayment
+    {
+        public int CustomerId { get; set; }
+        public string? DiscountCode { get; set; }
+        public decimal Total { get; set; }
+        public DateTime OrderDate { get; set; }
+        public DateTime BookDate { get; set; }
+        public byte PaymentStatus { get; set; }
+        public byte CheckIn { get; set; }
+        public virtual ICollection<TicketDetailDTOForPayment> TicketDetails { get; set; }
+    }
 }

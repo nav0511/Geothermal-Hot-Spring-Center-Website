@@ -16,11 +16,13 @@ namespace GHCW_BE.Controllers
         private IMapper _mapper;
         private TicketService _ticketService;
         private CloudinaryService _cloudinary;
-        public TicketController(IMapper mapper, TicketService ticketService, CloudinaryService cloudinary)
+        private AuthenticationService _authentication;
+        public TicketController(IMapper mapper, TicketService ticketService, CloudinaryService cloudinary, AuthenticationService authentication)
         {
             _mapper = mapper;
             _ticketService = ticketService;
             _cloudinary = cloudinary;
+            _authentication = authentication;
         }
 
         [HttpGet]
@@ -73,5 +75,30 @@ namespace GHCW_BE.Controllers
 
             return Ok("Cập nhật trạng thái Check-In thành công.");
         }
+
+        [HttpPost("Save")]
+        public async Task<IActionResult> SaveTicket([FromBody] TicketDTOForPayment ticketDto)
+        {
+            if (ticketDto == null || ticketDto.CustomerId == 0 || ticketDto.TicketDetails == null || !ticketDto.TicketDetails.Any())
+            {
+                return BadRequest("Dữ liệu không hợp lệ.");
+            }
+
+            var customer = await _authentication.CheckCustomerExsit(ticketDto.CustomerId);
+            if (customer == null) return StatusCode(500, "Có lỗi xảy ra khi lưu vé.");
+
+            var newTicket = _mapper.Map<Ticket>(ticketDto);
+            newTicket.CustomerId = customer.Id;
+
+            var result = await _ticketService.SaveTicketAsync(newTicket);
+
+            if (result == null)
+            {
+                return StatusCode(500, "Có lỗi xảy ra khi lưu vé.");
+            }
+
+            return Ok("Đã lưu vé thành công.");
+        }
+
     }
 }

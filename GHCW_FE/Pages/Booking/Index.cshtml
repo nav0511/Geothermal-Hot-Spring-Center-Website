@@ -4,11 +4,20 @@
 }
 
 <div class="container py-5">
-    <!-- Date Selection -->
-    <div class="form-group">
-        <label for="bookingDate">Choose Booking Date:</label>
-        <input type="date" id="bookingDate" class="form-control" asp-for="BookingDate" min="@DateTime.Now.ToString("yyyy-MM-dd")" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
-    </div>
+    <form>
+        <!-- Date Selection -->
+        <div class="form-group">
+            <label for="bookingDate">Choose Booking Date:</label>
+            <input type="date" id="bookingDate" class="form-control" asp-for="BookingDate"
+                   min="@DateTime.Now.ToString("yyyy-MM-dd")"
+                   value="@DateTime.Now.ToString("yyyy-MM-dd")" required />
+        </div>
+
+        <!-- Cart Summary and Payment -->
+        <div class="cart-summary mt-2 mb-5">
+            <a id="paymentButton" class="btn btn-success mt-3" onclick="checkBookingDate()">Thanh toán</a>
+        </div>
+    </form>
 
     <!-- Services List -->
     <div class="row">
@@ -24,33 +33,39 @@
                             <label>Quantity:</label>
                             <input type="number" min="1" value="1" id="quantity-@service.Id" class="form-control" />
                         </div>
-                        <button class="btn btn-primary mt-2" onclick="addToCart(@service.Id, parseInt(document.getElementById('quantity-@service.Id').value))">Add to Cart</button>
+                        <button class="btn btn-primary mt-2" onclick="addToCart(@service.Id, parseInt(document.getElementById('quantity-@service.Id').value), @service.Price)">Chọn</button>
                     </div>
                 </div>
             </div>
         }
     </div>
 
-    <!-- Cart Summary and Payment -->
-    <div class="cart-summary mt-5">
-        <a class="btn btn-success mt-3" asp-page="./Cart">Thanh toán</a>
-    </div>
 </div>
 
 <script>
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-    function addToCart(serviceId, quantity) {
+    function addToCart(serviceId, quantity, price) {
         const existingItem = cart.find(item => item.serviceId === serviceId);
 
         if (existingItem) {
             existingItem.quantity += quantity;
         } else {
-            cart.push({ serviceId, quantity });
+            cart.push({ serviceId, quantity , price });
         }
 
         localStorage.setItem("cart", JSON.stringify(cart));
 
+    }
+
+    function checkBookingDate() {
+        const bookingDate = document.getElementById("bookingDate").value;
+        if (!bookingDate) {
+            alert("Please select a booking date before proceeding to payment.");
+        } else {
+            localStorage.setItem("bookingDate", bookingDate);
+            window.location.href = `@Url.Page("./Cart")?bookingDate=${encodeURIComponent(bookingDate)}`;
+        }
     }
 
 </script>

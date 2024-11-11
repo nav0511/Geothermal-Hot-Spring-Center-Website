@@ -21,16 +21,11 @@ namespace GHCW_FE.Pages.Booking
             _servicesService = servicesService;
         }
 
-        public async Task OnGetAsync(int pageNumber = 1)
+        public async Task OnGetAsync()
         {
             (HttpStatusCode StatusCode, List<ServiceDTO>? ListServices) = await _servicesService.GetServices($"Service");
             AvailableServices = ListServices;
         }
 
-        public IActionResult OnPostProceedToPayment()
-        {
-            // Redirect to payment page with cart details
-            return RedirectToPage("Payment");
-        }
     }
 }

@@ -14,4 +14,11 @@ namespace GHCW_BE.DTOs
         public virtual ServiceDTO Service { get; set; } = null!;
 
     }
+
+    public class TicketDetailDTOForPayment
+    {
+        public int ServiceId { get; set; }
+        public int Quantity { get; set; }
+        public decimal Price { get; set; }
+    }
 }

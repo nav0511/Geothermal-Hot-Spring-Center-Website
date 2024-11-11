@@ -4,89 +4,149 @@
     ViewData["Title"] = "Cart";
 }
 
-<div class="container py-5">
-    <h2 style="color: #50A215">Thông tin đơn hàng</h2>
-    <table id="cart-items" class="mt-4" style="background-color: white">
-        <thead>
-            <tr>
-                <th>Dịch vụ</th>
-                <th>Số lượng</th>
-                <th>Đơn giá</th>
-                <th>Thành tiền</th>
-            </tr>
-        </thead>
-    </table>
-
-    <div class="cart-summary mt-4">
-        <button class="btn btn-success mt-3" onclick="proceedToPayment()">Thanh toán</button>
+@if (Model.Message != null)
+{
+    <div class="container py-5">
+        <h2 style="color: #50A215; background-color: white; padding: 2rem;">@Model.Message</h2>
     </div>
-</div>
+    <form method="post" asp-page-handler="SaveTicket" id="cartForm">
+        <input type="hidden" asp-for="CartData" id="cartData" name="cartData" />
+        <input type="hidden" asp-for="BookingDate" id="bookingDate" name="bookingDate" />
 
-<script>
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
-    let cartItemsContainer = document.getElementById("cart-items");
-    let cartTotal = 0;
-    const availableServices = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.AvailableServices));
+        <button type="submit" style="display: none;">Submit</button>
+    </form>
 
-    function displayCart() {
-        cartTotal = 0;
+    @if (Model.Success == true)
+    {
+        <script>
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            let cartData = JSON.stringify(cart);
+            let bookingDate = localStorage.getItem("bookingDate") || "";
 
-        cart.forEach(item => {
-            const serviceName = getServiceName(item.serviceId);
-            const servicePrice = getServicePrice(item.serviceId);
+            document.getElementById('cartData').value = cartData;
+            document.getElementById('bookingDate').value = bookingDate; 
 
-            const itemTotal = item.quantity * servicePrice;
-            cartTotal += itemTotal;
+            document.getElementById('cartForm').submit();
+
+            localStorage.removeItem("cart");
+        </script>
+    }
+}
+@if (Model.Message == null)
+{
+    <div class="container py-5" style="padding: 3rem; background-color: white; margin-top: 2rem;">
+        <h2 style="color: #50A215">Thông tin đơn hàng</h2>
+        <table id="cart-items" class="mt-4" style="">
+            <thead>
+                <tr>
+                    <th>Dịch vụ</th>
+                    <th>Số lượng</th>
+                    <th>Đơn giá</th>
+                    <th>Thành tiền</th>
+                </tr>
+            </thead>
+        </table>
+
+        <form method="post" asp-page-handler="InitiatePayment">
+            <input type="hidden" asp-for="PaymentInfo.Amount" id="paymentAmount" />
+
+@*             <div class="form-group">
+                <label asp-for="PaymentInfo.OrderType">Order Type</label>
+                <input type="text" asp-for="PaymentInfo.OrderType" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <label asp-for="PaymentInfo.OrderDescription">Order Description</label>
+                <input type="text" asp-for="PaymentInfo.OrderDescription" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <label asp-for="PaymentInfo.Name">Name</label>
+                <input type="text" asp-for="PaymentInfo.Name" class="form-control" required />
+            </div> *@
+            @if (Model.isLoggedIn == true)
+            {
+                <button type="submit" class="btn btn-success mt-3">Thanh toán</button>
+            }
+            else
+            {
+                <a href="@Url.Page("/Authentications/Login", new { returnUrl = Url.Page("/Booking/Cart") })" class="btn btn-primary mt-3">Đăng nhập</a>
+                <p class="text-danger mt-2">@Model.ErrorMessage</p>
+            }
+        </form>
+    </div>
+
+    <script>
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        let cartItemsContainer = document.getElementById("cart-items");
+        let cartTotal = 0;
+        const availableServices = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.AvailableServices));
+
+        function displayCart() {
+            cartTotal = 0;
+
+            cart.forEach(item => {
+                const serviceName = getServiceName(item.serviceId);
+                const servicePrice = getServicePrice(item.serviceId) * 1000;
+
+                const itemTotal = item.quantity * servicePrice;
+                cartTotal += itemTotal;
+
+                cartItemsContainer.innerHTML += `
+                                <tbody>
+                                    <tr class="cart-item">
+                                        <td>${serviceName}</td>
+                                        <td>${item.quantity}</td>
+                                        <td>${servicePrice}</td>
+                                        <td>${itemTotal}</td>
+                                    </tr>
+                                </tbody>
+                            `;
+            });
 
             cartItemsContainer.innerHTML += `
-                        <tbody>
-                            <tr class="cart-item">
-                                <td>${serviceName}</td>
-                                <td>${item.quantity}</td>
-                                <td>${servicePrice.toFixed(3)}</td>
-                                <td>${itemTotal.toFixed(3)}</td>
-                            </tr>
-                        </tbody>
-                    `;
-        });
+                                <tbody>
+                                        <tr class="cart-item" style="border-top: 1px solid lightgray;">
+                                        <th>Tổng tiền</th>
+                                        <th>${cartTotal}</th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                </tbody>
+                                    `;
+            const amountInput = document.getElementById("paymentAmount");
+            if (amountInput) {
+                amountInput.value = cartTotal;
+            } else {
+                console.error("Amount input field not found");
+            }
+        }
 
-        cartItemsContainer.innerHTML += `
-                        <tbody>
-                            <tr class="cart-item">
-                                <th>Tổng tiền</th>
-                                <th>${cartTotal.toFixed(3)}</th>
-                                <th></th>
-                                <th></th>
-                            </tr>
-                        </tbody>
-                        `;
-    }
+        function getServiceName(serviceId) {
+            const service = availableServices.find(service => service.Id === serviceId);
+            return service ? service.Name : 'Unknown Service';
+        }
 
-    function getServiceName(serviceId) {
-        const service = availableServices.find(service => service.Id === serviceId);
-        return service ? service.Name : 'Unknown Service';
-    }
+        function getServicePrice(serviceId) {
+            const service = availableServices.find(service => service.Id === serviceId);
+            return service ? service.Price : 0;
+        }
 
-    function getServicePrice(serviceId) {
-        const service = availableServices.find(service => service.Id === serviceId);
-        return service ? service.Price : 0;
-    }
+        displayCart();
 
-    function proceedToPayment() {
-        window.location.href = './Index';
-    }
 
-    displayCart();
-</script>
+    </script>
 
-<style>
-    .cart-item {
-        padding: 10px 0;
-    }
-    th, td {
-        padding: 10px;
-    }
-    th {
-        font-size: 25px;
-    }
-</style>
+    <style>
+        .cart-item {
+            padding: 10px 0;
+        }
+
+        th, td {
+            padding: 10px;
+        }
+
+        th {
+            font-size: 25px;
+        }
+    </style>
+
+}
