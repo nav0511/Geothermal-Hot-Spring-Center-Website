@@ -119,7 +119,6 @@ namespace GHCW_BE.Controllers
             {
                 return BadRequest(message);
             }
-
             return Ok(message);
         }
     }

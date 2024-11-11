@@ -5,6 +5,138 @@
     Layout = "_LayoutManagement";
 }
 
+<header class="page-header">
+    <h2><span style="color:#9197B3">Quản lý sản phẩm > </span>Thêm sản phẩm mới</h2>
+</header>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success mt-3">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger mt-3">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<div class="form-container">
+    <form method="post" asp-page-handler="Create" enctype="multipart/form-data">
+        <div class="form-group">
+            <div>
+                <label for="name">Tên sản phẩm:</label>
+                <input type="text" id="name" name="name" required />
+            </div>
+
+            <div>
+                <label for="price">Giá sản phẩm:</label>
+                <input type="number" id="price" name="price" step="0.01" required />
+            </div>
+
+            <div>
+                <label for="size">Kích thước:</label>
+                <select id="size" name="size" required>
+                    <option value="">Lựa chọn kích thước</option>
+                    @foreach (var size in Model.Sizes)
+                    {
+                        <option value="@size">@size</option>
+                    }
+                </select>
+            </div>
+
+
+            <div>
+                <label for="quantity">Số lượng:</label>
+                <input type="number" id="quantity" name="quantity" required />
+            </div>
+
+            <div>
+                <label for="category">Danh mục:</label>
+                <select id="category" name="categoryId" required>
+                    <option value="">Lựa chọn danh mục</option>
+                    @foreach (var category in Model.Categories)
+                    {
+                        <option value="@category.Id">@category.Name</option>
+                    }
+
+                </select>
+            </div>
+
+
+            <div class="form-group checkbox-group full-width">
+                <div class="checkbox-item">
+                    <input type="checkbox" id="isAvailable" name="isAvailable" />
+                    <label for="isAvailable">Đang có sẵn</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="isForRent" name="isForRent" />
+                    <label for="isForRent">Để cho thuê</label>
+                </div>
+            </div>
+
+            <div class="full-width">
+                <label for="description">Mô tả:</label>
+                <textarea id="description" name="description" rows="4" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;"></textarea>
+            </div>
+
+            <div class="full-width">
+                <label for="image">Ảnh sản phẩm:</label>
+                <input type="file" id="image" name="image" accept="image/*" onchange="previewImage(event)" />
+                <img id="imagePreview" class="image-preview" src="" alt="Xem trước ảnh" style="display: none;" />
+            </div>
+
+
+        </div>
+        <div class="form-group">
+            <button type="submit">Thêm sản phẩm</button>
+        </div>
+    </form>
+
+</div>
+
+<div class="back-button-container">
+    <button class="btn-back" onclick="window.location.href='/Admin/ProductManagement'"> << Quay lại</button>
+</div>
+
+<script>
+    // Get the profile icon and dropdown elements
+    var profileIcon = document.getElementById("profileIcon");
+    var dropdownMenu = document.getElementById("dropdownMenu");
+    var profileMenu = document.querySelector(".profile-menu");
+
+    // Toggle dropdown when the profile icon is clicked
+    profileIcon.addEventListener("click", function (event) {
+        event.stopPropagation();
+        profileMenu.classList.toggle("show");
+    });
+
+    // Close the dropdown if user clicks outside
+    window.addEventListener("click", function (event) {
+        if (!event.target.matches('.profile-icon') && profileMenu.classList.contains('show')) {
+            profileMenu.classList.remove('show');
+        }
+    });
+
+    function previewImage(event) {
+        var input = event.target;
+        var imagePreview = document.getElementById("imagePreview");
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                imagePreview.src = e.target.result;
+                imagePreview.style.display = "block";
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+
 <style>
     .btn-add {
         background-color: #42C2A8;
@@ -81,7 +213,7 @@
                 background-color: #37a58d;
             }
 
-  
+
     /* Ensure the container aligns everything in a single row */
     .checkbox-group {
         display: flex;
@@ -116,120 +248,3 @@
             background-color: #1E88E5;
         }
 </style>
-
-<header class="page-header">
-    <h2><span style="color:#9197B3">Quản lý sản phẩm > </span>Thêm sản phẩm mới</h2>
-</header>
-<div class="form-container">
-    <form method="post" asp-page-handler="Create" enctype="multipart/form-data">
-        <div class="form-group">
-            <div>
-                <label for="name">Tên sản phẩm:</label>
-                <input type="text" id="name" name="name" required />
-            </div>
-
-            <div>
-                <label for="price">Giá sản phẩm:</label>
-                <input type="number" id="price" name="price" step="0.01" required />
-            </div>
-
-            <div>
-                <label for="size">Kích thước:</label>
-                <select id="size" name="size" required>
-                    <option value="">Lựa chọn kích thước</option>
-                    @foreach (var size in Model.Sizes)
-                    {
-                        <option value="@size">@size</option>
-                    }
-                </select>
-            </div>
-
-
-            <div>
-                <label for="quantity">Số lượng:</label>
-                <input type="number" id="quantity" name="quantity" required />
-            </div>
-
-            <div>
-                <label for="category">Danh mục:</label>
-                <select id="category" name="categoryId" required>
-                    <option value="">Lựa chọn danh mục</option>
-                    @foreach (var category in Model.Categories)
-                    {
-                        <option value="@category.Id">@category.Name</option>
-                    }
-
-                </select>
-            </div>
-
-
-            <div class="form-group checkbox-group full-width">
-                <div class="checkbox-item">
-                    <input type="checkbox" id="isAvailable" name="isAvailable" />
-                    <label for="isAvailable">IsAvailable</label>
-                </div>
-                <div class="checkbox-item">
-                    <input type="checkbox" id="isForRent" name="isForRent" />
-                    <label for="isForRent">IsForRent</label>
-                </div>
-            </div>
-
-            <div class="full-width">
-                <label for="description">Mô tả:</label>
-                <textarea id="description" name="description" rows="4" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;"></textarea>
-            </div>
-
-            <div class="full-width">
-                <label for="image">Ảnh sản phẩm:</label>
-                <input type="file" id="image" name="image" accept="image/*" onchange="previewImage(event)" />
-                <img id="imagePreview" class="image-preview" src="" alt="Xem trước ảnh" style="display: none;" />
-            </div>
-
-
-        </div>
-        <div class="form-group">
-            <button type="submit">Thêm sản phẩm</button>
-        </div>
-    </form>
-
-</div>
-
-<div class="back-button-container">
-    <button class="btn-back" onclick="window.history.back()"> << Quay lại</button>
-</div>
-
-<script>
-    // Get the profile icon and dropdown elements
-    var profileIcon = document.getElementById("profileIcon");
-    var dropdownMenu = document.getElementById("dropdownMenu");
-    var profileMenu = document.querySelector(".profile-menu");
-
-    // Toggle dropdown when the profile icon is clicked
-    profileIcon.addEventListener("click", function (event) {
-        event.stopPropagation();
-        profileMenu.classList.toggle("show");
-    });
-
-    // Close the dropdown if user clicks outside
-    window.addEventListener("click", function (event) {
-        if (!event.target.matches('.profile-icon') && profileMenu.classList.contains('show')) {
-            profileMenu.classList.remove('show');
-        }
-    });
-
-    function previewImage(event) {
-        var input = event.target;
-        var imagePreview = document.getElementById("imagePreview");
-
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-
-            reader.onload = function (e) {
-                imagePreview.src = e.target.result;
-                imagePreview.style.display = "block";
-            };
-
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-</script>

@@ -5,6 +5,95 @@
     Layout = "_LayoutManagement";
 }
 
+<header class="page-header">
+    <h2><span style="color:#9197B3">Quản lý phiếu giảm giá > </span>Cập nhật phiếu giảm giá > @Model.Discount.Code</h2>
+</header>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success mt-3">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger mt-3">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<div class="form-container">
+    <form method="post" asp-page-handler="Update">
+        <div class="form-group">
+            <div>
+                <label for="name">Tên giảm giá:</label>
+                <input type="text" id="name" name="name" value="@Model.Discount.Name" />
+            </div>
+
+            <div>
+                <label for="code">Mã giảm giá:</label>
+                <input type="text" id="code" name="code" value="@Model.Discount.Code" readonly />
+            </div>
+
+            <div>
+                <label for="value">Giá trị giảm:</label>
+                <input type="number" id="value" name="value" value="@Model.Discount.Value" step="0.01" required />
+            </div>
+
+            <div>
+                <label for="startDate">Ngày bắt đầu:</label>
+                <input type="date" id="startDate" name="startDate" value="@Model.Discount.StartDate?.ToString("yyyy-MM-dd")" />
+            </div>
+
+            <div>
+                <label for="endDate">Ngày kết thúc:</label>
+                <input type="date" id="endDate" name="endDate" value="@Model.Discount.EndDate?.ToString("yyyy-MM-dd")" />
+            </div>
+
+            <div class="full-width">
+                <label for="description">Mô tả:</label>
+                <textarea id="description" name="description" rows="4" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">@Model.Discount.Description</textarea>
+            </div>
+        </div>
+
+        <div class="form-group checkbox-group">
+            <div class="checkbox-item">
+                <input type="checkbox" id="isAvailable" name="isAvailable" @(Model.Discount.IsAvailable == true ? "checked" : "") />
+                <label for="isAvailable">Đang hoạt động</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn-add">Cập nhật phiếu giảm giá</button>
+        </div>
+    </form>
+</div>
+
+<div class="back-button-container">
+    <button class="btn-back" onclick="window.location.href='/Admin/DiscountManagement'"> << Quay lại</button>
+</div>
+
+<script>
+    // Get the profile icon and dropdown elements
+    var profileIcon = document.getElementById("profileIcon");
+    var dropdownMenu = document.getElementById("dropdownMenu");
+    var profileMenu = document.querySelector(".profile-menu");
+
+    // Toggle dropdown when the profile icon is clicked
+    profileIcon.addEventListener("click", function (event) {
+        event.stopPropagation();
+        profileMenu.classList.toggle("show");
+    });
+
+    // Close the dropdown if user clicks outside
+    window.addEventListener("click", function (event) {
+        if (!event.target.matches('.profile-icon') && profileMenu.classList.contains('show')) {
+            profileMenu.classList.remove('show');
+        }
+    });
+</script>
+
 <style>
     .btn-add {
         background-color: #42C2A8;
@@ -116,78 +205,3 @@
             background-color: #1E88E5;
         }
 </style>
-
-<header class="page-header">
-    <h2><span style="color:#9197B3">Quản lý phiếu giảm giá > </span>Cập nhật phiếu giảm giá > @Model.Discount.Code</h2>
-</header>
-
-<div class="form-container">
-    <form method="post" asp-page-handler="Update">
-        <div class="form-group">
-            <div>
-                <label for="name">Tên giảm giá:</label>
-                <input type="text" id="name" name="name" value="@Model.Discount.Name" />
-            </div>
-
-            <div>
-                <label for="code">Mã giảm giá:</label>
-                <input type="text" id="code" name="code" value="@Model.Discount.Code" readonly />
-            </div>
-
-            <div>
-                <label for="value">Giá trị giảm:</label>
-                <input type="number" id="value" name="value" value="@Model.Discount.Value" step="0.01" required />
-            </div>
-
-            <div>
-                <label for="startDate">Ngày bắt đầu:</label>
-                <input type="date" id="startDate" name="startDate" value="@Model.Discount.StartDate?.ToString("yyyy-MM-dd")" />
-            </div>
-
-            <div>
-                <label for="endDate">Ngày kết thúc:</label>
-                <input type="date" id="endDate" name="endDate" value="@Model.Discount.EndDate?.ToString("yyyy-MM-dd")" />
-            </div>
-
-            <div class="full-width">
-                <label for="description">Mô tả:</label>
-                <textarea id="description" name="description" rows="4" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">@Model.Discount.Description</textarea>
-            </div>
-        </div>
-
-        <div class="form-group checkbox-group">
-            <div class="checkbox-item">
-                <input type="checkbox" id="isAvailable" name="isAvailable" @(Model.Discount.IsAvailable == true ? "checked" : "") />
-                <label for="isAvailable">IsAvailable</label>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <button type="submit" class="btn-add">Cập nhật phiếu giảm giá</button>
-        </div>
-    </form>
-</div>
-
-<div class="back-button-container">
-    <button class="btn-back" onclick="window.history.back()"> << Quay lại</button>
-</div>
-
-<script>
-    // Get the profile icon and dropdown elements
-    var profileIcon = document.getElementById("profileIcon");
-    var dropdownMenu = document.getElementById("dropdownMenu");
-    var profileMenu = document.querySelector(".profile-menu");
-
-    // Toggle dropdown when the profile icon is clicked
-    profileIcon.addEventListener("click", function (event) {
-        event.stopPropagation();
-        profileMenu.classList.toggle("show");
-    });
-
-    // Close the dropdown if user clicks outside
-    window.addEventListener("click", function (event) {
-        if (!event.target.matches('.profile-icon') && profileMenu.classList.contains('show')) {
-            profileMenu.classList.remove('show');
-        }
-    });
-</script>

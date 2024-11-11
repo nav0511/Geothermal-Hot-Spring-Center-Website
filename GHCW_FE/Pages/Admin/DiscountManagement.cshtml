@@ -14,6 +14,20 @@
     <button class="btn-add" onclick="window.location.href='/Admin/AddDiscount'">+ Thêm phiếu giảm giá mới</button>
 </header>
 
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success mt-3">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger mt-3">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
 <div class="search-container">
     <input type="text" placeholder="Tìm kiếm...">
     <select>
@@ -44,7 +58,16 @@
                 <td>@discount.Name</td>
                 <td>@discount.StartDate?.ToString("dd/MM/yyyy")</td>
                 <td>@discount.EndDate?.ToString("dd/MM/yyyy")</td>
-                <td>@discount.IsAvailable</td>
+                <td>
+                    @if (discount.IsAvailable == true)
+                    {
+                        <span class="status active">Hoạt động</span>
+                    }
+                    else
+                    {
+                        <span class="status inactive">Không hoạt động</span>
+                    }
+                </td>
 
                 <td>
                     <button class="status active" onclick="window.location.href='/Admin/EditDiscount?code=@discount.Code'">Sửa</button>

@@ -15,6 +15,20 @@
     <button class="btn-add" onclick="window.location.href='/Admin/AddProduct'">+ Thêm sản phẩm mới</button>
 </header>
 
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success mt-3">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger mt-3">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
 <div class="search-container">
     <input type="text" placeholder="Tìm kiếm...">
     <select>
