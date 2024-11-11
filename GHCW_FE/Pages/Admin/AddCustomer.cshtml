@@ -3,14 +3,14 @@
 @using System.Text.Json
 @using Microsoft.AspNetCore.Http
 @removeTagHelper Microsoft.AspNetCore.Mvc.TagHelpers.OptionTagHelper, Microsoft.AspNetCore.Mvc.TagHelpers
-@model GHCW_FE.Pages.Admin.CustomerDetailsModel
+@model GHCW_FE.Pages.Admin.AddCustomerModel
 @{
-    ViewData["Title"] = "Thông tin khách hàng";
+    ViewData["Title"] = "Thêm khách hàng";
     Layout = "_LayoutManagement";
 }
 
 <header class="page-header">
-    <h2><span style="color:#9197B3">Quản lý khách hàng > </span>Thông tin khách hàng</h2>
+    <h2><span style="color:#9197B3">Quản lý khách hàng > </span>Thêm khách hàng mới</h2>
 </header>
 @if (TempData["SuccessMessage"] != null)
 {
@@ -29,11 +29,6 @@
     <form method="post" onsubmit="return validateForm()">
         <div class="form-group">
             <div>
-                <label for="id">ID:</label>
-                <input type="text" name="id" value="@Model.CustomerProfile.Id" readonly />
-            </div>
-
-            <div>
                 <label for="name">Mã khách hàng:</label>
                 <select id="accountID" name="accountID">
                     <option value="0">Không có</option>
@@ -41,7 +36,7 @@
                     {
                         @foreach (var cusAcc in Model.CustomerAccounts)
                         {
-                            <option value="@cusAcc.Id" @(Model.CustomerProfile.AccountId == cusAcc.Id ? "selected" : "")>@cusAcc.Email</option>
+                            <option value="@cusAcc.Id">@cusAcc.Email</option>
                         }
                     }
                 </select>
@@ -49,49 +44,23 @@
 
             <div>
                 <label for="name">Họ và tên:</label>
-                <input type="text" id="fullname" name="fullname" value="@Model.CustomerProfile.FullName"
-                       title="Vui lòng nhập họ tên không chứa số và kí tự đặc biệt" placeholder="Nhập họ tên" required />
+                <input type="text" id="fullname" name="fullname" title="Vui lòng nhập họ tên không chứa số và kí tự đặc biệt" placeholder="Nhập họ tên" required />
             </div>
 
             <div>
                 <label for="email">Email:</label>
-                <input type="email" id="email" name="email" value="@Model.CustomerProfile.Email"
-                       title="Vui lòng nhập đúng định dạng email" placeholder="Nhập email" required />
-            </div>
-
-            <div>
-                <label for="gender">Giới tính:</label>
-                <select id="gender" name="gender">
-                    <option value="true" @(Model.CustomerProfile.Gender == true ? "selected" : "")>Nam</option>
-                    <option value="false" @(Model.CustomerProfile.Gender == false ? "selected" : "")>Nữ</option>
-                </select>
-            </div>
-
-            <div>
-                <label for="dob">Ngày sinh:</label>
-                <input type="date" id="dob" name="dob" value="@Model.CustomerProfile.DoB?.ToString("yyyy-MM-dd")"/>
+                <input type="email" id="email" name="email" title="Vui lòng nhập đúng định dạng email" placeholder="Nhập email" required />
             </div>
 
             <div>
                 <label for="phonenumber">Số điện thoại:</label>
                 <input type="text" id="phonenumber" name="phonenumber" placeholder="Nhập số điện thoại"
-                       pattern="[0-9]{10}" maxlength="10" title="Số điện thoại phải gồm 10 chữ số" value="@Model.CustomerProfile.PhoneNumber" required  />
-            </div>
-
-            <div>
-                <label for="address">Địa chỉ:</label>
-                <input type="text" id="address" name="address" value="@Model.CustomerProfile.Address"/>
+                       pattern="[0-9]{10}" maxlength="10" title="Số điện thoại phải gồm 10 chữ số" required />
             </div>
         </div>
 
-        <div class="form-group checkbox-group">
-            <div class="checkbox-item">
-                <input type="checkbox" id="isEmailNotify" name="isEmailNotify" value="true" @(Model.CustomerProfile.IsEmailNotify ? "checked" : "")>
-                <label for="isEmailNotify">Nhận thông báo qua Email</label>
-            </div>
-        </div>
         <div class="button-container">
-            <button type="submit" class="btn-update">Cập Nhật</button>
+            <button type="submit" class="btn-update">Thêm khách hàng</button>
         </div>
     </form>
 </div>

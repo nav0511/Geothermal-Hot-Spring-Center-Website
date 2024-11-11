@@ -23,7 +23,7 @@ namespace GHCW_FE.Pages.Authentications
         {
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(string? returnUrl = null)
         {
             if (!ModelState.IsValid)
             {
@@ -38,6 +38,11 @@ namespace GHCW_FE.Pages.Authentications
                 {
                     // Lưu thông tin tài khoản vào session
                     HttpContext.Session.SetString("acc", System.Text.Json.JsonSerializer.Serialize(userAccount));
+
+                    if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                    {
+                        return Redirect(returnUrl);
+                    }
 
                     // Điều hướng người dùng dựa trên loại tài khoản
                     return userAccount.Role switch

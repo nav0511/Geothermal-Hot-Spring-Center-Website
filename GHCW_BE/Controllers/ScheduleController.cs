@@ -2,9 +2,11 @@
 using GHCW_BE.DTOs;
 using GHCW_BE.Models;
 using GHCW_BE.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace GHCW_BE.Controllers
 {
@@ -21,74 +23,103 @@ namespace GHCW_BE.Controllers
             _scheduleService = scheduleService;
         }
 
+        [Authorize]
         [HttpGet("Weekly")]
         public async Task<IActionResult> GetWeeklySchedule([FromQuery] ScheduleByWeek sw)
         {
-            var schedules = await _scheduleService.GetWeeklySchedule(sw.StartDate, sw.EndDate);
-            if (schedules == null)
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var roleClaim = identity?.FindFirst("Role");
+
+            if (roleClaim != null && (int.Parse(roleClaim.Value) <= 1 || int.Parse(roleClaim.Value) == 4))
             {
-                return NotFound("Không tìm thấy lịch làm việc nào trong tuần này.");
+                var schedules = await _scheduleService.GetWeeklySchedule(sw.StartDate, sw.EndDate);
+                if (schedules == null)
+                {
+                    return NotFound("Không tìm thấy lịch làm việc nào trong tuần này.");
+                }
+                return Ok(schedules);
             }
-            return Ok(schedules);
+            return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền thực hiện hành động này.");
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetScheduleById(int id)
         {
-            var schedule = await _scheduleService.GetScheduleById(id);
-            if (schedule == null) return NotFound();
-            var result = _mapper.Map<ScheduleDTO>(schedule);
-            return Ok(result);
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var roleClaim = identity?.FindFirst("Role");
+
+            if (roleClaim != null && int.Parse(roleClaim.Value) <= 1)
+            {
+                var schedule = await _scheduleService.GetScheduleById(id);
+                if (schedule == null)
+                {
+                    return NotFound("Không tìm thấy lịch tương ứng");
+                }
+                return Ok(schedule);
+            }
+            return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền thực hiện hành động này.");
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateSchedule([FromBody] ScheduleDTO scheduleDto)
+        [Authorize]
+        [HttpPost("AddSchedule")]
+        public async Task<IActionResult> CreateSchedule(AddScheduleRequest ar)
         {
-            if (scheduleDto == null) return BadRequest("Dữ liệu lịch không hợp lệ.");
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var roleClaim = identity?.FindFirst("Role");
 
-            var schedule = _mapper.Map<Schedule>(scheduleDto);
-            await _scheduleService.AddSchedule(schedule);
-            return Ok("Thêm lịch thành công");
+            if (roleClaim != null && int.Parse(roleClaim.Value) <= 1)
+            {
+                var (isSuccess, message) = await _scheduleService.AddSchedule(ar);
+                if (!isSuccess)
+                {
+                    if (message.Contains("Đã có lịch làm việc"))
+                    {
+                        return Conflict(message);
+                    }
+                    return StatusCode(500, message);
+                }
+                return Ok(message);
+            }
+            return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền thực hiện hành động này.");
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateSchedule(int id, [FromBody] ScheduleDTO scheduleDto)
+        [Authorize]
+        [HttpPut("UpdateSchedule")]
+        public async Task<IActionResult> UpdateSchedule(EditScheduleRequest er)
         {
-            if (id != scheduleDto.Id) return BadRequest("ID không khớp.");
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var roleClaim = identity?.FindFirst("Role");
 
-            var existingSchedule = await _scheduleService.GetScheduleById(id);
-            if (existingSchedule == null) return NotFound();
-
-            _mapper.Map(scheduleDto, existingSchedule);
-
-            try
+            if (roleClaim != null && int.Parse(roleClaim.Value) <= 1)
             {
-                await _scheduleService.UpdateSchedule(existingSchedule);
+                var (isSuccess, message) = await _scheduleService.UpdateSchedule(er);
+                if (!isSuccess)
+                {
+                    if (message.Contains("Ca này đã có lễ tân làm việc"))
+                    {
+                        return Conflict(message);
+                    }
+                    if (message.Contains("Không tồn tại lịch này"))
+                    {
+                        return NotFound(message);
+                    }
+                    return StatusCode(500, message);
+                }
+                return Ok(message);
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Lỗi khi cập nhật lịch.");
-            }
-
-            return Ok("Cập nhật thành công");
+            return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền thực hiện hành động này.");
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSchedule(int id)
         {
-            var schedule = await _scheduleService.GetScheduleById(id);
-            if (schedule == null) return NotFound("Lịch không tồn tại.");
-
-            try
+            var (isSuccess, message) = await _scheduleService.DeleteSchedule(id);
+            if (!isSuccess)
             {
-                await _scheduleService.DeleteSchedule(schedule);
+                return BadRequest(message);
             }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Lỗi khi xóa lịch: {ex.Message}");
-            }
-
-            return Ok("Xóa thành công");
+            return Ok(message);
         }
     }
 }

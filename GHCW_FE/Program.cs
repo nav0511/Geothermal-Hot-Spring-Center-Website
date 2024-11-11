@@ -9,6 +9,7 @@ builder.Services.AddHttpClient();
 builder.Services.AddScoped<AccountService>();
 builder.Services.AddScoped<CustomerService>();
 builder.Services.AddScoped<TokenService>();
+builder.Services.AddScoped<ServicesService>();
 builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddScoped<TicketService>();
 builder.Services.AddScoped<TicketDetailService>();
@@ -19,10 +20,11 @@ builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<NewsService>();
 builder.Services.AddScoped<CategoryService>();
 
+builder.Services.AddScoped<VnPayService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.IdleTimeout = TimeSpan.FromMinutes(1440);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 } 

@@ -53,5 +53,19 @@ namespace GHCW_BE.Services
             _context.Tickets.Update(ticket);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<Ticket?> SaveTicketAsync(Ticket ticket)
+        {
+            try
+            {
+                _context.Tickets.Add(ticket);
+                await _context.SaveChangesAsync();
+                return ticket;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
     }
 }

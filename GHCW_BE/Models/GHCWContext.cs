@@ -28,7 +28,7 @@ namespace GHCW_BE.Models
         public virtual DbSet<Service> Services { get; set; } = null!;
         public virtual DbSet<Ticket> Tickets { get; set; } = null!;
         public virtual DbSet<TicketDetail> TicketDetails { get; set; } = null!;
-        
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Account>(entity =>
@@ -77,13 +77,11 @@ namespace GHCW_BE.Models
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.Bills)
                     .HasForeignKey(d => d.CustomerId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Bill__CustomerId__4CA06362");
 
                 entity.HasOne(d => d.DiscountCodeNavigation)
                     .WithMany(p => p.Bills)
                     .HasForeignKey(d => d.DiscountCode)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Bill__DiscountCo__4D94879B");
 
                 entity.HasOne(d => d.Receptionist)
@@ -96,7 +94,7 @@ namespace GHCW_BE.Models
             modelBuilder.Entity<BillDetail>(entity =>
             {
                 entity.HasKey(e => new { e.BillId, e.ProductId })
-                    .HasName("PK__BillDeta__DAB23006DE900610");
+                    .HasName("PK__BillDeta__DAB23006926306AA");
 
                 entity.ToTable("BillDetail");
 
@@ -122,8 +120,6 @@ namespace GHCW_BE.Models
                 entity.ToTable("Category");
 
                 entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.Description).HasMaxLength(500);
 
                 entity.Property(e => e.Name).HasMaxLength(255);
             });
@@ -153,15 +149,13 @@ namespace GHCW_BE.Models
             modelBuilder.Entity<Discount>(entity =>
             {
                 entity.HasKey(e => e.Code)
-                    .HasName("PK__Discount__A25C5AA653429F61");
+                    .HasName("PK__Discount__A25C5AA6DC61780B");
 
                 entity.ToTable("Discount");
 
                 entity.Property(e => e.Code)
                     .HasMaxLength(255)
                     .IsUnicode(false);
-
-                entity.Property(e => e.Description).HasMaxLength(500);
 
                 entity.Property(e => e.EndDate).HasColumnType("datetime");
 
@@ -173,8 +167,6 @@ namespace GHCW_BE.Models
             modelBuilder.Entity<News>(entity =>
             {
                 entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.Description).HasMaxLength(4000);
 
                 entity.Property(e => e.DiscountId)
                     .HasMaxLength(255)
@@ -191,7 +183,6 @@ namespace GHCW_BE.Models
                 entity.HasOne(d => d.Discount)
                     .WithMany(p => p.News)
                     .HasForeignKey(d => d.DiscountId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__News__DiscountId__52593CB8");
             });
 
@@ -202,8 +193,6 @@ namespace GHCW_BE.Models
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
-
-                entity.Property(e => e.Description).HasMaxLength(1000);
 
                 entity.Property(e => e.Image)
                     .HasMaxLength(255)
@@ -242,8 +231,6 @@ namespace GHCW_BE.Models
             modelBuilder.Entity<Service>(entity =>
             {
                 entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.Description).HasMaxLength(500);
 
                 entity.Property(e => e.Image)
                     .HasMaxLength(500)
@@ -290,7 +277,7 @@ namespace GHCW_BE.Models
             modelBuilder.Entity<TicketDetail>(entity =>
             {
                 entity.HasKey(e => new { e.TicketId, e.ServiceId })
-                    .HasName("PK__TicketDe__CD7D7D0756E67730");
+                    .HasName("PK__TicketDe__CD7D7D072BDC38AF");
 
                 entity.ToTable("TicketDetail");
 

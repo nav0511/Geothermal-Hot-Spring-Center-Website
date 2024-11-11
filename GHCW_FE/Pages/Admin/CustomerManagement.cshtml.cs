@@ -12,7 +12,7 @@ namespace GHCW_FE.Pages.Admin
         private readonly TokenService _tokenService;
         private readonly AuthenticationService _authService;
         [BindProperty]
-        public List<CustomerDTO> Customers { get; set; }
+        public List<CustomerDTO>? Customers { get; set; }
         public CustomerManagementModel(CustomerService cusService, TokenService tokenService, AuthenticationService authService)
         {
             _cusService = cusService;

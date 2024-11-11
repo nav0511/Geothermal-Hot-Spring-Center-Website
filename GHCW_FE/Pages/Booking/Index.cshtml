@@ -2,3 +2,86 @@
 @model GHCW_FE.Pages.Booking.IndexModel
 @{
 }
+
+<div class="container py-5">
+    <form>
+        <!-- Date Selection -->
+        <div class="form-group">
+            <label for="bookingDate">Choose Booking Date:</label>
+            <input type="date" id="bookingDate" class="form-control" asp-for="BookingDate"
+                   min="@DateTime.Now.ToString("yyyy-MM-dd")"
+                   value="@DateTime.Now.ToString("yyyy-MM-dd")" required />
+        </div>
+
+        <!-- Cart Summary and Payment -->
+        <div class="cart-summary mt-2 mb-5">
+            <a id="paymentButton" class="btn btn-success mt-3" onclick="checkBookingDate()">Thanh toán</a>
+        </div>
+    </form>
+
+    <!-- Services List -->
+    <div class="row">
+        @foreach (var service in Model.AvailableServices)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="@service.Image" class="card-img-top service-image" alt="@service.Name">
+                    <div class="card-body">
+                        <h5 class="card-title">@service.Name</h5>
+                        <p class="card-text service-description">@service.Description</p>
+                        <div>
+                            <label>Quantity:</label>
+                            <input type="number" min="1" value="1" id="quantity-@service.Id" class="form-control" />
+                        </div>
+                        <button class="btn btn-primary mt-2" onclick="addToCart(@service.Id, parseInt(document.getElementById('quantity-@service.Id').value), @service.Price)">Chọn</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+</div>
+
+<script>
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    function addToCart(serviceId, quantity, price) {
+        const existingItem = cart.find(item => item.serviceId === serviceId);
+
+        if (existingItem) {
+            existingItem.quantity += quantity;
+        } else {
+            cart.push({ serviceId, quantity , price });
+        }
+
+        localStorage.setItem("cart", JSON.stringify(cart));
+
+    }
+
+    function checkBookingDate() {
+        const bookingDate = document.getElementById("bookingDate").value;
+        if (!bookingDate) {
+            alert("Please select a booking date before proceeding to payment.");
+        } else {
+            localStorage.setItem("bookingDate", bookingDate);
+            window.location.href = `@Url.Page("./Cart")?bookingDate=${encodeURIComponent(bookingDate)}`;
+        }
+    }
+
+</script>
+
+<style>
+    .service-description {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-height: 4.5em;
+    }
+
+    .service-image {
+        min-height: 150px;
+        max-height: 200px;
+    }
+</style>

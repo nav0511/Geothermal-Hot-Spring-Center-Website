@@ -10,19 +10,21 @@ namespace GHCW_FE.Pages.Admin
     {
         private readonly ScheduleService _scheduleService;
         private readonly TokenService _tokenService;
-        private readonly AuthenticationService _authService;
         private readonly AccountService _accService;
-        public ScheduleManagementModel(ScheduleService scheduleService, TokenService tokenService, AuthenticationService authService, AccountService accService)
+        private readonly AuthenticationService _authService;
+
+        public ScheduleManagementModel(ScheduleService scheduleService, TokenService tokenService, AccountService accService, AuthenticationService authService)
         {
             _scheduleService = scheduleService;
-            _authService = authService;
             _tokenService = tokenService;
             _accService = accService;
+            _authService = authService;
         }
 
-        public ScheduleByWeek SW {  get; set; } = new ScheduleByWeek();
+        public ScheduleByWeek SW { get; set; } = new ScheduleByWeek();
         public List<ScheduleDTO>? Schedules { get; set; }
-        public async Task<IActionResult> OnGet(DateTime startDate, DateTime endDate)
+        public bool Flag { get; set; }
+        public async Task<IActionResult> OnGetAsync(DateTime startDate, DateTime endDate, bool flag = true)
         {
             var accessToken = await _tokenService.CheckAndRefreshTokenAsync();
             if (string.IsNullOrEmpty(accessToken))
@@ -33,32 +35,17 @@ namespace GHCW_FE.Pages.Admin
             }
             _accService.SetAccessToken(accessToken);
 
-            var (statusCode0, userProfile) = await _accService.UserProfile(accessToken);
-            if (userProfile?.Role > 4 || userProfile?.Role == 2 || userProfile?.Role == 3)
-            {
-                await _authService.LogoutAsync();
-                TempData["ErrorMessage"] = "Bạn không có quyền truy cập thông tin này.";
-                return RedirectToPage("/Authentications/Login");
-            }
-            else if (statusCode0 == HttpStatusCode.NotFound)
-            {
-                await _authService.LogoutAsync();
-                TempData["ErrorMessage"] = "Không tìm thấy người dùng này.";
-                return RedirectToPage("/Authentications/Login");
-            }
-            else if (statusCode0 != HttpStatusCode.OK)
-            {
-                await _authService.LogoutAsync();
-                TempData["ErrorMessage"] = "Đã xảy ra lỗi khi lấy thông tin người dùng.";
-                return RedirectToPage("/Authentications/Login");
-            }
-
-            if (startDate == DateTime.MinValue && endDate == DateTime.MinValue)
+            if (flag)
             {
                 var currentDate = DateTime.Now;
-                // Tính startDate (ngày thứ Hai của tuần hiện tại)
-                var startOfWeek = currentDate.AddDays(-((int)currentDate.DayOfWeek - (int)DayOfWeek.Monday));
-                // Tính endDate (ngày Chủ Nhật của tuần hiện tại)
+                // Calculate startDate (Monday of the current week)
+                int daysToSubtract = (int)currentDate.DayOfWeek - (int)DayOfWeek.Monday;
+                if (daysToSubtract < 0)
+                {
+                    daysToSubtract += 7; // Adjust for Sunday as the start of the week
+                }
+                var startOfWeek = currentDate.AddDays(-daysToSubtract);
+                // Calculate endDate (Sunday of the current week)
                 var endOfWeek = startOfWeek.AddDays(6);
 
                 SW.StartDate = startOfWeek;
@@ -75,25 +62,56 @@ namespace GHCW_FE.Pages.Admin
                 TempData["SuccessMessage"] = "Không có lịch làm việc nào trong tuần này";
                 return Page();
             }
-            else if (statusCode != HttpStatusCode.OK && statusCode != HttpStatusCode.NotFound)
+            else if (statusCode == HttpStatusCode.Forbidden)
+            {
+                await _authService.LogoutAsync();
+                TempData["ErrorMessage"] = "Bạn không có quyền truy cập thông tin này.";
+                return RedirectToPage("/Authentications/Login");
+            }
+            else if (statusCode == HttpStatusCode.Unauthorized)
+            {
+                await _authService.LogoutAsync();
+                TempData["ErrorMessage"] = "Phiên đăng nhập hết hạn.";
+                return RedirectToPage("/Authentications/Login");
+            }
+            else if (statusCode != HttpStatusCode.OK)
             {
                 TempData["ErrorMessage"] = "Đã xảy ra lỗi khi lấy lịch làm việc.";
                 return Page();
             }
             Schedules = schedules;
+            Flag = flag;
             return Page();
         }
 
-        public async Task<IActionResult> OnPostDeleteSchedule(int id)
+        public async Task<IActionResult> OnPostDeleteSchedule(int id, DateTime startDate2, DateTime endDate2)
         {
-            var responseStatus = await _scheduleService.DeleteSchedule(id);
-            if (responseStatus == HttpStatusCode.NoContent)
+            var accessToken = await _tokenService.CheckAndRefreshTokenAsync();
+            if (string.IsNullOrEmpty(accessToken))
             {
-                return RedirectToPage();
+                await _authService.LogoutAsync();
+                TempData["ErrorMessage"] = "Bạn cần đăng nhập để thực hiện việc này.";
+                return RedirectToPage("/Authentications/Login");
+            }
+            _accService.SetAccessToken(accessToken);
+
+            var statusCode = await _scheduleService.DeleteSchedule(id);
+            if (statusCode == HttpStatusCode.Forbidden)
+            {
+                await _authService.LogoutAsync();
+                TempData["ErrorMessage"] = "Bạn không có quyền truy cập thông tin này.";
+                return RedirectToPage("/Authentications/Login");
+            }
+            else if(statusCode != HttpStatusCode.OK)
+            {
+                TempData["ErrorMessage"] = "Ẩn lịch làm việc thất bại, vui lòng thử lại sau.";
+                await OnGetAsync(startDate2, endDate2, false);
+                return Page();
             }
             else
             {
-                ModelState.AddModelError(string.Empty, "Lỗi khi xóa lịch trình.");
+                TempData["SuccessMessage"] = "Ẩn lịch làm việc thành công.";
+                await OnGetAsync(startDate2, endDate2, false);
                 return Page();
             }
         }
