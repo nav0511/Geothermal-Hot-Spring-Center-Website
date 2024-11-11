@@ -56,7 +56,7 @@ namespace GHCW_FE.Pages.Admin
                 SW.StartDate = startDate;
                 SW.EndDate = endDate;
             }
-            var (statusCode, schedules) = await _scheduleService.GetWeeklySchedule(SW);
+            var (statusCode, schedules) = await _scheduleService.GetWeeklySchedule(SW, accessToken);
             if (statusCode == HttpStatusCode.NotFound)
             {
                 TempData["SuccessMessage"] = "Không có lịch làm việc nào trong tuần này";
@@ -95,7 +95,7 @@ namespace GHCW_FE.Pages.Admin
             }
             _accService.SetAccessToken(accessToken);
 
-            var statusCode = await _scheduleService.DeleteSchedule(id);
+            var statusCode = await _scheduleService.DeleteSchedule(id, accessToken);
             if (statusCode == HttpStatusCode.Forbidden)
             {
                 await _authService.LogoutAsync();
