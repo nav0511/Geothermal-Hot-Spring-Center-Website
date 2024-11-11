@@ -306,6 +306,26 @@ namespace GHCW_BE.Controllers
         }
 
         [Authorize]
+        [HttpGet("receptionlist")]
+        public async Task<IActionResult> GetReceptionList()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var roleClaim = identity?.FindFirst("Role");
+
+            if (roleClaim != null && int.Parse(roleClaim.Value) <= 1)
+            {
+                var acc = await _service.GetReceptionList();
+                if (acc == null)
+                {
+                    return NotFound("Danh sách nhân viên trống");
+                }
+
+                return Ok(acc);
+            }
+            return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền xem thông tin này.");
+        }
+
+        [Authorize]
         [HttpGet("customerAcclist")]
         public async Task<IActionResult> GetCustomerAccList()
         {
@@ -566,27 +586,53 @@ namespace GHCW_BE.Controllers
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             var roleClaim = identity?.FindFirst("Role");
 
-            if (roleClaim != null && int.Parse(roleClaim.Value) == 0)
+            if (roleClaim != null && int.Parse(roleClaim.Value) <= 4)
             {
-                UpdateRequest ur = new UpdateRequest()
-                {
-                    Id = c.AccountId ?? 0,
-                    Name = c.FullName,
-                    PhoneNumber = c.PhoneNumber
-                };
-                var (isSuccess, message) = await _service.UpdateProfile(ur);
+                var (isSuccess, message) = await _service.EditCustomer(c);
                 if (!isSuccess)
                 {
                     return BadRequest(message);
                 }
-                (isSuccess, message) = await _service.EditCustomer(c);
-                if (!isSuccess)
+                if (c.AccountId != null)
                 {
-                    return BadRequest(message);
+                    UpdateRequest ur = new UpdateRequest()
+                    {
+                        Id = c.AccountId ?? 0,
+                        Name = c.FullName,
+                        PhoneNumber = c.PhoneNumber,
+                        IsEmailNotify = c.IsEmailNotify,
+                        DoB = c.DoB,
+                        Gender = c.Gender,
+                        Address = c.Address
+                    };
+                    (isSuccess, message) = await _service.UpdateProfile(ur);
+                    if (!isSuccess)
+                    {
+                        return BadRequest(message);
+                    }
                 }
                 return Ok(message);
             }
             return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền thực hiện hành động này.");
+        }
+
+        [Authorize]
+        [HttpGet("customer/{id}")]
+        public async Task<IActionResult> GetCustomerProfileById(int id)
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var roleClaim = identity?.FindFirst("Role");
+
+            if (roleClaim != null && int.Parse(roleClaim.Value) <= 4)
+            {
+                var customer = await _service.GetCustomerProfileById(id);
+                if (customer == null)
+                {
+                    return NotFound("Khách hàng không tồn tại.");
+                }
+                return Ok(customer);
+            }
+            return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền xem thông tin này.");
         }
     }
 }

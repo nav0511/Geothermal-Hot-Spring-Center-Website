@@ -2,15 +2,14 @@
 @using GHCW_FE.DTOs
 @using System.Text.Json
 @using Microsoft.AspNetCore.Http
-@removeTagHelper Microsoft.AspNetCore.Mvc.TagHelpers.OptionTagHelper, Microsoft.AspNetCore.Mvc.TagHelpers
-@model GHCW_FE.Pages.Admin.CustomerDetailsModel
+@model GHCW_FE.Pages.Admin.AddEmployeeModel
 @{
-    ViewData["Title"] = "Thông tin khách hàng";
+    ViewData["Title"] = "Thêm nhân viên";
     Layout = "_LayoutManagement";
 }
 
 <header class="page-header">
-    <h2><span style="color:#9197B3">Quản lý khách hàng > </span>Thông tin khách hàng</h2>
+    <h2><span style="color:#9197B3">Quản lý nhân viên > </span>Thêm nhân viên mới</h2>
 </header>
 @if (TempData["SuccessMessage"] != null)
 {
@@ -29,75 +28,80 @@
     <form method="post" onsubmit="return validateForm()">
         <div class="form-group">
             <div>
-                <label for="id">ID:</label>
-                <input type="text" name="id" value="@Model.CustomerProfile.Id" readonly />
-            </div>
-
-            <div>
-                <label for="name">Mã khách hàng:</label>
-                <select id="accountID" name="accountID">
-                    <option value="0">Không có</option>
-                    @if (Model.CustomerAccounts != null)
-                    {
-                        @foreach (var cusAcc in Model.CustomerAccounts)
-                        {
-                            <option value="@cusAcc.Id" @(Model.CustomerProfile.AccountId == cusAcc.Id ? "selected" : "")>@cusAcc.Email</option>
-                        }
-                    }
-                </select>
-            </div>
-
-            <div>
                 <label for="name">Họ và tên:</label>
-                <input type="text" id="fullname" name="fullname" value="@Model.CustomerProfile.FullName"
-                       title="Vui lòng nhập họ tên không chứa số và kí tự đặc biệt" placeholder="Nhập họ tên" required />
+                <input type="text" id="name" name="name" title="Vui lòng nhập họ tên không chứa số và kí tự đặc biệt" placeholder="Nhập họ tên" required />
             </div>
 
             <div>
                 <label for="email">Email:</label>
-                <input type="email" id="email" name="email" value="@Model.CustomerProfile.Email"
-                       title="Vui lòng nhập đúng định dạng email" placeholder="Nhập email" required />
+                <input type="email" id="email" name="email" title="Vui lòng nhập đúng định dạng email" placeholder="Nhập email" required />
             </div>
 
             <div>
                 <label for="gender">Giới tính:</label>
                 <select id="gender" name="gender">
-                    <option value="true" @(Model.CustomerProfile.Gender == true ? "selected" : "")>Nam</option>
-                    <option value="false" @(Model.CustomerProfile.Gender == false ? "selected" : "")>Nữ</option>
+                    <option value="true">Nam</option>
+                    <option value="false">Nữ</option>
                 </select>
             </div>
 
             <div>
                 <label for="dob">Ngày sinh:</label>
-                <input type="date" id="dob" name="dob" value="@Model.CustomerProfile.DoB?.ToString("yyyy-MM-dd")"/>
+                <input type="date" id="dob" name="dob" />
             </div>
 
             <div>
                 <label for="phonenumber">Số điện thoại:</label>
                 <input type="text" id="phonenumber" name="phonenumber" placeholder="Nhập số điện thoại"
-                       pattern="[0-9]{10}" maxlength="10" title="Số điện thoại phải gồm 10 chữ số" value="@Model.CustomerProfile.PhoneNumber" required  />
+                       pattern="[0-9]{10}" maxlength="10" title="Số điện thoại phải gồm 10 chữ số" required />
             </div>
 
             <div>
                 <label for="address">Địa chỉ:</label>
-                <input type="text" id="address" name="address" value="@Model.CustomerProfile.Address"/>
+                <input type="text" id="address" name="address" />
+            </div>
+
+            <div>
+                <label for="role">Vai trò:</label>
+                <select id="role" name="role">
+                    <option value="2">Marketing</option>
+                    <option value="3">Sale</option>
+                    <option value="4">Lễ tân</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="password">Mật Khẩu</label>
+                <div class="input-group" style="display:flex">
+                    <input type="password" class="form-control" name="Password" id="password" placeholder="Nhập mật khẩu" required>
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-black" id="togglePassword" style="width:40px">
+                            <i class="fa fa-eye" id="eyeIcon"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
 
         <div class="form-group checkbox-group">
             <div class="checkbox-item">
-                <input type="checkbox" id="isEmailNotify" name="isEmailNotify" value="true" @(Model.CustomerProfile.IsEmailNotify ? "checked" : "")>
+                <input type="checkbox" id="isActive" name="isActive" value="true">
+                <label for="isActive">Đang hoạt động</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="isEmailNotify" name="isEmailNotify" value="true">
                 <label for="isEmailNotify">Nhận thông báo qua Email</label>
             </div>
         </div>
+
         <div class="button-container">
-            <button type="submit" class="btn-update">Cập Nhật</button>
+            <button type="submit" class="btn-add">Thêm</button>
         </div>
     </form>
 </div>
 
 <div class="back-button-container">
-    <button class="btn-back" onclick="window.location.href='/Admin/CustomerManagement'"> << Quay lại</button>
+    <button class="btn-back" onclick="window.location.href='/Admin/EmployeeManagement'"> << Quay lại</button>
 </div>
 
 <script>
@@ -119,6 +123,32 @@
         }
     });
 
+    document.getElementById('togglePassword').addEventListener('click', function () {
+        const passwordInput = document.getElementById('password');
+        const eyeIcon = document.getElementById('eyeIcon');
+
+        // Toggle the type attribute
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+
+        // Toggle the eye icon
+        eyeIcon.classList.toggle('fa-eye');
+        eyeIcon.classList.toggle('fa-eye-slash');
+    });
+
+    function validatePassword() {
+        const passwordInput = document.getElementById('password');
+        const password = passwordInput.value.trim();
+
+        const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@@$#^!%*?&])[A-Za-z\d@@$#^!%*?&]{8,}$/;
+
+        if (!passwordPattern.test(password)) {
+            passwordInput.setCustomValidity("Mật khẩu phải dài ít nhất 8 kí tự, bao gồm ít nhất 1 kí tự thường, 1 kí tự hoa, 1 kí tự đặc biệt (@@$#^!%*?&) và 1 kí tự số.");
+        } else {
+            passwordInput.setCustomValidity(""); // Xóa thông báo lỗi nếu hợp lệ
+        }
+    }
+
     // Hàm kiểm tra số điện thoại
     function validatePhoneNumber() {
         const phoneInput = document.getElementById('phonenumber');
@@ -129,18 +159,6 @@
             phoneInput.setCustomValidity("Số điện thoại phải gồm 10 chữ số và bắt đầu bằng 03, 05, 07, 08 hoặc 09.");
         } else {
             phoneInput.setCustomValidity(""); // Xóa thông báo lỗi nếu hợp lệ
-        }
-    }
-
-    // Hàm kiểm tra tên hợp lệ
-    function validateName() {
-        const nameInput = document.getElementById('fullname');
-        const namePattern = /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠÝàáâãèéêìíòóôõùúăđĩũơưƯẠ-ỹ\s]+$/;
-
-        if (!namePattern.test(nameInput.value.trim())) {
-            nameInput.setCustomValidity("Vui lòng nhập tên không chứa chữ số và kí tự đặc biệt.");
-        } else {
-            nameInput.setCustomValidity(""); // Xóa thông báo lỗi nếu hợp lệ
         }
     }
 
@@ -156,21 +174,47 @@
         }
     }
 
+    // Hàm kiểm tra tên hợp lệ
+    function validateName() {
+        const nameInput = document.getElementById('name');
+        const namePattern = /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠÝàáâãèéêìíòóôõùúăđĩũơưƯẠ-ỹ\s]+$/;
+
+        if (!namePattern.test(nameInput.value.trim())) {
+            nameInput.setCustomValidity("Vui lòng nhập tên không chứa chữ số và kí tự đặc biệt.");
+        } else {
+            nameInput.setCustomValidity(""); // Xóa thông báo lỗi nếu hợp lệ
+        }
+    }
+
     // Hàm tổng kiểm tra form
     function validateForm() {
         validatePhoneNumber();
-        validateName();
         validateEmail();
+        validatePassword();
+        validateName();
+
         return true;
     }
 
     // Thêm sự kiện cho input để kiểm tra ngay khi người dùng nhập liệu
     document.getElementById('phonenumber').addEventListener('input', validatePhoneNumber);
-    document.getElementById('fullname').addEventListener('input', validateName);
     document.getElementById('email').addEventListener('input', validateEmail);
+    document.getElementById('password').addEventListener('input', validatePassword);
+    document.getElementById('name').addEventListener('input', validateName);
 </script>
 
 <style>
+    .form-group .btn-black {
+        background-color: black;
+        color: white;
+        border: none;
+    }
+
+        .form-group .btn-black:hover {
+            background-color: #333;
+            color: white;
+        }
+
     .btn-update, .btn-back {
         padding: 10px 20px;
         font-size: 16px;
@@ -318,4 +362,5 @@
         .btn-back:hover {
             background-color: #1E88E5;
         }
+
 </style>

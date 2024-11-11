@@ -12,7 +12,7 @@
 <!-- Main Content -->
 <header class="page-header">
     <h2>Quản lý lịch làm việc</h2>
-    <button class="btn-add" onclick="window.location.href='#'">+ Thêm lịch</button>
+    <button class="btn-add" onclick="window.location.href='/Admin/AddSchedule'">+ Thêm lịch</button>
 </header>
 
 @if (TempData["SuccessMessage"] != null)
@@ -85,11 +85,23 @@
                     @if (scheduledEmployee != null)
                     {
                         <span>@scheduledEmployee.ReceptionistName</span>
-
-                        <br>
-                        <a href="/Admin/EditSchedule/?id=@scheduledEmployee.Id">Sửa</a>
-                        <span class="separator">|</span>
-                        <a href="/Admin/EditSchedule/?id=@scheduledEmployee.Id">Xóa</a>
+                        @if (HttpContext.Session.GetString("acc") != null)
+                        {
+                            var account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
+                            @if (account.Role <= 1)
+                            {
+                                <br>
+                                <div style="display:flex; align-content:center; justify-content: center;">
+                                    <a href="/Admin/EditSchedule/?id=@scheduledEmployee.Id">Sửa</a>
+                                    <span class="separator">|</span>
+                                    <form method="post" asp-page-handler="DeleteSchedule">
+                                        <input type="hidden" name="startDate2" value="@Model.SW.StartDate.ToString("yyyy-MM-dd")" />
+                                        <input type="hidden" name="endDate2" value="@Model.SW.EndDate.ToString("yyyy-MM-dd")" />
+                                        <button type="submit" class="btn btn-danger" name="id" value="@scheduledEmployee.Id">Ẩn</button>
+                                    </form>
+                                </div>
+                            }
+                        }
                     }
                     else
                     {
@@ -101,9 +113,10 @@
     }
 </table>
 
-<form id="scheduleForm" method="get" asp-page-handler="OnGet">
+<form id="scheduleForm" method="get" asp-page-handler="OnGetAsync">
     <input type="hidden" id="startDateInput" name="startDate" />
     <input type="hidden" id="endDateInput" name="endDate" />
+    <input type="hidden" id="flagInput" name="flag" value="@(Model.Flag)" />
 </form>
 
 <script>
@@ -112,8 +125,15 @@
         const weekNumber = parseInt(document.getElementById("weekFilter").value, 10);
         const headerRow = document.getElementById("scheduleHeaderRow");
 
+        // const storedYear = sessionStorage.getItem("selectedYear");
+        // const storedWeek = sessionStorage.getItem("selectedWeek");
+        // if (storedYear && storedWeek) {
+        //     year = parseInt(storedYear, 10);
+        //     weekNumber = parseInt(storedWeek, 10);
+        // }
         // Lấy ngày bắt đầu và kết thúc của tuần đã chọn
         const { start, end } = getWeekStartEndDates(year, weekNumber);
+
         // Cập nhật từng ngày trong tiêu đề của bảng
         for (let i = 1; i <= 7; i++) {
             const th = headerRow.children[i]; // Lấy th thứ 2 đến Chủ Nhật
@@ -124,6 +144,7 @@
             th.innerHTML = `${dayOfWeek}<br>${formattedDate}`;
         }
 
+        // Cập nhật giá trị startDate và endDate vào input
         document.getElementById("startDateInput").value = `${start.getFullYear()}-${(start.getMonth() + 1).toString().padStart(2, '0')}-${start.getDate().toString().padStart(2, '0')}`;
         document.getElementById("endDateInput").value = `${end.getFullYear()}-${(end.getMonth() + 1).toString().padStart(2, '0')}-${end.getDate().toString().padStart(2, '0')}`;
     }
@@ -132,7 +153,7 @@
     function updateYearOptions() {
         const currentYear = new Date().getFullYear(); // Lấy năm hiện tại
         const yearFilter = document.getElementById("yearFilter");
-        
+
         // Xóa các tùy chọn cũ trong dropdown
         yearFilter.innerHTML = "";
 
@@ -226,6 +247,19 @@
     }
 
     document.addEventListener("DOMContentLoaded", function () {
+        const currentYear = new Date().getFullYear();
+        const currentWeek = getCurrentWeek(currentYear);
+        flag = document.getElementById("flagInput").value;
+        console.log(flag);
+        if (flag) {
+            sessionStorage.setItem("selectedYear", currentYear);
+            sessionStorage.setItem("selectedWeek", currentWeek);
+        } else {
+            const selectedYear = sessionStorage.getItem("selectedYear") ? parseInt(sessionStorage.getItem("selectedYear"), 10) : currentYear;
+            const selectedWeek = sessionStorage.getItem("selectedWeek") ? parseInt(sessionStorage.getItem("selectedWeek"), 10) : currentWeek;
+            document.getElementById("yearFilter").value = selectedYear;
+            document.getElementById("weekFilter").value = selectedWeek;
+        }
         // Khởi tạo danh sách năm và tuần khi trang được tải
         updateYearOptions();
         updateDateRange();
@@ -235,6 +269,8 @@
     function OnYearChange() {
         const selectedYear = document.getElementById("yearFilter").value;
         sessionStorage.setItem("selectedYear", selectedYear);
+        flag = false;
+        document.getElementById("flagInput").value = flag;
         updateDateRange(); // Cập nhật danh sách tuần cho năm mới
         updateScheduleTableHeader(); // Cập nhật ngày trong bảng
         document.getElementById("scheduleForm").submit();
@@ -243,6 +279,8 @@
     function OnWeekChange() {
         const selectedWeek = document.getElementById("weekFilter").value;
         sessionStorage.setItem("selectedWeek", selectedWeek);
+        flag = false;
+        document.getElementById("flagInput").value = flag;
         updateScheduleTableHeader(); // Cập nhật ngày trong bảng khi tuần thay đổi
         document.getElementById("scheduleForm").submit();
     }

@@ -99,7 +99,7 @@ namespace GHCW_BE.Services
                 Password = emailSettings.Password,
                 ToEmail = registerDTO.Email,
                 Subject = "Kích hoạt tài khoản",
-                Body = $"Nhấp vào liên kết để kích hoạt tài khoản của bạn: {activationLink}"
+                Body = $"Nhấp vào liên kết <strong><a href='{activationLink}'>này</a></strong> để kích hoạt tài khoản của bạn."
             };
 
             return await _helper.SendEmail(emailDTO);
@@ -210,6 +210,18 @@ namespace GHCW_BE.Services
         public async Task<List<AccountDTO>?> GetEmployeeList()
         {
             var employees = await _context.Accounts.Where(a => a.Role >= 1 && a.Role <= 4).ToListAsync();
+            if (employees != null)
+            {
+                var employeeDTOs = _mapper.Map<List<Account>, List<AccountDTO>>(employees);
+                return employeeDTOs;
+            }
+            return null;
+        }
+
+        //lấy danh sách lễ tân role = 4
+        public async Task<List<AccountDTO>?> GetReceptionList()
+        {
+            var employees = await _context.Accounts.Where(a => a.Role == 4).ToListAsync();
             if (employees != null)
             {
                 var employeeDTOs = _mapper.Map<List<Account>, List<AccountDTO>>(employees);
@@ -363,6 +375,17 @@ namespace GHCW_BE.Services
             var customers = await _context.Customers.ToListAsync();
             var customerDTOs = _mapper.Map<List<Customer>, List<CustomerDTO>>(customers);
             return customerDTOs;
+        }
+
+        public async Task<CustomerDTO?> GetCustomerProfileById(int uID)
+        {
+            var customer = await _context.Customers.Include(c => c.Account).FirstOrDefaultAsync(u => u.Id == uID);
+            if (customer != null)
+            {
+                var userDTO = _mapper.Map<Customer, CustomerDTO>(customer);
+                return userDTO;
+            }
+            return null;
         }
 
         public async Task<(bool isSuccess, string message)> AddNewCustomer(AddCustomerRequest a)

@@ -14,22 +14,28 @@ namespace GHCW_FE.Services
             return (statusCode, Schedules);
         }
 
-        public async Task<HttpStatusCode> UpdateSchedule(ScheduleDTO schedule)
+        public async Task<HttpStatusCode> UpdateSchedule(EditScheduleRequest er, string accessToken)
         {
-            string url = $"Schedule/{schedule.Id}";
-            return await PutData(url, schedule);
+            var statusCode = await PutData<EditScheduleRequest>("Schedule/UpdateSchedule", er, null, accessToken);
+            return statusCode;
+        }
+
+        public async Task<(HttpStatusCode StatusCode, ScheduleDTO? Schedule)> GetScheduleByID(int id)
+        {
+            var (statusCode, schedule) = await GetData<ScheduleDTO>($"Schedule/{id}");
+            return (statusCode, schedule);
         }
 
         public async Task<HttpStatusCode> DeleteSchedule(int id)
         {
-            string url = $"Schedule/{id}";
-            return await DeleteData(url);
+            var statusCode = await DeleteData($"Schedule/{id}");
+            return statusCode;
         }
 
-        public async Task<HttpStatusCode> CreateSchedule(ScheduleDTO schedule)
+        public async Task<HttpStatusCode> AddSchedule(AddScheduleRequest ar, string accessToken)
         {
-            string url = "Schedule";
-            return await PushData(url, schedule);
+            var statusCode = await PushData<AddScheduleRequest>("Schedule/AddSchedule", ar, null, accessToken);
+            return statusCode;
         }
     }
 }
