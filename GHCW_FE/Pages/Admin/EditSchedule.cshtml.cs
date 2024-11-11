@@ -57,7 +57,7 @@ namespace GHCW_FE.Pages.Admin
             }
             Receptionists = receptionists;
 
-            var (statusCode2, schedule) = await _scheduleService.GetScheduleByID(id);
+            var (statusCode2, schedule) = await _scheduleService.GetScheduleByID(id, accessToken);
             if (statusCode2 == HttpStatusCode.NotFound)
             {
                 TempData["ErrorMessage"] = "Lịch làm việc không tồn tại.";

@@ -7,10 +7,10 @@ namespace GHCW_FE.Services
 {
     public class ScheduleService : BaseService
     {
-        public async Task<(HttpStatusCode StatusCode, List<ScheduleDTO>? Schedule)> GetWeeklySchedule(ScheduleByWeek sw)
+        public async Task<(HttpStatusCode StatusCode, List<ScheduleDTO>? Schedule)> GetWeeklySchedule(ScheduleByWeek sw, string accessToken)
         {
             var queryString = $"Schedule/Weekly?startDate={sw.StartDate:yyyy-MM-dd}&endDate={sw.EndDate:yyyy-MM-dd}";
-            var (statusCode, Schedules) = await GetData<List<ScheduleDTO>>(queryString);
+            var (statusCode, Schedules) = await GetData<List<ScheduleDTO>>(queryString, null, accessToken);
             return (statusCode, Schedules);
         }
 
@@ -20,15 +20,15 @@ namespace GHCW_FE.Services
             return statusCode;
         }
 
-        public async Task<(HttpStatusCode StatusCode, ScheduleDTO? Schedule)> GetScheduleByID(int id)
+        public async Task<(HttpStatusCode StatusCode, ScheduleDTO? Schedule)> GetScheduleByID(int id, string accessToken)
         {
-            var (statusCode, schedule) = await GetData<ScheduleDTO>($"Schedule/{id}");
+            var (statusCode, schedule) = await GetData<ScheduleDTO>($"Schedule/{id}", null, accessToken);
             return (statusCode, schedule);
         }
 
-        public async Task<HttpStatusCode> DeleteSchedule(int id)
+        public async Task<HttpStatusCode> DeleteSchedule(int id, string accessToken)
         {
-            var statusCode = await DeleteData($"Schedule/{id}");
+            var statusCode = await DeleteData($"Schedule/{id}", accessToken);
             return statusCode;
         }
 
