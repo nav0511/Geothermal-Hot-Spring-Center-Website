@@ -27,20 +27,7 @@ namespace GHCW_FE.Pages.Admin
         public int TotalPages { get; set; }
         private const int PageSize = 6;
 
-        public async Task OnGet(int pageNumber = 1)
-        {
-            CurrentPage = pageNumber;
-            int skip = (pageNumber - 1) * PageSize;
-
-            var(statusCode, TotalNewsCount) = _discountService.GetTotalDiscounts().Result;
-            int totalNewsCount = TotalNewsCount;
-            TotalPages = (int)Math.Ceiling((double)totalNewsCount / PageSize);
-
-            var (statusCode2, discounts) = await _discountService.GetDiscounts($"Discount?$top={PageSize}&$skip={skip}");
-            DiscountDTOs = discounts;
-        }
-
-        public async Task<IActionResult> OnPostDeleteDiscount(string id)
+        public async Task<IActionResult> OnGetAsync(int pageNumber = 1)
         {
             var accessToken = await _tokenService.CheckAndRefreshTokenAsync();
             if (string.IsNullOrEmpty(accessToken))
@@ -71,6 +58,53 @@ namespace GHCW_FE.Pages.Admin
                 return RedirectToPage("/Authentications/Login");
             }
 
+            CurrentPage = pageNumber;
+            int skip = (pageNumber - 1) * PageSize;
+
+            var(statusCode1, TotalNewsCount) = _discountService.GetTotalDiscounts().Result;
+            int totalNewsCount = TotalNewsCount;
+            TotalPages = (int)Math.Ceiling((double)totalNewsCount / PageSize);
+
+            var (statusCode2, discounts) = await _discountService.GetDiscounts($"Discount?$top={PageSize}&$skip={skip}");
+            DiscountDTOs = discounts;
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostDiscountActivation(string code)
+        {
+            var accessToken = await _tokenService.CheckAndRefreshTokenAsync();
+            if (string.IsNullOrEmpty(accessToken))
+            {
+                await _authService.LogoutAsync();
+                TempData["ErrorMessage"] = "Bạn cần đăng nhập để thực hiện việc này.";
+                return RedirectToPage("/Authentications/Login");
+            }
+            _accService.SetAccessToken(accessToken);
+
+            var statusCode = await _discountService.DiscountActivation(accessToken, code);
+            if (statusCode == HttpStatusCode.Forbidden)
+            {
+                await _authService.LogoutAsync();
+                TempData["ErrorMessage"] = "Bạn không có quyền truy cập thông tin này.";
+                return RedirectToPage("/Authentications/Login");
+            }
+            else if (statusCode != HttpStatusCode.OK)
+            {
+                TempData["ErrorMessage"] = "Đổi trạng thái thất bại, vui lòng thử lại sau.";
+                await OnGetAsync();
+                return Page();
+            }
+            else
+            {
+                TempData["SuccessMessage"] = "Đổi trạng thái thành công.";
+                await OnGetAsync();
+                return Page();
+            }
+        }
+
+
+        public async Task<IActionResult> OnPostDeleteDiscount(string id)
+        {
             var responseStatus = await _discountService.DeleteDiscount(id);
             if (responseStatus == HttpStatusCode.OK)
             {

@@ -47,5 +47,26 @@ namespace GHCW_BE.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task<(bool isSuccess, string message)> NewsActivation(int nid)
+        {
+            var news = await _context.News.FindAsync(nid);
+            if (news == null)
+            {
+                return (false, "Tin tức không tồn tại.");
+            }
+            try
+            {
+                news.IsActive = !news.IsActive;
+                _context.News.Update(news);
+                await _context.SaveChangesAsync();
+
+                return (true, "Thay đổi trạng thái tin tức thành công.");
+            }
+            catch (Exception)
+            {
+                return (false, "Thay đổi trạng thái tin tức thất bại, vui lòng thử lại.");
+            }
+        }
+
     }
 }

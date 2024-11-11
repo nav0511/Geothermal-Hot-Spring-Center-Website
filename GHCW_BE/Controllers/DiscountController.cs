@@ -2,9 +2,11 @@
 using GHCW_BE.DTOs;
 using GHCW_BE.Models;
 using GHCW_BE.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace GHCW_BE.Controllers
 {
@@ -113,7 +115,6 @@ namespace GHCW_BE.Controllers
                 return BadRequest("Dữ liệu mã giảm giá không hợp lệ.");
             }
 
-
             var discount = new Discount
             {
                 Code = discountDto.Code,
@@ -125,12 +126,29 @@ namespace GHCW_BE.Controllers
                 IsAvailable = discountDto.IsAvailable ?? false
             };
 
-
             await _discountService.AddDiscount(discount);
 
-
             return Ok("Thêm thành công");
+        }
 
+        [Authorize]
+        [HttpDelete("DiscountActivation/{code}")]
+        public async Task<IActionResult> DiscountActivation(string code)
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var roleClaim = identity?.FindFirst("Role");
+
+            if (roleClaim != null && int.Parse(roleClaim.Value) <=3)
+            {
+                var (isSuccess, message) = await _discountService.DiscountActivation(code);
+                if (!isSuccess)
+                {
+                    return BadRequest(message);
+                }
+
+                return Ok(message);
+            }
+            return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền thực hiện hành động này.");
         }
 
     }
