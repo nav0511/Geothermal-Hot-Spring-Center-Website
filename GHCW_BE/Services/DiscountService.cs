@@ -22,10 +22,10 @@ namespace GHCW_BE.Services
             return _context.Discounts.FirstOrDefault(x => x.Code == code);
         }
 
-        public async Task<Discount> GetDiscountByCode(string code)
-        {
-            return await _context.Discounts.FirstOrDefaultAsync(n => n.Code == code);
-        }
+        //public async Task<Discount> GetDiscountByCode(string code)
+        //{
+        //    return await _context.Discounts.FirstOrDefaultAsync(n => n.Code == code);
+        //}
 
         public async Task UpdateDiscount(Discount discount)
         {
@@ -46,20 +46,25 @@ namespace GHCW_BE.Services
             await _context.SaveChangesAsync();
         }
 
-        //public async Task<string> GenerateUniqueDiscountCode()
-        //{
-        //    string code;
-        //    var random = new Random();
-        //    const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        public async Task<(bool isSuccess, string message)> DiscountActivation(string code)
+        {
+            var discount = GetDiscount(code);
+            if (discount == null)
+            {
+                return (false, "Phiếu giảm giá không tồn tại.");
+            }
+            try
+            {
+                discount.IsAvailable = !discount.IsAvailable;
+                _context.Discounts.Update(discount);
+                await _context.SaveChangesAsync();
 
-        //    do
-        //    {
-        //        code = new string(Enumerable.Repeat(chars, 6)
-        //          .Select(s => s[random.Next(s.Length)]).ToArray());
-        //    }
-        //    while (await _context.Discounts.AnyAsync(d => d.Code == code));
-
-        //    return code;
-        //}
+                return (true, "Thay đổi trạng thái phiếu giảm giá thành công.");
+            }
+            catch (Exception)
+            {
+                return (false, "Thay đổi trạng thái phiếu giảm giá thất bại, vui lòng thử lại.");
+            }
+        }
     }
 }

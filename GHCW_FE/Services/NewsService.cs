@@ -64,5 +64,11 @@ namespace GHCW_FE.Services
             if (accepttype != null) return await PushData(url, news, accepttype);
             else return await PushData(url, news);
         }
+
+        public async Task<HttpStatusCode> NewsActivation(string accessToken, int id)
+        {
+            var statusCode = await DeleteData($"News/NewsActivation/{id}", accessToken);
+            return statusCode;
+        }
     }
 }

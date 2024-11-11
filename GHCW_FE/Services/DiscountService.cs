@@ -39,5 +39,11 @@ namespace GHCW_FE.Services
             string url = "Discount";
             return await PushData(url, discount);
         }
+
+        public async Task<HttpStatusCode> DiscountActivation(string accessToken, string code)
+        {
+            var statusCode = await DeleteData($"Discount/DiscountActivation/{code}", accessToken);
+            return statusCode;
+        }
     }
 }
