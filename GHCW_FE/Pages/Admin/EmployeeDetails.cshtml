@@ -3,14 +3,14 @@
 @using System.Text.Json
 @using Microsoft.AspNetCore.Http
 @removeTagHelper Microsoft.AspNetCore.Mvc.TagHelpers.OptionTagHelper, Microsoft.AspNetCore.Mvc.TagHelpers
-@model GHCW_FE.Pages.Admin.CustomerDetailsModel
+@model GHCW_FE.Pages.Admin.EmployeeDetailsModel
 @{
-    ViewData["Title"] = "Thông tin khách hàng";
+    ViewData["Title"] = "Thông tin nhân viên";
     Layout = "_LayoutManagement";
 }
 
 <header class="page-header">
-    <h2><span style="color:#9197B3">Quản lý khách hàng > </span>Thông tin khách hàng</h2>
+    <h2><span style="color:#9197B3">Quản lý nhân viên > </span>Thông tin nhân viên</h2>
 </header>
 @if (TempData["SuccessMessage"] != null)
 {
@@ -30,74 +30,80 @@
         <div class="form-group">
             <div>
                 <label for="id">ID:</label>
-                <input type="text" name="id" value="@Model.CustomerProfile.Id" readonly />
-            </div>
-
-            <div>
-                <label for="name">Mã khách hàng:</label>
-                <select id="accountID" name="accountID">
-                    <option value="0">Không có</option>
-                    @if (Model.CustomerAccounts != null)
-                    {
-                        @foreach (var cusAcc in Model.CustomerAccounts)
-                        {
-                            <option value="@cusAcc.Id" @(Model.CustomerProfile.AccountId == cusAcc.Id ? "selected" : "")>@cusAcc.Email</option>
-                        }
-                    }
-                </select>
+                <input type="text" name="id" value="@Model.EmployeeProfile.Id" readonly />
             </div>
 
             <div>
                 <label for="name">Họ và tên:</label>
-                <input type="text" id="fullname" name="fullname" value="@Model.CustomerProfile.FullName"
-                       title="Vui lòng nhập họ tên không chứa số và kí tự đặc biệt" placeholder="Nhập họ tên" required />
+                <input type="text" id="name" name="name" value="@Model.EmployeeProfile.Name" required
+                @(Model.UserProfile.Role == 1 ? "readonly" : "") />
             </div>
 
             <div>
                 <label for="email">Email:</label>
-                <input type="email" id="email" name="email" value="@Model.CustomerProfile.Email"
-                       title="Vui lòng nhập đúng định dạng email" placeholder="Nhập email" required />
+                <input type="email" id="email" name="email" value="@Model.EmployeeProfile.Email" readonly />
             </div>
 
             <div>
                 <label for="gender">Giới tính:</label>
-                <select id="gender" name="gender">
-                    <option value="true" @(Model.CustomerProfile.Gender == true ? "selected" : "")>Nam</option>
-                    <option value="false" @(Model.CustomerProfile.Gender == false ? "selected" : "")>Nữ</option>
+                <select id="gender" name="gender" @(Model.UserProfile.Role == 1 ? "disabled" : "")>
+                    <option value="true" @(Model.EmployeeProfile.Gender == true ? "selected" : "")>Nam</option>
+                    <option value="false" @(Model.EmployeeProfile.Gender == false ? "selected" : "")>Nữ</option>
                 </select>
             </div>
 
             <div>
                 <label for="dob">Ngày sinh:</label>
-                <input type="date" id="dob" name="dob" value="@Model.CustomerProfile.DoB?.ToString("yyyy-MM-dd")"/>
+                <input type="date" id="dob" name="dob" value="@Model.EmployeeProfile.DoB?.ToString("yyyy-MM-dd")"
+                @(Model.UserProfile.Role == 1 ? "readonly" : "") />
             </div>
 
             <div>
                 <label for="phonenumber">Số điện thoại:</label>
-                <input type="text" id="phonenumber" name="phonenumber" placeholder="Nhập số điện thoại"
-                       pattern="[0-9]{10}" maxlength="10" title="Số điện thoại phải gồm 10 chữ số" value="@Model.CustomerProfile.PhoneNumber" required  />
+                <input type="text" id="phonenumber" name="phonenumber" value="@Model.EmployeeProfile.PhoneNumber" required
+                @(Model.UserProfile.Role == 1 ? "readonly" : "") />
             </div>
 
             <div>
                 <label for="address">Địa chỉ:</label>
-                <input type="text" id="address" name="address" value="@Model.CustomerProfile.Address"/>
+                <input type="text" id="address" name="address" value="@Model.EmployeeProfile.Address"
+                @(Model.UserProfile.Role == 1 ? "readonly" : "") />
+            </div>
+
+            <div>
+                <label for="role">Vai trò:</label>
+                <select id="role" name="role" @(Model.UserProfile.Role == 1 ? "disabled" : "") >
+                    <option value="0" @(Model.EmployeeProfile.Role == 0 ? "selected" : "")>Quản trị viên</option>
+                    <option value="1" @(Model.EmployeeProfile.Role == 1 ? "selected" : "")>Quản lý</option>
+                    <option value="2" @(Model.EmployeeProfile.Role == 2 ? "selected" : "")>Marketing</option>
+                    <option value="3" @(Model.EmployeeProfile.Role == 3 ? "selected" : "")>Sale</option>
+                    <option value="4" @(Model.EmployeeProfile.Role == 4 ? "selected" : "")>Lễ tân</option>
+                </select>
             </div>
         </div>
 
         <div class="form-group checkbox-group">
             <div class="checkbox-item">
-                <input type="checkbox" id="isEmailNotify" name="isEmailNotify" value="true" @(Model.CustomerProfile.IsEmailNotify ? "checked" : "")>
+                <input type="checkbox" id="isActive" name="isActive" value="true" @(Model.EmployeeProfile.IsActive ? "checked" : "")>
+                <label for="isActive">Đang hoạt động</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="isEmailNotify" name="isEmailNotify" value="true" @(Model.EmployeeProfile.IsEmailNotify ? "checked" : "")
+                @(Model.UserProfile.Role == 1 ? "disabled" : "") />
                 <label for="isEmailNotify">Nhận thông báo qua Email</label>
             </div>
         </div>
-        <div class="button-container">
-            <button type="submit" class="btn-update">Cập Nhật</button>
-        </div>
+        @if (Model.UserProfile.Role <= 1)
+        {
+            <div class="button-container">
+                <button type="submit" class="btn-update">Cập Nhật</button>
+            </div>
+        }
     </form>
 </div>
 
 <div class="back-button-container">
-    <button class="btn-back" onclick="window.location.href='/Admin/CustomerManagement'"> << Quay lại</button>
+    <button class="btn-back" onclick="window.location.href='/Admin/EmployeeManagement'"> << Quay lại</button>
 </div>
 
 <script>
@@ -134,7 +140,7 @@
 
     // Hàm kiểm tra tên hợp lệ
     function validateName() {
-        const nameInput = document.getElementById('fullname');
+        const nameInput = document.getElementById('name');
         const namePattern = /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠÝàáâãèéêìíòóôõùúăđĩũơưƯẠ-ỹ\s]+$/;
 
         if (!namePattern.test(nameInput.value.trim())) {
@@ -144,30 +150,17 @@
         }
     }
 
-    // Hàm kiểm tra email hợp lệ
-    function validateEmail() {
-        const emailInput = document.getElementById('email');
-        const emailPattern = /^[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-        if (!emailPattern.test(emailInput.value.trim())) {
-            emailInput.setCustomValidity("Vui lòng nhập đúng định dạng email.");
-        } else {
-            emailInput.setCustomValidity(""); // Xóa thông báo lỗi nếu hợp lệ
-        }
-    }
-
     // Hàm tổng kiểm tra form
     function validateForm() {
         validatePhoneNumber();
         validateName();
-        validateEmail();
+
         return true;
     }
 
     // Thêm sự kiện cho input để kiểm tra ngay khi người dùng nhập liệu
     document.getElementById('phonenumber').addEventListener('input', validatePhoneNumber);
-    document.getElementById('fullname').addEventListener('input', validateName);
-    document.getElementById('email').addEventListener('input', validateEmail);
+    document.getElementById('name').addEventListener('input', validateName);
 </script>
 
 <style>

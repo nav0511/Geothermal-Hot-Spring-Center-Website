@@ -30,29 +30,85 @@ namespace GHCW_BE.Services
             return null;
         }
 
-        public async Task<Schedule?> GetScheduleById(int id)
+        public async Task<ScheduleDTO?> GetScheduleById(int id)
         {
-            return await _context.Schedules
+            var schedule = await _context.Schedules
                                  .Include(s => s.Receptionist)
                                  .FirstOrDefaultAsync(s => s.Id == id);
+            if (schedule != null)
+            {
+                var result = _mapper.Map<ScheduleDTO>(schedule);
+                return result;
+            }
+            return null;
         }
 
-        public async Task UpdateSchedule(Schedule schedule)
+        public async Task<(bool isSuccess, string message)> UpdateSchedule(EditScheduleRequest er)
         {
-            _context.Schedules.Update(schedule);
-            await _context.SaveChangesAsync();
+            var checkExistSchedule = await _context.Schedules.FindAsync(er.Id);
+            if (checkExistSchedule != null)
+            {
+                var existingScheduleForDateShift = await _context.Schedules
+                    .Where(s => s.Date == er.Date && s.Shift == er.Shift && s.Id != er.Id)
+                    .FirstOrDefaultAsync();
+                if (existingScheduleForDateShift != null)
+                {
+                    return (false, "Ca này đã có lễ tân làm việc rồi.");
+                }
+                try
+                {
+                    _mapper.Map(er, checkExistSchedule);
+                    _context.Schedules.Update(checkExistSchedule);
+                    await _context.SaveChangesAsync();
+                    return (true, "Cập nhật thông tin thành công.");
+                }
+                catch (Exception)
+                {
+                    return (false, "Cập nhật thông tin thất bại, vui lòng kiểm tra lại.");
+                }
+            }
+            return (false, "Không tồn tại lịch này.");
         }
 
-        public async Task DeleteSchedule(Schedule schedule)
+        public async Task<(bool isSuccess, string message)> DeleteSchedule(int id)
         {
-            _context.Schedules.Remove(schedule);
-            await _context.SaveChangesAsync();
+            var schedule = await _context.Schedules.FindAsync(id);
+            if (schedule == null)
+            {
+                return (false, "Lịch làm việc không tồn tại.");
+            }
+            try
+            {
+                schedule.IsActive = !schedule.IsActive;
+                _context.Schedules.Update(schedule);
+                await _context.SaveChangesAsync();
+
+                return (true, "Ẩn lịch làm việc thành công.");
+            }
+            catch (Exception)
+            {
+                return (false, "Ẩn lịch làm việc thất bại, vui lòng thử lại.");
+            }
         }
 
-        public async Task AddSchedule(Schedule schedule)
+        public async Task<(bool isSuccess, string message)> AddSchedule(AddScheduleRequest ar)
         {
-            await _context.Schedules.AddAsync(schedule);
-            await _context.SaveChangesAsync();
+            var existSchedule = await _context.Schedules.AnyAsync(s => s.Date == ar.Date && s.Shift == ar.Shift);
+            if (existSchedule)
+            {
+                return (false, "Đã có lịch làm việc vào thời gian này.");
+            }
+            try
+            {
+                var schedule = _mapper.Map<AddScheduleRequest, Schedule>(ar);
+                await _context.Schedules.AddAsync(schedule);
+                await _context.SaveChangesAsync();
+                return (true, "Thêm lịch làm việc mới thành công.");
+            }
+            catch (Exception)
+            {
+                return (false, "Đã xảy ra lỗi trong quá trình thêm lịch làm việc mới.");
+            }
         }
     }
 }

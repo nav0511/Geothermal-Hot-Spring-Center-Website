@@ -45,7 +45,11 @@ namespace GHCW_BE.Mapper
                 .ForMember(dest => dest.AccountId, opt => opt.MapFrom(src => src.AccountId))
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
                 .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber))
-                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FullName));
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FullName))
+                .ForMember(dest => dest.DoB, opt => opt.MapFrom(src => src.Account.DoB))
+                .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.Account.Gender))
+                .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Account.Address))
+                .ForMember(dest => dest.IsEmailNotify, opt => opt.MapFrom(src => src.Account.IsEmailNotify));
 
             CreateMap<CustomerDTO, Customer>()
                 .ForMember(dest => dest.AccountId, opt => opt.MapFrom(src => src.AccountId))
@@ -120,6 +124,15 @@ namespace GHCW_BE.Mapper
             CreateMap<EditRequest, CustomerDTO>()
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber));
+
+            CreateMap<AddScheduleRequest, Schedule>()
+                .ForMember(dest => dest.Receptionist, opt => opt.MapFrom(src => src.ReceptionistId))
+                .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Date))
+                .ForMember(dest => dest.Shift, opt => opt.MapFrom(src => src.Shift))
+                .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive))
+                .ForMember(dest => dest.Receptionist, opt => opt.Ignore());
+
+            CreateMap<EditScheduleRequest, Schedule>();
         }
     }
 }

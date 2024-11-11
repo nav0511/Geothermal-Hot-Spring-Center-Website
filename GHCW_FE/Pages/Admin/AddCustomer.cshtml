@@ -2,14 +2,15 @@
 @using GHCW_FE.DTOs
 @using System.Text.Json
 @using Microsoft.AspNetCore.Http
-@model GHCW_FE.Pages.Admin.AddScheduleModel
+@removeTagHelper Microsoft.AspNetCore.Mvc.TagHelpers.OptionTagHelper, Microsoft.AspNetCore.Mvc.TagHelpers
+@model GHCW_FE.Pages.Admin.AddCustomerModel
 @{
-    ViewData["Title"] = "Thêm lịch làm việc";
+    ViewData["Title"] = "Thêm khách hàng";
     Layout = "_LayoutManagement";
 }
 
 <header class="page-header">
-    <h2><span style="color:#9197B3">Quản lý lịch làm việc > </span>Thêm lịch làm việc mới</h2>
+    <h2><span style="color:#9197B3">Quản lý khách hàng > </span>Thêm khách hàng mới</h2>
 </header>
 @if (TempData["SuccessMessage"] != null)
 {
@@ -28,50 +29,44 @@
     <form method="post" onsubmit="return validateForm()">
         <div class="form-group">
             <div>
-                <label for="name">Họ và tên:</label>
-                <select id="receptionistID" name="receptionistID">
-                    @if (Model.Receptionists == null)
+                <label for="name">Mã khách hàng:</label>
+                <select id="accountID" name="accountID">
+                    <option value="0">Không có</option>
+                    @if (Model.CustomerAccounts != null)
                     {
-                        
-                    }
-                    else
-                    {
-                        @foreach (var receptionist in Model.Receptionists)
+                        @foreach (var cusAcc in Model.CustomerAccounts)
                         {
-                            <option value="@receptionist.Id">@receptionist.Name</option>
+                            <option value="@cusAcc.Id">@cusAcc.Email</option>
                         }
                     }
                 </select>
             </div>
 
             <div>
-                <label for="shift">Ca làm:</label>
-                <select id="shift" name="shift">
-                    <option value="1">Ca 1 (Từ 7:00 - Đến 15:00)</option>
-                    <option value="2">Ca 2 (Từ 15:00 - Đến 22:00)</option>
-                </select>
+                <label for="name">Họ và tên:</label>
+                <input type="text" id="fullname" name="fullname" title="Vui lòng nhập họ tên không chứa số và kí tự đặc biệt" placeholder="Nhập họ tên" required />
             </div>
 
             <div>
-                <label for="date">Ngày làm:</label>
-                <input type="date" id="date" name="date"/>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" title="Vui lòng nhập đúng định dạng email" placeholder="Nhập email" required />
+            </div>
+
+            <div>
+                <label for="phonenumber">Số điện thoại:</label>
+                <input type="text" id="phonenumber" name="phonenumber" placeholder="Nhập số điện thoại"
+                       pattern="[0-9]{10}" maxlength="10" title="Số điện thoại phải gồm 10 chữ số" required />
             </div>
         </div>
 
-        <div class="form-group checkbox-group">
-            <div class="checkbox-item">
-                <input type="checkbox" id="isActive" name="isActive" value="true" checked>
-                <label for="isActive">Đang hoạt động</label>
-            </div>
-        </div>
         <div class="button-container">
-            <button type="submit" class="btn-update">Thêm</button>
+            <button type="submit" class="btn-update">Thêm khách hàng</button>
         </div>
     </form>
 </div>
 
 <div class="back-button-container">
-    <button class="btn-back" onclick="window.location.href='/Admin/ScheduleManagement'"> << Quay lại</button>
+    <button class="btn-back" onclick="window.location.href='/Admin/CustomerManagement'"> << Quay lại</button>
 </div>
 
 <script>
@@ -92,6 +87,56 @@
             profileMenu.classList.remove('show');
         }
     });
+
+    // Hàm kiểm tra số điện thoại
+    function validatePhoneNumber() {
+        const phoneInput = document.getElementById('phonenumber');
+        const phoneNumber = phoneInput.value.trim();
+        const phonePattern = /^(0[3,5,7,8,9])\d{8}$/;
+
+        if (!phonePattern.test(phoneNumber)) {
+            phoneInput.setCustomValidity("Số điện thoại phải gồm 10 chữ số và bắt đầu bằng 03, 05, 07, 08 hoặc 09.");
+        } else {
+            phoneInput.setCustomValidity(""); // Xóa thông báo lỗi nếu hợp lệ
+        }
+    }
+
+    // Hàm kiểm tra tên hợp lệ
+    function validateName() {
+        const nameInput = document.getElementById('fullname');
+        const namePattern = /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠÝàáâãèéêìíòóôõùúăđĩũơưƯẠ-ỹ\s]+$/;
+
+        if (!namePattern.test(nameInput.value.trim())) {
+            nameInput.setCustomValidity("Vui lòng nhập tên không chứa chữ số và kí tự đặc biệt.");
+        } else {
+            nameInput.setCustomValidity(""); // Xóa thông báo lỗi nếu hợp lệ
+        }
+    }
+
+    // Hàm kiểm tra email hợp lệ
+    function validateEmail() {
+        const emailInput = document.getElementById('email');
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+        if (!emailPattern.test(emailInput.value.trim())) {
+            emailInput.setCustomValidity("Vui lòng nhập đúng định dạng email.");
+        } else {
+            emailInput.setCustomValidity(""); // Xóa thông báo lỗi nếu hợp lệ
+        }
+    }
+
+    // Hàm tổng kiểm tra form
+    function validateForm() {
+        validatePhoneNumber();
+        validateName();
+        validateEmail();
+        return true;
+    }
+
+    // Thêm sự kiện cho input để kiểm tra ngay khi người dùng nhập liệu
+    document.getElementById('phonenumber').addEventListener('input', validatePhoneNumber);
+    document.getElementById('fullname').addEventListener('input', validateName);
+    document.getElementById('email').addEventListener('input', validateEmail);
 </script>
 
 <style>

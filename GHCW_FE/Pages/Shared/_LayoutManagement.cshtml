@@ -51,9 +51,6 @@
                         <li class="@(ViewData["ActivePage"] as string == "/Admin/Dashboard" ? "active" : "")">
                             <a asp-page="/Admin/Dashboard"><i class="fas fa-chart-line"></i> Dashboard</a>
                         </li>
-                        <li class="@(ViewData["ActivePage"] as string == "/Admin/ScheduleManagement" ? "active" : "")">
-                            <a asp-page="/Admin/ScheduleManagement"><i class="fas fa-calendar"></i> Quản lý lịch trình</a>
-                        </li>
                         <li class="@(ViewData["ActivePage"] as string == "/Admin/PromotionManagement" ? "active" : "")">
                             <a asp-page="/Admin/PromotionManagement"><i class="fas fa-bullhorn"></i> Quản lý tin khuyến mãi</a>
                         </li>
@@ -84,6 +81,12 @@
                         </li>
                         <li class="@(ViewData["ActivePage"] as string == "/Admin/NewsManagement" ? "active" : "")">
                             <a asp-page="/Admin/NewsManagement"><i class="fas fa-newspaper"></i> Quản lý tin tức</a>
+                        </li>
+                    }
+                    @if (account?.Role <=1 || account?.Role == 4)
+                    {
+                        <li class="@(ViewData["ActivePage"] as string == "/Admin/ScheduleManagement" ? "active" : "")">
+                            <a asp-page="/Admin/ScheduleManagement"><i class="fas fa-calendar"></i> Quản lý lịch làm việc</a>
                         </li>
                     }
                 </ul>

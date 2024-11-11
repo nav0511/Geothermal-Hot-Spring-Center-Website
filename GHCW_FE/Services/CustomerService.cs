@@ -10,5 +10,23 @@ namespace GHCW_FE.Services
             var user = await GetData<List<CustomerDTO>>("Authentication/CustomerList", null, accessToken);
             return user;
         }
+
+        public async Task<HttpStatusCode> AddCustomer(string accessToken, AddCustomerRequest ar)
+        {
+            var statusCode = await PushData<AddCustomerRequest>("Authentication/addcustomer", ar, null, accessToken);
+            return statusCode;
+        }
+
+        public async Task<HttpStatusCode> EditCustomer(string accessToken, CustomerDTO er)
+        {
+            var statusCode = await PutData<CustomerDTO>("Authentication/editcustomer", er, null, accessToken);
+            return statusCode;
+        }
+
+        public async Task<(HttpStatusCode StatusCode, CustomerDTO? CustomerInfo)> GetCustomerById(string accessToken, int uid)
+        {
+            var customer = await GetData<CustomerDTO>($"Authentication/customer/{uid}", null, accessToken);
+            return customer;
+        }
     }
 }
