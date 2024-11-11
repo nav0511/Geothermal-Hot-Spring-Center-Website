@@ -30,5 +30,12 @@ namespace GHCW_FE.Services
             string url = "Ticket/Update-Checkin";
             return await PutData(url, ticket);
         }
+
+        public async Task<HttpStatusCode> SaveTicketAsync(TicketDTOForPayment ticket)
+        {
+            string url = "Ticket/Save";
+
+            return await PushData(url, ticket);
+        }
     }
 }
