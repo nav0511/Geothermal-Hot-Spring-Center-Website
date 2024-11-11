@@ -30,11 +30,7 @@
             <div>
                 <label for="name">Họ và tên:</label>
                 <select id="receptionistID" name="receptionistID">
-                    @if (Model.Receptionists == null)
-                    {
-                        
-                    }
-                    else
+                    @if (Model.Receptionists != null)
                     {
                         @foreach (var receptionist in Model.Receptionists)
                         {
