@@ -6,6 +6,7 @@ using GHCW_BE.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Query;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Security.Claims;
@@ -66,7 +67,7 @@ namespace GHCW_BE.Controllers
                     existCustomer.Email = a.Email;
                     existCustomer.FullName = a.Name;
                     existCustomer.AccountId = a.Id;
-                    var (isSuccess,message) = await _service.EditCustomer(existCustomer);
+                    var (isSuccess, message) = await _service.EditCustomer(existCustomer);
                     if (!isSuccess)
                     {
                         return BadRequest(message);
@@ -214,7 +215,7 @@ namespace GHCW_BE.Controllers
                 {
                     return StatusCode(500, "Không thể gửi email đặt lại mật khẩu.");
                 }
-                await _service.ChangePassword(user.Id,user.Password);
+                await _service.ChangePassword(user.Id, user.Password);
                 return Ok("Gửi thành công, vui lòng kiểm tra email để lấy tài khoản mới của bạn!");
             }
             return BadRequest("Không có tài khoản nào khớp với email đã nhập");
@@ -267,6 +268,7 @@ namespace GHCW_BE.Controllers
         }
 
         [Authorize]
+        [EnableQuery]
         [HttpGet("userlist")]
         public async Task<IActionResult> GetUserList()
         {
@@ -286,6 +288,7 @@ namespace GHCW_BE.Controllers
         }
 
         [Authorize]
+        [EnableQuery]
         [HttpGet("employeelist")]
         public async Task<IActionResult> GetEmployeeList()
         {
@@ -409,6 +412,29 @@ namespace GHCW_BE.Controllers
 
                 return Ok(message);
             }
+            else if (roleClaim != null && int.Parse(roleClaim.Value) == 1)
+            {
+                if (a.Role >= 2 && a.Role <= 4)
+                {
+                    var checkAccExist = await _service.CheckAccountExsit(a.Email);
+                    if (checkAccExist != null)
+                    {
+                        return Conflict("Email đã được sử dụng, vui lòng dùng email khác để đăng ký");
+                    }
+                    a.Password = _helper.HashPassword(a.Password);
+                    var (isSuccess, message) = await _service.AddNewUser(a);
+                    if (!isSuccess)
+                    {
+                        return BadRequest(message);
+                    }
+
+                    return Ok(message);
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền thực hiện hành động này.");
+                }
+            }
             return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền thực hiện hành động này.");
         }
 
@@ -421,7 +447,7 @@ namespace GHCW_BE.Controllers
 
             if (roleClaim != null && int.Parse(roleClaim.Value) == 0)
             {
-                if(r.Role == 5)
+                if (r.Role == 5)
                 {
                     var checkExistCustomer = await _service.CheckCustomerExsit(r.Id);
                     if (checkExistCustomer != null)
@@ -535,6 +561,7 @@ namespace GHCW_BE.Controllers
         }
 
         [Authorize]
+        [EnableQuery]
         [HttpGet("CustomerList")]
         public async Task<IActionResult> GetCustomerList()
         {

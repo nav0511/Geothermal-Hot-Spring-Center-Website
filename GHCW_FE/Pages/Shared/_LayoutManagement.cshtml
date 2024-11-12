@@ -57,10 +57,6 @@
                         <li class="@(ViewData["ActivePage"] as string == "/Admin/ServiceManagement" ? "active" : "")">
                             <a asp-page="/Admin/ServiceManagement"><i class="fas fa-cogs"></i> Quản lý dịch vụ</a>
                         </li>
-                        
-                    }
-                    @if (account?.Role == 1)
-                    {
                         <li class="@(ViewData["ActivePage"] as string == "/Admin/EmployeeManagement" ? "active" : "")">
                             <a asp-page="/Admin/EmployeeManagement"><i class="fas fa-users"></i> Quản lý nhân viên</a>
                         </li>

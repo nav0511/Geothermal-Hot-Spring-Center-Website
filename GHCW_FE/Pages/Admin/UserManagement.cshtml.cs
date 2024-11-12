@@ -23,7 +23,11 @@ namespace GHCW_FE.Pages.Admin
             _authService = authService;
         }
 
-        public async Task<IActionResult> OnGetAsync()
+        public int CurrentPage { get; set; }
+        public int TotalPages { get; set; }
+        private const int PageSize = 9;
+
+        public async Task<IActionResult> OnGetAsync(int pageNumber = 1)
         {
             var accessToken = await _tokenService.CheckAndRefreshTokenAsync();
             if (string.IsNullOrEmpty(accessToken))
@@ -34,7 +38,7 @@ namespace GHCW_FE.Pages.Admin
             }
             _accService.SetAccessToken(accessToken);
 
-            var (statusCode, accounts) = await _accService.ListAccount(accessToken);
+            var (statusCode, accounts) = await _accService.ListAccount("Authentication/userlist", accessToken);
             if (statusCode == HttpStatusCode.Forbidden)
             {
                 await _authService.LogoutAsync();
@@ -53,6 +57,33 @@ namespace GHCW_FE.Pages.Admin
                 return Page();
             }
             Accounts = accounts;
+
+            CurrentPage = pageNumber;
+            int skip = (pageNumber - 1) * PageSize;
+            if (accounts != null)
+            {
+                var total = accounts.Count();
+                TotalPages = (int)Math.Ceiling((double)total / PageSize);
+                (statusCode, accounts) = await _accService.ListAccount($"Authentication/userlist?$top={PageSize}&$skip={skip}", accessToken);
+                if (statusCode == HttpStatusCode.Forbidden)
+                {
+                    await _authService.LogoutAsync();
+                    TempData["ErrorMessage"] = "Bạn không có quyền truy cập thông tin này.";
+                    return RedirectToPage("/Authentications/Login");
+                }
+                else if (statusCode == HttpStatusCode.Unauthorized)
+                {
+                    await _authService.LogoutAsync();
+                    TempData["ErrorMessage"] = "Phiên đăng nhập hết hạn.";
+                    return RedirectToPage("/Authentications/Login");
+                }
+                else if (statusCode != HttpStatusCode.OK)
+                {
+                    TempData["ErrorMessage"] = "Đã xảy ra lỗi khi lấy danh sách thông tin người dùng.";
+                    return Page();
+                }
+                Accounts = accounts;
+            }
             return Page();
         }
 

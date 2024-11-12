@@ -13,7 +13,7 @@ namespace GHCW_FE.Pages.Admin
         private readonly AuthenticationService _authService;
 
         [BindProperty]
-        public List<AccountDTO> Employees { get; set; }
+        public List<AccountDTO>? Employees { get; set; }
 
         public EmployeeManagementModel(AccountService accountService, TokenService tokenService, AuthenticationService authService)
         {
@@ -22,7 +22,10 @@ namespace GHCW_FE.Pages.Admin
             _authService = authService;
         }
 
-        public async Task<IActionResult> OnGetAsync()
+        public int CurrentPage { get; set; }
+        public int TotalPages { get; set; }
+        private const int PageSize = 9;
+        public async Task<IActionResult> OnGetAsync(int pageNumber = 1)
         {
             var accessToken = await _tokenService.CheckAndRefreshTokenAsync();
             if (string.IsNullOrEmpty(accessToken))
@@ -33,7 +36,7 @@ namespace GHCW_FE.Pages.Admin
             }
             _accService.SetAccessToken(accessToken);
 
-            var (statusCode, employees) = await _accService.ListEmployee(accessToken);
+            var (statusCode, employees) = await _accService.ListEmployee("Authentication/employeelist",accessToken);
             if (statusCode == HttpStatusCode.Forbidden)
             {
                 await _authService.LogoutAsync();
@@ -52,6 +55,33 @@ namespace GHCW_FE.Pages.Admin
                 return Page();
             }
             Employees = employees;
+
+            CurrentPage = pageNumber;
+            int skip = (pageNumber - 1) * PageSize;
+            if (employees != null)
+            {
+                var total = employees.Count();
+                TotalPages = (int)Math.Ceiling((double)total / PageSize);
+                (statusCode, employees) = await _accService.ListEmployee($"Authentication/employeelist?$top={PageSize}&$skip={skip}", accessToken);
+                if (statusCode == HttpStatusCode.Forbidden)
+                {
+                    await _authService.LogoutAsync();
+                    TempData["ErrorMessage"] = "Bạn không có quyền truy cập thông tin này.";
+                    return RedirectToPage("/Authentications/Login");
+                }
+                else if (statusCode == HttpStatusCode.Unauthorized)
+                {
+                    await _authService.LogoutAsync();
+                    TempData["ErrorMessage"] = "Phiên đăng nhập hết hạn.";
+                    return RedirectToPage("/Authentications/Login");
+                }
+                else if (statusCode != HttpStatusCode.OK)
+                {
+                    TempData["ErrorMessage"] = "Đã xảy ra lỗi khi lấy danh sách thông tin người dùng.";
+                    return Page();
+                }
+                Employees = employees;
+            }
             return Page();
         }
 

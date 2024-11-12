@@ -5,9 +5,9 @@ namespace GHCW_FE.Services
 {
     public class CustomerService : BaseService
     {
-        public async Task<(HttpStatusCode StatusCode, List<CustomerDTO>? ListCustomer)> ListCustomer(string accessToken)
+        public async Task<(HttpStatusCode StatusCode, List<CustomerDTO>? ListCustomer)> ListCustomer(string url, string accessToken)
         {
-            var user = await GetData<List<CustomerDTO>>("Authentication/CustomerList", null, accessToken);
+            var user = await GetData<List<CustomerDTO>>(url, null, accessToken);
             return user;
         }
 
