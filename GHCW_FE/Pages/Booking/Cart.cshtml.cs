@@ -32,7 +32,7 @@ namespace GHCW_FE.Pages.Booking
         public bool IsLoggedIn { get; set; }
         public string ErrorMessage { get; set; }
         public string CartData { get; set; }
-        public bool HasTicketSaved { get; set; }
+        public bool HasTicketSaved { get; set; } = false;
 
         public List<ServiceDTO> AvailableServices { get; set; } = new List<ServiceDTO>();
 

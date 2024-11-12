@@ -16,7 +16,7 @@
         <button type="submit" style="display: none;">Submit</button>
     </form>
 
-    @if (Model.Success == true && Model.HasTicketSaved == null)
+    @if (Model.Success == true && Model.HasTicketSaved == false)
     {
         <script>
             let cart = JSON.parse(localStorage.getItem("cart")) || [];
