@@ -43,15 +43,15 @@ namespace GHCW_FE.Services
             return (statusCode, user);
         }
 
-        public async Task<(HttpStatusCode StatusCode, List<AccountDTO>? ListAccount)> ListAccount(string accessToken)
+        public async Task<(HttpStatusCode StatusCode, List<AccountDTO>? ListAccount)> ListAccount(string url, string accessToken)
         {
-            var user = await GetData<List<AccountDTO>>("Authentication/userlist", null, accessToken);
+            var user = await GetData<List<AccountDTO>>(url, null, accessToken);
             return user;
         }
 
-        public async Task<(HttpStatusCode StatusCode, List<AccountDTO>? ListEmployee)> ListEmployee(string accessToken)
+        public async Task<(HttpStatusCode StatusCode, List<AccountDTO>? ListEmployee)> ListEmployee(string url,string accessToken)
         {
-            var user = await GetData<List<AccountDTO>>("Authentication/employeelist", null, accessToken);
+            var user = await GetData<List<AccountDTO>>(url, null, accessToken);
             return user;
         }
         
