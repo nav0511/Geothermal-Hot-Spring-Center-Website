@@ -88,6 +88,12 @@
             profileMenu.classList.remove('show');
         }
     });
+
+    // Thiết lập thuộc tính min cho input date để không cho phép chọn ngày trong quá khứ
+    document.addEventListener("DOMContentLoaded", function () {
+        const today = new Date().toISOString().split('T')[0]; // Lấy ngày hiện tại
+        document.getElementById("date").setAttribute("min", today); // Thiết lập thuộc tính min
+    });
 </script>
 
 <style>
