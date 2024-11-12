@@ -40,6 +40,11 @@
         }
     </div>
 
+    <!-- Notification -->
+    <div id="notification" class="notification">
+        <p id="notification-message"></p>
+    </div>
+
 </div>
 
 <script>
@@ -56,6 +61,22 @@
 
         localStorage.setItem("cart", JSON.stringify(cart));
 
+        showNotification(`Đã thêm ${quantity} x Dịch vụ vào giỏ hàng`);
+
+    }
+
+    function showNotification(message) {
+        const notification = document.getElementById("notification");
+        const messageElement = document.getElementById("notification-message");
+
+        messageElement.textContent = message;
+
+        notification.style.display = "block";
+
+        // Hide the notification after 3 seconds
+        setTimeout(function () {
+            notification.style.display = "none";
+        }, 3000);
     }
 
     function checkBookingDate() {
@@ -83,5 +104,19 @@
     .service-image {
         min-height: 150px;
         max-height: 200px;
+    }
+
+    .notification {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #28a745;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        display: none;
+        font-size: 16px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 </style>
