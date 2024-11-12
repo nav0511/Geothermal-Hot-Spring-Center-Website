@@ -55,7 +55,7 @@
                                     }
                                     <span>@checkInStatus</span>
                                 </td>
-                                <td>@String.Format("{0:N0}000 VNĐ", ticket.Total)</td>
+                                <td>@String.Format("{0:N0} VNĐ", ticket.Total *1000)</td>
                                 <td>
                                     <button class="btn btn-outline-success btn-lg" onclick="window.location.href='/Authentications/BookingDetails?id=@ticket.Id'">Chi tiết</button>
                                 </td>
