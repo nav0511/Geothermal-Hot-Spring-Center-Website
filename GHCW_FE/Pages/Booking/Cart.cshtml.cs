@@ -29,9 +29,10 @@ namespace GHCW_FE.Pages.Booking
         public string BookingDate { get; set; }
         public string Message { get; set; }
         public bool Success {  get; set; }
-        public bool isLoggedIn { get; set; }
+        public bool IsLoggedIn { get; set; }
         public string ErrorMessage { get; set; }
         public string CartData { get; set; }
+        public bool HasTicketSaved { get; set; }
 
         public List<ServiceDTO> AvailableServices { get; set; } = new List<ServiceDTO>();
 
@@ -44,12 +45,12 @@ namespace GHCW_FE.Pages.Booking
             var user = HttpContext.Session.GetString("acc");
             if (user == null)
             {
-                isLoggedIn = false;
+                IsLoggedIn = false;
                 ErrorMessage = "Quý khách cần đăng nhập để thanh toán đơn hàng";
             }
             else
             {
-                isLoggedIn = true;
+                IsLoggedIn = true;
             }
         }
 
@@ -114,7 +115,19 @@ namespace GHCW_FE.Pages.Booking
                     }).ToList()
                 };
 
-                await _ticketService.SaveTicketAsync(newTicket, accessToken);
+                var statusCode = await _ticketService.SaveTicketAsync(newTicket, accessToken);
+                if (statusCode == HttpStatusCode.OK)
+                {
+
+                    Message = "Thanh toán thành công";
+                    Success = true;
+                    HasTicketSaved = true;
+                }
+                else
+                {
+                    Message = "Thanh toán không thành công";
+                    Success = false;
+                }
 
             }
         }
