@@ -246,6 +246,7 @@
             padding: 5px 10px;
             border-radius: 4px;
             font-size: 14px;
+
         }
 
         .user-table td.address-cell {
@@ -259,6 +260,20 @@
             display: flex;
             gap: 5px; /* Khoảng cách giữa các nút */
         }
+
+    .status.active,
+    .status.inactive {
+        display: inline-block; 
+        padding: 5px 10px; 
+        font-size: 12px;
+        font-weight: bold;
+        text-align: center;
+        border-radius: 5px;
+        white-space: nowrap; 
+        max-width: 100px; 
+        overflow: hidden;
+        text-overflow: ellipsis; 
+    }
 
     .status.active {
         background-color: #00b894;

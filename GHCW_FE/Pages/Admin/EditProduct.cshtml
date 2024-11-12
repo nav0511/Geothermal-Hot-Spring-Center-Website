@@ -213,19 +213,24 @@
             }
 
 
-    /* Ensure the container aligns everything in a single row */
     .checkbox-group {
         display: flex;
         justify-content: flex-start;
         align-items: center;
-        gap: 44%;
+        gap: 42%;
+        flex-wrap: nowrap;
     }
 
-    /* Make sure each checkbox and its label are aligned properly */
     .checkbox-item {
         display: flex;
         align-items: center;
+        white-space: nowrap;
     }
+
+        .checkbox-item label {
+            margin-bottom: -1px;
+            margin-left: 5px;
+        }
 
     .back-button-container {
         display: flex;

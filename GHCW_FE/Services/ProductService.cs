@@ -39,5 +39,11 @@ namespace GHCW_FE.Services
             if (accepttype != null) return await PushData(url, product, accepttype);
             else return await PushData(url, product);
         }
+
+        public async Task<HttpStatusCode> ProductActivation(string accessToken, int id)
+        {
+            var statusCode = await DeleteData($"Product/ProductActivation/{id}", accessToken);
+            return statusCode;
+        }
     }
 }

@@ -51,6 +51,27 @@ namespace GHCW_BE.Services
            
         }
 
+        public async Task<(bool isSuccess, string message)> ProductActivation(int pid)
+        {
+            var product = await _context.Products.FindAsync(pid);
+            if (product == null)
+            {
+                return (false, "Sản phẩm không tồn tại.");
+            }
+            try
+            {
+                product.IsAvailable = !product.IsAvailable;
+                _context.Products.Update(product);
+                await _context.SaveChangesAsync();
+
+                return (true, "Thay đổi trạng thái sản phẩm thành công.");
+            }
+            catch (Exception)
+            {
+                return (false, "Thay đổi trạng thái sản phẩm thất bại, vui lòng thử lại.");
+            }
+        }
+
         public async Task<string> UploadImageResult(IFormFile r)
         {
             return await _cloudinary.UploadImageResult(r);
