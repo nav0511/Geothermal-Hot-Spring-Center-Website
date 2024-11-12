@@ -14,12 +14,16 @@ namespace GHCW_FE.Pages.Booking
         private readonly ServicesService _servicesService;
         private readonly VnPayService _vnPayService;
         private readonly TicketService _ticketService;
+        private readonly TokenService _tokenService;
+        private readonly AuthenticationService _authService;
 
-        public CartModel(ServicesService servicesService, VnPayService vnPayService, TicketService ticketService)
+        public CartModel(ServicesService servicesService, VnPayService vnPayService, TicketService ticketService, TokenService tokenService, AuthenticationService authService)
         {
             _servicesService = servicesService;
             _vnPayService = vnPayService;
             _ticketService = ticketService;
+            _tokenService = tokenService;
+            _authService = authService;
         }
         public PaymentInformationDTO PaymentInfo { get; set; }
         public string BookingDate { get; set; }
@@ -77,6 +81,14 @@ namespace GHCW_FE.Pages.Booking
         }
         public async Task OnPostSaveTicketAsync()
         {
+            var accessToken = await _tokenService.CheckAndRefreshTokenAsync();
+            if (string.IsNullOrEmpty(accessToken))
+            {
+                await _authService.LogoutAsync();
+                ErrorMessage = "Quý khách cần đăng nhập để thanh toán đơn hàng";
+            }
+            _ticketService.SetAccessToken(accessToken);
+
             var cart = JsonConvert.DeserializeObject<List<CartItemDTO>>(CartData);
             var user = JsonConvert.DeserializeObject<AccountDTO>(HttpContext.Session.GetString("acc"));
 
@@ -102,7 +114,7 @@ namespace GHCW_FE.Pages.Booking
                     }).ToList()
                 };
 
-                await _ticketService.SaveTicketAsync(newTicket);
+                await _ticketService.SaveTicketAsync(newTicket, accessToken);
 
             }
         }
