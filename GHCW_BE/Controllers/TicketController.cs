@@ -91,12 +91,23 @@ namespace GHCW_BE.Controllers
 
             var newTicket = _mapper.Map<Ticket>(ticketDto);
             newTicket.CustomerId = customer.Id;
+            foreach (var ticket in newTicket.TicketDetails)
+            {
+                ticket.Total = ticket.Price * ticket.Quantity;
+            }
 
             var result = await _ticketService.SaveTicketAsync(newTicket);
 
             if (result == null)
             {
                 return StatusCode(500, "Có lỗi xảy ra khi lưu vé.");
+            }
+
+            var addedTicket = await _ticketService.GetTicketByIdIncludeService(newTicket.Id);
+            var emailSent = await _ticketService.SendTicketToEmail(addedTicket, customer);
+            if (emailSent == false)
+            {
+                return StatusCode(500, "Có lỗi xảy ra khi gửi email.");
             }
 
             return Ok("Đã lưu vé thành công.");
