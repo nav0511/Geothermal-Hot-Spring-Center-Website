@@ -2,6 +2,7 @@
 using GHCW_BE.DTOs;
 using GHCW_BE.Models;
 using GHCW_BE.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
@@ -76,6 +77,7 @@ namespace GHCW_BE.Controllers
             return Ok("Cập nhật trạng thái Check-In thành công.");
         }
 
+        [Authorize]
         [HttpPost("Save")]
         public async Task<IActionResult> SaveTicket([FromBody] TicketDTOForPayment ticketDto)
         {
