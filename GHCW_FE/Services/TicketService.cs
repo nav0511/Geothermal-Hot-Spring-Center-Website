@@ -22,11 +22,11 @@ namespace GHCW_FE.Services
             return await PutData(url, ticket);
         }
 
-        public async Task<HttpStatusCode> SaveTicketAsync(TicketDTOForPayment ticket)
+        public async Task<HttpStatusCode> SaveTicketAsync(TicketDTOForPayment ticket, string accessToken)
         {
             string url = "Ticket/Save";
 
-            return await PushData(url, ticket);
+            return await PushData(url, ticket, null, accessToken);
         }
     }
 }
