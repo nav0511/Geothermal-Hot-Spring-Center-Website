@@ -48,10 +48,12 @@
             <th>Tên dịch vụ</th>
             <th>Thời gian</th>
             <th>Giá</th>
+            <th>Trạng thái</th>
+
             @if (HttpContext.Session.GetString("acc") != null)
             {
                 var account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
-                @if (account.Role == 0)
+                @if (account.Role <= 1)
                 {
                     <th>Tùy chọn</th>
                 }
@@ -67,6 +69,17 @@
                 <td>@service.Name</td>
                 <td>@service.Time</td>
                 <td>@service.Price</td>
+                <td>
+                    @if (service.IsActive == true)
+                    {
+                        <span class="status active">Hoạt động</span>
+                    }
+                    else
+                    {
+                        <span class="status inactive">Không hoạt động</span>
+                    }
+                </td>
+
                 @if (HttpContext.Session.GetString("acc") != null)
                 {
                     var account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
@@ -74,7 +87,7 @@
                     {
                         <td class="options-cell">
                             <button class=" btn-update" onclick="window.location.href='/Admin/EditService?id=@service.Id'">Chỉnh sửa</button>
-                            @* @if (service.IsActive == true)
+                            @if (service.IsActive == true)
                             {
                                 <form method="post" asp-page-handler="ServiceActivation">
                                     <button type="submit" class=" btn-deactive" name="nId" value="@service.Id">Vô hiệu hóa</button>
@@ -85,7 +98,7 @@
                                 <form method="post" asp-page-handler="ServiceActivation">
                                     <button type="submit" class=" btn-active" name="nId" value="@service.Id">Kích hoạt</button>
                                 </form>
-                            } *@
+                            }
                         </td>
                     }
                 }
