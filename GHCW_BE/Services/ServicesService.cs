@@ -41,5 +41,26 @@ namespace GHCW_BE.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task<(bool isSuccess, string message)> ServiceActivation(int sid)
+        {
+            var service = await _context.Services.FindAsync(sid);
+            if (service == null)
+            {
+                return (false, "Dịch vụ không tồn tại.");
+            }
+            try
+            {
+                service.IsActive = !service.IsActive;
+                _context.Services.Update(service);
+                await _context.SaveChangesAsync();
+
+                return (true, "Thay đổi trạng thái dịch vụ thành công.");
+            }
+            catch (Exception)
+            {
+                return (false, "Thay đổi trạng thái dịch vụ thất bại, vui lòng thử lại.");
+            }
+        }
+
     }
 }

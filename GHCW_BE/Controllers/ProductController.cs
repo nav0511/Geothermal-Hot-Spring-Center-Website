@@ -138,7 +138,7 @@ namespace GHCW_BE.Controllers
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             var roleClaim = identity?.FindFirst("Role");
 
-            if (roleClaim != null && int.Parse(roleClaim.Value) <= 3)
+            if (roleClaim != null && int.Parse(roleClaim.Value) <= 1)
             {
                 var (isSuccess, message) = await _productService.ProductActivation(id);
                 if (!isSuccess)

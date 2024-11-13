@@ -40,7 +40,11 @@ namespace GHCW_FE.Services
             else return await PushData(url, service);
         }
 
-
+        public async Task<HttpStatusCode> ServiceActivation(string accessToken, int id)
+        {
+            var statusCode = await DeleteData($"Service/ServiceActivation/{id}", accessToken);
+            return statusCode;
+        }
 
     }
 }

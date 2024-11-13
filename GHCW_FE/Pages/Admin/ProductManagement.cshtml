@@ -51,7 +51,7 @@
             @if (HttpContext.Session.GetString("acc") != null)
             {
                 var account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
-                @if (account.Role == 0)
+                @if (account.Role <= 1)
                 {
                     <th>Tùy chọn</th>
                 }
@@ -79,7 +79,7 @@
                 @if (HttpContext.Session.GetString("acc") != null)
                 {
                     var account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
-                    @if (account.Role == 0)
+                    @if (account.Role <= 1)
                     {
                         <td class="options-cell">
                             <button class=" btn-update" onclick="window.location.href='/Admin/EditProduct?id=@product.Id'">Chỉnh sửa</button>

@@ -7,6 +7,8 @@ using GHCW_BE.DTOs;
 using GHCW_BE.Services;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace GHCW_BE.Controllers
 {
@@ -130,7 +132,25 @@ namespace GHCW_BE.Controllers
            
         }
 
-       
+        [Authorize]
+        [HttpDelete("ServiceActivation/{id}")]
+        public async Task<IActionResult> ServiceActivation(int id)
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var roleClaim = identity?.FindFirst("Role");
+
+            if (roleClaim != null && int.Parse(roleClaim.Value) <= 1)
+            {
+                var (isSuccess, message) = await _servicesService.ServiceActivation(id);
+                if (!isSuccess)
+                {
+                    return BadRequest(message);
+                }
+
+                return Ok(message);
+            }
+            return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền thực hiện hành động này.");
+        }
 
     }
 }
