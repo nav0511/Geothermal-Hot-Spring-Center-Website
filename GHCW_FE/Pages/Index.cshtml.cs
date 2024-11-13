@@ -21,7 +21,7 @@ namespace GHCW_FE.Pages
 
         public async Task OnGet()
         {
-            var (statusCode, newsDTOs) = _newsService.GetNews("News?$orderby=UploadDate desc&$top=3").Result;
+            var (statusCode, newsDTOs) = _newsService.GetNews("News?$orderby=UploadDate desc&$top=3&$filter=DiscountId eq null and IsActive eq true").Result;
             NewsDtos = newsDTOs;
             var (statusCode2, serviceDTOs) = _servicesService.GetServices("Service?$top=3").Result;
             ServiceDtos = serviceDTOs;

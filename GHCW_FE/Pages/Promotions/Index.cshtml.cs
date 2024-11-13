@@ -25,7 +25,7 @@ namespace GHCW_FE.Pages.Promotions
             int totalNewsCount = TotalNewsCount;
             TotalPages = (int)Math.Ceiling((double)totalNewsCount / PageSize);
 
-            var (statusCode2, newsDTOs) = _newsService.GetNews($"News?$orderby=UploadDate desc&$top={PageSize}&$skip={skip}&$filter=DiscountId ne null").Result;
+            var (statusCode2, newsDTOs) = _newsService.GetNews($"News?$orderby=UploadDate desc&$top={PageSize}&$skip={skip}&$filter=DiscountId ne null and IsActive eq true").Result;
             NewsDtos = newsDTOs;
         }
     }

@@ -50,6 +50,30 @@
 <script>
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
+    function updatePaymentButton() {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const paymentButton = document.getElementById("paymentButton");
+
+        if (cart.length > 0) {
+            paymentButton.classList.remove("disabled");
+            paymentButton.onclick = checkBookingDate;
+            paymentButton.removeAttribute("title");
+        } else {
+            paymentButton.classList.add("disabled");
+            paymentButton.onclick = null;
+            paymentButton.setAttribute("title", "Bạn phải thêm dịch vụ vào giỏ hàng trước khi thanh toán");
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        updatePaymentButton();
+
+        const savedBookingDate = localStorage.getItem("bookingDate");
+        if (savedBookingDate) {
+            document.getElementById("bookingDate").value = savedBookingDate;
+        }
+    });
+
     function addToCart(serviceId, quantity, price) {
         const existingItem = cart.find(item => item.serviceId === serviceId);
 
@@ -62,7 +86,7 @@
         localStorage.setItem("cart", JSON.stringify(cart));
 
         showNotification(`Đã thêm ${quantity} x Dịch vụ vào giỏ hàng`);
-
+        updatePaymentButton();
     }
 
     function showNotification(message) {

@@ -19,7 +19,7 @@
                             <div class="bg-white p-4">
                                 <div class="d-flex justify-content-between mb-3">
                                     <small class="m-0"><i class="fa fa-clock text-primary mr-2"></i>@s.Time</small>
-                                    <h5 class="m-0">@(s.Price * 1000)₫</h5>
+                                    <h5 class="m-0 service-price">@(s.Price * 1000)₫</h5>
                                 </div>
                                 <div class="d-flex mb-2">
                                     <a class="text-primary text-uppercase text-decoration-none" asp-page="./Detail" asp-route-Id="@s.Id">@s.Name</a>
@@ -99,3 +99,20 @@
         max-height: 200px;
     }
 </style>
+
+<script>
+    function formatPrice(price) {
+        return price.toLocaleString();
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const priceElements = document.querySelectorAll('.service-price');
+
+        priceElements.forEach(function (element) {
+            let priceText = element.textContent.trim().replace('₫', '').replace(',', '');
+            let formattedPrice = formatPrice(parseInt(priceText));
+
+            element.textContent = `${formattedPrice}₫`;
+        });
+    });
+</script>

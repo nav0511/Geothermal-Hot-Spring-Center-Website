@@ -15,7 +15,7 @@
                     <div class="p-3" style="max-width: 900px;">
                         <h4 class="text-white text-uppercase mb-md-3">Tham quan & Nghỉ dưỡng</h4>
                         <h1 class="display-3 text-white mb-md-4">Trải nghiệm nghỉ dưỡng cao cấp</h1>
-                        <a href="" class="btn btn-primary py-md-3 px-md-5 mt-2">Đặt vé ngay</a>
+                        <a asp-page="/Booking/Index" class="btn btn-primary py-md-3 px-md-5 mt-2">Đặt vé ngay</a>
                     </div>
                 </div>
             </div>
@@ -37,7 +37,7 @@
                     </div>
                 </div>
                 <div class="ml-2">
-                    <button class="btn btn-primary btn-block" type="submit" style="height: 47px;">Đặt vé</button>
+                    <button class="btn btn-primary btn-block" type="button" onclick="saveBookingDate()" style="height: 47px;">Đặt vé</button>
                 </div>
             </div>
         </div>
@@ -85,16 +85,18 @@
                 <div class="col-lg-4 col-md-6 mb-4 pb-2">
                     <div class="blog-item">
                         <div class="position-relative">
-                            <img class="img-fluid w-100 service-image" src="@n.Image" alt="">
-                            <div class="blog-date">
-                                <h6 class="font-weight-bold text-white mb-n1">@n.UploadDate.Value.Day / @n.UploadDate.Value.Month</h6>
-                            </div>
+                            <a asp-page="./News/Detail" asp-route-Id="@n.Id">
+                                <img class="img-fluid w-100 service-image" src="@n.Image" alt="">
+                                <div class="blog-date">
+                                    <h6 class="font-weight-bold text-white mb-n1">@n.UploadDate.Value.Day / @n.UploadDate.Value.Month</h6>
+                                </div>
+                            </a>
                         </div>
                         <div class="bg-white p-4">
                             <div class="d-flex mb-2">
-                                <a class="text-primary text-uppercase text-decoration-none" href="">@n.Title</a>
+                                <a class="text-primary text-uppercase text-decoration-none" asp-page="./News/Detail" asp-route-Id="@n.Id">@n.Title</a>
                             </div>
-                            <a class="h5 m-0 text-decoration-none service-description" href="">@n.Description</a>
+                            <a class="h5 m-0 text-decoration-none service-description">@n.Description</a>
                         </div>
                     </div>
                 </div>
@@ -115,13 +117,15 @@
             {
                 <div class="col-lg-4 col-md-6 mb-4">
                     <div class="package-item bg-white mb-2">
-                        <img class="img-fluid w-100 service-image" src="@s.Image" alt="">
+                        <a asp-page="./Services/Detail" asp-route-Id="@s.Id">
+                            <img class="img-fluid w-100 service-image" src="@s.Image" alt="">
+                        </a>
                         <div class="p-4">
                             <div class="d-flex justify-content-between mb-3">
                                 <small class="m-0"><i class="fa fa-clock text-primary mr-2"></i>@s.Time</small>
-                                <h5 class="m-0">@(s.Price * 1000)₫</h5>
+                                <h5 class="m-0 service-price">@(s.Price * 1000)₫</h5>
                             </div>
-                            <a class="h5 text-decoration-none service-description" href="">@s.Name</a>
+                            <a class="h5 text-decoration-none service-description" asp-page="./Services/Detail" asp-route-Id="@s.Id">@s.Name</a>
                         </div>
                     </div>
                 </div>
@@ -138,6 +142,31 @@
         const today = new Date().toISOString().split('T')[0]; // Lấy ngày hiện tại
         document.getElementById("dateInput").setAttribute("min", today); // Thiết lập thuộc tính min
     });
+
+    function formatPrice(price) {
+        return price.toLocaleString();
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const priceElements = document.querySelectorAll('.service-price');
+
+        priceElements.forEach(function (element) {
+            let priceText = element.textContent.trim().replace('₫', '').replace(',', '');
+            let formattedPrice = formatPrice(parseInt(priceText));
+
+            element.textContent = `${formattedPrice}₫`;
+        });
+    });
+
+    function saveBookingDate() {
+        const bookingDate = document.getElementById("dateInput").value;
+        if (!bookingDate) {
+            alert("Please select a booking date.");
+        } else {
+            localStorage.setItem("bookingDate", bookingDate);
+            window.location.href = "@Url.Page("/Booking/Index")";
+        }
+    }
 </script>
 
 <style>
