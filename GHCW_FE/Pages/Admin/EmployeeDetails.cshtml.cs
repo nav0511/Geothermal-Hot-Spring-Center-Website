@@ -20,7 +20,6 @@ namespace GHCW_FE.Pages.Admin
         [BindProperty]
         public EditRequest EditRequest { get; set; }
 
-        public AccountDTO? UserProfile { get; set; }
         public AccountDTO? EmployeeProfile { get; set; }
         public async Task<IActionResult> OnGetAsync(int id)
         {
@@ -52,27 +51,6 @@ namespace GHCW_FE.Pages.Admin
                 return Page();
             }
             EmployeeProfile = userInfo;
-
-            var (statusCode2, userProfile) = await _accService.UserProfile(accessToken);
-            if (statusCode2 == HttpStatusCode.Forbidden)
-            {
-                await _authService.LogoutAsync();
-                TempData["ErrorMessage"] = "Bạn không có quyền truy cập hồ sơ này.";
-                return RedirectToPage("/Authentications/Login");
-            }
-            else if (statusCode2 == HttpStatusCode.NotFound)
-            {
-                await _authService.LogoutAsync();
-                TempData["ErrorMessage"] = "Không tìm thấy người dùng này.";
-                return RedirectToPage("/Authentications/Login");
-            }
-            else if (statusCode2 != HttpStatusCode.OK)
-            {
-                await _authService.LogoutAsync();
-                TempData["ErrorMessage"] = "Đã xảy ra lỗi khi lấy thông tin người dùng.";
-                return RedirectToPage("/Authentications/Login");
-            }
-            UserProfile = userProfile;
             return Page();
         }
 

@@ -478,6 +478,22 @@ namespace GHCW_BE.Controllers
                     return Ok(message);
                 }
             }
+            else if (roleClaim != null && int.Parse(roleClaim.Value) == 1)
+            {
+                if (r.Role >= 2 && r.Role <= 4)
+                {
+                    var (isSuccess, message) = await _service.EditProfile(r);
+                    if (!isSuccess)
+                    {
+                        return BadRequest(message);
+                    }
+                    return Ok(message);
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền thực hiện hành động này.");
+                }
+            }
             return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền thực hiện hành động này.");
         }
 
@@ -540,6 +556,20 @@ namespace GHCW_BE.Controllers
 
                 return Ok(message);
             }
+            else if (roleClaim != null && int.Parse(roleClaim.Value) == 1)
+            {
+                var user = await _service.GetUserProfileById(uid);
+                if (user.Role >= 2 && user.Role <= 4)
+                {
+                    var (isSuccess, message) = await _service.UserActivation(uid);
+                    if (!isSuccess)
+                    {
+                        return BadRequest(message);
+                    }
+
+                    return Ok(message);
+                }
+            }
             return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền thực hiện hành động này.");
         }
 
@@ -589,6 +619,10 @@ namespace GHCW_BE.Controllers
 
             if (roleClaim != null && int.Parse(roleClaim.Value) <= 4)
             {
+                //if (a.AccountId  != null)
+                //{
+                //    var existAcc = await _service.GetUserProfileById(a.AccountId.Value);
+                //}
                 var checkAccExist = await _service.CheckAccountExsit(a.Email);
                 if (checkAccExist != null)
                 {
