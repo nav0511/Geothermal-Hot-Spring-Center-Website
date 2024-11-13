@@ -372,7 +372,7 @@ namespace GHCW_BE.Services
 
         public async Task<List<CustomerDTO>> GetCustomerList()
         {
-            var customers = await _context.Customers.ToListAsync();
+            var customers = await _context.Customers.Include(c => c.Account).ToListAsync();
             var customerDTOs = _mapper.Map<List<Customer>, List<CustomerDTO>>(customers);
             return customerDTOs;
         }

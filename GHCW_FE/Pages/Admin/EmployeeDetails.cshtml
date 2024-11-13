@@ -7,6 +7,11 @@
 @{
     ViewData["Title"] = "Thông tin nhân viên";
     Layout = "_LayoutManagement";
+    AccountDTO? account = null;
+    if (HttpContext.Session.GetString("acc") != null)
+    {
+        account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
+    }
 }
 
 <header class="page-header">
@@ -35,8 +40,7 @@
 
             <div>
                 <label for="name">Họ và tên:</label>
-                <input type="text" id="name" name="name" value="@Model.EmployeeProfile.Name" required
-                @(Model.UserProfile.Role == 1 ? "readonly" : "") />
+                <input type="text" id="name" name="name" value="@Model.EmployeeProfile.Name" required />
             </div>
 
             <div>
@@ -46,7 +50,7 @@
 
             <div>
                 <label for="gender">Giới tính:</label>
-                <select id="gender" name="gender" @(Model.UserProfile.Role == 1 ? "disabled" : "")>
+                <select id="gender" name="gender">
                     <option value="true" @(Model.EmployeeProfile.Gender == true ? "selected" : "")>Nam</option>
                     <option value="false" @(Model.EmployeeProfile.Gender == false ? "selected" : "")>Nữ</option>
                 </select>
@@ -54,27 +58,27 @@
 
             <div>
                 <label for="dob">Ngày sinh:</label>
-                <input type="date" id="dob" name="dob" value="@Model.EmployeeProfile.DoB?.ToString("yyyy-MM-dd")"
-                @(Model.UserProfile.Role == 1 ? "readonly" : "") />
+                <input type="date" id="dob" name="dob" value="@Model.EmployeeProfile.DoB?.ToString("yyyy-MM-dd")" />
             </div>
 
             <div>
                 <label for="phonenumber">Số điện thoại:</label>
-                <input type="text" id="phonenumber" name="phonenumber" value="@Model.EmployeeProfile.PhoneNumber" required
-                @(Model.UserProfile.Role == 1 ? "readonly" : "") />
+                <input type="text" id="phonenumber" name="phonenumber" value="@Model.EmployeeProfile.PhoneNumber" required />
             </div>
 
             <div>
                 <label for="address">Địa chỉ:</label>
-                <input type="text" id="address" name="address" value="@Model.EmployeeProfile.Address"
-                @(Model.UserProfile.Role == 1 ? "readonly" : "") />
+                <input type="text" id="address" name="address" value="@Model.EmployeeProfile.Address" />
             </div>
 
             <div>
                 <label for="role">Vai trò:</label>
-                <select id="role" name="role" @(Model.UserProfile.Role == 1 ? "disabled" : "") >
-                    <option value="0" @(Model.EmployeeProfile.Role == 0 ? "selected" : "")>Quản trị viên</option>
-                    <option value="1" @(Model.EmployeeProfile.Role == 1 ? "selected" : "")>Quản lý</option>
+                <select id="role" name="role">
+                    @if (account?.Role == 0)
+                    {
+                        <option value="0" @(Model.EmployeeProfile.Role == 0 ? "selected" : "")>Quản trị viên</option>
+                        <option value="1" @(Model.EmployeeProfile.Role == 1 ? "selected" : "")>Quản lý</option>
+                    }
                     <option value="2" @(Model.EmployeeProfile.Role == 2 ? "selected" : "")>Marketing</option>
                     <option value="3" @(Model.EmployeeProfile.Role == 3 ? "selected" : "")>Sale</option>
                     <option value="4" @(Model.EmployeeProfile.Role == 4 ? "selected" : "")>Lễ tân</option>
@@ -88,17 +92,13 @@
                 <label for="isActive">Đang hoạt động</label>
             </div>
             <div class="checkbox-item">
-                <input type="checkbox" id="isEmailNotify" name="isEmailNotify" value="true" @(Model.EmployeeProfile.IsEmailNotify ? "checked" : "")
-                @(Model.UserProfile.Role == 1 ? "disabled" : "") />
+                <input type="checkbox" id="isEmailNotify" name="isEmailNotify" value="true" @(Model.EmployeeProfile.IsEmailNotify ? "checked" : "") />
                 <label for="isEmailNotify">Nhận thông báo qua Email</label>
             </div>
         </div>
-        @if (Model.UserProfile.Role <= 1)
-        {
-            <div class="button-container">
-                <button type="submit" class="btn-update">Cập Nhật</button>
-            </div>
-        }
+        <div class="button-container">
+            <button type="submit" class="btn-update">Cập Nhật</button>
+        </div>
     </form>
 </div>
 
