@@ -48,8 +48,14 @@
             <th>Tên dịch vụ</th>
             <th>Thời gian</th>
             <th>Giá</th>
-            @*                         <th>IsAdult</th>
-            *@
+            @if (HttpContext.Session.GetString("acc") != null)
+            {
+                var account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
+                @if (account.Role == 0)
+                {
+                    <th>Tùy chọn</th>
+                }
+            }
             <th></th>
         </tr>
     </thead>
@@ -61,13 +67,35 @@
                 <td>@service.Name</td>
                 <td>@service.Time</td>
                 <td>@service.Price</td>
+                @if (HttpContext.Session.GetString("acc") != null)
+                {
+                    var account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
+                    @if (account.Role <= 1)
+                    {
+                        <td class="options-cell">
+                            <button class=" btn-update" onclick="window.location.href='/Admin/EditService?id=@service.Id'">Chỉnh sửa</button>
+                            @* @if (service.IsActive == true)
+                            {
+                                <form method="post" asp-page-handler="ServiceActivation">
+                                    <button type="submit" class=" btn-deactive" name="nId" value="@service.Id">Vô hiệu hóa</button>
+                                </form>
+                            }
+                            else
+                            {
+                                <form method="post" asp-page-handler="ServiceActivation">
+                                    <button type="submit" class=" btn-active" name="nId" value="@service.Id">Kích hoạt</button>
+                                </form>
+                            } *@
+                        </td>
+                    }
+                }
 
-                <td>
+                @* <td>
                     <button class="status active" onclick="window.location.href='/Admin/EditService?id=@service.Id'">Sửa</button>
                     <form method="post" asp-page-handler="DeleteService" asp-route-id="@service.Id" style="display:inline;">
                         <button type="submit" class="status inactive" onclick="return confirm('Bạn có chắc chắn muốn xóa dịch vụ này?');">Xóa</button>
                     </form>
-                </td>
+                </td> *@
             </tr>
         }
     </tbody>
@@ -113,6 +141,43 @@
 </script>
 
 <style>
+    .btn-update, .btn-active, .btn-deactive {
+        padding: 6px;
+        font-size: 14px;
+        font-weight: bold;
+        border-radius: 5px;
+        cursor: pointer;
+        border: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-update {
+        background-color: #007bff;
+        color: #ffffff;
+    }
+
+        .btn-update:hover {
+            background-color: #0056b3;
+        }
+
+    .btn-active {
+        background-color: #00b894;
+        color: #ffffff;
+    }
+
+        .btn-active:hover {
+            background-color: #029274;
+        }
+
+    .btn-deactive {
+        background-color: #ff6b6b;
+        color: #ffffff;
+    }
+
+        .btn-deactive:hover {
+            background-color: #D65D5D;
+        }
+
    .btn-add {
         background-color: #42C2A8;
         color: white;
@@ -175,6 +240,32 @@
             border-radius: 4px;
             font-size: 14px;
         }
+
+        .user-table td.address-cell {
+            max-width: 100px; /* Đặt giới hạn độ rộng */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .user-table .options-cell {
+            display: flex;
+            gap: 5px; /* Khoảng cách giữa các nút */
+        }
+
+    .status.active,
+    .status.inactive {
+        display: inline-block;
+        padding: 5px 10px;
+        font-size: 12px;
+        font-weight: bold;
+        text-align: center;
+        border-radius: 5px;
+        white-space: nowrap;
+        max-width: 100px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 
     .status.active {
         background-color: #00b894;
