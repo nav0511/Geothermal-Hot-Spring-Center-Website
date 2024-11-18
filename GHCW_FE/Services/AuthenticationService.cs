@@ -1,17 +1,16 @@
 ﻿using GHCW_FE.DTOs;
 using Newtonsoft.Json;
+using System.Net;
 using System.Net.Http.Headers;
 
 namespace GHCW_FE.Services
 {
-    public class AuthenticationService
+    public class AuthenticationService : BaseService
     {
         private readonly HttpClient _client;
         private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private string AuthorApiUrl => $"{_configuration.GetValue<string>("ApiUrls:MyApi")}Authentication/login";
-        private string GetUserInfoApiUrl => $"{_configuration.GetValue<string>("ApiUrls:MyApi")}Authentication/profile";
-        private string LogoutApiUrl => $"{_configuration.GetValue<string>("ApiUrls:MyApi")}Authentication/logout";
 
         public AuthenticationService(IConfiguration configuration, HttpClient client, IHttpContextAccessor httpContextAccessor)
         {
@@ -21,19 +20,18 @@ namespace GHCW_FE.Services
             _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public async Task<bool> AuthenticateUserAsync(string email, string password)
+        public async Task<bool> AuthenticateUserAsync(LoginDTO userLogin)
         {
-            var userLogin = new LoginDTO { Email = email, Password = password };
+            var session = _httpContextAccessor.HttpContext.Session;
             HttpResponseMessage response = await _client.PostAsJsonAsync(AuthorApiUrl, userLogin);
-
-            if (response.IsSuccessStatusCode)
+            var statusCode = await PushData("Authentication/login", userLogin);
+            if (statusCode == HttpStatusCode.OK)
             {
                 var content = await response.Content.ReadAsStringAsync();
                 var token = JsonConvert.DeserializeObject<LoginResponse>(content);
 
                 if (!string.IsNullOrEmpty(token?.AccessToken))
                 {
-                    var session = _httpContextAccessor.HttpContext.Session;
                     session.SetString("accessToken", token.AccessToken.Replace("\n", ""));
                     session.SetString("refreshToken", token.RefreshToken.Replace("\n", ""));
                     return true;
@@ -42,36 +40,44 @@ namespace GHCW_FE.Services
             return false;
         }
 
-        public async Task<AccountDTO?> GetUserInfoAsync()
-        {
-            var session = _httpContextAccessor.HttpContext.Session;
-            var token = session.GetString("accessToken");
-            if (!string.IsNullOrEmpty(token))
-            {
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-                HttpResponseMessage response = await _client.GetAsync(GetUserInfoApiUrl);
-                if (response.IsSuccessStatusCode)
-                {
-                    var content = await response.Content.ReadAsStringAsync();
-                    return JsonConvert.DeserializeObject<AccountDTO>(content);
-                }
-            }
-            return null;
-        }
-
         public async Task LogoutAsync()
         {
             var session = _httpContextAccessor.HttpContext.Session;
-            var refreshToken = session.GetString("refreshToken");
-            if (!string.IsNullOrEmpty(refreshToken))
+            var accessToken = session.GetString("accessToken");
+            if (!string.IsNullOrEmpty(accessToken))
             {
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", refreshToken);
-                await _client.PostAsync(LogoutApiUrl, null);
+                var statusCode = await DeleteData("Authentication/logout", accessToken);
+                if (statusCode == HttpStatusCode.OK)
+                {
+                    session.Remove("accessToken");
+                    session.Remove("refreshToken");
+                    session.Remove("acc");
+                }
             }
+        }
 
-            session.Remove("accessToken");
-            session.Remove("refreshToken");
-            session.Remove("acc");
+        public async Task<HttpStatusCode> Register(RegisterDTO registerDTO)
+        {
+            var statusCode = await PushData("Authentication/Register", registerDTO);
+            return statusCode;
+        }
+
+        public async Task<HttpStatusCode> ForgotPassword(string email)
+        {
+            var statusCode = await PushData("Authentication/ForgotPassword", new { email });
+            return statusCode;
+        }
+
+        public async Task<HttpStatusCode> ChangePassword(ChangePassRequest changePassRequest, string accessToken)
+        {
+            var statusCode = await PushData("Authentication/ChangePassword", changePassRequest, null, accessToken);
+            return statusCode;
+        }
+
+        public async Task<HttpStatusCode> AccountActivation(ActivationCode ac)
+        {
+            var statusCode = await PushData("Authentication/activate", ac);
+            return statusCode;
         }
     }
 }

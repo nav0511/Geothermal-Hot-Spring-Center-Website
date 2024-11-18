@@ -8,11 +8,11 @@ namespace GHCW_FE.Pages.Authentications
 {
     public class RegisterModel : PageModel
     {
-        private readonly AccountService _accService;
+        private readonly AuthenticationService _authService;
 
-        public RegisterModel(AccountService accService)
+        public RegisterModel(AuthenticationService authenticationService)
         {
-            _accService = accService;
+            _authService = authenticationService;
         }
 
         [BindProperty]
@@ -29,7 +29,7 @@ namespace GHCW_FE.Pages.Authentications
                 TempData["ErrorMessage"] = "Thông tin đăng ký không hợp lệ, vui lòng thử lại.";
                 return Page();
             }
-            var statusCode = await _accService.Register(Account);
+            var statusCode = await _authService.Register(Account);
             if (statusCode == HttpStatusCode.OK)
             {
                 TempData["SuccessMessage"] = "Đăng ký thành công, vui lòng kiểm tra email để kích hoạt tài khoản";

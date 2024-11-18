@@ -45,7 +45,7 @@ namespace GHCW_FE.Pages.Admin
             }
             _accService.SetAccessToken(accessToken);
 
-            var (statusCode, employees) = await _accService.ListEmployee("Authentication/employeelist",accessToken);
+            var (statusCode, employees) = await _accService.ListEmployee("Account/employeelist", accessToken);
             if (statusCode == HttpStatusCode.Forbidden)
             {
                 await _authService.LogoutAsync();
