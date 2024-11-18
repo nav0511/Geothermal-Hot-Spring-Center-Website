@@ -11,7 +11,6 @@ namespace GHCW_FE.Services
         private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private string AuthorApiUrl => $"{_configuration.GetValue<string>("ApiUrls:MyApi")}Authentication/login";
-        private string GetUserInfoApiUrl => $"{_configuration.GetValue<string>("ApiUrls:MyApi")}Account/profile";
 
         public AuthenticationService(IConfiguration configuration, HttpClient client, IHttpContextAccessor httpContextAccessor)
         {
