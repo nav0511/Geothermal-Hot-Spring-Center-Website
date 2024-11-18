@@ -19,7 +19,7 @@ namespace GHCW_BE.Services
         public async Task<List<ScheduleDTO>?> GetWeeklySchedule(DateTime startDate, DateTime endDate)
         {
             var schedules = await _context.Schedules
-                                 .Where(s => s.Date >= startDate && s.Date < endDate && s.IsActive == true)
+                                 .Where(s => s.Date >= startDate && s.Date <= endDate)
                                  .Include(s => s.Receptionist)
                                  .ToListAsync();
             if (schedules != null)
@@ -79,15 +79,14 @@ namespace GHCW_BE.Services
             }
             try
             {
-                schedule.IsActive = !schedule.IsActive;
-                _context.Schedules.Update(schedule);
+                _context.Schedules.Remove(schedule);
                 await _context.SaveChangesAsync();
 
-                return (true, "Ẩn lịch làm việc thành công.");
+                return (true, "Xóa lịch làm việc thành công.");
             }
             catch (Exception)
             {
-                return (false, "Ẩn lịch làm việc thất bại, vui lòng thử lại.");
+                return (false, "Xóa lịch làm việc thất bại, vui lòng thử lại.");
             }
         }
 

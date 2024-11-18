@@ -42,7 +42,7 @@ namespace GHCW_FE.Pages.Admin
             }
             _cusService.SetAccessToken(accessToken);
 
-            var (statusCode, customers) = await _cusService.ListCustomer("Authentication/CustomerList", accessToken);
+            var (statusCode, customers) = await _cusService.ListCustomer("Customer/CustomerList", accessToken);
             if (statusCode == HttpStatusCode.Forbidden)
             {
                 await _authService.LogoutAsync();
@@ -74,10 +74,10 @@ namespace GHCW_FE.Pages.Admin
                     customers = customers?.ToList();
                     break;
                 case 1:
-                    customers = customers?.OrderBy(e => e.FullName).ToList(); // Sắp xếp A-Z
+                    customers = customers?.Where(e => e.AccountId != null).ToList(); // Đã đăng ký tài khoản
                     break;
                 case 2:
-                    customers = customers?.OrderByDescending(e => e.FullName).ToList(); // Sắp xếp Z-A
+                    customers = customers?.Where(e => e.AccountId == null).ToList(); // Chưa đăng ký tài khoản
                     break;
                 case 3:
                     customers = customers?.Where(e => e.Gender == true).ToList(); // Lọc Nam

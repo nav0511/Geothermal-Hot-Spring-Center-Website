@@ -8,12 +8,12 @@ namespace GHCW_FE.Pages.Authentications
     public class ForgotPasswordModel : PageModel
     {
         private readonly HttpClient _httpClient;
-        private readonly AccountService _accService;
+        private readonly AuthenticationService _authService;
 
-        public ForgotPasswordModel(HttpClient httpClient, AccountService accService)
+        public ForgotPasswordModel(HttpClient httpClient, AuthenticationService authenticationService)
         {
             _httpClient = httpClient;
-            _accService = accService;
+            _authService = authenticationService;
         }
 
         [BindProperty]
@@ -30,7 +30,7 @@ namespace GHCW_FE.Pages.Authentications
                 return Page();
             }
 
-            var statusCode = await _accService.ForgotPassword(Email);
+            var statusCode = await _authService.ForgotPassword(Email);
 
             if (statusCode == HttpStatusCode.OK)
             {

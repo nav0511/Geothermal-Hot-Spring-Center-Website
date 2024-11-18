@@ -21,6 +21,9 @@ builder.Services.AddDbContext<GHCWContext>(opt => opt.UseSqlServer(builder.Confi
 builder.Services.AddAutoMapper(typeof(MapperProfile));
 builder.Services.AddScoped<Helper>();
 builder.Services.AddScoped<AuthenticationService>();
+builder.Services.AddScoped<AccountService>();
+builder.Services.AddScoped<CustomerService>();
+builder.Services.AddScoped<ScheduleService>();
 builder.Services.AddAuthentication(opt =>
 {
     opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
