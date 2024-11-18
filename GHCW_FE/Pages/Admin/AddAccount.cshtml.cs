@@ -49,6 +49,15 @@ namespace GHCW_FE.Pages.Admin
 
         public async Task<IActionResult> OnPostAsync()
         {
+            var accessToken = await _tokenService.CheckAndRefreshTokenAsync();
+            if (string.IsNullOrEmpty(accessToken))
+            {
+                await _authService.LogoutAsync();
+                TempData["ErrorMessage"] = "Bạn cần đăng nhập để thực hiện hành động này.";
+                return RedirectToPage("/Authentications/Login");
+            }
+            _accService.SetAccessToken(accessToken);
+
             if (!ModelState.IsValid)
             {
                 TempData["ErrorMessage"] = "Thông tin đăng ký không hợp lệ, vui lòng thử lại.";
@@ -56,14 +65,6 @@ namespace GHCW_FE.Pages.Admin
             }
             try
             {
-                var accessToken = await _tokenService.CheckAndRefreshTokenAsync();
-                if (string.IsNullOrEmpty(accessToken))
-                {
-                    await _authService.LogoutAsync();
-                    TempData["ErrorMessage"] = "Bạn cần đăng nhập để thực hiện hành động này.";
-                    return RedirectToPage("/Authentications/Login");
-                }
-                _accService.SetAccessToken(accessToken);
 
                 var statusCode = await _accService.AddUser(accessToken, AddRequest);
                 if (statusCode == HttpStatusCode.OK)

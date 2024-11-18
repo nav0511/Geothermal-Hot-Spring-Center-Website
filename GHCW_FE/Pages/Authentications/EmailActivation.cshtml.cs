@@ -8,11 +8,11 @@ namespace GHCW_FE.Pages.Authentications
 {
     public class EmailActivationModel : PageModel
     {
-        private readonly AccountService _accService;
+        private readonly AuthenticationService _authService;
 
-        public EmailActivationModel(AccountService accountService)
+        public EmailActivationModel(AuthenticationService authenticationService)
         {
-            _accService = accountService;
+            _authService = authenticationService;
         }
 
         public async Task<IActionResult> OnGetAsync(string email, string code)
@@ -23,7 +23,7 @@ namespace GHCW_FE.Pages.Authentications
                 Code = code
             };
 
-            var statusCode = await _accService.AccountActivation(activationRequest);
+            var statusCode = await _authService.AccountActivation(activationRequest);
 
             if (statusCode == HttpStatusCode.OK)
             {

@@ -104,13 +104,13 @@ namespace GHCW_FE.Pages.Admin
             }
             else if(statusCode != HttpStatusCode.OK)
             {
-                TempData["ErrorMessage"] = "Ẩn lịch làm việc thất bại, vui lòng thử lại sau.";
+                TempData["ErrorMessage"] = "Xóa lịch làm việc thất bại, vui lòng thử lại sau.";
                 await OnGetAsync(startDate2, endDate2, false);
                 return Page();
             }
             else
             {
-                TempData["SuccessMessage"] = "Ẩn lịch làm việc thành công.";
+                TempData["SuccessMessage"] = "Xóa lịch làm việc thành công.";
                 await OnGetAsync(startDate2, endDate2, false);
                 return Page();
             }

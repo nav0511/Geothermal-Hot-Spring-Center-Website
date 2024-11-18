@@ -18,7 +18,6 @@ namespace GHCW_BE.Models
         public string? Image { get; set; }
         public bool IsActive { get; set; }
 
-
         public virtual ICollection<TicketDetail> TicketDetails { get; set; }
     }
 }

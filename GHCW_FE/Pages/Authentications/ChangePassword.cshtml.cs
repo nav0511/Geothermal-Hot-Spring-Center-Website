@@ -79,7 +79,7 @@ namespace GHCW_FE.Pages.Authentications
                     return RedirectToPage("/Authentications/Login");
                 }
                 _accService.SetAccessToken(accessToken);
-                var statusCode = await _accService.ChangePassword(changePassRequest, accessToken);
+                var statusCode = await _authService.ChangePassword(changePassRequest, accessToken);
                 if (statusCode == HttpStatusCode.OK)
                 {
                     await _authService.LogoutAsync();

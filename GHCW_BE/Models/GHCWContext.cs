@@ -236,6 +236,10 @@ namespace GHCW_BE.Models
                     .HasMaxLength(500)
                     .IsUnicode(false);
 
+                entity.Property(e => e.IsActive)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
+
                 entity.Property(e => e.Name).HasMaxLength(255);
 
                 entity.Property(e => e.Time).HasMaxLength(50);
