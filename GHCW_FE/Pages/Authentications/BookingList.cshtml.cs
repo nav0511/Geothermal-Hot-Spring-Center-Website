@@ -24,7 +24,7 @@ namespace GHCW_FE.Pages.Authentications
 
         public int CurrentPage { get; set; }
         public int TotalPages { get; set; }
-        private const int PageSize = 3;
+        private const int PageSize = 9;
 
         public async Task<IActionResult> OnGetAsync(int pageNumber = 1)
         {
