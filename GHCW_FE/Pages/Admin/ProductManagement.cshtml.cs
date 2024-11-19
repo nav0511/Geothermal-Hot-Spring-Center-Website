@@ -24,11 +24,16 @@ namespace GHCW_FE.Pages.Admin
 
         public List<ProductDTO> ProductDTOs { get; set; } = new List<ProductDTO>();
 
+        [BindProperty(SupportsGet = true)]
+        public string? SearchTerm { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public int SortOption { get; set; }
         public int CurrentPage { get; set; }
         public int TotalPages { get; set; }
         private const int PageSize = 6;
 
-        public async Task<IActionResult> OnGetAsync(int pageNumber = 1)
+        public async Task<IActionResult> OnGetAsync(int pageNumber = 1, string? searchTerm = null, int sortOption = 0)
         {
             var accessToken = await _tokenService.CheckAndRefreshTokenAsync();
             if (string.IsNullOrEmpty(accessToken))
@@ -59,15 +64,29 @@ namespace GHCW_FE.Pages.Admin
                 return RedirectToPage("/Authentications/Login");
             }
 
+            SearchTerm = searchTerm;
+            SortOption = sortOption;
             CurrentPage = pageNumber;
             int skip = (pageNumber - 1) * PageSize;
 
-            var(statusCode1, TotalNewsCount) = _productService.GetTotalProducts().Result;
-            int totalNewsCount = TotalNewsCount;
-            TotalPages = (int)Math.Ceiling((double)totalNewsCount / PageSize);
+            var (statusCode1, products) = await _productService.GetProducts("Product");
+            if (!string.IsNullOrEmpty(SearchTerm))
+            {
+                products = products?.Where(d => d.Name?.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase) ?? false).ToList();
+            }
 
-            var (statusCode2, productDTOs) = await _productService.GetProducts($"Product?$top={PageSize}&$skip={skip}");
-            ProductDTOs = productDTOs;
+            products = SortOption switch
+            {
+                1 => products.OrderBy(d => d.Name).ToList(),
+                2 => products.OrderByDescending(d => d.Name).ToList(),
+                3 => products.OrderBy(d => d.Price).ToList(),
+                4 => products.OrderByDescending(d => d.Price).ToList(),
+                _ => products.ToList(),
+            };
+
+            var totalProducts = products?.Count() ?? 0;
+            TotalPages = (int)Math.Ceiling((double)totalProducts / PageSize);
+            ProductDTOs = products?.Skip(skip).Take(PageSize).ToList() ?? new List<ProductDTO>();
 
             return Page();
         }

@@ -23,11 +23,16 @@ namespace GHCW_FE.Pages.Admin
 
         public List<NewsDTO> NewsDTOs { get; set; } = new List<NewsDTO>();
 
+        [BindProperty(SupportsGet = true)]
+        public string? SearchTerm { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public int SortOption { get; set; }
         public int CurrentPage { get; set; }
         public int TotalPages { get; set; }
         private const int PageSize = 6;
 
-        public async Task<IActionResult> OnGetAsync(int pageNumber = 1)
+        public async Task<IActionResult> OnGetAsync(int pageNumber = 1, string? searchTerm = null, int sortOption = 0)
         {
             var accessToken = await _tokenService.CheckAndRefreshTokenAsync();
             if (string.IsNullOrEmpty(accessToken))
@@ -58,17 +63,29 @@ namespace GHCW_FE.Pages.Admin
                 return RedirectToPage("/Authentications/Login");
             }
 
+            SearchTerm = searchTerm;
+            SortOption = sortOption;
             CurrentPage = pageNumber;
             int skip = (pageNumber - 1) * PageSize;
 
-            var (statusCode1, TotalNewsCount) = _newsService.GetTotalRegularNews().Result;
-            int totalNewsCount = TotalNewsCount;
+            var (statusCode1, news) = await _newsService.GetNews($"News?$filter=DiscountId eq null");
+            if (!string.IsNullOrEmpty(SearchTerm))
+            {
+                news = news?.Where(d => d.Title?.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase) ?? false).ToList();
+            }
 
-            TotalPages = (int)Math.Ceiling((double)totalNewsCount / PageSize);
+            news = SortOption switch
+            {
+                1 => news.OrderBy(d => d.Title).ToList(),
+                2 => news.OrderByDescending(d => d.Title).ToList(),
+                3 => news.OrderBy(d => d.UploadDate).ToList(),
+                4 => news.OrderByDescending(d => d.UploadDate).ToList(),
+                _ => news.ToList(),
+            };
 
-            var (statusCode2, newsDTOs) = await _newsService.GetNews($"News?$filter=DiscountId eq null&top={PageSize}&$skip={skip}");
-
-            NewsDTOs = newsDTOs;
+            var totalNews = news?.Count() ?? 0;
+            TotalPages = (int)Math.Ceiling((double)totalNews / PageSize);
+            NewsDTOs = news?.Skip(skip).Take(PageSize).ToList() ?? new List<NewsDTO>();
 
             return Page();
         }

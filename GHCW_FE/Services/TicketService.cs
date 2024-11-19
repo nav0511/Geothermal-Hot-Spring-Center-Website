@@ -10,7 +10,7 @@ namespace GHCW_FE.Services
         {
             if (role.HasValue)
             {
-                url += $"&role={role.Value}&uId={uId.Value}";
+                url += $"?&role={role.Value}&uId={uId.Value}";
             }
             
             return await GetData<List<TicketDTO>>(url);
