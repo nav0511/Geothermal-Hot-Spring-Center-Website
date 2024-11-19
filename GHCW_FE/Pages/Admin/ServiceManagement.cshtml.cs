@@ -24,11 +24,16 @@ namespace GHCW_FE.Pages.Admin
 
         public List<ServiceDTO> ServiceDTOs { get; set; } = new List<ServiceDTO>();
 
+        [BindProperty(SupportsGet = true)]
+        public string? SearchTerm { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public int SortOption { get; set; }
         public int CurrentPage { get; set; }
         public int TotalPages { get; set; }
         private const int PageSize = 6;
 
-        public async Task<IActionResult> OnGetAsync(int pageNumber = 1)
+        public async Task<IActionResult> OnGetAsync(int pageNumber = 1, string? searchTerm = null, int sortOption = 0)
         {
             var accessToken = await _tokenService.CheckAndRefreshTokenAsync();
             if (string.IsNullOrEmpty(accessToken))
@@ -59,15 +64,29 @@ namespace GHCW_FE.Pages.Admin
                 return RedirectToPage("/Authentications/Login");
             }
 
+            SearchTerm = searchTerm;
+            SortOption = sortOption;
             CurrentPage = pageNumber;
             int skip = (pageNumber - 1) * PageSize;
 
-            var(statusCode1, TotalNewsCount) = _servicesService.GetTotalServices().Result;
-            int totalNewsCount = TotalNewsCount;
-            TotalPages = (int)Math.Ceiling((double)totalNewsCount / PageSize);
+            var (statusCode1, services) = await _servicesService.GetServices("Service");
+            if (!string.IsNullOrEmpty(SearchTerm))
+            {
+                services = services?.Where(d => d.Name?.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase) ?? false).ToList();
+            }
 
-            var (statusCode2, serviceDTOs) = await _servicesService.GetServices($"Service?$top={PageSize}&$skip={skip}");
-            ServiceDTOs = serviceDTOs;
+            services = SortOption switch
+            {
+                1 => services.OrderBy(d => d.Name).ToList(),
+                2 => services.OrderByDescending(d => d.Name).ToList(),
+                3 => services.OrderBy(d => d.Price).ToList(),
+                4 => services.OrderByDescending(d => d.Price).ToList(),
+                _ => services.ToList(),
+            };
+
+            var totalServices = services?.Count() ?? 0;
+            TotalPages = (int)Math.Ceiling((double)totalServices / PageSize);
+            ServiceDTOs = services?.Skip(skip).Take(PageSize).ToList() ?? new List<ServiceDTO>();
             return Page();
         }
 
