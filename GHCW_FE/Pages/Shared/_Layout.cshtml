@@ -1,6 +1,8 @@
 ﻿@using GHCW_FE.DTOs
 @using System.Text.Json
 @using Microsoft.AspNetCore.Http
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -112,6 +114,26 @@
         </div>
         <!-- Navbar End -->
     </header>
+
+    <!-- Chat Bubble and Popup -->
+    <div id="chat-bubble" class="chat-bubble">
+        <i class="fas fa-comments"></i> Chat
+    </div>
+
+    <div id="chat-popup" class="chat-popup d-none">
+        <div class="chat-header">
+            <span>Nhắn tin với chúng tôi</span>
+            <button id="close-chat" class="close-chat">X</button>
+        </div>
+        <div id="chat-body" class="chat-body" style="display:flex; flex-direction:column">
+            <div class="chat-message bot-message">Bạn cần giúp đỡ gì?</div>
+        </div>
+        <div class="chat-footer">
+            <input id="chat-input" type="text" placeholder="Nhập tin nhắn...">
+            <button id="send-chat">Gửi</button>
+        </div>
+    </div>
+
     <div>
         <main role="main">
             @RenderBody()
@@ -164,7 +186,6 @@
     <!-- Back to Top -->
     <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="fa fa-angle-double-up"></i></a>
 
-
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
@@ -180,7 +201,11 @@
 
     <script src="~/js/main.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-
+    <script>
+        window.apiUrls = {
+            myApi: '@Configuration["ApiUrls:MyApi"]'
+        };
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
