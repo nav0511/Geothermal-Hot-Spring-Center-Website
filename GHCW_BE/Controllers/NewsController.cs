@@ -86,7 +86,7 @@ namespace GHCW_BE.Controllers
             return Ok(list.Count());
         }
 
-       
+
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateNews(int id, [FromBody] NewsDTO newsDto)
         {
@@ -176,6 +176,39 @@ namespace GHCW_BE.Controllers
             news.Image = await _cloudinaryService.UploadImageResult(newsDto.Image);
 
             await _newsService.AddNews(news);
+
+            var fakeCustomers = new List<CustomerDTO>
+        {
+            new CustomerDTO
+            {
+                Id = 1,
+                FullName = "Phong DB 05",
+                Email = "phongdb05@gmail.com",
+                PhoneNumber = "0901234567",
+                DoB = new DateTime(1995, 5, 15),
+                Gender = true, // Assuming true is male
+                Address = "Hà Nội, Việt Nam",
+                IsEmailNotify = true
+            },
+            new CustomerDTO
+            {
+                Id = 2,
+                FullName = "Phong DB 02",
+                Email = "phongdb02@gmail.com",
+                PhoneNumber = "0907654321",
+                DoB = new DateTime(1992, 3, 25),
+                Gender = true, // Assuming true is male
+                Address = "Hồ Chí Minh, Việt Nam",
+                IsEmailNotify = true
+            }
+        };
+            var users = fakeCustomers;
+
+            var emailSent = await _newsService.SendNewsNotificationAsync(news, users);
+            if (!emailSent)
+            {
+                return StatusCode(500, "Tin tức được thêm nhưng không thể gửi email thông báo.");
+            }
 
 
             return Ok("Thêm thành công");

@@ -1,16 +1,23 @@
-﻿using GHCW_BE.Models;
+﻿using GHCW_BE.DTOs;
+using GHCW_BE.Helpers;
+using GHCW_BE.Models;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace GHCW_BE.Services
 {
     public class NewsService
     {
         private readonly GHCWContext _context;
+        private readonly IConfiguration _configuration;
+        private readonly Helper _helper;
 
-        public NewsService(GHCWContext context)
+        public NewsService(GHCWContext context,IConfiguration configuration, Helper helper)
         {
             _context = context;
+            _configuration = configuration;
+            _helper = helper;
         }
 
         public IQueryable<News> GetListNews()
@@ -46,6 +53,32 @@ namespace GHCW_BE.Services
             await _context.News.AddAsync(news);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<bool> SendNewsNotificationAsync(News news, List<CustomerDTO> users)
+        {
+            var emailSettings = _configuration.GetSection("EmailSettings").Get<SendEmailDTO>();
+
+            foreach (var email in users)
+            {
+                var emailDTO = new SendEmailDTO
+                {
+                    FromEmail = emailSettings.FromEmail,
+                    Password = emailSettings.Password,
+                    ToEmail = email.Email,
+                    Subject = "Tin tức mới từ hệ thống",
+                    Body = $"Chúng tôi vừa cập nhật tin tức mới: <strong>{news.Title}</strong>. Nhấn vào đây để xem chi tiết: <a href='https://localhost:7260/News/Detail?Id={news.Id}'>Xem tin tức</a>"
+                };
+
+                bool emailSent = await _helper.SendEmail(emailDTO);
+                if (!emailSent)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
 
         public async Task<(bool isSuccess, string message)> NewsActivation(int nid)
         {
