@@ -2,11 +2,17 @@
 @using GHCW_FE.DTOs
 @using System.Text.Json
 @using Microsoft.AspNetCore.Http
+@removeTagHelper Microsoft.AspNetCore.Mvc.TagHelpers.OptionTagHelper, Microsoft.AspNetCore.Mvc.TagHelpers
 @model GHCW_FE.Pages.Admin.CustomerManagementModel
 @{
     ViewData["Title"] = "Quản lý khách hàng";
     Layout = "_LayoutManagement";
     ViewData["ActivePage"] = "/Admin/CustomerManagement";
+    AccountDTO? account = null;
+    if (HttpContext.Session.GetString("acc") != null)
+    {
+        account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
+    }
 }
 
 <header class="page-header" style="">
@@ -30,15 +36,25 @@
 
 
 <div class="search-container">
-    @* <h3>Tất cả người dùng</h3> *@
-    <input type="text" placeholder="Tìm kiếm...">
-    <select>
-        <option value="0">Sắp xếp: chọn tùy chọn</option>
-        <option value="1">A-Z</option>
-        <option value="2">Z-A</option>
-        <option value="3">Active</option>
-        <option value="4">Inactive</option>
-    </select>
+    <form method="get" id="filterForm">
+        <input type="text" name="SearchTerm" placeholder="Tìm kiếm..." value="@Model.SearchTerm" />
+        <button type="submit" class="btn-add">Tìm kiếm</button>
+
+        <select name="SortOption" onchange="document.getElementById('filterForm').submit()">
+            <option value="0" @(Model.SortOption == 0 ? "selected" : "")>Lọc theo</option>
+            <option value="1" @(Model.SortOption == 1 ? "selected" : "")>Khách đã đăng ký tài khoản</option>
+            <option value="2" @(Model.SortOption == 2 ? "selected" : "")>Khách chưa đăng ký tài khoản</option>
+            <option value="3" @(Model.SortOption == 3 ? "selected" : "")>Khách nam</option>
+            <option value="4" @(Model.SortOption == 4 ? "selected" : "")>Khách nữ</option>
+        </select>
+
+        <select name="OrderOption" onchange="document.getElementById('filterForm').submit()">
+            <option value="1" @(Model.OrderOption == 1 ? "selected" : "")>ID Tăng dần</option>
+            <option value="2" @(Model.OrderOption == 2 ? "selected" : "")>ID Giảm dần</option>
+            <option value="3" @(Model.OrderOption == 3 ? "selected" : "")>Tên A-Z</option>
+            <option value="4" @(Model.OrderOption == 4 ? "selected" : "")>Tên Z-A</option>
+        </select>
+    </form>
 </div>
 
 <div>
@@ -60,13 +76,9 @@
                     <th>Họ và tên</th>
                     <th>Số điện thoại</th>
                     <th>Email</th>
-                    @if (HttpContext.Session.GetString("acc") != null)
+                    @if (account?.Role == 0)
                     {
-                        var account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
-                        @if (account.Role == 0)
-                        {
-                            <th>Tùy chọn</th>
-                        }
+                        <th>Tùy chọn</th>
                     }
                 </tr>
             </thead>
@@ -78,15 +90,11 @@
                         <td>@cus.FullName</td>
                         <td>@cus.PhoneNumber</td>
                         <td>@cus.Email</td>
-                        @if (HttpContext.Session.GetString("acc") != null)
+                        @if (account?.Role == 0)
                         {
-                            var account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
-                            @if (account.Role == 0)
-                            {
-                                <td class="options-cell">
-                                    <button class=" btn-update" onclick="window.location.href='/Admin/CustomerDetails/?id=@cus.Id'">Chỉnh sửa</button>
-                                </td>
-                            }
+                            <td class="options-cell">
+                                <button class=" btn-update" onclick="window.location.href='/Admin/CustomerDetails/?id=@cus.Id'">Chỉnh sửa</button>
+                            </td>
                         }
                     </tr>
                 }
@@ -220,14 +228,14 @@
 
     /* Search container */
     .search-container {
-        display: flex;
+        display: inline;
         justify-content: space-between;
         margin-bottom: 20px;
     }
 
         .search-container input {
             padding: 10px;
-            width: 80%;
+            width: 75%;
             border: 1px solid #ccc;
             border-radius: 8px;
         }

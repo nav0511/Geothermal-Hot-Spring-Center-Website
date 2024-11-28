@@ -17,13 +17,13 @@ namespace GHCW_BE.Controllers
         private IMapper _mapper;
         private TicketService _ticketService;
         private CloudinaryService _cloudinary;
-        private AuthenticationService _authentication;
-        public TicketController(IMapper mapper, TicketService ticketService, CloudinaryService cloudinary, AuthenticationService authentication)
+        private readonly CustomerService _customerService;
+        public TicketController(IMapper mapper, TicketService ticketService, CloudinaryService cloudinary, CustomerService customerService)
         {
             _mapper = mapper;
             _ticketService = ticketService;
             _cloudinary = cloudinary;
-            _authentication = authentication;
+            _customerService = customerService;
         }
 
         [HttpGet]
@@ -86,7 +86,7 @@ namespace GHCW_BE.Controllers
                 return BadRequest("Dữ liệu không hợp lệ.");
             }
 
-            var customer = await _authentication.CheckCustomerExsit(ticketDto.CustomerId);
+            var customer = await _customerService.GetCustomerProfileById(ticketDto.CustomerId);
             if (customer == null) return StatusCode(500, "Có lỗi xảy ra khi lưu vé.");
 
             var newTicket = _mapper.Map<Ticket>(ticketDto);

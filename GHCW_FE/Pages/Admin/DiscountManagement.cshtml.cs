@@ -23,11 +23,17 @@ namespace GHCW_FE.Pages.Admin
         }
         public List<DiscountDTO> DiscountDTOs { get; set; } = new List<DiscountDTO>();
 
+        [BindProperty(SupportsGet = true)]
+        public string? SearchTerm { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public int SortOption { get; set; }
+
         public int CurrentPage { get; set; }
         public int TotalPages { get; set; }
         private const int PageSize = 6;
 
-        public async Task<IActionResult> OnGetAsync(int pageNumber = 1)
+        public async Task<IActionResult> OnGetAsync(int pageNumber = 1, string? searchTerm = null, int sortOption = 0)
         {
             var accessToken = await _tokenService.CheckAndRefreshTokenAsync();
             if (string.IsNullOrEmpty(accessToken))
@@ -58,15 +64,29 @@ namespace GHCW_FE.Pages.Admin
                 return RedirectToPage("/Authentications/Login");
             }
 
+            SearchTerm = searchTerm; 
+            SortOption = sortOption;
             CurrentPage = pageNumber;
             int skip = (pageNumber - 1) * PageSize;
 
-            var(statusCode1, TotalNewsCount) = _discountService.GetTotalDiscounts().Result;
-            int totalNewsCount = TotalNewsCount;
-            TotalPages = (int)Math.Ceiling((double)totalNewsCount / PageSize);
+            var (statusCode1, discounts) = await _discountService.GetDiscounts("Discount");
+            if (!string.IsNullOrEmpty(SearchTerm))
+            {
+                discounts = discounts?.Where(d => d.Name?.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase) ?? false).ToList();
+            }
 
-            var (statusCode2, discounts) = await _discountService.GetDiscounts($"Discount?$top={PageSize}&$skip={skip}");
-            DiscountDTOs = discounts;
+            discounts = SortOption switch
+            {
+                1 => discounts.OrderBy(d => d.Name).ToList(),
+                2 => discounts.OrderByDescending(d => d.Name).ToList(),
+                3 => discounts.OrderBy(d => d.EndDate).ToList(),
+                4 => discounts.OrderByDescending(d => d.EndDate).ToList(),
+                _ => discounts.ToList(),
+            };
+
+            var totalDiscounts = discounts?.Count() ?? 0;
+            TotalPages = (int)Math.Ceiling((double)totalDiscounts / PageSize);
+            DiscountDTOs = discounts?.Skip(skip).Take(PageSize).ToList() ?? new List<DiscountDTO>();
             return Page();
         }
 

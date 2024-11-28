@@ -8,6 +8,8 @@
         public string? Time { get; set; }
         public string? Description { get; set; }
         public string? Image { get; set; }
+        public bool? IsActive { get; set; }
+
     }
 
     public class ServiceDTO2
@@ -17,5 +19,7 @@
         public string? Time { get; set; }
         public string? Description { get; set; }
         public IFormFile? Image { get; set; }
+        public bool? IsActive { get; set; }
+
     }
 }

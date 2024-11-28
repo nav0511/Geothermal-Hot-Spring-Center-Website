@@ -27,6 +27,13 @@ namespace GHCW_FE.Pages.Admin
         public int TotalPages { get; set; }
         private const int PageSize = 9;
 
+        [BindProperty(SupportsGet = true)]
+        public string? SearchTerm { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public int SortOption { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public int OrderOption { get; set; }
         public async Task<IActionResult> OnGetAsync(int pageNumber = 1)
         {
             var accessToken = await _tokenService.CheckAndRefreshTokenAsync();
@@ -38,7 +45,7 @@ namespace GHCW_FE.Pages.Admin
             }
             _accService.SetAccessToken(accessToken);
 
-            var (statusCode, accounts) = await _accService.ListAccount("Authentication/userlist", accessToken);
+            var (statusCode, accounts) = await _accService.ListAccount("Account/userlist", accessToken);
             if (statusCode == HttpStatusCode.Forbidden)
             {
                 await _authService.LogoutAsync();
@@ -56,34 +63,69 @@ namespace GHCW_FE.Pages.Admin
                 TempData["ErrorMessage"] = "Đã xảy ra lỗi khi lấy danh sách thông tin người dùng.";
                 return Page();
             }
-            Accounts = accounts;
+            if (!string.IsNullOrEmpty(SearchTerm))
+            {
+                accounts = accounts?.Where(e =>
+                    (e.Name != null && e.Name.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase)) ||
+                    (e.Email != null && e.Email.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase))
+                ).ToList();
+            }
+
+            switch (SortOption)
+            {
+                case 0:
+                    accounts = accounts?.ToList();
+                    break;
+                case 1:
+                    accounts = accounts?.Where(e => e.Gender == true).ToList(); // Lọc giới tính Nam
+                    break;
+                case 2:
+                    accounts = accounts?.Where(e => e.Gender != true).ToList(); // Lọc giới tính Nữ
+                    break;
+                case 3:
+                    accounts = accounts?.Where(e => e.IsActive).ToList(); // Lọc Active
+                    break;
+                case 4:
+                    accounts = accounts?.Where(e => !e.IsActive).ToList(); // Lọc Inactive
+                    break;
+                case 5:
+                    accounts = accounts?.Where(e => e.Role == 2).ToList(); // Lọc theo role = sale
+                    break;
+                case 6:
+                    accounts = accounts?.Where(e => e.Role == 3).ToList(); // Lọc theo role = marketing
+                    break;
+                case 7:
+                    accounts = accounts?.Where(e => e.Role == 4).ToList(); // Lọc theo role = lễ tân
+                    break;
+                case 8:
+                    accounts = accounts?.Where(e => e.Role == 1).ToList(); // Lọc theo role = quản lí
+                    break;
+                case 9:
+                    accounts = accounts?.Where(e => e.Role == 0).ToList(); // Lọc theo role = admin
+                    break;
+            }
+
+            switch (OrderOption)
+            {
+                case 1:
+                    accounts = accounts?.OrderBy(e => e.Id).ToList(); // Sắp xếp ID tăng dần
+                    break;
+                case 2:
+                    accounts = accounts?.OrderByDescending(e => e.Id).ToList(); // Sắp xếp ID giảm dần
+                    break;
+                case 3:
+                    accounts = accounts?.OrderBy(e => e.Name).ToList(); // Sắp xếp tên A-Z
+                    break;
+                case 4:
+                    accounts = accounts?.OrderByDescending(e => e.Name).ToList(); // Sắp xếp tên Z-A
+                    break;
+            }
 
             CurrentPage = pageNumber;
             int skip = (pageNumber - 1) * PageSize;
-            if (accounts != null)
-            {
-                var total = accounts.Count();
-                TotalPages = (int)Math.Ceiling((double)total / PageSize);
-                (statusCode, accounts) = await _accService.ListAccount($"Authentication/userlist?$top={PageSize}&$skip={skip}", accessToken);
-                if (statusCode == HttpStatusCode.Forbidden)
-                {
-                    await _authService.LogoutAsync();
-                    TempData["ErrorMessage"] = "Bạn không có quyền truy cập thông tin này.";
-                    return RedirectToPage("/Authentications/Login");
-                }
-                else if (statusCode == HttpStatusCode.Unauthorized)
-                {
-                    await _authService.LogoutAsync();
-                    TempData["ErrorMessage"] = "Phiên đăng nhập hết hạn.";
-                    return RedirectToPage("/Authentications/Login");
-                }
-                else if (statusCode != HttpStatusCode.OK)
-                {
-                    TempData["ErrorMessage"] = "Đã xảy ra lỗi khi lấy danh sách thông tin người dùng.";
-                    return Page();
-                }
-                Accounts = accounts;
-            }
+            TotalPages = (int)Math.Ceiling((double)accounts.Count() / PageSize);
+
+            Accounts = accounts.Skip((pageNumber - 1) * PageSize).Take(PageSize).ToList();
             return Page();
         }
 

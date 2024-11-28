@@ -16,6 +16,7 @@ namespace GHCW_BE.Models
         public string Time { get; set; } = null!;
         public string? Description { get; set; }
         public string? Image { get; set; }
+        public bool IsActive { get; set; }
 
         public virtual ICollection<TicketDetail> TicketDetails { get; set; }
     }

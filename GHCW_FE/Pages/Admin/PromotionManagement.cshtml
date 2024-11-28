@@ -2,6 +2,7 @@
 @using GHCW_FE.DTOs
 @using System.Text.Json
 @using Microsoft.AspNetCore.Http
+@removeTagHelper Microsoft.AspNetCore.Mvc.TagHelpers.OptionTagHelper, Microsoft.AspNetCore.Mvc.TagHelpers
 @model GHCW_FE.Pages.Admin.PromotionManagementModel
 @{
     ViewData["Title"] = "Quản lý khuyến mãi";
@@ -30,14 +31,18 @@
 }
 
 <div class="search-container">
-    <input type="text" placeholder="Tìm kiếm...">
-    <select>
-        <option value="0">Sắp xếp: chọn tùy chọn</option>
-        <option value="1">A-Z</option>
-        <option value="2">Z-A</option>
-        <option value="3">Active</option>
-        <option value="4">Inactive</option>
-    </select>
+    <form method="get" id="filterForm">
+        <input type="text" name="SearchTerm" placeholder="Tìm kiếm..." value="@Model.SearchTerm" />
+        <button type="submit" class="btn-add">Tìm kiếm</button>
+
+        <select name="SortOption" onchange="document.getElementById('filterForm').submit()">
+            <option value="0" @(Model.SortOption == 0 ? "selected" : "")>Lọc theo</option>
+            <option value="1" @(Model.SortOption == 1 ? "selected" : "")>A-Z</option>
+            <option value="2" @(Model.SortOption == 2 ? "selected" : "")>Z-A</option>
+            <option value="3" @(Model.SortOption == 3 ? "selected" : "")>Ngày đăng tăng dần</option>
+            <option value="4" @(Model.SortOption == 4 ? "selected" : "")>Ngày đăng giảm dần</option>
+        </select>
+    </form>
 </div>
 
 <table class="user-table">
@@ -50,7 +55,7 @@
             @if (HttpContext.Session.GetString("acc") != null)
             {
                 var account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
-                @if (account.Role == 0)
+                @if (account.Role <= 3)
                 {
                     <th>Tùy chọn</th>
                 }
@@ -78,7 +83,7 @@
                 @if (HttpContext.Session.GetString("acc") != null)
                 {
                     var account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
-                    @if (account.Role == 0)
+                    @if (account.Role <= 3)
                     {
                         <td class="options-cell">
                             <button class=" btn-update" onclick="window.location.href='/Admin/EditNews?id=@news.Id'">Chỉnh sửa</button>
@@ -112,17 +117,17 @@
 <div class="pagination">
     @if (Model.CurrentPage > 1)
     {
-        <a href="?pageNumber=@(Model.CurrentPage - 1)">«</a>
+        <a href="?pageNumber=@(Model.CurrentPage - 1)&searchTerm=@Model.SearchTerm&sortOption=@Model.SortOption">«</a>
     }
 
     @for (int i = 1; i <= Model.TotalPages; i++)
     {
-        <a href="?pageNumber=@i" class="@(i == Model.CurrentPage ? "active" : "")">@i</a>
+        <a href="?pageNumber=@i&searchTerm=@Model.SearchTerm&sortOption=@Model.SortOption" class="@(i == Model.CurrentPage ? "active" : "")">@i</a>
     }
 
     @if (Model.CurrentPage < Model.TotalPages)
     {
-        <a href="?pageNumber=@(Model.CurrentPage + 1)">»</a>
+        <a href="?pageNumber=@(Model.CurrentPage + 1)&searchTerm=@Model.SearchTerm&sortOption=@Model.SortOption">»</a>
     }
 </div>
 

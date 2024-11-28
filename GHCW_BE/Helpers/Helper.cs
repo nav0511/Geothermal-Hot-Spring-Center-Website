@@ -119,5 +119,22 @@ namespace GHCW_BE.Helpers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
+        public string ReadSystemPrompt(string fileName)
+        {
+            string filePath = Path.Combine(Directory.GetCurrentDirectory(), fileName);
+            if (!File.Exists(filePath))
+            {
+                throw new FileNotFoundException($"File '{fileName}' không tồn tại trong đường dẫn.");
+            }
+
+            try
+            {
+                return File.ReadAllText(filePath);
+            }
+            catch (Exception ex)
+            {
+                throw new IOException($"Lỗi load file '{fileName}': {ex.Message}");
+            }
+        }
     }
 }

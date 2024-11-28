@@ -21,6 +21,20 @@ builder.Services.AddDbContext<GHCWContext>(opt => opt.UseSqlServer(builder.Confi
 builder.Services.AddAutoMapper(typeof(MapperProfile));
 builder.Services.AddScoped<Helper>();
 builder.Services.AddScoped<AuthenticationService>();
+builder.Services.AddScoped<AccountService>();
+builder.Services.AddScoped<CustomerService>();
+builder.Services.AddScoped<ScheduleService>();
+builder.Services.AddHttpClient("OpenAI", client =>
+{
+    var apiKey = builder.Configuration["OpenAI:Key"];
+    if (string.IsNullOrEmpty(apiKey))
+    {
+        throw new InvalidOperationException("API Key for OpenAI is not configured.");
+    }
+
+    client.BaseAddress = new Uri("https://api.openai.com");
+    client.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
+});
 builder.Services.AddAuthentication(opt =>
 {
     opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -128,7 +142,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseRouting();
 app.MapControllers();
 
 app.Run();

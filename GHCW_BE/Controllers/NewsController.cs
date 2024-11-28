@@ -144,7 +144,7 @@ namespace GHCW_BE.Controllers
 
         [Authorize]
         [HttpDelete("NewsActivation/{id}")]
-        public async Task<IActionResult> UserActivation(int id)
+        public async Task<IActionResult> NewsActivation(int id)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             var roleClaim = identity?.FindFirst("Role");

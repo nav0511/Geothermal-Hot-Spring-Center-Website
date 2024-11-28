@@ -101,7 +101,7 @@ namespace GHCW_BE.DTOs
         [RegularExpression(@"^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠƯÝàáâãèéêìíòóôõùúăđĩũơưýẠ-ỹẠ-ỹ\s]+$", ErrorMessage = "Họ tên chỉ được chứa chữ cái và khoảng trắng.")]
         public string Name { get; set; }
 
-        public string Address { get; set; }
+        public string? Address { get; set; }
 
         [Required(ErrorMessage = "Yêu cầu nhập số điện thoại.")]
         [RegularExpression(@"^(0[3||5||7||8||9])\d{8}$", ErrorMessage = "Số điện thoại chưa đúng định dạng.")]

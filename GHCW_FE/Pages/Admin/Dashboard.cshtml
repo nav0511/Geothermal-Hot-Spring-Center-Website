@@ -8,11 +8,10 @@
     Layout = "_LayoutManagement";
     ViewData["ActivePage"] = "/Admin/Dashboard";
 }
-
 <div class="dashboard-page-header">
     <div class="header-content">
         <header class="dashboard-header">
-            <h2>Dashboard</h2>
+            <h2>Dashboard</h2>z
         </header>
 
         <section class="dashboard-stats">
@@ -66,6 +65,14 @@
         margin-top: 60px;
         min-height: 200px;
     }
+
+    iframe {
+        width: 100%;
+        height: 80vh;
+        max-width: 100%;
+        border: none;
+        margin-top: 60px;
+    }
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -97,7 +104,7 @@
     var profileIcon = document.getElementById("profileIcon");
     var dropdownMenu = document.getElementById("dropdownMenu");
     var profileMenu = document.querySelector(".profile-menu");
-    
+
     // Toggle dropdown when the profile icon is clicked
     profileIcon.addEventListener("click", function (event) {
         event.stopPropagation();

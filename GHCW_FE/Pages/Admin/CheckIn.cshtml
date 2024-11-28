@@ -2,13 +2,12 @@
 @model GHCW_FE.Pages.Admin.CheckInModel
 @{
     ViewData["Title"] = "Check-In";
-    Layout = "_LayoutReceptionist";
+    Layout = "_LayoutManagement";
     ViewData["ActivePage"] = "/Admin/CheckIn";
 }
 <header class="page-header">
     <h2><span style="color:#9197B3">Danh sách đặt trước > </span>CheckIn > @Model.TicketId</h2>
-    @*     <button class="btn-add" onclick="window.location.href='#'"></button>
-    *@
+
 </header>
 
 @if (TempData["SuccessMessage"] != null)
@@ -26,14 +25,7 @@
 }
 
 <div class="search-container">
-    <input type="text" placeholder="Tìm kiếm...">
-    <select>
-        <option value="0">Sắp xếp: chọn tùy chọn</option>
-        <option value="1">A-Z</option>
-        <option value="2">Z-A</option>
-        <option value="3">Active</option>
-        <option value="4">Inactive</option>
-    </select>
+    
 </div>
 
 <table class="user-table">

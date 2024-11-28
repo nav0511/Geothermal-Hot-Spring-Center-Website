@@ -133,7 +133,6 @@ namespace GHCW_BE.Mapper
                 .ForMember(dest => dest.Receptionist, opt => opt.MapFrom(src => src.ReceptionistId))
                 .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Date))
                 .ForMember(dest => dest.Shift, opt => opt.MapFrom(src => src.Shift))
-                .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive))
                 .ForMember(dest => dest.Receptionist, opt => opt.Ignore());
 
             CreateMap<EditScheduleRequest, Schedule>();

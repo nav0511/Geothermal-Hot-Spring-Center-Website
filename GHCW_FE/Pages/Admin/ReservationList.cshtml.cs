@@ -24,11 +24,16 @@ namespace GHCW_FE.Pages.Admin
         public int ReceptionistID { get; set; }
         public List<TicketDTO> TicketDTOs { get; set; } = new List<TicketDTO>();
 
+        [BindProperty(SupportsGet = true)]
+        public string? SearchTerm { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public int SortOption { get; set; }
         public int CurrentPage { get; set; }
         public int TotalPages { get; set; }
         private const int PageSize = 6;
 
-        public async Task<IActionResult> OnGetAsync(int pageNumber = 1)
+        public async Task<IActionResult> OnGetAsync(int pageNumber = 1, string? searchTerm = null, int sortOption = 0)
         {
             var accessToken = await _tokenService.CheckAndRefreshTokenAsync();
             if (string.IsNullOrEmpty(accessToken))
@@ -60,34 +65,36 @@ namespace GHCW_FE.Pages.Admin
             }
             ReceptionistID = userProfile.Id;
 
+            SearchTerm = searchTerm;
+            SortOption = sortOption;
             CurrentPage = pageNumber;
             int skip = (pageNumber - 1) * PageSize;
 
-            var (statusCode2, totalNewsCount) = await _ticketService.GetTotalBooking(userProfile.Role, userProfile.Id);
-            if (statusCode2 != HttpStatusCode.OK)
+            var (statusCode1, tickets) = await _ticketService.GetBookingList("Ticket", userProfile.Role, userProfile.Id);
+            if (statusCode1 != HttpStatusCode.OK || tickets == null)
             {
-                TempData["ErrorMessage"] = "Đã xảy ra lỗi khi lấy tổng số vé đặt chỗ.";
-                return RedirectToPage("/Admin/ResercationList");
+                TempData["ErrorMessage"] = "Không lấy được danh sách vé.";
+                tickets = new List<TicketDTO>();
+                return RedirectToPage();
             }
 
-            TotalPages = (int)Math.Ceiling((double)totalNewsCount / PageSize);
-
-            var (statusCode1, list) = await _ticketService.GetBookingList($"Ticket?$top={PageSize}&$skip={skip}", userProfile.Role, userProfile.Id);
-
-            if (statusCode1 == HttpStatusCode.NotFound)
+            if (!string.IsNullOrEmpty(SearchTerm))
             {
-                TempData["ErrorMessage"] = "Không tìm thấy thông tin này này.";
-                return RedirectToPage("/Admin/ResercationList");
-            }
-            else if (statusCode1 != HttpStatusCode.OK)
-            {
-                TempData["ErrorMessage"] = "Đã xảy ra lỗi khi lấy danh sách đặt trước.";
-                return RedirectToPage("/Admin/ResercationList");
+                tickets = tickets?.Where(d => d.Customer.FullName?.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase) ?? false).ToList();
             }
 
+            tickets = SortOption switch
+            {
+                1 => tickets.OrderBy(d => d.OrderDate).ToList(),
+                2 => tickets.OrderByDescending(d => d.OrderDate).ToList(),
+                3 => tickets.OrderBy(d => d.BookDate).ToList(),
+                4 => tickets.OrderByDescending(d => d.BookDate).ToList(),
+                _ => tickets.ToList(),
+            };
 
-
-            TicketDTOs = list?.ToList() ?? new List<TicketDTO>();
+            var totalTickets = tickets?.Count() ?? 0;
+            TotalPages = (int)Math.Ceiling((double)totalTickets / PageSize);
+            TicketDTOs = tickets?.Skip(skip).Take(PageSize).ToList() ?? new List<TicketDTO>();
             return Page();
         }
 
