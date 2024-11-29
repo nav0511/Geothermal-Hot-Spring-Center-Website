@@ -57,6 +57,7 @@ namespace GHCW_BE.Services
         public async Task<bool> SendNewsNotificationAsync(News news, List<CustomerDTO> users)
         {
             var emailSettings = _configuration.GetSection("EmailSettings").Get<SendEmailDTO>();
+            var url = _configuration.GetSection("JWT")["Audience"];
 
             foreach (var email in users)
             {
@@ -66,7 +67,7 @@ namespace GHCW_BE.Services
                     Password = emailSettings.Password,
                     ToEmail = email.Email,
                     Subject = "Tin tức mới từ hệ thống",
-                    Body = $"Chúng tôi vừa cập nhật tin tức mới: <strong>{news.Title}</strong>. Nhấn vào đây để xem chi tiết: <a href='https://localhost:7260/News/Detail?Id={news.Id}'>Xem tin tức</a>"
+                    Body = $"Chúng tôi vừa cập nhật tin tức mới: <strong>{news.Title}</strong>. Nhấn vào đây để xem chi tiết: <a href='{url}/News/Detail?Id={news.Id}'>Xem tin tức</a>"
                 };
 
                 bool emailSent = await _helper.SendEmail(emailDTO);
