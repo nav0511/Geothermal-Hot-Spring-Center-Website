@@ -25,7 +25,7 @@ namespace GHCW_BE.Services
             if (r == null || r.Length == 0)
                 throw new Exception("No file uploaded.");
             var uploadResult = new ImageUploadResult();
-            string folderName = "TestPRM";
+            string folderName = "GHCW";
 
             if (r.Length > 0)
             {
