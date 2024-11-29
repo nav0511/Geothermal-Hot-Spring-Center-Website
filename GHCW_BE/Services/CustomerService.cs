@@ -23,6 +23,13 @@ namespace GHCW_BE.Services
             return customerDTOs;
         }
 
+        public async Task<List<CustomerDTO>> GetSubcribeCustomerList()
+        {
+            var customers = await _context.Customers.Include(c => c.Account).Where(c => c.IsEmailNotify).ToListAsync();
+            var customerDTOs = _mapper.Map<List<Customer>, List<CustomerDTO>>(customers);
+            return customerDTOs;
+        }
+
         public async Task<CustomerDTO?> GetCustomerProfileById(int uID)
         {
             var customer = await _context.Customers.Include(c => c.Account).FirstOrDefaultAsync(u => u.Id == uID);

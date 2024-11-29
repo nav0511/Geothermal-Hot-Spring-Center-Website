@@ -51,9 +51,18 @@ namespace GHCW_BE.Controllers
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             var roleClaim = identity?.FindFirst("Role");
 
-            if (roleClaim != null && int.Parse(roleClaim.Value) <= 4)
+            if (roleClaim != null && int.Parse(roleClaim.Value) <= 1)
             {
                 var acc = await _service.GetCustomerList();
+                if (acc == null)
+                {
+                    return NotFound("Danh sách khách hàng trống");
+                }
+                return Ok(acc);
+            }
+            else if (roleClaim != null && int.Parse(roleClaim.Value) > 1 && int.Parse(roleClaim.Value) <= 3)
+            {
+                var acc = await _service.GetSubcribeCustomerList();
                 if (acc == null)
                 {
                     return NotFound("Danh sách khách hàng trống");
@@ -72,14 +81,34 @@ namespace GHCW_BE.Controllers
 
             if (roleClaim != null && int.Parse(roleClaim.Value) <= 4)
             {
-                //if (a.AccountId  != null)
-                //{
-                //    var existAcc = await _service.GetUserProfileById(a.AccountId.Value);
-                //}
-                var checkAccExist = await _accountService.CheckAccountExsit(a.Email);
+                var checkAccExist = await _service.CheckCustomerExsit(a.Email);
                 if (checkAccExist != null)
                 {
-                    return Conflict("Email đã được sử dụng, vui lòng dùng email khác để đăng ký");
+                    checkAccExist.AccountId = a.AccountId;
+                    checkAccExist.FullName = a.FullName;
+                    checkAccExist.Email = a.Email;
+                    checkAccExist.PhoneNumber = a.PhoneNumber;
+                    checkAccExist.IsEmailNotify = true;
+                    var (isSuccess2, message2) = await _service.EditCustomer(checkAccExist);
+                    if (!isSuccess2)
+                    {
+                        return BadRequest(message2);
+                    }
+                    if (a.AccountId != null)
+                    {
+                        UpdateRequest ur = new UpdateRequest()
+                        {
+                            Id = a.AccountId ?? 0,
+                            Name = a.FullName,
+                            PhoneNumber = a.PhoneNumber,
+                        };
+                        (isSuccess2, message2) = await _accountService.UpdateProfile(ur);
+                        if (!isSuccess2)
+                        {
+                            return BadRequest(message2);
+                        }
+                    }
+                    return Ok(message2);
                 }
 
                 var (isSuccess, message) = await _service.AddNewCustomer(a);
@@ -114,7 +143,6 @@ namespace GHCW_BE.Controllers
                         Id = c.AccountId ?? 0,
                         Name = c.FullName,
                         PhoneNumber = c.PhoneNumber,
-                        IsEmailNotify = c.IsEmailNotify,
                         DoB = c.DoB,
                         Gender = c.Gender,
                         Address = c.Address
@@ -130,5 +158,11 @@ namespace GHCW_BE.Controllers
             return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền thực hiện hành động này.");
         }
 
+        [Authorize]
+        [HttpPut("editsubcribe")]
+        public async Task<IActionResult> EditSubcribe(CustomerDTO c)
+        {
+            return Ok();
+        }
     }
 }

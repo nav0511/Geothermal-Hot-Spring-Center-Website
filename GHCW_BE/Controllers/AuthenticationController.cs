@@ -50,8 +50,7 @@ namespace GHCW_BE.Controllers
                     PhoneNumber = registerDTO.PhoneNumber,
                     IsActive = false,
                     ActivationCode = activeCode,
-                    Role = 5,
-                    IsEmailNotify = true
+                    Role = 5
                 };
                 var encodedEmail = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(a.Email));
                 var encodedActivationCode = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(a.ActivationCode));
@@ -71,6 +70,7 @@ namespace GHCW_BE.Controllers
                     existCustomer.Email = a.Email;
                     existCustomer.FullName = a.Name;
                     existCustomer.AccountId = a.Id;
+                    existCustomer.IsEmailNotify = true;
                     var (isSuccess, message) = await _cusService.EditCustomer(existCustomer);
                     if (!isSuccess)
                     {
@@ -85,7 +85,8 @@ namespace GHCW_BE.Controllers
                         FullName = a.Name,
                         Email = a.Email,
                         PhoneNumber = a.PhoneNumber,
-                        AccountId = a.Id
+                        AccountId = a.Id,
+                        IsEmailNotify = true
                     };
                     var (isSuccess, message) = await _cusService.AddNewCustomer(addCustomer);
                     if (!isSuccess)
