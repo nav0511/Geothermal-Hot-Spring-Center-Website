@@ -139,10 +139,10 @@ if (app.Environment.IsDevelopment())
 }
 app.UseCors("Cors");
 app.UseHttpsRedirection();
+app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseRouting();
 app.MapControllers();
 
 app.Run();
