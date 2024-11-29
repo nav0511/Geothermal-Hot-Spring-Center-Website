@@ -14,7 +14,6 @@ namespace GHCW_BE.DTOs
         public string? ActivationCode { get; set; }
         public string Email { get; set; } = null!;
         public string Password { get; set; } = null!;
-        public bool IsEmailNotify { get; set; }
         public bool IsActive { get; set; }
         public string? RefreshToken { get; set; }
     }
@@ -29,7 +28,6 @@ namespace GHCW_BE.DTOs
         public DateTime? DoB { get; set; }
         public int Role { get; set; }
         public string Email { get; set; } = null!;
-        public bool IsEmailNotify { get; set; }
         public bool IsActive { get; set; }
     }
 
@@ -88,8 +86,6 @@ namespace GHCW_BE.DTOs
         public int Role { get; set; }
 
         public bool IsActive { get; set; }
-
-        public bool IsEmailNotify { get; set; }
     }
 
     public class UpdateRequest
@@ -110,8 +106,6 @@ namespace GHCW_BE.DTOs
         public DateTime? DoB { get; set; }
 
         public bool? Gender { get; set; }
-
-        public bool IsEmailNotify { get; set; }
     }
 
     public class EditRequest
@@ -136,7 +130,5 @@ namespace GHCW_BE.DTOs
         public int Role { get; set; }
 
         public bool IsActive { get; set; }
-
-        public bool IsEmailNotify { get; set; }
     }
 }

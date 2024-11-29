@@ -91,10 +91,6 @@
                 <input type="checkbox" id="isActive" name="isActive" value="true" @(Model.EmployeeProfile.IsActive ? "checked" : "")>
                 <label for="isActive">Đang hoạt động</label>
             </div>
-            <div class="checkbox-item">
-                <input type="checkbox" id="isEmailNotify" name="isEmailNotify" value="true" @(Model.EmployeeProfile.IsEmailNotify ? "checked" : "") />
-                <label for="isEmailNotify">Nhận thông báo qua Email</label>
-            </div>
         </div>
         <div class="button-container">
             <button type="submit" class="btn-update">Cập Nhật</button>

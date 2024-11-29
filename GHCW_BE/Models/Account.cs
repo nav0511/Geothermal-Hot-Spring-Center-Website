@@ -23,7 +23,6 @@ namespace GHCW_BE.Models
         public string? ActivationCode { get; set; }
         public string Email { get; set; } = null!;
         public string Password { get; set; } = null!;
-        public bool IsEmailNotify { get; set; }
         public bool IsActive { get; set; }
         public string? RefreshToken { get; set; }
 

@@ -7,7 +7,6 @@
         public string ReceptionistName { get; set; }
         public byte Shift { get; set; }
         public DateTime Date { get; set; }
-        public bool IsActive { get; set; }
     }
 
     public class ScheduleByWeek
@@ -21,7 +20,6 @@
         public int ReceptionistId { get; set; }
         public byte Shift { get; set; }
         public DateTime Date { get; set; }
-        public bool IsActive { get; set; }
     }
 
     public class EditScheduleRequest
@@ -30,6 +28,5 @@
         public int ReceptionistId { get; set; }
         public byte Shift { get; set; }
         public DateTime Date { get; set; }
-        public bool IsActive { get; set; }
     }
 }
