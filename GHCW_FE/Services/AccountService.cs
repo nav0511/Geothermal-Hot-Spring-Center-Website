@@ -49,6 +49,12 @@ namespace GHCW_FE.Services
             return user;
         }
 
+        public async Task<(HttpStatusCode StatusCode, AccountDTO? UserInfo)> GetUserByEmail(string accessToken, string email)
+        {
+            var user = await GetData<AccountDTO>($"Account/{email}", null, accessToken);
+            return user;
+        }
+
         public async Task<HttpStatusCode> AccountActivation(string accessToken, int uid)
         {
             var statusCode = await DeleteData($"Account/useractivation/{uid}", accessToken);

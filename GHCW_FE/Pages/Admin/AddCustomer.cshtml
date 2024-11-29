@@ -29,20 +29,6 @@
     <form method="post" onsubmit="return validateForm()">
         <div class="form-group">
             <div>
-                <label for="name">Mã khách hàng:</label>
-                <select id="accountID" name="accountID">
-                    <option value="0">Không có</option>
-                    @if (Model.CustomerAccounts != null)
-                    {
-                        @foreach (var cusAcc in Model.CustomerAccounts)
-                        {
-                            <option value="@cusAcc.Id">@cusAcc.Email</option>
-                        }
-                    }
-                </select>
-            </div>
-
-            <div>
                 <label for="name">Họ và tên:</label>
                 <input type="text" id="fullname" name="fullname" title="Vui lòng nhập họ tên không chứa số và kí tự đặc biệt" placeholder="Nhập họ tên" required />
             </div>
@@ -56,6 +42,13 @@
                 <label for="phonenumber">Số điện thoại:</label>
                 <input type="text" id="phonenumber" name="phonenumber" placeholder="Nhập số điện thoại"
                        pattern="[0-9]{10}" maxlength="10" title="Số điện thoại phải gồm 10 chữ số" required />
+            </div>
+
+            <div class="form-group checkbox-group">
+                <label>
+                    <input type="checkbox" id="isEmailNotify" name="isEmailNotify" value="true" checked>
+                    Nhận thông báo qua Email
+                </label>
             </div>
         </div>
 
@@ -253,19 +246,23 @@
         display: flex;
         justify-content: flex-start;
         align-items: center;
-        gap: 42%;
-        flex-wrap: nowrap;
+        gap: 10px;
+        margin-top: 10px;
     }
 
-    .checkbox-item {
-        display: flex;
-        align-items: center;
-        white-space: nowrap;
-    }
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
 
-        .checkbox-item label {
-            margin-bottom: -1px;
-            margin-left: 5px;
+        .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin-right: 8px;
+            cursor: pointer;
         }
 
     .back-button-container {

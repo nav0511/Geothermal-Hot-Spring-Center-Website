@@ -101,9 +101,6 @@ namespace GHCW_FE.Pages.Admin
                 case 8:
                     employees = employees?.Where(e => e.Role == 1).ToList(); // Lọc theo role = quản lí
                     break;
-                case 9:
-                    employees = employees?.Where(e => e.Role == 0).ToList(); // Lọc theo role = admin
-                    break;
             }
 
             switch (OrderOption)

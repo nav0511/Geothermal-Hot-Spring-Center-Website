@@ -46,6 +46,11 @@
             <option value="2" @(Model.SortOption == 2 ? "selected" : "")>Khách chưa đăng ký tài khoản</option>
             <option value="3" @(Model.SortOption == 3 ? "selected" : "")>Khách nam</option>
             <option value="4" @(Model.SortOption == 4 ? "selected" : "")>Khách nữ</option>
+            @if (account?.Role <= 1)
+            {
+                <option value="5" @(Model.SortOption == 5 ? "selected" : "")>Khách đăng ký nhận thông báo</option>
+                <option value="6" @(Model.SortOption == 6 ? "selected" : "")>Khách không đăng ký nhận thông báo</option>
+            }
         </select>
 
         <select name="OrderOption" onchange="document.getElementById('filterForm').submit()">
@@ -76,7 +81,8 @@
                     <th>Họ và tên</th>
                     <th>Số điện thoại</th>
                     <th>Email</th>
-                    @if (account?.Role == 0)
+                    <th>Nhận thông báo qua email</th>
+                    @if (account?.Role <= 4)
                     {
                         <th>Tùy chọn</th>
                     }
@@ -85,12 +91,13 @@
             <tbody>
                 @foreach (var cus in Model.Customers)
                 {
-                    <tr onclick="window.location.href='/Admin/CustomerDetails/?id=@cus.Id'">
+                    <tr>
                         <td>@cus.Id</td>
                         <td>@cus.FullName</td>
                         <td>@cus.PhoneNumber</td>
                         <td>@cus.Email</td>
-                        @if (account?.Role == 0)
+                        <td>@(cus.IsEmailNotify == true ? "Có" : "Không")</td>
+                        @if (account?.Role <= 4)
                         {
                             <td class="options-cell">
                                 <button class=" btn-update" onclick="window.location.href='/Admin/CustomerDetails/?id=@cus.Id'">Chỉnh sửa</button>
@@ -112,7 +119,9 @@
                     @if (Model.CurrentPage > 1)
                     {
                         <li class="page-item">
-                            <a class="page-link" asp-route-pageNumber="@(Model.CurrentPage - 1)" aria-label="Previous">
+                            <a class="page-link" asp-route-pageNumber="@(Model.CurrentPage - 1)" asp-route-SortOption="@Model.SortOption"
+                               asp-route-OrderOption="@Model.OrderOption"
+                               asp-route-SearchTerm="@Model.SearchTerm" aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                                 <span class="sr-only">Previous</span>
                             </a>
@@ -128,14 +137,18 @@
                     @for (int i = 1; i <= Model.TotalPages; i++)
                     {
                         <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
-                            <a class="page-link" asp-route-pageNumber="@i">@i</a>
+                            <a class="page-link" asp-route-pageNumber="@i" asp-route-SortOption="@Model.SortOption"
+                               asp-route-OrderOption="@Model.OrderOption"
+                               asp-route-SearchTerm="@Model.SearchTerm">@i</a>
                         </li>
                     }
 
                     @if (Model.CurrentPage < Model.TotalPages)
                     {
                         <li class="page-item">
-                            <a class="page-link" asp-route-pageNumber="@(Model.CurrentPage + 1)" aria-label="Next">
+                            <a class="page-link" asp-route-pageNumber="@(Model.CurrentPage + 1)" asp-route-SortOption="@Model.SortOption"
+                               asp-route-OrderOption="@Model.OrderOption"
+                               asp-route-SearchTerm="@Model.SearchTerm" aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                                 <span class="sr-only">Next</span>
                             </a>
@@ -235,7 +248,7 @@
 
         .search-container input {
             padding: 10px;
-            width: 75%;
+            width: 60%;
             border: 1px solid #ccc;
             border-radius: 8px;
         }
@@ -333,4 +346,9 @@
             margin: 0 5px;
             border-radius: 4px;
         }
+
+        .pagination .page-item.active .page-link{
+            background-color: #00b894;
+            color: white;
+        }        
 </style>

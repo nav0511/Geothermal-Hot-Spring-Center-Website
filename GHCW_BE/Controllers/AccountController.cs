@@ -212,6 +212,25 @@ namespace GHCW_BE.Controllers
         }
 
         [Authorize]
+        [HttpGet("{email}")]
+        public async Task<IActionResult> GetUserProfileByEmail(string email)
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var roleClaim = identity?.FindFirst("Role");
+
+            if (roleClaim != null && int.Parse(roleClaim.Value) != 5)
+            {
+                var requestedAcc = await _service.CheckAccountExsit(email);
+                if (requestedAcc == null)
+                {
+                    return NotFound("Tài khoản không tồn tại.");
+                }
+                return Ok(requestedAcc);
+            }
+            return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền xem thông tin tài khoản này.");
+        }
+
+        [Authorize]
         [HttpPost("adduser")]
         public async Task<IActionResult> AddNewUser(AddRequest a)
         {

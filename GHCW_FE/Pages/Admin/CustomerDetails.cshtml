@@ -34,20 +34,6 @@
             </div>
 
             <div>
-                <label for="name">Mã khách hàng:</label>
-                <select id="accountID" name="accountID">
-                    <option value="0">Không có</option>
-                    @if (Model.CustomerAccounts != null)
-                    {
-                        @foreach (var cusAcc in Model.CustomerAccounts)
-                        {
-                            <option value="@cusAcc.Id" @(Model.CustomerProfile.AccountId == cusAcc.Id ? "selected" : "")>@cusAcc.Email</option>
-                        }
-                    }
-                </select>
-            </div>
-
-            <div>
                 <label for="name">Họ và tên:</label>
                 <input type="text" id="fullname" name="fullname" value="@Model.CustomerProfile.FullName"
                        title="Vui lòng nhập họ tên không chứa số và kí tự đặc biệt" placeholder="Nhập họ tên" required />

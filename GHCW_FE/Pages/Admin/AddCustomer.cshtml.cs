@@ -20,48 +20,9 @@ namespace GHCW_FE.Pages.Admin
             _authService = authService;
             _customerService = customerService;
         }
-        public List<AccountDTO>? CustomerAccounts { get; set; }
 
         [BindProperty]
         public AddCustomerRequest AddRequest { get; set; }
-
-        public async Task<IActionResult> OnGet()
-        {
-            var accessToken = await _tokenService.CheckAndRefreshTokenAsync();
-            if (string.IsNullOrEmpty(accessToken))
-            {
-                await _authService.LogoutAsync();
-                TempData["ErrorMessage"] = "Bạn cần đăng nhập để xem thông tin.";
-                return RedirectToPage("/Authentications/Login");
-            }
-            _accService.SetAccessToken(accessToken);
-
-            var (statusCode, customers) = await _accService.ListCustomerAccount(accessToken);
-            if (statusCode == HttpStatusCode.Forbidden)
-            {
-                await _authService.LogoutAsync();
-                TempData["ErrorMessage"] = "Bạn không có quyền truy cập thông tin này.";
-                return RedirectToPage("/Authentications/Login");
-            }
-            else if (statusCode == HttpStatusCode.Unauthorized)
-            {
-                await _authService.LogoutAsync();
-                TempData["ErrorMessage"] = "Phiên đăng nhập hết hạn.";
-                return RedirectToPage("/Authentications/Login");
-            }
-            else if (statusCode == HttpStatusCode.NotFound)
-            {
-                TempData["ErrorMessage"] = "Danh sách tài khoản khách hàng trống.";
-                return Page();
-            }
-            else if (statusCode != HttpStatusCode.OK)
-            {
-                TempData["ErrorMessage"] = "Đã xảy ra lỗi khi lấy danh sách thông tin người dùng.";
-                return Page();
-            }
-            CustomerAccounts = customers;
-            return Page();
-        }
 
         public async Task<IActionResult> OnPostAsync()
         {
@@ -81,10 +42,17 @@ namespace GHCW_FE.Pages.Admin
                 }
                 _accService.SetAccessToken(accessToken);
 
-                if(AddRequest.AccountId == 0)
+                var (statusCode1, account) = await _accService.GetUserByEmail(accessToken, AddRequest.Email);
+
+                if (statusCode1 == HttpStatusCode.OK && account != null)
+                {
+                    AddRequest.AccountId = account.Id;
+                }
+                else if (statusCode1 != HttpStatusCode.NotFound)
                 {
                     AddRequest.AccountId = null;
                 }
+
                 var statusCode = await _customerService.AddCustomer(accessToken, AddRequest);
                 if (statusCode == HttpStatusCode.OK)
                 {

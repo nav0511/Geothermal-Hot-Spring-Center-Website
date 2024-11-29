@@ -85,6 +85,12 @@ namespace GHCW_FE.Pages.Admin
                 case 4:
                     customers = customers?.Where(e => !e.Gender == true).ToList(); // Lọc Nữ
                     break;
+                case 5:
+                    customers = customers?.Where(e => e.IsEmailNotify == true).ToList(); // Lọc Nam
+                    break;
+                case 6:
+                    customers = customers?.Where(e => !e.IsEmailNotify == true).ToList(); // Lọc Nữ
+                    break;
             }
 
             switch (OrderOption)
