@@ -158,11 +158,17 @@ namespace GHCW_BE.Controllers
             return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền thực hiện hành động này.");
         }
 
-        [Authorize]
-        [HttpPut("editsubcribe")]
-        public async Task<IActionResult> EditSubcribe(CustomerDTO c)
+        [HttpPut("editsubscribe")]
+        public async Task<IActionResult> EditSubscribe(Subscriber s)
         {
-            return Ok();
+            var decodeEmail = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(s.Email));
+            s.Email = decodeEmail;
+            var check = await _service.EditSubscriber(s);
+            if (!check)
+            {
+                return BadRequest("Không có khách hàng nào tương ứng.");
+            }
+            return Ok("Đã cập nhật trạng thái nhận thông báo qua email.");
         }
 
         [HttpGet("SubUser")]

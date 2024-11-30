@@ -271,3 +271,14 @@ body {
     background-color: #f8d7da;
     border-color: #f5c6cb;
 }
+
+
+.image-preview {
+    display: none;
+    max-width: 100%;
+    height: auto;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
