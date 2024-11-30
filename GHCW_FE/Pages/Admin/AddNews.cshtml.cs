@@ -8,15 +8,58 @@ namespace GHCW_FE.Pages.Admin
 {
     public class AddNewsModel : PageModel
     {
-        private NewsService _newsService = new NewsService();
-        private DiscountService _discountService = new DiscountService();
+        private NewsService _newsService;
+        private DiscountService _discountService;
+        private readonly TokenService _tokenService;
+        private readonly AuthenticationService _authService;
+        private readonly AccountService _accService;
+
+        public AddNewsModel(TokenService tokenService, AuthenticationService authService, NewsService newsService, AccountService accService, DiscountService discountService)
+        {
+            _authService = authService;
+            _newsService = newsService;
+            _discountService = discountService;
+            _tokenService = tokenService;
+            _accService = accService;
+        }
+
 
         public List<DiscountDTO> Discounts { get; set; } = new List<DiscountDTO>();
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
-            var (statusCode, discounts) = await _discountService.GetDiscounts("Discount");
+            var accessToken = await _tokenService.CheckAndRefreshTokenAsync();
+            if (string.IsNullOrEmpty(accessToken))
+            {
+                await _authService.LogoutAsync();
+                TempData["ErrorMessage"] = "Bạn cần đăng nhập để xem thông tin.";
+                return RedirectToPage("/Authentications/Login");
+            }
+            _accService.SetAccessToken(accessToken);
+
+            var (statusCode, userProfile) = await _accService.UserProfile(accessToken);
+            if (userProfile?.Role > 3)
+            {
+                await _authService.LogoutAsync();
+                TempData["ErrorMessage"] = "Bạn không có quyền truy cập thông tin này.";
+                return RedirectToPage("/Authentications/Login");
+            }
+            else if (statusCode == HttpStatusCode.NotFound)
+            {
+                await _authService.LogoutAsync();
+                TempData["ErrorMessage"] = "Không tìm thấy người dùng này.";
+                return RedirectToPage("/Authentications/Login");
+            }
+            else if (statusCode != HttpStatusCode.OK)
+            {
+                await _authService.LogoutAsync();
+                TempData["ErrorMessage"] = "Đã xảy ra lỗi khi lấy thông tin người dùng.";
+                return RedirectToPage("/Authentications/Login");
+            }
+
+            var (statusCode1, discounts) = await _discountService.GetDiscounts("Discount");
             Discounts = discounts;
+            return Page();
         }
 
         public async Task<IActionResult> OnPostCreateAsync()

@@ -8,13 +8,53 @@ namespace GHCW_FE.Pages.Admin
 {
     public class EditServiceModel : PageModel
     {
-        private ServicesService _servicesService = new ServicesService();
+        private ServicesService _servicesService;
+        private readonly TokenService _tokenService;
+        private readonly AuthenticationService _authService;
+        private readonly AccountService _accService;
+
+        public EditServiceModel(TokenService tokenService, AuthenticationService authService, ServicesService servicesService, AccountService accService)
+        {
+            _authService = authService;
+            _servicesService = servicesService;
+            _tokenService = tokenService;
+            _accService = accService;
+        }
 
         public ServiceDTO Service { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            var (statusCode, service) = await _servicesService.GetServiceById(id);
+            var accessToken = await _tokenService.CheckAndRefreshTokenAsync();
+            if (string.IsNullOrEmpty(accessToken))
+            {
+                await _authService.LogoutAsync();
+                TempData["ErrorMessage"] = "Bạn cần đăng nhập để xem thông tin.";
+                return RedirectToPage("/Authentications/Login");
+            }
+            _accService.SetAccessToken(accessToken);
+
+            var (statusCode, userProfile) = await _accService.UserProfile(accessToken);
+            if (userProfile?.Role > 1)
+            {
+                await _authService.LogoutAsync();
+                TempData["ErrorMessage"] = "Bạn không có quyền truy cập thông tin này.";
+                return RedirectToPage("/Authentications/Login");
+            }
+            else if (statusCode == HttpStatusCode.NotFound)
+            {
+                await _authService.LogoutAsync();
+                TempData["ErrorMessage"] = "Không tìm thấy người dùng này.";
+                return RedirectToPage("/Authentications/Login");
+            }
+            else if (statusCode != HttpStatusCode.OK)
+            {
+                await _authService.LogoutAsync();
+                TempData["ErrorMessage"] = "Đã xảy ra lỗi khi lấy thông tin người dùng.";
+                return RedirectToPage("/Authentications/Login");
+            }
+
+            var (statusCode1, service) = await _servicesService.GetServiceById(id);
             Service = service;
 
             if (Service == null)
@@ -47,6 +87,8 @@ namespace GHCW_FE.Pages.Admin
             Service.Time = Request.Form["time"];
             Service.Description = Request.Form["description"];
             Service.Image = "/images/" + Request.Form["image"];
+            Service.IsActive = Request.Form["isActive"] == "on";
+
 
             if (!ModelState.IsValid)
             {
@@ -61,11 +103,12 @@ namespace GHCW_FE.Pages.Admin
                 Time = Service.Time,
                 Description = Service.Description,
                 Image = Service.Image,
+                IsActive = Service.IsActive,
             };
 
             statusCode = await _servicesService.UpdateService(serviceDto);
 
-            if (statusCode == HttpStatusCode.NoContent)
+            if (statusCode == HttpStatusCode.OK)
             {
                 return RedirectToPage("/Admin/ServiceManagement");
             }
