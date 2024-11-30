@@ -16,6 +16,7 @@ namespace GHCW_BE.Models
         public string FullName { get; set; } = null!;
         public string Email { get; set; } = null!;
         public string PhoneNumber { get; set; } = null!;
+        public bool IsEmailNotify { get; set; }
 
         public virtual Account? Account { get; set; }
         public virtual ICollection<Bill> Bills { get; set; }
