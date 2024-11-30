@@ -164,5 +164,12 @@ namespace GHCW_BE.Controllers
         {
             return Ok();
         }
+
+        [HttpGet("SubUser")]
+        public async Task<IActionResult> GetAllSubUser()
+        {
+            var cus = await _service.GetSubcribeCustomerList();
+            return Ok(cus);
+        }
     }
 }

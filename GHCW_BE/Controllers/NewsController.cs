@@ -18,14 +18,16 @@ namespace GHCW_BE.Controllers
         private IMapper _mapper;
         private NewsService _newsService;
         private DiscountService _discountService;
+        private CustomerService _customerService;
         private CloudinaryService _cloudinaryService;
 
-        public NewsController(IMapper mapper, NewsService newsService, DiscountService discountService, CloudinaryService cloudinaryService)
+        public NewsController(IMapper mapper, NewsService newsService, DiscountService discountService, CloudinaryService cloudinaryService, CustomerService customerService)
         {
             _mapper = mapper;
             _newsService = newsService;
             _discountService = discountService;
             _cloudinaryService = cloudinaryService;
+            _customerService = customerService;
         }
 
         [HttpGet]
@@ -177,32 +179,34 @@ namespace GHCW_BE.Controllers
 
             await _newsService.AddNews(news);
 
-            var fakeCustomers = new List<CustomerDTO>
-        {
-            new CustomerDTO
-            {
-                Id = 1,
-                FullName = "Phong DB 05",
-                Email = "phongdb05@gmail.com",
-                PhoneNumber = "0901234567",
-                DoB = new DateTime(1995, 5, 15),
-                Gender = true, // Assuming true is male
-                Address = "Hà Nội, Việt Nam",
-                IsEmailNotify = true
-            },
-            new CustomerDTO
-            {
-                Id = 2,
-                FullName = "Phong DB 02",
-                Email = "phongdb02@gmail.com",
-                PhoneNumber = "0907654321",
-                DoB = new DateTime(1992, 3, 25),
-                Gender = true, // Assuming true is male
-                Address = "Hồ Chí Minh, Việt Nam",
-                IsEmailNotify = true
-            }
-        };
-            var users = fakeCustomers;
+            //    var fakeCustomers = new List<CustomerDTO>
+            //{
+            //    new CustomerDTO
+            //    {
+            //        Id = 1,
+            //        FullName = "Phong DB 05",
+            //        Email = "phongdb05@gmail.com",
+            //        PhoneNumber = "0901234567",
+            //        DoB = new DateTime(1995, 5, 15),
+            //        Gender = true, // Assuming true is male
+            //        Address = "Hà Nội, Việt Nam",
+            //        IsEmailNotify = true
+            //    },
+            //    new CustomerDTO
+            //    {
+            //        Id = 2,
+            //        FullName = "Phong DB 02",
+            //        Email = "phongdb02@gmail.com",
+            //        PhoneNumber = "0907654321",
+            //        DoB = new DateTime(1992, 3, 25),
+            //        Gender = true, // Assuming true is male
+            //        Address = "Hồ Chí Minh, Việt Nam",
+            //        IsEmailNotify = true
+            //    }
+            //};
+            //var users = fakeCustomers;
+            var users = await _customerService.GetSubcribeCustomerList();
+
 
             var emailSent = await _newsService.SendNewsNotificationAsync(news, users);
             if (!emailSent)

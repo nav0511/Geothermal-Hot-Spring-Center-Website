@@ -59,6 +59,26 @@ namespace GHCW_BE.Services
             var emailSettings = _configuration.GetSection("EmailSettings").Get<SendEmailDTO>();
             var url = _configuration.GetSection("JWT")["Audience"];
 
+            string message;
+            string newsUrl;
+            if (news.IsActive)
+            {
+                if (news.DiscountId == null)
+                {
+                    message = "Chúng tôi vừa cập nhật tin tức mới";
+                    newsUrl = $"{url}/News/Detail?Id={Uri.EscapeDataString(news.Id.ToString())}";
+                }
+                else
+                {
+                    message = "Chúng tôi vừa cập nhật khuyến mãi mới";
+                    newsUrl = $"{url}/Promotions/Detail?Id={Uri.EscapeDataString(news.Id.ToString())}";
+                }
+            }
+            else
+            {
+                return false;
+            }
+
             foreach (var email in users)
             {
                 var emailDTO = new SendEmailDTO
@@ -67,7 +87,9 @@ namespace GHCW_BE.Services
                     Password = emailSettings.Password,
                     ToEmail = email.Email,
                     Subject = "Tin tức mới từ hệ thống",
-                    Body = $"Chúng tôi vừa cập nhật tin tức mới: <strong>{news.Title}</strong>. Nhấn vào đây để xem chi tiết: <a href='{url}/News/Detail?Id={news.Id}'>Xem tin tức</a>"
+                   
+                    Body = $"{message}: <strong>{news.Title}</strong>. Nhấn vào đây để xem chi tiết: <a href='{newsUrl}'>Xem tin tức</a>"
+                   
                 };
 
                 bool emailSent = await _helper.SendEmail(emailDTO);
