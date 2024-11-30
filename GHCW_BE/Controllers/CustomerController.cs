@@ -170,5 +170,12 @@ namespace GHCW_BE.Controllers
             }
             return Ok("Đã cập nhật trạng thái nhận thông báo qua email.");
         }
+
+        [HttpGet("SubUser")]
+        public async Task<IActionResult> GetAllSubUser()
+        {
+            var cus = await _service.GetSubcribeCustomerList();
+            return Ok(cus);
+        }
     }
 }
