@@ -25,7 +25,7 @@ namespace GHCW_FE.Pages.Services
             int totalNewsCount = TotalNewsCount;
             TotalPages = (int)Math.Ceiling((double)totalNewsCount / PageSize);
 
-            var(statusCode2, serviceDTOs) = await _servicesService.GetServices($"Service?$top={PageSize}&$skip={skip}");
+            var(statusCode2, serviceDTOs) = await _servicesService.GetServices($"Service?$top={PageSize}&$skip={skip}&$filter=IsActive eq true");
             ServiceDTOs = serviceDTOs;
         }
     }

@@ -101,5 +101,16 @@ namespace GHCW_BE.Services
             await _context.SaveChangesAsync();
             return true;
         }
+
+        public async Task<CustomerDTO?> GetCustomerProfileByAccountId(int accID)
+        {
+            var customer = await _context.Customers.Include(c => c.Account).FirstOrDefaultAsync(u => u.AccountId == accID);
+            if (customer != null)
+            {
+                var userDTO = _mapper.Map<Customer, CustomerDTO>(customer);
+                return userDTO;
+            }
+            return null;
+        }
     }
 }
