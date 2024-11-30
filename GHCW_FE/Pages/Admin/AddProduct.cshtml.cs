@@ -8,16 +8,58 @@ namespace GHCW_FE.Pages.Admin
 {
     public class AddProductModel : PageModel
     {
-        private ProductService _poductService = new ProductService();
-        private CategoryService _categoryService = new CategoryService();
+        private ProductService _productService;
+        private CategoryService _categoryService;
+        private readonly TokenService _tokenService;
+        private readonly AuthenticationService _authService;
+        private readonly AccountService _accService;
+
+        public AddProductModel(TokenService tokenService, AuthenticationService authService, ProductService productService, AccountService accService, CategoryService categoryService)
+        {
+            _authService = authService;
+            _productService = productService;
+            _categoryService = categoryService;
+            _tokenService = tokenService;
+            _accService = accService;
+        }
         public List<string> Sizes { get; } = new List<string> { "XS", "S", "M", "L", "XL", "XXL" };
 
         public List<CategoryDTO> Categories { get; set; } = new List<CategoryDTO>();
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
-            var (statusCode, categories) = await _categoryService.GetCategory("Category");
+            var accessToken = await _tokenService.CheckAndRefreshTokenAsync();
+            if (string.IsNullOrEmpty(accessToken))
+            {
+                await _authService.LogoutAsync();
+                TempData["ErrorMessage"] = "Bạn cần đăng nhập để xem thông tin.";
+                return RedirectToPage("/Authentications/Login");
+            }
+            _accService.SetAccessToken(accessToken);
+
+            var (statusCode, userProfile) = await _accService.UserProfile(accessToken);
+            if (userProfile?.Role > 1)
+            {
+                await _authService.LogoutAsync();
+                TempData["ErrorMessage"] = "Bạn không có quyền truy cập thông tin này.";
+                return RedirectToPage("/Authentications/Login");
+            }
+            else if (statusCode == HttpStatusCode.NotFound)
+            {
+                await _authService.LogoutAsync();
+                TempData["ErrorMessage"] = "Không tìm thấy người dùng này.";
+                return RedirectToPage("/Authentications/Login");
+            }
+            else if (statusCode != HttpStatusCode.OK)
+            {
+                await _authService.LogoutAsync();
+                TempData["ErrorMessage"] = "Đã xảy ra lỗi khi lấy thông tin người dùng.";
+                return RedirectToPage("/Authentications/Login");
+            }
+
+            var (statusCode1, categories) = await _categoryService.GetCategory("Category");
             Categories = categories;
+            return Page();
         }
 
         public async Task<IActionResult> OnPostCreateAsync()
@@ -42,7 +84,7 @@ namespace GHCW_FE.Pages.Admin
             };
 
 
-            var response = await _poductService.CreateProduct(product, "multipart/form-data");
+            var response = await _productService.CreateProduct(product, "multipart/form-data");
 
             if (response == HttpStatusCode.OK)
             {
