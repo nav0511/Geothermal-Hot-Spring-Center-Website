@@ -44,4 +44,12 @@ namespace GHCW_BE.DTOs
         public string PhoneNumber { get; set; } = null!;
         public bool IsEmailNotify { get; set; }
     }
+
+    public class Subscriber
+    {
+        [Required(ErrorMessage = "Yêu cầu nhập email.")]
+        [EmailAddress(ErrorMessage = "Không đúng định dạng email.")]
+        public string Email { get; set; } = null!;
+        public bool IsEmailNotify { get; set; }
+    }
 }

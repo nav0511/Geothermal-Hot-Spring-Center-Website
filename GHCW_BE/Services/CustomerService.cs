@@ -86,5 +86,20 @@ namespace GHCW_BE.Services
                 return (false, "Cập nhật thông tin thất bại, vui lòng kiểm tra lại.");
             }
         }
+
+        public async Task<bool> EditSubscriber(Subscriber s)
+        {
+            var customers = await _context.Customers.Where(c => c.Email == s.Email).ToListAsync();
+            if (customers == null || customers.Count == 0)
+            {
+                return false;
+            }
+            foreach (var c in customers)
+            {
+                c.IsEmailNotify = s.IsEmailNotify;
+            }
+            await _context.SaveChangesAsync();
+            return true;
+        }
     }
 }
