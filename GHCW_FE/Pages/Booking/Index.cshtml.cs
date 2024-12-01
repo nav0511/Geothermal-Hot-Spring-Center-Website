@@ -23,7 +23,7 @@ namespace GHCW_FE.Pages.Booking
 
         public async Task OnGetAsync()
         {
-            (HttpStatusCode StatusCode, List<ServiceDTO>? ListServices) = await _servicesService.GetServices($"Service");
+            (HttpStatusCode StatusCode, List<ServiceDTO>? ListServices) = await _servicesService.GetServices($"Service?$filter=IsActive eq true");
             AvailableServices = ListServices;
         }
 

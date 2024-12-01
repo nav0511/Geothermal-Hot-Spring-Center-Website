@@ -18,12 +18,14 @@ namespace GHCW_BE.Controllers
         private TicketService _ticketService;
         private CloudinaryService _cloudinary;
         private readonly CustomerService _customerService;
-        public TicketController(IMapper mapper, TicketService ticketService, CloudinaryService cloudinary, CustomerService customerService)
+        private readonly DiscountService _discountService;
+        public TicketController(IMapper mapper, TicketService ticketService, CloudinaryService cloudinary, CustomerService customerService, DiscountService discountService)
         {
             _mapper = mapper;
             _ticketService = ticketService;
             _cloudinary = cloudinary;
             _customerService = customerService;
+            _discountService = discountService;
         }
 
         [HttpGet]
@@ -86,7 +88,7 @@ namespace GHCW_BE.Controllers
                 return BadRequest("Dữ liệu không hợp lệ.");
             }
 
-            var customer = await _customerService.GetCustomerProfileById(ticketDto.CustomerId);
+            var customer = await _customerService.GetCustomerProfileByAccountId(ticketDto.CustomerId);
             if (customer == null) return StatusCode(500, "Có lỗi xảy ra khi lưu vé.");
 
             var newTicket = _mapper.Map<Ticket>(ticketDto);
@@ -95,6 +97,8 @@ namespace GHCW_BE.Controllers
             {
                 ticket.Total = ticket.Price * ticket.Quantity;
             }
+            var discount = _discountService.GetDiscount(ticketDto.DiscountCode);
+            if (discount != null) newTicket.Total *= (1 - (discount.Value / 100.0m));
 
             var result = await _ticketService.SaveTicketAsync(newTicket);
 

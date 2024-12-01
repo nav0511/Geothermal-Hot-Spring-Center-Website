@@ -16,14 +16,18 @@ namespace GHCW_FE.Pages.Booking
         private readonly TicketService _ticketService;
         private readonly TokenService _tokenService;
         private readonly AuthenticationService _authService;
+        private readonly DiscountService _discountService;
 
-        public CartModel(ServicesService servicesService, VnPayService vnPayService, TicketService ticketService, TokenService tokenService, AuthenticationService authService)
+        public CartModel(ServicesService servicesService, VnPayService vnPayService, 
+            TicketService ticketService, TokenService tokenService, 
+            AuthenticationService authService, DiscountService discountService)
         {
             _servicesService = servicesService;
             _vnPayService = vnPayService;
             _ticketService = ticketService;
             _tokenService = tokenService;
             _authService = authService;
+            _discountService = discountService;
         }
         public PaymentInformationDTO PaymentInfo { get; set; }
         public string BookingDate { get; set; }
@@ -32,15 +36,24 @@ namespace GHCW_FE.Pages.Booking
         public bool IsLoggedIn { get; set; }
         public string ErrorMessage { get; set; }
         public string CartData { get; set; }
+        [BindProperty]
+        public string SelectedDiscountCode { get; set; }
         public bool HasTicketSaved { get; set; } = false;
 
         public List<ServiceDTO> AvailableServices { get; set; } = new List<ServiceDTO>();
+        public List<DiscountDTO> AvailableDiscounts { get; set; } = new List<DiscountDTO>();
 
         public async Task OnGet(string bookingDate)
         {
-            (HttpStatusCode StatusCode, List<ServiceDTO>? ListServices) = await _servicesService.GetServices($"Service");
+            (HttpStatusCode StatusCode, List<ServiceDTO>? ListServices) = await _servicesService.GetServices($"Service?$filter=IsActive eq true");
             AvailableServices = ListServices;
             BookingDate = bookingDate;
+
+            (HttpStatusCode discountStatusCode, List<DiscountDTO>? Discounts) = await _discountService.GetDiscounts("Discount?$filter=IsAvailable eq true");
+            if (discountStatusCode == HttpStatusCode.OK && Discounts != null)
+            {
+                AvailableDiscounts = Discounts;
+            }
 
             var user = HttpContext.Session.GetString("acc");
             if (user == null)
@@ -102,6 +115,7 @@ namespace GHCW_FE.Pages.Booking
                 var newTicket = new TicketDTOForPayment
                 {
                     CustomerId = user.Id,
+                    DiscountCode = SelectedDiscountCode,
                     Total = cart.Sum(item => item.Quantity * item.Price),
                     OrderDate = DateTime.Now,
                     BookDate = DateTime.Parse(BookingDate),

@@ -87,10 +87,10 @@ namespace GHCW_BE.Services
                 detail.Price *= 1000;
                 detail.Total *= 1000;
                 ticketDetails += $"<tr>" +
-                                 $"<td>{detail.Service.Name}</td>" +
-                                 $"<td>{detail.Quantity}</td>" +
-                                 $"<td>{detail.Price:n0} VND</td>" +
-                                 $"<td>{detail.Total:n0} VND</td>" +
+                                 $"<td style='padding: 8px; border: 1px solid #ddd;'>{detail.Service.Name}</td>" +
+                                 $"<td style='padding: 8px; border: 1px solid #ddd;'>{detail.Quantity}</td>" +
+                                 $"<td style='padding: 8px; border: 1px solid #ddd;'>{detail.Price:n0} VND</td>" +
+                                 $"<td style='padding: 8px; border: 1px solid #ddd;'>{detail.Total:n0} VND</td>" +
                                  $"</tr>";
             }
 
@@ -114,8 +114,12 @@ namespace GHCW_BE.Services
                 </tbody>
                 <tfoot>
                     <tr style='font-weight: bold;'>
-                        <td colspan='3' style='padding: 8px; border: 1px solid #ddd;'>Tổng cộng</td>
-                        <td style='padding: 8px; border: 1px solid #ddd;'>{ticket.Total:n0} VND</td>
+                        <td style='padding: 8px; border: 1px solid #ddd;'>Mã giảm giá</td>
+                        <td colspan='3' style='padding: 8px; border: 1px solid #ddd;'>{ticket.DiscountCode}</td>
+                    </tr>
+                    <tr style='font-weight: bold;'>
+                        <td style='padding: 8px; border: 1px solid #ddd;'>Tổng cộng</td>
+                        <td colspan='3' style='padding: 8px; border: 1px solid #ddd;'>{ticket.Total:n0} VND</td>
                     </tr>
                 </tfoot>
             </table>
