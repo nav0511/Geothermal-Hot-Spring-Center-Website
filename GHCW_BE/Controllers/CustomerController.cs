@@ -159,7 +159,7 @@ namespace GHCW_BE.Controllers
         }
 
         [HttpPut("editsubscribe")]
-        public async Task<IActionResult> EditSubscribe(Subscriber s)
+        public async Task<IActionResult> EditSubscribe([FromBody] Subscriber s)
         {
             var decodeEmail = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(s.Email));
             s.Email = decodeEmail;
@@ -177,5 +177,11 @@ namespace GHCW_BE.Controllers
             var cus = await _service.GetSubcribeCustomerList();
             return Ok(cus);
         }
+
+        //[HttpGet("customerProfile/{accID}")]
+        //public async Task<IActionResult> GetCustomerProfileByAccId(int accID)
+        //{
+
+        //}
     }
 }
