@@ -21,12 +21,6 @@ namespace GHCW_BE.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<Ticket>> GetUserBookingList(int uid)
-        {
-            var tickets = await _context.Tickets.Include(c => c.Customer).Include(td => td.TicketDetails).Where(t => t.CustomerId == uid).ToListAsync();
-            return tickets;
-        }
-
         public IQueryable<Ticket> GetListBooking(int? role, int? uId)
         {
             if(role == 3)
