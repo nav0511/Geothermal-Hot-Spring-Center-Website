@@ -24,7 +24,7 @@ namespace GHCW_FE.Pages.Authentications
 
         public int CurrentPage { get; set; }
         public int TotalPages { get; set; }
-        private const int PageSize = 9;
+        private const int PageSize = 10;
 
         public async Task<IActionResult> OnGetAsync(int pageNumber = 1)
         {
@@ -69,7 +69,7 @@ namespace GHCW_FE.Pages.Authentications
 
             TotalPages = (int)Math.Ceiling((double)totalNewsCount / PageSize);
 
-            var (statusCode1, list) = await _ticketService.GetBookingList($"Ticket?$top={PageSize}&$skip={skip}", userProfile?.Role, userProfile?.Id);
+            var (statusCode1, list) = await _ticketService.GetBookingList($"Ticket", userProfile?.Role, userProfile?.Id);
 
             if (statusCode1 == HttpStatusCode.NotFound)
             {
@@ -82,7 +82,10 @@ namespace GHCW_FE.Pages.Authentications
                 return RedirectToPage("/Authentications/BookingList");
             }
 
-            TicketDTOs = list?.ToList() ?? new List<TicketDTO>();
+            var totalTickets = list?.Count() ?? 0;
+            TotalPages = (int)Math.Ceiling((double)totalTickets / PageSize);
+            TicketDTOs = list?.Skip(skip).Take(PageSize).ToList() ?? new List<TicketDTO>();
+
             return Page();
         }
     }

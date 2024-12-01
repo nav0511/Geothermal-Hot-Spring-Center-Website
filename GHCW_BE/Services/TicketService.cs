@@ -138,5 +138,19 @@ namespace GHCW_BE.Services
             return await _helper.SendEmail(emailDTO);
         }
 
+        public IQueryable<TicketDetail> GetListBookingDetails()
+        {
+            return _context.TicketDetails.AsQueryable();
+        }
+
+        public async Task<List<TicketDetail>> GetBookingDetails(int id)
+        {
+            return await _context.TicketDetails
+                .Include(t => t.Ticket)
+                .Include(s => s.Service)
+                .Where(t => t.TicketId == id)
+                .ToListAsync();
+        }
+
     }
 }

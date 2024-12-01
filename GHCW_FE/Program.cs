@@ -12,7 +12,6 @@ builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<ServicesService>();
 builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddScoped<TicketService>();
-builder.Services.AddScoped<TicketDetailService>();
 builder.Services.AddScoped<ScheduleService>();
 builder.Services.AddScoped<DiscountService>();
 builder.Services.AddScoped<ServicesService>();

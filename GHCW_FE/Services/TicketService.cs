@@ -10,7 +10,7 @@ namespace GHCW_FE.Services
         {
             if (role.HasValue)
             {
-                url += $"?&role={role.Value}&uId={uId.Value}";
+                url += $"?role={role.Value}&uId={uId.Value}";
             }
             
             return await GetData<List<TicketDTO>>(url);
@@ -36,6 +36,13 @@ namespace GHCW_FE.Services
             string url = "Ticket/Save";
 
             return await PushData(url, ticket, null, accessToken);
+        }
+
+        //Ticket Detail
+        public async Task<(HttpStatusCode StatusCode, List<TicketDetailDTO>?)> GetBookingDetailsById(int id)
+        {
+            string url = $"Ticket/TicketDetail/{id}";
+            return await GetData<List<TicketDetailDTO>>(url);
         }
     }
 }
