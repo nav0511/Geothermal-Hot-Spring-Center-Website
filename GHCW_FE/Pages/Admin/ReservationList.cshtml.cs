@@ -106,6 +106,29 @@ namespace GHCW_FE.Pages.Admin
                 return RedirectToPage("/Authentications/Login");
             }
 
+            var (statusCode0, ticket) = await _ticketService.GetTicketById(ticketId);
+            if (statusCode0 != HttpStatusCode.OK || ticket == null)
+            {
+                TempData["ErrorMessage"] = "Không tìm thấy vé này.";
+                return RedirectToPage();
+            }
+
+            var currentDate = DateTime.Now.Date;
+            if (ticket.BookDate.Date != currentDate)
+            {
+                TempData["ErrorMessage"] = "Chỉ được thay đổi trạng thái check-in vào ngày đặt vé.";
+                return RedirectToPage();
+            }
+
+            var currentTime = DateTime.Now.TimeOfDay;
+            var startTime = new TimeSpan(7, 15, 0); 
+            var endTime = new TimeSpan(22, 0, 0);  
+            if (currentTime < startTime || currentTime > endTime)
+            {
+                TempData["ErrorMessage"] = "Chỉ được thay đổi trạng thái check-in trong khoảng từ 7:15 sáng đến 10:00 tối.";
+                return RedirectToPage();
+            }
+
             if (paymentStatus == 0 && checkInStatus != 0)
             {
                 paymentStatus = 1;
