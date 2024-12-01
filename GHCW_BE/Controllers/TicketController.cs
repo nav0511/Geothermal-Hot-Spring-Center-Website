@@ -117,5 +117,34 @@ namespace GHCW_BE.Controllers
             return Ok("Đã lưu vé thành công.");
         }
 
+
+        [HttpGet("TicketDetail")]
+        [EnableQuery]
+        public async Task<IActionResult> GetBookingList()
+        {
+            var list = _ticketService.GetListBookingDetails();
+            if (list == null)
+            {
+                return NotFound("Không có danh sách vé nào.");
+            }
+
+            var projectedQuery = _mapper.ProjectTo<TicketDetailDTO>(list);
+            var result = await projectedQuery.ToListAsync();
+            return Ok(result);
+        }
+
+        [HttpGet("TicketDetail/{id}")]
+        public async Task<IActionResult> GetTicketDetailById(int id)
+        {
+            var details = await _ticketService.GetBookingDetails(id);
+            if (details == null)
+            {
+                return NotFound();
+            }
+
+            var ticketDetailDTOs = _mapper.Map<List<TicketDetailDTO>>(details);
+            return Ok(ticketDetailDTOs);
+        }
+
     }
 }
