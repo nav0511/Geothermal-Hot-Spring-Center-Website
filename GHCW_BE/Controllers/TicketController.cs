@@ -56,6 +56,18 @@ namespace GHCW_BE.Controllers
             return Ok(count);
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetBookingById(int id)
+        {
+            var ticket = await _ticketService.GetTicketById(id);
+            if (ticket == null)
+            {
+                return NotFound("Vé không tồn tại");
+            }
+
+            return Ok(ticket);
+        }
+
         [HttpPut("Update-Checkin")]
         public async Task<IActionResult> UpdateCheckIn([FromBody] TicketDTO2 request)
         {

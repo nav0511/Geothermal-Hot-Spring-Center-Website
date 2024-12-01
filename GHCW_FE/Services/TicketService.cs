@@ -38,6 +38,12 @@ namespace GHCW_FE.Services
             return await PushData(url, ticket, null, accessToken);
         }
 
+        public async Task<(HttpStatusCode StatusCode, TicketDTO? Ticket)> GetTicketById(int id)
+        {
+            string url = $"Ticket/{id}";
+            return await GetData<TicketDTO>(url);
+        }
+
         //Ticket Detail
         public async Task<(HttpStatusCode StatusCode, List<TicketDetailDTO>?)> GetBookingDetailsById(int id)
         {

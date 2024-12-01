@@ -21,6 +21,8 @@ namespace GHCW_BE.Services
             _mapper = mapper;
         }
 
+
+
         public IQueryable<Ticket> GetListBooking(int? role, int? uId)
         {
             if(role == 3)
