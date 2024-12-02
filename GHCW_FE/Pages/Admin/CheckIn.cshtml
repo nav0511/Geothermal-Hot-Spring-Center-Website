@@ -4,10 +4,17 @@
     ViewData["Title"] = "Check-In";
     Layout = "_LayoutManagement";
     ViewData["ActivePage"] = "/Admin/CheckIn";
+    var source = Request.Query["source"];
 }
 <header class="page-header">
-    <h2><span style="color:#9197B3">Danh sách đặt trước > </span>CheckIn > @Model.TicketId</h2>
-
+     @if (source == "danh_sach")
+    {
+        <h2><span style="color:#9197B3">Danh sách đặt trước > </span>CheckIn > @Model.TicketId</h2>
+    }
+    else if (source == "quan_ly_ve")
+    {
+        <h2><span style="color:#9197B3">Quản lý vé > </span>CheckIn > @Model.TicketId</h2>
+    }
 </header>
 
 @if (TempData["SuccessMessage"] != null)
@@ -66,7 +73,7 @@
 </table>
 
 <div class="back-button-container">
-    <button class="btn-back" onclick="window.location.href='/Admin/ReservationList'"> << Quay lại</button>
+    <button class="btn-back" onclick="goBack()"> << Quay lại</button>
 </div>
 
 
@@ -217,4 +224,16 @@
             profileMenu.classList.remove('show');
         }
     });
+
+    function goBack() {
+        var source = new URLSearchParams(window.location.search).get("source");
+
+        if (source === "danh_sach") {
+            window.location.href = '/Admin/ReservationList';
+        } else if (source === "quan_ly_ve") {
+            window.location.href = '/Admin/TicketManagement';
+        } else {
+            window.location.href = '/Admin/ReservationList';
+        }
+    }
 </script>

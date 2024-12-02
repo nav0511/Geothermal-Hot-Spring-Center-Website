@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace GHCW_BE.Controllers
 {
@@ -129,6 +130,25 @@ namespace GHCW_BE.Controllers
             return Ok("Đã lưu vé thành công.");
         }
 
+        [Authorize]
+        [HttpDelete("TicketActivation/{id}")]
+        public async Task<IActionResult> ProductActivation(int id)
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var roleClaim = identity?.FindFirst("Role");
+
+            if (roleClaim != null && int.Parse(roleClaim.Value) <= 1)
+            {
+                var (isSuccess, message) = await _ticketService.TicketActivation(id);
+                if (!isSuccess)
+                {
+                    return BadRequest(message);
+                }
+
+                return Ok(message);
+            }
+            return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền thực hiện hành động này.");
+        }
 
         [HttpGet("TicketDetail")]
         [EnableQuery]
