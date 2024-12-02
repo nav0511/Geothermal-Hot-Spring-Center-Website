@@ -1,6 +1,6 @@
 ﻿using GHCW_BE.DTOs;
-using GHCW_BE.Helpers;
 using GHCW_BE.Models;
+using GHCW_BE.Utils.Helpers;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
