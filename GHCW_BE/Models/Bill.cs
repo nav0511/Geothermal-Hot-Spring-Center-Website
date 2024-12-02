@@ -17,6 +17,8 @@ namespace GHCW_BE.Models
         public decimal Total { get; set; }
         public byte PaymentStatus { get; set; }
         public DateTime OrderDate { get; set; }
+        public bool IsActive { get; set; }
+
 
         public virtual Customer? Customer { get; set; }
         public virtual Discount? DiscountCodeNavigation { get; set; }

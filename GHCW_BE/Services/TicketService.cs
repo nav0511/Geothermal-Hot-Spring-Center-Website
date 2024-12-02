@@ -27,15 +27,15 @@ namespace GHCW_BE.Services
         {
             if(role == 3)
             {
-                return _context.Tickets.Include(t => t.Customer).Include(t => t.Receptionist).Where(t => t.SaleId == uId);
+                return _context.Tickets.Include(t => t.Customer).Include(t => t.Receptionist).Where(t => t.SaleId == uId && t.IsActive);
             }
             else if (role == 5)
             {
-                return _context.Tickets.Include(t => t.Customer).Include(t => t.Receptionist).Where(t => t.Customer.AccountId == uId);
+                return _context.Tickets.Include(t => t.Customer).Include(t => t.Receptionist).Where(t => t.Customer.AccountId == uId && t.IsActive);
             }
             else
             {
-                return _context.Tickets.Include(t => t.Customer).Include(t => t.Receptionist);
+                return _context.Tickets.Include(t => t.Customer).Include(t => t.Receptionist).Where(t => t.IsActive);
 
             }
         }
