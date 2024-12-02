@@ -84,15 +84,14 @@ namespace GHCW_BE.Controllers
                 var checkAccExist = await _service.CheckCustomerExsit(a.Email);
                 if (checkAccExist != null)
                 {
-                    checkAccExist.AccountId = a.AccountId;
-                    checkAccExist.FullName = a.FullName;
-                    checkAccExist.Email = a.Email;
-                    checkAccExist.PhoneNumber = a.PhoneNumber;
-                    checkAccExist.IsEmailNotify = true;
-                    var (isSuccess2, message2) = await _service.EditCustomer(checkAccExist);
-                    if (!isSuccess2)
+                    return Conflict("Email đã được sử dụng, vui lòng chọn email khác!");
+                }
+                else
+                {
+                    var (isSuccess, message) = await _service.AddNewCustomer(a);
+                    if (!isSuccess)
                     {
-                        return BadRequest(message2);
+                        return BadRequest(message);
                     }
                     if (a.AccountId != null)
                     {
@@ -101,23 +100,17 @@ namespace GHCW_BE.Controllers
                             Id = a.AccountId ?? 0,
                             Name = a.FullName,
                             PhoneNumber = a.PhoneNumber,
+                            Gender = a.Gender
                         };
-                        (isSuccess2, message2) = await _accountService.UpdateProfile(ur);
+                        var (isSuccess2, message2) = await _accountService.UpdateProfile(ur);
                         if (!isSuccess2)
                         {
                             return BadRequest(message2);
                         }
+                        return Ok(message2);
                     }
-                    return Ok(message2);
+                    return Ok(message);
                 }
-
-                var (isSuccess, message) = await _service.AddNewCustomer(a);
-                if (!isSuccess)
-                {
-                    return BadRequest(message);
-                }
-
-                return Ok(message);
             }
             return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền thực hiện hành động này.");
         }
@@ -177,11 +170,5 @@ namespace GHCW_BE.Controllers
             var cus = await _service.GetSubcribeCustomerList();
             return Ok(cus);
         }
-
-        //[HttpGet("customerProfile/{accID}")]
-        //public async Task<IActionResult> GetCustomerProfileByAccId(int accID)
-        //{
-
-        //}
     }
 }
