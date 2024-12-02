@@ -10,12 +10,13 @@ namespace GHCW_BE.Models
             Bills = new HashSet<Bill>();
             Customers = new HashSet<Customer>();
             Schedules = new HashSet<Schedule>();
-            Tickets = new HashSet<Ticket>();
+            TicketReceptionists = new HashSet<Ticket>();
+            TicketSales = new HashSet<Ticket>();
         }
 
         public int Id { get; set; }
         public string Name { get; set; } = null!;
-        public bool? Gender { get; set; }
+        public bool Gender { get; set; }
         public string? Address { get; set; }
         public string PhoneNumber { get; set; } = null!;
         public DateTime? DoB { get; set; }
@@ -29,6 +30,7 @@ namespace GHCW_BE.Models
         public virtual ICollection<Bill> Bills { get; set; }
         public virtual ICollection<Customer> Customers { get; set; }
         public virtual ICollection<Schedule> Schedules { get; set; }
-        public virtual ICollection<Ticket> Tickets { get; set; }
+        public virtual ICollection<Ticket> TicketReceptionists { get; set; }
+        public virtual ICollection<Ticket> TicketSales { get; set; }
     }
 }
