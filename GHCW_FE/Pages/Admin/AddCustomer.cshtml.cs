@@ -83,7 +83,7 @@ namespace GHCW_FE.Pages.Admin
                 }
                 else
                 {
-                    TempData["ErrorMessage"] = "Thêm người dùng mới thất bại, vui lòng thử lại.";
+                    TempData["ErrorMessage"] = "Thêm khách hàng mới thất bại, vui lòng thử lại.";
                     return Page();
                 }
             }
