@@ -1,20 +1,12 @@
 ﻿@page
-@model GHCW_FE.Pages.Admin.CheckInModel
+@model GHCW_FE.Pages.Admin.BillDetailsModel
 @{
-    ViewData["Title"] = "Check-In";
+    ViewData["Title"] = "Chi tiết hóa đơn";
     Layout = "_LayoutManagement";
-    ViewData["ActivePage"] = "/Admin/CheckIn";
-    var source = Request.Query["source"];
+    ViewData["ActivePage"] = "/Admin/BillDetails";
 }
 <header class="page-header">
-     @if (source == "danh_sach")
-    {
-        <h2><span style="color:#9197B3">Danh sách đặt trước > </span>CheckIn > @Model.TicketId</h2>
-    }
-    else if (source == "quan_ly_ve")
-    {
-        <h2><span style="color:#9197B3">Quản lý hóa đơn vé > </span>CheckIn > @Model.TicketId</h2>
-    }
+    <h2><span style="color:#9197B3">Quản lý hóa đơn sản phẩm > </span>Chi tiết hóa đơn > @Model.BillId</h2>
 </header>
 
 @if (TempData["SuccessMessage"] != null)
@@ -32,15 +24,13 @@
 }
 
 <div class="search-container">
-    
 </div>
 
 <table class="user-table">
     <thead>
         <tr>
             <th>Id</th>
-            <th>Dịch Vụ</th>
-            <th>Ngày sử dụng</th>
+            <th>Sản phẩm</th>
             <th>Số lượng</th>
             <th>Giá</th>
             <th>Giảm giá</th>
@@ -48,32 +38,31 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var ticketDetail in Model.TicketDetails)
+        @foreach (var billDetail in Model.BillDetails)
         {
-            var discountCode = ticketDetail.Ticket.DiscountCode;
+            var discountCode = billDetail.Bill.DiscountCode;
             var discount = Model.DiscountDTOs.FirstOrDefault(d => d.Code == discountCode);
             decimal discountValue = discount?.Value ?? 0;
 
-            var total = ticketDetail.Total - (ticketDetail.Total * discountValue / 100);
+            var total = billDetail.Total - (billDetail.Total * discountValue / 100);
             <tr>
-                <td>@ticketDetail.TicketId</td>
-                <td>@ticketDetail.Service.Name</td>
-                <td>@ticketDetail.Ticket.BookDate.ToString("dd/MM/yyyy")</td>
-                <td>@ticketDetail.Quantity</td>
-                <td>@String.Format("{0:N0} VNĐ", (int)ticketDetail.Price * 1000)</td>
+                <td>@billDetail.BillId</td>
+                <td>@billDetail.Product.Name</td>
+                <td>@billDetail.Quantity</td>
+                <td>@String.Format("{0:N0} VNĐ", (int)billDetail.Price * 1000)</td>
                 <td>@discountValue%</td>
                 <td>@String.Format("{0:N0} VNĐ", (int)total * 1000)</td>
             </tr>
         }
         <tr>
-            <td colspan="6" style="text-align: right; font-weight: bold;">Tổng cộng:</td>
+            <td colspan="5" style="text-align: right; font-weight: bold;">Tổng cộng:</td>
             <td style="font-weight: bold;">@String.Format("{0:N0} VNĐ", Model.TotalAmount * 1000)</td>
         </tr>
     </tbody>
 </table>
 
 <div class="back-button-container">
-    <button class="btn-back" onclick="goBack()"> << Quay lại</button>
+    <button class="btn-back" onclick="window.location.href='/Admin/BillManagement'"> << Quay lại</button>
 </div>
 
 
@@ -224,16 +213,4 @@
             profileMenu.classList.remove('show');
         }
     });
-
-    function goBack() {
-        var source = new URLSearchParams(window.location.search).get("source");
-
-        if (source === "danh_sach") {
-            window.location.href = '/Admin/ReservationList';
-        } else if (source === "quan_ly_ve") {
-            window.location.href = '/Admin/TicketManagement';
-        } else {
-            window.location.href = '/Admin/ReservationList';
-        }
-    }
 </script>

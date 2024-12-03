@@ -13,7 +13,7 @@ namespace GHCW_BE.DTOs
         public DateTime OrderDate { get; set; }
         public bool IsActive { get; set; }
 
-        public virtual Customer? Customer { get; set; }
-        public virtual Account Receptionist { get; set; } = null!;
+        public virtual CustomerDTO? Customer { get; set; }
+        public virtual AccountDTO Receptionist { get; set; } = null!;
     }
 }
