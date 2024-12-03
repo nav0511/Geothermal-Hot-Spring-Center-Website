@@ -132,7 +132,7 @@ namespace GHCW_BE.Controllers
 
         [Authorize]
         [HttpDelete("TicketActivation/{id}")]
-        public async Task<IActionResult> ProductActivation(int id)
+        public async Task<IActionResult> TicketActivation(int id)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             var roleClaim = identity?.FindFirst("Role");
@@ -152,7 +152,7 @@ namespace GHCW_BE.Controllers
 
         [HttpGet("TicketDetail")]
         [EnableQuery]
-        public async Task<IActionResult> GetBookingList()
+        public async Task<IActionResult> GetBookingDetailList()
         {
             var list = _ticketService.GetListBookingDetails();
             if (list == null)
