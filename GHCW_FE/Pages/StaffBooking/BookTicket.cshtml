@@ -1,0 +1,416 @@
+﻿@page
+@model GHCW_FE.Pages.StaffBooking.BookTicketModel
+@{
+    ViewData["Title"] = "Đặt vé";
+    Layout = "_LayoutManagement";
+    ViewData["ActivePage"] = "/StaffBooking/BookTicket";
+}
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success mt-3">
+        @TempData["SuccessMessage"]
+    </div>
+}
+@if (Model.HasTicketSaved)
+{
+    <script>
+        localStorage.removeItem("cart");
+    </script>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger mt-3">
+        @TempData["ErrorMessage"]
+    </div>
+}
+<div class="booking-container">
+    <div class="services-section">
+        <h2 style="margin-bottom: 1rem">Danh sách dịch vụ</h2>
+        <div class="services-grid">
+            @foreach (var service in Model.AvailableServices)
+            {
+                <div class="service-card">
+                    <div class="service-image-container">
+                        <img src="@service.Image" alt="@service.Name" class="service-image">
+                    </div>
+                    <div class="service-info">
+                        <h3>@service.Name</h3>
+                        <div class="service-actions">
+                            <p class="price">Giá: @(service.Price * 1000) VND</p>
+                            <label class="quantity-label">Số lượng:</label>
+                            <input type="number" min="1" value="1" id="quantity-@service.Id" class="quantity-input">
+                            <button class="btn btn-primary" onclick="addToCart(@service.Id, '@Html.Raw(service.Name.Replace("'", "\\'"))', parseInt(document.getElementById('quantity-@service.Id').value), @service.Price)">Thêm</button>
+                        </div>
+
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="cart-summary">
+        <h2>Dịch vụ đã chọn</h2>
+        <div class="cart-items" id="cartItems">
+            <p>Bạn chưa chọn dịch vụ nào.</p>
+        </div>
+        <div class="cart-total">
+            <h3>Tổng tiền: <span id="cartTotal">0</span> VND</h3>
+        </div>
+        <form method="post" id="paymentForm">
+            <input type="hidden" id="cartData" name="cartData" />
+            <div class="discount-section">
+                <label for="discountSelect">Chọn mã giảm giá:</label>
+                <select id="discountSelect" asp-for="SelectedDiscountCode">
+                    <option value="">Không áp dụng mã giảm giá</option>
+                    @if (Model.AvailableDiscounts.Any()){
+                        @foreach (var discount in Model.AvailableDiscounts){
+                            <option value="@discount.Code">@discount.Code - Giảm @discount.Value %</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div>
+                <label for="name">Họ và tên:</label>
+                <input type="text" id="fullname" name="fullname" title="Vui lòng nhập họ tên không chứa số và kí tự đặc biệt" placeholder="Nhập họ tên" required />
+            </div>
+
+            <div>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" title="Vui lòng nhập đúng định dạng email" placeholder="Nhập email" required />
+            </div>
+
+            <div>
+                <label for="phonenumber">Số điện thoại:</label>
+                <input type="text" id="phonenumber" name="phonenumber" placeholder="Nhập số điện thoại"
+                       pattern="[0-9]{10}" maxlength="10" title="Số điện thoại phải gồm 10 chữ số" required />
+            </div>
+
+            <div class="form-group checkbox-group">
+                <label>
+                    <input type="checkbox" id="isEmailNotify" name="isEmailNotify" value="true" checked>
+                    Nhận thông báo qua Email
+                </label>
+            </div>
+        </form>
+
+        <button class="btn btn-success" id="paymentButton" disabled">Thanh toán</button>
+
+    </div>
+
+    <div class="confirmation-dialog" id="confirmationDialog" style="display: none;">
+        <p>Bạn có chắc chắn muốn thanh toán không?</p>
+        <button class="btn btn-success" onclick="confirmPayment()">Có</button>
+        <button class="btn btn-danger" onclick="cancelPayment()">Không</button>
+    </div>
+
+</div>
+
+<script>
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    function updateCartDisplay() {
+        const cartItemsContainer = document.getElementById("cartItems");
+        cartItemsContainer.innerHTML = "";
+
+        // Add column headers
+        const headerRow = document.createElement("div");
+        headerRow.className = "cart-header";
+        headerRow.innerHTML = `
+            <span class="cart-header-item">Tên dịch vụ</span>
+            <span class="cart-header-item">Số lượng</span>
+            <span class="cart-header-item">Thành tiền</span>
+            <span class="cart-header-item">Hành động</span>
+        `;
+        cartItemsContainer.appendChild(headerRow);
+
+        let total = 0;
+        cart.forEach(item => {
+            const displayPrice = item.price * 1000;
+            const itemRow = document.createElement("div");
+            itemRow.className = "cart-item";
+            itemRow.innerHTML = `
+                <span title="${item.name}" class="cart-item-name">${item.name}</span>
+                <span class="cart-item-quantity">${item.quantity}</span>
+                <span class="cart-item-price">${(displayPrice * item.quantity).toLocaleString()} VND</span>
+                <button onclick="removeFromCart(${item.serviceId})" class="remove-btn">Xóa</button>
+            `;
+            cartItemsContainer.appendChild(itemRow);
+            total += displayPrice * item.quantity;
+        });
+
+        if (cart.length === 0) {
+            cartItemsContainer.innerHTML = "<p>Bạn chưa chọn dịch vụ nào.</p>";
+        }
+
+        document.getElementById("cartTotal").textContent = total.toLocaleString();
+        document.getElementById("paymentButton").disabled = cart.length === 0;
+    }
+
+
+    function addToCart(serviceId, name, quantity, price) {
+        const existingItem = cart.find(item => item.serviceId === serviceId);
+
+        if (existingItem) {
+            existingItem.quantity += quantity;
+        } else {
+            cart.push({ serviceId, name, quantity, price });
+        }
+
+        localStorage.setItem("cart", JSON.stringify(cart));
+        updateCartDisplay();
+    }
+
+    function removeFromCart(serviceId) {
+        cart = cart.filter(item => item.serviceId !== serviceId);
+        localStorage.setItem("cart", JSON.stringify(cart));
+        updateCartDisplay();
+    }
+
+    document.getElementById("paymentButton").addEventListener("click", function() {
+        const confirmationDialog = document.getElementById("confirmationDialog");
+        confirmationDialog.style.display = "block";  // Show confirmation dialog
+    });
+
+    function confirmPayment() {
+        let cartt = JSON.parse(localStorage.getItem("cart")) || [];
+        let cartData = cartt.map(item => ({
+            ServiceId: item.serviceId,
+            Quantity: item.quantity,
+            Price: item.price
+        }));
+
+        document.getElementById('cartData').value = JSON.stringify(cartData);
+
+        // Submit the form using JavaScript
+        document.getElementById("paymentForm").submit();
+
+        // Hide the confirmation dialog
+        const confirmationDialog = document.getElementById("confirmationDialog");
+        confirmationDialog.style.display = "none";
+    }
+
+
+    function cancelPayment() {
+        const confirmationDialog = document.getElementById("confirmationDialog");
+        confirmationDialog.style.display = "none";
+    }
+
+    document.addEventListener("DOMContentLoaded", updateCartDisplay);
+</script>
+
+<style>
+    /* General Layout */
+    .booking-container {
+        display: flex;
+        gap: 20px;
+        align-items: flex-start;
+        padding: 20px;
+        font-family: Arial, sans-serif;
+        color: #333;
+    }
+
+    /* Services Section */
+    .services-section {
+        flex: 2;
+        background-color: #f3f8ff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .services-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); /* 2 columns */
+        gap: 20px;
+    }
+
+    .service-card {
+        background: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    .service-image-container {
+        width: 100%;
+        height: 150px;
+        background: #ddd;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .service-image {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: cover;
+    }
+
+    .service-info {
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .service-actions {
+        align-items: center;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+        .service-actions p,
+        .service-actions label {
+            margin-bottom: 10px;
+        }
+
+        .service-actions .price {
+            font-weight: bold;
+        }
+
+        .service-actions .quantity-label {
+            margin-top: 10px;
+        }
+
+
+    .quantity-input {
+        width: 50px;
+        padding: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .btn-primary {
+        background: #0066cc;
+        color: #fff;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+        .btn-primary:hover {
+            background: #004da3;
+        }
+
+    /* Cart Section */
+    .cart-summary {
+        flex: 1;
+        background-color: #fff4e6;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        height: 100%; /* Matches the height of the services section */
+    }
+
+        .cart-summary h2 {
+            margin-bottom: 20px;
+        }
+
+    .cart-header, .cart-item {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1fr; /* Chia tỷ lệ cột */
+        align-items: center;
+        gap: 10px;
+        padding: 10px 0;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .cart-header {
+        font-weight: bold;
+        background-color: #f3f8ff;
+    }
+
+    .cart-header-item, .cart-item div {
+        text-align: center;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .cart-item-name {
+        text-align: left;
+    }
+
+    .cart-total {
+        margin: 1rem 0;
+    }
+
+    .btn-primary {
+        background-color: #0066cc;
+        border-radius: 5px;
+        padding: 5px 10px;
+    }
+
+    .remove-btn {
+        background-color: #ff4d4d;
+        padding: 5px 10px;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+    }
+
+
+    .btn-success {
+        background: #28a745;
+        color: #fff;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+        .btn-success:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+    .remove-btn {
+        background: #ff4d4d;
+        color: #fff;
+        padding: 5px 10px;
+        font-size: 0.9rem;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
+    .confirmation-dialog {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        display: none;
+        z-index: 1000;
+    }
+
+        .confirmation-dialog button {
+            padding: 10px 15px;
+            margin: 5px;
+            cursor: pointer;
+        }
+
+        .confirmation-dialog .btn-success {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+        }
+
+        .confirmation-dialog .btn-danger {
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+        }
+
+</style>

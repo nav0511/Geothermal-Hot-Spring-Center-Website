@@ -37,5 +37,12 @@ namespace GHCW_FE.Services
 
             return await PushData(url, ticket, null, accessToken);
         }
+
+        public async Task<HttpStatusCode> SaveTicketForStaffAsync(TicketDTOForStaff ticket, string accessToken)
+        {
+            string url = "Ticket/SaveForStaff";
+
+            return await PushData(url, ticket, null, accessToken);
+        }
     }
 }
