@@ -27,16 +27,23 @@ namespace GHCW_BE.Services
         {
             if(role == 3)
             {
-                return _context.Tickets.Include(t => t.Customer).Include(t => t.Receptionist).Where(t => t.SaleId == uId);
+                return _context.Tickets.Include(t => t.Customer).Include(t => t.Receptionist).Where(t => t.SaleId == uId && t.IsActive);
             }
             else if (role == 5)
             {
-                return _context.Tickets.Include(t => t.Customer).Include(t => t.Receptionist).Where(t => t.Customer.AccountId == uId);
+                return _context.Tickets.Include(t => t.Customer).Include(t => t.Receptionist).Where(t => t.Customer.AccountId == uId && t.IsActive);
+            }
+            else if(role == 4)
+            {
+                return _context.Tickets.Include(t => t.Customer).Include(t => t.Receptionist).Where(t => t.IsActive);
+            }
+            else if(role <= 1)
+            {
+                return _context.Tickets.Include(t => t.Customer).Include(t => t.Receptionist);
             }
             else
             {
-                return _context.Tickets.Include(t => t.Customer).Include(t => t.Receptionist);
-
+                return _context.Tickets.Where(t => false);
             }
         }
 
@@ -138,6 +145,28 @@ namespace GHCW_BE.Services
             return await _helper.SendEmail(emailDTO);
         }
 
+
+        public async Task<(bool isSuccess, string message)> TicketActivation(int tid)
+        {
+            var ticket = await _context.Tickets.FindAsync(tid);
+            if (ticket == null)
+            {
+                return (false, "Vé không tồn tại.");
+            }
+            try
+            {
+                ticket.IsActive = !ticket.IsActive;
+                _context.Tickets.Update(ticket);
+                await _context.SaveChangesAsync();
+
+                return (true, "Thay đổi trạng thái vé thành công.");
+            }
+            catch (Exception)
+            {
+                return (false, "Thay đổi trạng thái vé thất bại, vui lòng thử lại.");
+            }
+        }
+
         public IQueryable<TicketDetail> GetListBookingDetails()
         {
             return _context.TicketDetails.AsQueryable();
@@ -151,6 +180,5 @@ namespace GHCW_BE.Services
                 .Where(t => t.TicketId == id)
                 .ToListAsync();
         }
-
     }
 }

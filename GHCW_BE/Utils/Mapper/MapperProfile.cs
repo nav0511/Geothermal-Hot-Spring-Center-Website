@@ -27,6 +27,8 @@ namespace GHCW_BE.Utils.Mapper
             CreateMap<Ticket, TicketDTOForPayment>();
             CreateMap<TicketDetail, TicketDetailDTO>();
             CreateMap<TicketDetail, TicketDetailDTOForPayment>();
+            CreateMap<Bill, BillDTO>();
+            CreateMap<BillDetail, BillDetailDTO>();
 
 
             CreateMap<NewsDTO, News>();
@@ -44,6 +46,8 @@ namespace GHCW_BE.Utils.Mapper
             CreateMap<TicketDTOForPayment, Ticket>();
             CreateMap<TicketDetailDTO, TicketDetail>();
             CreateMap<TicketDetailDTOForPayment, TicketDetail>();
+            CreateMap<BillDTO, Bill>();
+            CreateMap<BillDetailDTO, BillDetail>();
 
             CreateMap<Customer, CustomerDTO>()
                 .ForMember(dest => dest.AccountId, opt => opt.MapFrom(src => src.AccountId))

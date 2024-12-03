@@ -18,6 +18,7 @@ builder.Services.AddScoped<ServicesService>();
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<NewsService>();
 builder.Services.AddScoped<CategoryService>();
+builder.Services.AddScoped<BillService>();
 
 builder.Services.AddScoped<VnPayService>();
 builder.Services.AddHttpContextAccessor();

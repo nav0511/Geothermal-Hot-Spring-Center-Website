@@ -1,15 +1,9 @@
-using System;
-using System.Collections.Generic;
+﻿using GHCW_BE.Models;
 
-namespace GHCW_BE.Models
+namespace GHCW_BE.DTOs
 {
-    public partial class Bill
+    public class BillDTO
     {
-        public Bill()
-        {
-            BillDetails = new HashSet<BillDetail>();
-        }
-
         public int Id { get; set; }
         public int ReceptionistId { get; set; }
         public int? CustomerId { get; set; }
@@ -20,8 +14,6 @@ namespace GHCW_BE.Models
         public bool IsActive { get; set; }
 
         public virtual Customer? Customer { get; set; }
-        public virtual Discount? DiscountCodeNavigation { get; set; }
         public virtual Account Receptionist { get; set; } = null!;
-        public virtual ICollection<BillDetail> BillDetails { get; set; }
     }
 }

@@ -12,6 +12,8 @@
         public DateTime BookDate { get; set; }
         public byte PaymentStatus { get; set; }
         public byte CheckIn { get; set; }
+        public bool IsActive { get; set; }
+
 
         public virtual CustomerDTO Customer { get; set; } = null!;
         public virtual AccountDTO? Receptionist { get; set; }
