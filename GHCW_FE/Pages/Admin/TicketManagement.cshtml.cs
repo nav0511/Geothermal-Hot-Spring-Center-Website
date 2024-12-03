@@ -43,7 +43,7 @@ namespace GHCW_FE.Pages.Admin
             _accService.SetAccessToken(accessToken);
 
             var (statusCode, userProfile) = await _accService.UserProfile(accessToken);
-            if (userProfile?.Role > 4 || userProfile?.Role == 2)
+            if (userProfile?.Role > 3 || userProfile?.Role == 2)
             {
                 await _authService.LogoutAsync();
                 TempData["ErrorMessage"] = "Bạn không có quyền truy cập thông tin này.";
