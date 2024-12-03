@@ -6,6 +6,11 @@
 @{
     ViewData["Title"] = "Thêm nhân viên";
     Layout = "_LayoutManagement";
+    AccountDTO? account = null;
+    if (HttpContext.Session.GetString("acc") != null)
+    {
+        account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
+    }
 }
 
 <header class="page-header">
@@ -64,6 +69,10 @@
             <div>
                 <label for="role">Vai trò:</label>
                 <select id="role" name="role">
+                    @if(account?.Role == 0)
+                    {
+                        <option value="1">Quản lý</option>
+                    }
                     <option value="2">Marketing</option>
                     <option value="3">Sale</option>
                     <option value="4">Lễ tân</option>

@@ -2,6 +2,7 @@
 using GHCW_FE.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 
 namespace GHCW_FE.Pages.Admin
@@ -38,6 +39,16 @@ namespace GHCW_FE.Pages.Admin
             {
                 await _authService.LogoutAsync();
                 TempData["ErrorMessage"] = "Bạn cần đăng nhập để xem thông tin.";
+                return RedirectToPage("/Authentications/Login");
+            }
+
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(accessToken);
+            var roleClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "Role");
+            if (roleClaim != null && int.Parse(roleClaim.Value) > 3)
+            {
+                await _authService.LogoutAsync();
+                TempData["ErrorMessage"] = "Bạn không có quyền truy cập trang này.";
                 return RedirectToPage("/Authentications/Login");
             }
             _cusService.SetAccessToken(accessToken);

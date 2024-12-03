@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Net;
 using static System.Net.Mime.MediaTypeNames;
 using System.Xml.Linq;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace GHCW_FE.Pages.Admin
 {
@@ -38,6 +39,16 @@ namespace GHCW_FE.Pages.Admin
             {
                 await _authService.LogoutAsync();
                 TempData["ErrorMessage"] = "Bạn cần đăng nhập để xem thông tin.";
+                return RedirectToPage("/Authentications/Login");
+            }
+
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(accessToken);
+            var roleClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "Role");
+            if (roleClaim != null && int.Parse(roleClaim.Value) > 1)
+            {
+                await _authService.LogoutAsync();
+                TempData["ErrorMessage"] = "Bạn không có quyền truy cập trang này.";
                 return RedirectToPage("/Authentications/Login");
             }
             _accService.SetAccessToken(accessToken);
