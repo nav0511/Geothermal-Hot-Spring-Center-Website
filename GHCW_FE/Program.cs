@@ -12,13 +12,13 @@ builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<ServicesService>();
 builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddScoped<TicketService>();
-builder.Services.AddScoped<TicketDetailService>();
 builder.Services.AddScoped<ScheduleService>();
 builder.Services.AddScoped<DiscountService>();
 builder.Services.AddScoped<ServicesService>();
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<NewsService>();
 builder.Services.AddScoped<CategoryService>();
+builder.Services.AddScoped<BillService>();
 
 builder.Services.AddScoped<VnPayService>();
 builder.Services.AddHttpContextAccessor();

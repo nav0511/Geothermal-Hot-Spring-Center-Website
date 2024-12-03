@@ -24,6 +24,18 @@ namespace GHCW_FE.Pages.Admin
         [BindProperty]
         public AddCustomerRequest AddRequest { get; set; }
 
+        public async Task<IActionResult> OnGetAsync()
+        {
+            var accessToken = await _tokenService.CheckAndRefreshTokenAsync();
+            if (string.IsNullOrEmpty(accessToken))
+            {
+                await _authService.LogoutAsync();
+                TempData["ErrorMessage"] = "Bạn cần đăng nhập để thực hiện hành động này.";
+                return RedirectToPage("/Authentications/Login");
+            }
+            return Page();
+        }
+
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
@@ -71,7 +83,7 @@ namespace GHCW_FE.Pages.Admin
                 }
                 else
                 {
-                    TempData["ErrorMessage"] = "Thêm người dùng mới thất bại, vui lòng thử lại.";
+                    TempData["ErrorMessage"] = "Thêm khách hàng mới thất bại, vui lòng thử lại.";
                     return Page();
                 }
             }

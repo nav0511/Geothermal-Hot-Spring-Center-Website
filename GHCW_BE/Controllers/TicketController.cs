@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace GHCW_BE.Controllers
 {
@@ -57,6 +58,18 @@ namespace GHCW_BE.Controllers
 
             var count = await list.CountAsync();
             return Ok(count);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetBookingById(int id)
+        {
+            var ticket = await _ticketService.GetTicketById(id);
+            if (ticket == null)
+            {
+                return NotFound("Vé không tồn tại");
+            }
+
+            return Ok(ticket);
         }
 
         [HttpPut("Update-Checkin")]
@@ -118,6 +131,54 @@ namespace GHCW_BE.Controllers
             }
 
             return Ok("Đã lưu vé thành công.");
+        }
+
+        [Authorize]
+        [HttpDelete("TicketActivation/{id}")]
+        public async Task<IActionResult> TicketActivation(int id)
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var roleClaim = identity?.FindFirst("Role");
+
+            if (roleClaim != null && int.Parse(roleClaim.Value) <= 1)
+            {
+                var (isSuccess, message) = await _ticketService.TicketActivation(id);
+                if (!isSuccess)
+                {
+                    return BadRequest(message);
+                }
+
+                return Ok(message);
+            }
+            return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền thực hiện hành động này.");
+        }
+
+        [HttpGet("TicketDetail")]
+        [EnableQuery]
+        public async Task<IActionResult> GetBookingDetailList()
+        {
+            var list = _ticketService.GetListBookingDetails();
+            if (list == null)
+            {
+                return NotFound("Không có danh sách vé nào.");
+            }
+
+            var projectedQuery = _mapper.ProjectTo<TicketDetailDTO>(list);
+            var result = await projectedQuery.ToListAsync();
+            return Ok(result);
+        }
+
+        [HttpGet("TicketDetail/{id}")]
+        public async Task<IActionResult> GetTicketDetailById(int id)
+        {
+            var details = await _ticketService.GetBookingDetails(id);
+            if (details == null)
+            {
+                return NotFound();
+            }
+
+            var ticketDetailDTOs = _mapper.Map<List<TicketDetailDTO>>(details);
+            return Ok(ticketDetailDTOs);
         }
 
         [Authorize]

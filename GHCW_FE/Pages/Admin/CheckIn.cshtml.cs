@@ -8,18 +8,18 @@ namespace GHCW_FE.Pages.Admin
 {
     public class CheckInModel : PageModel
     {
-        private TicketDetailService _ticketDetailService;
+        private TicketService _ticketService;
         private DiscountService _discountService;
         private readonly TokenService _tokenService;
         private readonly AuthenticationService _authService;
         private readonly AccountService _accService;
 
-        public CheckInModel(TokenService tokenService, AuthenticationService authService, TicketDetailService ticketDetailService, AccountService accService, DiscountService discountService)
+        public CheckInModel(TokenService tokenService, AuthenticationService authService, TicketService ticketService, AccountService accService, DiscountService discountService)
         {
             _authService = authService;
             _tokenService = tokenService;
             _accService = accService;
-            _ticketDetailService = ticketDetailService;
+            _ticketService = ticketService;
             _discountService = discountService;
         }
 
@@ -62,7 +62,7 @@ namespace GHCW_FE.Pages.Admin
 
             TicketId = id;
 
-            var (statusCode0, ticketDetails) = await _ticketDetailService.GetBookingDetailsById(id);
+            var (statusCode0, ticketDetails) = await _ticketService.GetBookingDetailsById(id);
             var (statusCode1, discountList) = await _discountService.GetDiscounts("Discount");
 
             TicketDetails = ticketDetails.ToList();

@@ -1,5 +1,5 @@
 ﻿using GHCW_BE.DTOs;
-using GHCW_BE.Helpers;
+using GHCW_BE.Utils.Helpers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;

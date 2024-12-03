@@ -20,10 +20,12 @@ namespace GHCW_BE.Models
         public DateTime BookDate { get; set; }
         public byte PaymentStatus { get; set; }
         public byte CheckIn { get; set; }
+        public bool IsActive { get; set; }
 
         public virtual Customer Customer { get; set; } = null!;
         public virtual Discount? DiscountCodeNavigation { get; set; }
         public virtual Account? Receptionist { get; set; }
+        public virtual Account? Sale { get; set; }
         public virtual ICollection<TicketDetail> TicketDetails { get; set; }
     }
 }

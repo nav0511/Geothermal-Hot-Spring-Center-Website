@@ -3,14 +3,15 @@
 @using System.Text.Json
 @using Microsoft.AspNetCore.Http
 @removeTagHelper Microsoft.AspNetCore.Mvc.TagHelpers.OptionTagHelper, Microsoft.AspNetCore.Mvc.TagHelpers
-@model GHCW_FE.Pages.Admin.ReservationListModel
+@model GHCW_FE.Pages.Admin.TicketManagementModel
 @{
-    ViewData["Title"] = "Danh sách đặt trước";
+    ViewData["Title"] = "Quản lý hóa đơn vé";
     Layout = "_LayoutManagement";
-    ViewData["ActivePage"] = "/Admin/ReservationList";
+    ViewData["ActivePage"] = "/Admin/TicketManagement";
 }
 <header class="page-header">
-    <h2>Danh sách đặt trước</h2>
+    <h2>Quản lý hóa đơn vé</h2>
+    <button class="btn-add" onclick="window.location.href='#'">+ Đặt vé</button>
 </header>
 
 @if (TempData["SuccessMessage"] != null)
@@ -63,6 +64,7 @@
             <th>Ngày sử dụng</th>
             <th>Trạng thái thanh toán</th>
             <th>Check-In</th>
+            <th>Trạng thái vé</th>
             @if (HttpContext.Session.GetString("acc") != null)
             {
                 var account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
@@ -96,41 +98,56 @@
                 <td class="@(ticket.PaymentStatus == 1 ? "status-paid" : "status-unpaid")">
                     @(ticket.PaymentStatus == 1 ? "Đã thanh toán" : "Chưa thanh toán")
                 </td>
+                <td>
+                    @if (ticket.CheckIn == 0)
+                    {
+                        <span>Chưa đến</span>
+                    }
+                    else if(ticket.CheckIn == 1)
+                    {
+                        <span>Đã check-in</span>
+                    }else if(ticket.CheckIn == 2)
+                    {
+                        <span>Hoàn tất</span>
+                    }
+                </td>
+                <td>
+                    @if (ticket.IsActive == true)
+                    {
+                        <span class="status active">Hoạt động</span>
+                    }
+                    else
+                    {
+                        <span class="status inactive">Không hoạt động</span>
+                    }
+                </td>
+
 
                 @if (HttpContext.Session.GetString("acc") != null)
                 {
                     var account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
-                    @if (account.Role == 3)
+                    @if (account.Role < 5)
                     {
-                        <td>
-                            <select name="checkInStatus" disabled>
-                                <option value="0" selected="@(ticket.CheckIn == 0)">Chưa đến</option>
-                                <option value="1" selected="@(ticket.CheckIn == 1)">Đã check-in</option>
-                                <option value="2" selected="@(ticket.CheckIn == 2)">Hoàn tất</option>
-                            </select>
+                        <td class="options-cell">
+                            <button class="status active" onclick="window.location.href='/Admin/CheckIn?id=@ticket.Id&source=quan_ly_ve'">Chi tiết</button>
+                            @if(account.Role <= 1)
+                            {
+                                @if (ticket.IsActive == true)
+                                {
+                                    <form method="post" asp-page-handler="TicketActivation">
+                                        <button type="submit" class=" btn-deactive" name="nId" value="@ticket.Id">Vô hiệu hóa</button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <form method="post" asp-page-handler="TicketActivation">
+                                        <button type="submit" class=" btn-active" name="nId" value="@ticket.Id">Kích hoạt</button>
+                                    </form>
+                                }
+                            }
                         </td>
                     }
-                    else
-                    {
-                        <td>
-                            <form method="post" asp-page-handler="UpdateCheckIn">
-                                <input type="hidden" name="receptionistID" value="@Model.ReceptionistID" />
-                                <input type="hidden" name="ticketId" value="@ticket.Id" />
-                                <input type="hidden" name="paymentStatus" value="@ticket.PaymentStatus" />
-                                <select name="checkInStatus" onchange="this.form.submit()">
-                                    <option value="0" selected="@(ticket.CheckIn == 0)">Chưa đến</option>
-                                    <option value="1" selected="@(ticket.CheckIn == 1)">Đã check-in</option>
-                                    <option value="2" selected="@(ticket.CheckIn == 2)">Hoàn tất</option>
-                                </select>
-                            </form>
-                        </td>
-                    }
-                }    
-
-                <td>
-                    <button class="status active" onclick="window.location.href='/Admin/CheckIn?id=@ticket.Id&source=danh_sach'">Chi tiết</button>
-
-                </td>
+                }
             </tr>
         }
     </tbody>
@@ -154,6 +171,43 @@
 </div>
 
 <style>
+    .btn-update, .btn-active, .btn-deactive {
+        padding: 6px;
+        font-size: 14px;
+        font-weight: bold;
+        border-radius: 5px;
+        cursor: pointer;
+        border: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-update {
+        background-color: #007bff;
+        color: #ffffff;
+    }
+
+        .btn-update:hover {
+            background-color: #0056b3;
+        }
+
+    .btn-active {
+        background-color: #00b894;
+        color: #ffffff;
+    }
+
+        .btn-active:hover {
+            background-color: #029274;
+        }
+
+    .btn-deactive {
+        background-color: #ff6b6b;
+        color: #ffffff;
+    }
+
+        .btn-deactive:hover {
+            background-color: #D65D5D;
+        }
+
     .btn-add {
         background-color: #42C2A8;
         color: white;
@@ -216,6 +270,32 @@
             border-radius: 4px;
             font-size: 14px;
         }
+
+        .user-table td.address-cell {
+            max-width: 100px; /* Đặt giới hạn độ rộng */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .user-table .options-cell {
+            display: flex;
+            gap: 5px; /* Khoảng cách giữa các nút */
+        }
+
+    .status.active,
+    .status.inactive {
+        display: inline-block;
+        padding: 5px 10px;
+        font-size: 12px;
+        font-weight: bold;
+        text-align: center;
+        border-radius: 5px;
+        white-space: nowrap;
+        max-width: 100px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 
     .status.active {
         background-color: #00b894;

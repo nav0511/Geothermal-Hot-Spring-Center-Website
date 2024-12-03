@@ -8,7 +8,7 @@ using BCrypt.Net;
 using GHCW_BE.Models;
 using Microsoft.IdentityModel.Tokens;
 
-namespace GHCW_BE.Helpers
+namespace GHCW_BE.Utils.Helpers
 {
     public class Helper
     {

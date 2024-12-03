@@ -6,7 +6,7 @@ namespace GHCW_FE.DTOs
     {
         public int Id { get; set; }
         public string Name { get; set; } = null!;
-        public bool? Gender { get; set; }
+        public bool Gender { get; set; }
         public string? Address { get; set; }
         public string PhoneNumber { get; set; } = null!;
         public DateTime? DoB { get; set; }
@@ -68,7 +68,7 @@ namespace GHCW_FE.DTOs
 
         public DateTime? DoB { get; set; }
 
-        public bool? Gender { get; set; }
+        public bool Gender { get; set; }
 
         public int Role { get; set; }
 
@@ -92,7 +92,7 @@ namespace GHCW_FE.DTOs
 
         public DateTime? DoB { get; set; }
 
-        public bool? Gender { get; set; }
+        public bool Gender { get; set; }
     }
 
     public class EditRequest
@@ -112,7 +112,7 @@ namespace GHCW_FE.DTOs
 
         public DateTime? DoB { get; set; }
 
-        public bool? Gender { get; set; }
+        public bool Gender { get; set; }
 
         public int Role { get; set; }
 

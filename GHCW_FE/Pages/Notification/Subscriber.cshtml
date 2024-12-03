@@ -38,6 +38,11 @@
                                         </div>
                                     }
 
+                                    <form method="post">
+                                        <input type="hidden" asp-for="subscriber.Email" />
+                                        <button type="submit" class="btn btn-danger mt-3">Hủy đăng ký</button>
+                                    </form>
+
                                     <button onclick="location.href='@Url.Page("/Authentications/Login")'" class="btn btn-primary mt-3">Đăng nhập</button>
                                 </div>
                             </div>

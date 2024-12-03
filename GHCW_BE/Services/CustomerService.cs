@@ -70,6 +70,7 @@ namespace GHCW_BE.Services
         public async Task<(bool isSuccess, string message)> EditCustomer(CustomerDTO c)
         {
             var customer = await _context.Customers.FirstOrDefaultAsync(u => u.Id == c.Id);
+            var account = await _context.Accounts.FirstOrDefaultAsync(a => a.Id == c.AccountId);
             if (customer == null)
             {
                 return (false, "Không tìm thấy khách hàng.");
@@ -78,6 +79,15 @@ namespace GHCW_BE.Services
             {
                 _mapper.Map(c, customer);
                 _context.Customers.Update(customer);
+
+                if (account != null)
+                {
+                    account.Address = c.Address;
+                    account.Gender = c.Gender;
+                    account.DoB = c.DoB;
+                    account.PhoneNumber = c.PhoneNumber;
+                }
+
                 await _context.SaveChangesAsync();
                 return (true, "Cập nhật thông tin thành công.");
             }

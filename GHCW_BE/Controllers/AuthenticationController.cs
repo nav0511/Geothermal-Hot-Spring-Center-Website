@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using GHCW_BE.DTOs;
-using GHCW_BE.Helpers;
 using GHCW_BE.Models;
 using GHCW_BE.Services;
+using GHCW_BE.Utils.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -50,7 +50,8 @@ namespace GHCW_BE.Controllers
                     PhoneNumber = registerDTO.PhoneNumber,
                     IsActive = false,
                     ActivationCode = activeCode,
-                    Role = 5
+                    Role = 5,
+                    Gender = registerDTO.Gender
                 };
                 var encodedEmail = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(a.Email));
                 var encodedActivationCode = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(a.ActivationCode));
@@ -67,10 +68,10 @@ namespace GHCW_BE.Controllers
                 var existCustomer = await _cusService.CheckCustomerExsit(a.Email);
                 if (existCustomer != null)
                 {
-                    existCustomer.Email = a.Email;
                     existCustomer.FullName = a.Name;
                     existCustomer.AccountId = a.Id;
                     existCustomer.IsEmailNotify = true;
+                    existCustomer.Gender = a.Gender;
                     var (isSuccess, message) = await _cusService.EditCustomer(existCustomer);
                     if (!isSuccess)
                     {
@@ -86,7 +87,8 @@ namespace GHCW_BE.Controllers
                         Email = a.Email,
                         PhoneNumber = a.PhoneNumber,
                         AccountId = a.Id,
-                        IsEmailNotify = true
+                        IsEmailNotify = true,
+                        Gender = a.Gender,
                     };
                     var (isSuccess, message) = await _cusService.AddNewCustomer(addCustomer);
                     if (!isSuccess)

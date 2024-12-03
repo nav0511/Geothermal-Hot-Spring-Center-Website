@@ -89,10 +89,19 @@
                             <a asp-page="/Admin/ScheduleManagement"><i class="fas fa-calendar"></i> Quản lý lịch làm việc</a>
                         </li>
                     }
-                    @if (account?.Role <= 4 && account?.Role != 2)
+                    @if (account?.Role == 4)
                     {
                         <li class="@(ViewData["ActivePage"] as string == "/Admin/ReservationList" ? "active" : "")">
                             <a asp-page="/Admin/ReservationList"><i class="fas fa-list"></i> Danh sách đặt trước</a>
+                        </li>
+                    }
+                    @if (account?.Role != 2 && account?.Role <= 3)
+                    {
+                        <li class="@(ViewData["ActivePage"] as string == "/Admin/TicketManagement" ? "active" : "")">
+                            <a asp-page="/Admin/TicketManagement"><i class="fas fa-clipboard-list"></i> Quản lý hóa đơn vé</a>
+                        </li>
+                        <li class="@(ViewData["ActivePage"] as string == "/Admin/BillManagement" ? "active" : "")">
+                            <a asp-page="/Admin/BillManagement"><i class="fas fa-file-invoice"></i> Quản lý hóa đơn sản phẩm</a>
                         </li>
                     }
                 </ul>

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using GHCW_BE.DTOs;
-using GHCW_BE.Helpers;
 using GHCW_BE.Models;
+using GHCW_BE.Utils.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace GHCW_BE.Services
@@ -21,26 +21,29 @@ namespace GHCW_BE.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<Ticket>> GetUserBookingList(int uid)
-        {
-            var tickets = await _context.Tickets.Include(c => c.Customer).Include(td => td.TicketDetails).Where(t => t.CustomerId == uid).ToListAsync();
-            return tickets;
-        }
+
 
         public IQueryable<Ticket> GetListBooking(int? role, int? uId)
         {
             if(role == 3)
             {
-                return _context.Tickets.Include(t => t.Customer).Include(t => t.Receptionist).Where(t => t.SaleId == uId);
+                return _context.Tickets.Include(t => t.Customer).Include(t => t.Receptionist).Where(t => t.SaleId == uId && t.IsActive);
             }
             else if (role == 5)
             {
-                return _context.Tickets.Include(t => t.Customer).Include(t => t.Receptionist).Where(t => t.Customer.AccountId == uId);
+                return _context.Tickets.Include(t => t.Customer).Include(t => t.Receptionist).Where(t => t.Customer.AccountId == uId && t.IsActive);
+            }
+            else if(role == 4)
+            {
+                return _context.Tickets.Include(t => t.Customer).Include(t => t.Receptionist).Where(t => t.IsActive);
+            }
+            else if(role <= 1)
+            {
+                return _context.Tickets.Include(t => t.Customer).Include(t => t.Receptionist);
             }
             else
             {
-                return _context.Tickets.Include(t => t.Customer).Include(t => t.Receptionist);
-
+                return _context.Tickets.Where(t => false);
             }
         }
 
@@ -142,5 +145,40 @@ namespace GHCW_BE.Services
             return await _helper.SendEmail(emailDTO);
         }
 
+
+        public async Task<(bool isSuccess, string message)> TicketActivation(int tid)
+        {
+            var ticket = await _context.Tickets.FindAsync(tid);
+            if (ticket == null)
+            {
+                return (false, "Vé không tồn tại.");
+            }
+            try
+            {
+                ticket.IsActive = !ticket.IsActive;
+                _context.Tickets.Update(ticket);
+                await _context.SaveChangesAsync();
+
+                return (true, "Thay đổi trạng thái vé thành công.");
+            }
+            catch (Exception)
+            {
+                return (false, "Thay đổi trạng thái vé thất bại, vui lòng thử lại.");
+            }
+        }
+
+        public IQueryable<TicketDetail> GetListBookingDetails()
+        {
+            return _context.TicketDetails.AsQueryable();
+        }
+
+        public async Task<List<TicketDetail>> GetBookingDetails(int id)
+        {
+            return await _context.TicketDetails
+                .Include(t => t.Ticket)
+                .Include(s => s.Service)
+                .Where(t => t.TicketId == id)
+                .ToListAsync();
+        }
     }
 }

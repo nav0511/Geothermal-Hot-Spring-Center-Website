@@ -2,7 +2,7 @@
 using GHCW_BE.DTOs;
 using GHCW_BE.Models;
 
-namespace GHCW_BE.Mapper
+namespace GHCW_BE.Utils.Mapper
 {
     public class MapperProfile : Profile
     {
@@ -28,7 +28,9 @@ namespace GHCW_BE.Mapper
             CreateMap<Ticket, TicketDTOForStaff>();
             CreateMap<TicketDetail, TicketDetailDTO>();
             CreateMap<TicketDetail, TicketDetailDTOForPayment>();
-            
+            CreateMap<Bill, BillDTO>();
+            CreateMap<BillDetail, BillDetailDTO>();
+
 
             CreateMap<NewsDTO, News>();
             CreateMap<NewsDTO2, News>();
@@ -46,6 +48,8 @@ namespace GHCW_BE.Mapper
             CreateMap<TicketDTOForStaff, Ticket>();
             CreateMap<TicketDetailDTO, TicketDetail>();
             CreateMap<TicketDetailDTOForPayment, TicketDetail>();
+            CreateMap<BillDTO, Bill>();
+            CreateMap<BillDetailDTO, BillDetail>();
 
             CreateMap<Customer, CustomerDTO>()
                 .ForMember(dest => dest.AccountId, opt => opt.MapFrom(src => src.AccountId))

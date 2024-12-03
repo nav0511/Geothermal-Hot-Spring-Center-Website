@@ -1,8 +1,8 @@
 ﻿using GHCW_BE.DTOs;
-using GHCW_BE.Helpers;
-using GHCW_BE.Mapper;
 using GHCW_BE.Models;
 using GHCW_BE.Services;
+using GHCW_BE.Utils.Helpers;
+using GHCW_BE.Utils.Mapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.OData;
 using Microsoft.EntityFrameworkCore;
@@ -123,7 +123,8 @@ builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<CategoryService>();
 builder.Services.AddScoped<ScheduleService>();
 builder.Services.AddScoped<TicketService>();
-builder.Services.AddScoped<TicketDetailService>();
+builder.Services.AddScoped<BillService>();
+
 
 builder.Services.Configure<CloudinarySetting>(builder.Configuration.GetSection("CloudinarySettings"));
 builder.Services.AddScoped<CloudinaryService>();

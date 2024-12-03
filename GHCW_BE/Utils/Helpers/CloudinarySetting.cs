@@ -1,4 +1,4 @@
-﻿namespace GHCW_BE.Helpers
+﻿namespace GHCW_BE.Utils.Helpers
 {
     public class CloudinarySetting
     {

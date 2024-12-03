@@ -6,14 +6,14 @@ using System.Net;
 
 namespace GHCW_FE.Pages.Admin
 {
-    public class ReservationListModel : PageModel
+    public class TicketManagementModel : PageModel
     {
         private readonly TicketService _ticketService;
         private readonly TokenService _tokenService;
         private readonly AuthenticationService _authService;
         private readonly AccountService _accService;
 
-        public ReservationListModel(TokenService tokenService, AuthenticationService authService, TicketService ticketService, AccountService accService)
+        public TicketManagementModel(TokenService tokenService, AuthenticationService authService, TicketService ticketService, AccountService accService)
         {
             _authService = authService;
             _ticketService = ticketService;
@@ -21,7 +21,6 @@ namespace GHCW_FE.Pages.Admin
             _accService = accService;
         }
 
-        public int ReceptionistID { get; set; }
         public List<TicketDTO> TicketDTOs { get; set; } = new List<TicketDTO>();
 
         [BindProperty(SupportsGet = true)]
@@ -32,7 +31,6 @@ namespace GHCW_FE.Pages.Admin
         public int CurrentPage { get; set; }
         public int TotalPages { get; set; }
         private const int PageSize = 6;
-
         public async Task<IActionResult> OnGetAsync(int pageNumber = 1, string? searchTerm = null, int sortOption = 0)
         {
             var accessToken = await _tokenService.CheckAndRefreshTokenAsync();
@@ -63,7 +61,6 @@ namespace GHCW_FE.Pages.Admin
                 TempData["ErrorMessage"] = "Đã xảy ra lỗi khi lấy thông tin người dùng.";
                 return RedirectToPage("/Authentications/Login");
             }
-            ReceptionistID = userProfile.Id;
 
             SearchTerm = searchTerm;
             SortOption = sortOption;
@@ -98,62 +95,36 @@ namespace GHCW_FE.Pages.Admin
             return Page();
         }
 
-        public async Task<IActionResult> OnPostUpdateCheckIn(int receptionistID, int ticketId, int checkInStatus, int paymentStatus)
+        public async Task<IActionResult> OnPostTicketActivation(int nId)
         {
-            if (receptionistID == null)
+            var accessToken = await _tokenService.CheckAndRefreshTokenAsync();
+            if (string.IsNullOrEmpty(accessToken))
             {
-                TempData["ErrorMessage"] = "Bạn cần đăng nhập lại.";
+                await _authService.LogoutAsync();
+                TempData["ErrorMessage"] = "Bạn cần đăng nhập để thực hiện việc này.";
                 return RedirectToPage("/Authentications/Login");
             }
+            _accService.SetAccessToken(accessToken);
 
-            var (statusCode0, ticket) = await _ticketService.GetTicketById(ticketId);
-            if (statusCode0 != HttpStatusCode.OK || ticket == null)
+            var statusCode = await _ticketService.TicketActivation(accessToken, nId);
+            if (statusCode == HttpStatusCode.Forbidden)
             {
-                TempData["ErrorMessage"] = "Không tìm thấy vé này.";
-                return RedirectToPage();
+                await _authService.LogoutAsync();
+                TempData["ErrorMessage"] = "Bạn không có quyền truy cập thông tin này.";
+                return RedirectToPage("/Authentications/Login");
             }
-
-            var currentDate = DateTime.Now.Date;
-            if (ticket.BookDate.Date != currentDate)
+            else if (statusCode != HttpStatusCode.OK)
             {
-                TempData["ErrorMessage"] = "Chỉ được thay đổi trạng thái check-in vào ngày đặt vé.";
-                return RedirectToPage();
-            }
-
-            var currentTime = DateTime.Now.TimeOfDay;
-            var startTime = new TimeSpan(7, 15, 0); 
-            var endTime = new TimeSpan(22, 0, 0);  
-            if (currentTime < startTime || currentTime > endTime)
-            {
-                TempData["ErrorMessage"] = "Chỉ được thay đổi trạng thái check-in trong khoảng từ 7:15 sáng đến 10:00 tối.";
-                return RedirectToPage();
-            }
-
-            if (paymentStatus == 0 && checkInStatus != 0)
-            {
-                paymentStatus = 1;
-            }
-
-            var ticketDto = new TicketDTO2
-            {
-                Id = ticketId,
-                CheckIn = (byte)checkInStatus,
-                ReceptionistId = receptionistID,
-                PaymentStatus = (byte)paymentStatus
-            };
-
-            var statusCode = await _ticketService.UpdateCheckinStatus(ticketDto);
-            if (statusCode != HttpStatusCode.OK)
-            {
-                TempData["ErrorMessage"] = "Cập nhật trạng thái check-in thất bại.";
+                TempData["ErrorMessage"] = "Đổi trạng thái thất bại, vui lòng thử lại sau.";
+                await OnGetAsync();
+                return Page();
             }
             else
             {
-                TempData["SuccessMessage"] = "Cập nhật trạng thái check-in thành công.";
+                TempData["SuccessMessage"] = "Đổi trạng thái thành công.";
+                await OnGetAsync();
+                return Page();
             }
-
-            return RedirectToPage();
         }
-
     }
 }
