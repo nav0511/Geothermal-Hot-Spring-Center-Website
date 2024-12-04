@@ -69,8 +69,8 @@
             <tr>
                 <td>@discount.Code</td>
                 <td>@discount.Name</td>
-                <td>@discount.StartDate?.ToString("dd/MM/yyyy")</td>
-                <td>@discount.EndDate?.ToString("dd/MM/yyyy")</td>
+                <td>@discount.StartDate.ToString("dd/MM/yyyy")</td>
+                <td>@discount.EndDate.ToString("dd/MM/yyyy")</td>
                 <td>
                     @if (discount.IsAvailable == true)
                     {

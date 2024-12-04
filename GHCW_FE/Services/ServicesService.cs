@@ -21,10 +21,10 @@ namespace GHCW_FE.Services
             return await GetData<ServiceDTO>(url);
         }
 
-        public async Task<HttpStatusCode> UpdateService(ServiceDTO service)
+        public async Task<HttpStatusCode> UpdateService(ServiceDTO service, string accessToken)
         {
             string url = $"Service/{service.Id}";
-            return await PutData(url, service);
+            return await PutData(url, service, null, accessToken);
         }
 
         public async Task<HttpStatusCode> DeleteService(int id)
@@ -33,11 +33,11 @@ namespace GHCW_FE.Services
             return await DeleteData(url);
         }
 
-        public async Task<HttpStatusCode> CreateService(ServiceDTO2 service, string? accepttype = null)
+        public async Task<HttpStatusCode> CreateService(ServiceDTO2 service, string accessToken, string? accepttype = null)
         {
             string url = "Service";
-            if (accepttype != null) return await PushData(url, service, accepttype);
-            else return await PushData(url, service);
+            if (accepttype != null) return await PushData(url, service, accepttype, accessToken);
+            else return await PushData(url, service, null, accessToken);
         }
 
         public async Task<HttpStatusCode> ServiceActivation(string accessToken, int id)

@@ -90,11 +90,24 @@ namespace GHCW_FE.Pages.Admin
 
         public async Task<IActionResult> OnPostUpdateAsync(int id)
         {
-            if (id <= 0)
+            var accessToken = await _tokenService.CheckAndRefreshTokenAsync();
+            if (string.IsNullOrEmpty(accessToken))
             {
-                ModelState.AddModelError(string.Empty, "ID dịch vụ không hợp lệ.");
-                return Page();
+                await _authService.LogoutAsync();
+                TempData["ErrorMessage"] = "Bạn cần đăng nhập để xem thông tin.";
+                return RedirectToPage("/Authentications/Login");
             }
+
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(accessToken);
+            var roleClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "Role");
+            if (roleClaim != null && int.Parse(roleClaim.Value) > 0)
+            {
+                await _authService.LogoutAsync();
+                TempData["ErrorMessage"] = "Bạn không có quyền truy cập trang này.";
+                return RedirectToPage("/Authentications/Login");
+            }
+            _productService.SetAccessToken(accessToken);
 
             var (statusCode, product) = await _productService.GetProductByID(id);
             Product = product;
@@ -133,15 +146,16 @@ namespace GHCW_FE.Pages.Admin
                 IsAvailable = Product.IsAvailable
             };
 
-            statusCode = await _productService.UpdateProduct(productDto);
+            statusCode = await _productService.UpdateProduct(productDto, accessToken);
 
             if (statusCode == HttpStatusCode.OK)
             {
+                TempData["SuccessMessage"] = "Cập nhật sản phẩm thành công";
                 return RedirectToPage("/Admin/ProductManagement");
             }
             else
             {
-                ModelState.AddModelError(string.Empty, "Có lỗi xảy ra khi cập nhật dịch vụ.");
+                @TempData["ErrorMessage"] = ("Có lỗi xảy ra khi cập nhật dịch vụ.");
                 return Page();
             }
         }

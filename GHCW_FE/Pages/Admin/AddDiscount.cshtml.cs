@@ -69,6 +69,25 @@ namespace GHCW_FE.Pages.Admin
 
         public async Task<IActionResult> OnPostCreateAsync()
         {
+            var accessToken = await _tokenService.CheckAndRefreshTokenAsync();
+            if (string.IsNullOrEmpty(accessToken))
+            {
+                await _authService.LogoutAsync();
+                TempData["ErrorMessage"] = "Bạn cần đăng nhập để xem thông tin.";
+                return RedirectToPage("/Authentications/Login");
+            }
+
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(accessToken);
+            var roleClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "Role");
+            if (roleClaim != null && int.Parse(roleClaim.Value) > 0)
+            {
+                await _authService.LogoutAsync();
+                TempData["ErrorMessage"] = "Bạn không có quyền truy cập trang này.";
+                return RedirectToPage("/Authentications/Login");
+            }
+            _discountService.SetAccessToken(accessToken);
+
             if (!ModelState.IsValid)
             {
                 return Page();
@@ -86,7 +105,7 @@ namespace GHCW_FE.Pages.Admin
             };
 
 
-            var response = await _discountService.CreateDiscount(discount);
+            var response = await _discountService.CreateDiscount(discount, accessToken);
 
             if (response == HttpStatusCode.OK)
             {
@@ -95,7 +114,7 @@ namespace GHCW_FE.Pages.Admin
             }
             else
             {
-                TempData["ErrorMessage"] = ("Có lỗi xảy ra khi thêm dịch vụ.");
+                TempData["ErrorMessage"] = ("Có lỗi xảy ra khi thêm phiếu giảm giá.");
                 return Page();
             }
         }

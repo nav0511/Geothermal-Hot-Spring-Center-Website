@@ -33,15 +33,15 @@
                 <input type="text" id="title" name="title" value="@Model.News.Title" required />
             </div>
 
-            <div>
+            @* <div>
                 <label for="uploadDate">Ngày đăng:</label>
-                <input type="date" id="uploadDate" name="uploadDate" value="@Model.News.UploadDate?.ToString("yyyy-MM-dd")" />
-            </div>
+                <input type="date" id="uploadDate" name="uploadDate" value="@Model.News.UploadDate.ToString("yyyy-MM-dd")" />
+            </div> *@
 
             <div>
                 <label for="discountId">Mã giảm giá:</label>
                 <select id="discountId" name="discountId">
-                    <option value="">Chọn mã giảm giá</option>
+                    <option value="0">Chọn mã giảm giá</option>
                     @foreach (var discount in Model.Discounts)
                     {
                         <option value="@discount.Code" selected="@(discount.Code == Model.News.DiscountId)">@discount.Code</option>

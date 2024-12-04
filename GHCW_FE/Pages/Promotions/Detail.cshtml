@@ -24,7 +24,7 @@
                                 <img class="img-fluid w-100" src="@Model.News.Image" alt="">
                                 <div class="blog-date">
                                     <h6 class="font-weight-bold text-white mb-n1">
-                                        @Model.News.UploadDate.Value.ToString("dd/MM")
+                                        @Model.News.UploadDate.ToString("dd/MM")
                                     </h6>
                                 </div>
                             </div>
@@ -39,8 +39,8 @@
                             {
                                 <p class="text-primary">
                                     Khuyến mãi được áp dụng từ ngày
-                                    @Model.News.Discount.StartDate.Value.ToString("dd/MM") đến ngày
-                                    @Model.News.Discount.EndDate.Value.ToString("dd/MM")
+                                    @Model.News.Discount.StartDate.ToString("dd/MM") đến ngày
+                                    @Model.News.Discount.EndDate.ToString("dd/MM")
                                 </p>
                             }
                             <p>
@@ -67,7 +67,7 @@
                             <div class="pl-3 m-1">
                                 <h6>@d.Title</h6>
                                 <small>
-                                    @d.Discount.StartDate.Value.ToString("dd/MM/yyyy") - @d.Discount.EndDate.Value.ToString("dd/MM/yyyy")
+                                    @d.Discount.StartDate.ToString("dd/MM/yyyy") - @d.Discount.EndDate.ToString("dd/MM/yyyy")
                                 </small>
                             </div>
                         </a>

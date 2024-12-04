@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
+using System.Net.WebSockets;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace GHCW_FE.Pages.Admin
@@ -87,52 +88,76 @@ namespace GHCW_FE.Pages.Admin
 
         public async Task<IActionResult> OnPostUpdateAsync(int id)
         {
-            if (id <= 0)
+            var accessToken = await _tokenService.CheckAndRefreshTokenAsync();
+            if (string.IsNullOrEmpty(accessToken))
             {
-                ModelState.AddModelError(string.Empty, "ID tin tức không hợp lệ.");
-                return Page();
+                await _authService.LogoutAsync();
+                TempData["ErrorMessage"] = "Bạn cần đăng nhập để xem thông tin.";
+                return RedirectToPage("/Authentications/Login");
             }
+
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(accessToken);
+            var roleClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "Role");
+            if (roleClaim != null && int.Parse(roleClaim.Value) > 0)
+            {
+                await _authService.LogoutAsync();
+                TempData["ErrorMessage"] = "Bạn không có quyền truy cập trang này.";
+                return RedirectToPage("/Authentications/Login");
+            }
+            _newsService.SetAccessToken(accessToken);
 
             var (statusCode, news) = await _newsService.GetNewsById(id);
             News = news;
-            if (News == null)
-            {
-                ModelState.AddModelError(string.Empty, "Tin tức không tồn tại.");
-                return NotFound();
-            }
-
-            News.Title = Request.Form["title"];
-            News.DiscountId = Request.Form["discountId"];
-            News.UploadDate = Convert.ToDateTime(Request.Form["uploadDate"]);
-            News.IsActive = Request.Form["isActive"] == "on";
-            News.Description = Request.Form["description"];
-            News.Image = "/images/" + Request.Form["image"].ToString();
+            var (statusCode2, discounts) = await _discountService.GetDiscounts("Discount");
+            Discounts = discounts;
 
             if (!ModelState.IsValid)
             {
+                TempData["ErrorMessage"] = "Thông tin đã nhập không hợp lệ, vui lòng thử lại";
+                await OnGetAsync(id);
                 return Page();
             }
 
-            var promotion = new NewsDTO
+            var promotion = new NewsDTO();
+            var discount = Request.Form["discountId"];
+            if (discount == "0")
             {
-                Id = News.Id,
-                Title = News.Title,
-                DiscountId = News.DiscountId,
-                UploadDate = News.UploadDate,
-                IsActive = News.IsActive,
-                Description = News.Description,
-                Image = News.Image,
-            };
-
-            statusCode = await _newsService.UpdateNews(promotion);
-
-            if (statusCode == HttpStatusCode.OK)
+                promotion = new NewsDTO
+                {
+                    Id = id,
+                    Title = Request.Form["title"],
+                    DiscountId = null,
+                    UploadDate = DateTime.Now,
+                    IsActive = Request.Form["isActive"] == "on",
+                    Description = Request.Form["description"],
+                    Image = "/images/" + Request.Form["image"].ToString(),
+                };
+            }
+            else
             {
+                promotion = new NewsDTO
+                {
+                    Id = id,
+                    Title = Request.Form["title"],
+                    DiscountId = discount,
+                    UploadDate = DateTime.Now,
+                    IsActive = Request.Form["isActive"] == "on",
+                    Description = Request.Form["description"],
+                    Image = "/images/" + Request.Form["image"].ToString(),
+                };
+            }
+
+            var response = await _newsService.UpdateNews(promotion, accessToken);
+
+            if (response == HttpStatusCode.OK)
+            {
+                TempData["SuccessMessage"] = "Cập nhật tin tức thành công";
                 return RedirectToPage("/Admin/NewsManagement");
             }
             else
             {
-                ModelState.AddModelError(string.Empty, "Có lỗi xảy ra khi cập nhật tin tức.");
+                @TempData["ErrorMessage"] = ("Có lỗi xảy ra khi cập nhật tin tức.");
                 return Page();
             }
         }

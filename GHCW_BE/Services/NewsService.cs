@@ -35,10 +35,18 @@ namespace GHCW_BE.Services
             return await _context.News.Include(n => n.Discount).FirstOrDefaultAsync(n => n.DiscountId == code);
         }
 
-        public async Task UpdateNews(News news)
+        public async Task<(bool isSuccess, string message)> UpdateNews(News news)
         {
-            _context.News.Update(news);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.News.Update(news);
+                await _context.SaveChangesAsync();
+                return (true, "Cập nhật Tin tức mới thành công.");
+            }
+            catch (Exception)
+            {
+                return (false, "Có lỗi trong quá trình cập nhật Tin tức, vui lòng thử lại.");
+            }
         }
 
         public async Task DeleteNews(News news)
@@ -47,11 +55,18 @@ namespace GHCW_BE.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task AddNews(News news)
+        public async Task<(bool isSuccess, string message)> AddNews(News news)
         {
-
-            await _context.News.AddAsync(news);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.News.AddAsync(news);
+                await _context.SaveChangesAsync();
+                return (true, "Thêm Tin tức mới thành công.");
+            }
+            catch (Exception)
+            {
+                return (false, "Có lỗi trong quá trình thêm Tin tức, vui lòng thử lại.");
+            }
         }
 
         public async Task<bool> SendNewsNotificationAsync(News news, List<CustomerDTO> users)

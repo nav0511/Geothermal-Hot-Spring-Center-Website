@@ -88,38 +88,38 @@ namespace GHCW_BE.Controllers
             return Ok(list.Count());
         }
 
-
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateNews(int id, [FromBody] NewsDTO newsDto)
         {
-            if (id != newsDto.Id)
-            {
-                return BadRequest("ID không khớp.");
-            }
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var roleClaim = identity?.FindFirst("Role");
 
-            var existingNews = await _newsService.GetListNews()
-                                                        .FirstOrDefaultAsync(s => s.Id == id);
-            if (existingNews == null)
+            if (roleClaim != null && int.Parse(roleClaim.Value) <= 3)
             {
-                return NotFound();
-            }
+                if (id != newsDto.Id)
+                {
+                    return BadRequest("ID không khớp.");
+                }
 
-            _mapper.Map(newsDto, existingNews);
-
-            try
-            {
-                await _newsService.UpdateNews(existingNews);
-            }
-            catch (DbUpdateConcurrencyException)
-            {
+                var existingNews = await _newsService.GetNewsById(id);
                 if (existingNews == null)
                 {
-                    return NotFound("Tin tức không tồn tại.");
+                    return NotFound();
                 }
-                throw;
-            }
 
-            return Ok("Cập nhật thành công");
+                _mapper.Map(newsDto, existingNews);
+
+
+                var (isSuccess, message) = await _newsService.UpdateNews(existingNews);
+                if (!isSuccess)
+                {
+                    return BadRequest(message);
+                }
+
+                return Ok(message);
+            }
+            return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền thực hiện hành động này.");
         }
 
         [HttpDelete("{id}")]
@@ -164,58 +164,40 @@ namespace GHCW_BE.Controllers
             return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền thực hiện hành động này.");
         }
 
-
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateNews([FromForm] NewsDTOForAdd newsDto)
         {
-            if (newsDto == null)
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var roleClaim = identity?.FindFirst("Role");
+
+            if (roleClaim != null && int.Parse(roleClaim.Value) <= 3)
             {
-                return BadRequest("Dữ liệu tin tức không hợp lệ.");
+                if (newsDto == null)
+                {
+                    return BadRequest("Dữ liệu tin tức không hợp lệ.");
+                }
+
+                var news = _mapper.Map<News>(newsDto);
+
+                news.Image = await _cloudinaryService.UploadImageResult(newsDto.Image);
+
+                var (isSuccess, message) = await _newsService.AddNews(news);
+                if (!isSuccess)
+                {
+                    return BadRequest(message);
+                }
+
+                var users = await _customerService.GetSubcribeCustomerList();
+
+                var emailSent = await _newsService.SendNewsNotificationAsync(news, users);
+                if (!emailSent)
+                {
+                    return StatusCode(500, "Tin tức được thêm nhưng không thể gửi email thông báo.");
+                }
+                return Ok(message);
             }
-
-            var news = _mapper.Map<News>(newsDto);
-
-            news.Image = await _cloudinaryService.UploadImageResult(newsDto.Image);
-
-            await _newsService.AddNews(news);
-
-            //    var fakeCustomers = new List<CustomerDTO>
-            //{
-            //    new CustomerDTO
-            //    {
-            //        Id = 1,
-            //        FullName = "Phong DB 05",
-            //        Email = "phongdb05@gmail.com",
-            //        PhoneNumber = "0901234567",
-            //        DoB = new DateTime(1995, 5, 15),
-            //        Gender = true, // Assuming true is male
-            //        Address = "Hà Nội, Việt Nam",
-            //        IsEmailNotify = true
-            //    },
-            //    new CustomerDTO
-            //    {
-            //        Id = 2,
-            //        FullName = "Phong DB 02",
-            //        Email = "phongdb02@gmail.com",
-            //        PhoneNumber = "0907654321",
-            //        DoB = new DateTime(1992, 3, 25),
-            //        Gender = true, // Assuming true is male
-            //        Address = "Hồ Chí Minh, Việt Nam",
-            //        IsEmailNotify = true
-            //    }
-            //};
-            //var users = fakeCustomers;
-            var users = await _customerService.GetSubcribeCustomerList();
-
-
-            var emailSent = await _newsService.SendNewsNotificationAsync(news, users);
-            if (!emailSent)
-            {
-                return StatusCode(500, "Tin tức được thêm nhưng không thể gửi email thông báo.");
-            }
-
-
-            return Ok("Thêm thành công");
+            return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền thực hiện hành động này.");
 
         }
     }

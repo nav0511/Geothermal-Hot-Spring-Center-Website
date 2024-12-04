@@ -58,37 +58,38 @@ namespace GHCW_BE.Controllers
             return Ok(productDTO);
         }
 
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateProduct(int id, [FromBody] ProductDTO productDto)
         {
-            if (id != productDto.Id)
-            {
-                return BadRequest("ID không khớp.");
-            }
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var roleClaim = identity?.FindFirst("Role");
 
-            var existingProduct = await _productService.GetListProducts()
-                                                        .FirstOrDefaultAsync(s => s.Id == id);
-            if (existingProduct == null)
+            if (roleClaim != null && int.Parse(roleClaim.Value) <= 1)
             {
-                return NotFound();
-            }
+                if (id != productDto.Id)
+                {
+                    return BadRequest("ID không khớp.");
+                }
 
-            _mapper.Map(productDto, existingProduct);
-
-            try
-            {
-                await _productService.UpdateProduct(existingProduct);
-            }
-            catch (DbUpdateConcurrencyException)
-            {
+                var existingProduct = await _productService.GetListProducts()
+                                                            .FirstOrDefaultAsync(s => s.Id == id);
                 if (existingProduct == null)
                 {
-                    return NotFound("Sản phẩm không tồn tại.");
+                    return NotFound();
                 }
-                throw;
-            }
 
-            return Ok("Cập nhật thành công");
+                _mapper.Map(productDto, existingProduct);
+
+                var (isSuccess, message) = await _productService.UpdateProduct(existingProduct);
+                if (!isSuccess)
+                {
+                    return BadRequest(message);
+                }
+
+                return Ok(message);
+            }
+            return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền thực hiện hành động này.");
         }
 
         [HttpDelete("{id}")]
@@ -113,22 +114,32 @@ namespace GHCW_BE.Controllers
             return Ok("Xóa thành công");
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateProduct([FromForm] ProductDTOImg productDto)
         {
-            if (productDto == null)
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var roleClaim = identity?.FindFirst("Role");
+
+            if (roleClaim != null && int.Parse(roleClaim.Value) <= 1)
             {
-                return BadRequest("Dữ liệu dịch vụ không hợp lệ.");
+                if (productDto == null)
+                {
+                    return BadRequest("Dữ liệu dịch vụ không hợp lệ.");
+                }
+
+                var product = _mapper.Map<Product>(productDto);
+
+                product.Image = await _productService.UploadImageResult(productDto.Img);
+
+                var (isSuccess, message) = await _productService.AddProduct(product);
+                if (!isSuccess)
+                {
+                    return BadRequest(message);
+                }
+                return Ok(message);
             }
-
-            var product = _mapper.Map<Product>(productDto);
-
-            product.Image = await _productService.UploadImageResult(productDto.Img);
-
-            await _productService.AddProduct(product);
-
-            return Ok("Thêm thành công");
-
+            return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền thực hiện hành động này.");
         }
 
         [Authorize]
@@ -152,7 +163,7 @@ namespace GHCW_BE.Controllers
         }
 
         [HttpPost("Image")]
-        public async Task<IActionResult> AddImage( IFormFile img)
+        public async Task<IActionResult> AddImage(IFormFile img)
         {
             return Ok(await _productService.UploadImageResult(img));
         }

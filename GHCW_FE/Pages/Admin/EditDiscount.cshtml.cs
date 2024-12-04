@@ -78,6 +78,25 @@ namespace GHCW_FE.Pages.Admin
 
         public async Task<IActionResult> OnPostUpdateAsync(string code)
         {
+            var accessToken = await _tokenService.CheckAndRefreshTokenAsync();
+            if (string.IsNullOrEmpty(accessToken))
+            {
+                await _authService.LogoutAsync();
+                TempData["ErrorMessage"] = "Bạn cần đăng nhập để xem thông tin.";
+                return RedirectToPage("/Authentications/Login");
+            }
+
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(accessToken);
+            var roleClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "Role");
+            if (roleClaim != null && int.Parse(roleClaim.Value) > 0)
+            {
+                await _authService.LogoutAsync();
+                TempData["ErrorMessage"] = "Bạn không có quyền truy cập trang này.";
+                return RedirectToPage("/Authentications/Login");
+            }
+            _discountService.SetAccessToken(accessToken);
+
             var (statusCode, discount) = await _discountService.GetDiscountByCode(code);
             Discount = discount;
             if (Discount == null)
@@ -110,15 +129,17 @@ namespace GHCW_FE.Pages.Admin
                 IsAvailable = Discount.IsAvailable
             };
 
-            statusCode = await _discountService.UpdateDiscount(discountDto);
+            statusCode = await _discountService.UpdateDiscount(discountDto, accessToken);
 
             if (statusCode == HttpStatusCode.OK)
             {
+                TempData["SuccessMessage"] = "Cập nhật phiếu giảm giá thành công";
+
                 return RedirectToPage("/Admin/DiscountManagement");
             }
             else
             {
-                ModelState.AddModelError(string.Empty, "Có lỗi xảy ra khi cập nhật phiếu giảm giá.");
+                @TempData["ErrorMessage"] = ("Có lỗi xảy ra khi cập nhật phiếu giảm giá.");
                 return Page();
             }
         }

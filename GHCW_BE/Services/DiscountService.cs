@@ -22,15 +22,19 @@ namespace GHCW_BE.Services
             return _context.Discounts.FirstOrDefault(x => x.Code == code);
         }
 
-        //public async Task<Discount> GetDiscountByCode(string code)
-        //{
-        //    return await _context.Discounts.FirstOrDefaultAsync(n => n.Code == code);
-        //}
-
-        public async Task UpdateDiscount(Discount discount)
+        public async Task<(bool isSuccess, string message)> UpdateDiscount(Discount discount)
         {
-            _context.Discounts.Update(discount);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Discounts.Update(discount);
+                await _context.SaveChangesAsync();
+                return (true, "Cập nhật Mã giảm giá thành công.");
+
+            }
+            catch (Exception)
+            {
+                return (false, "Có lỗi trong quá trình cập nhật Mã giảm giá, vui lòng thử lại.");
+            }
         }
 
         public async Task DeleteDiscount(Discount discount)
@@ -39,11 +43,25 @@ namespace GHCW_BE.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task AddDiscount(Discount discount)
+        public async Task<(bool isSuccess, string message)> AddDiscount(Discount discount)
         {
+            try
+            {
+                await _context.Discounts.AddAsync(discount);
+                await _context.SaveChangesAsync();
+                return (true, "Thêm Mã giảm giá mới thành công.");
+            }
+            catch (Exception)
+            {
+                return (false, "Có lỗi trong quá trình thêm Mã giảm giá, vui lòng thử lại.");
+            }
+            
+        }
 
-            await _context.Discounts.AddAsync(discount);
-            await _context.SaveChangesAsync();
+        public async Task<Discount?> CheckDiscountExsit(string code)
+        {
+            var checkDiscount = await _context.Discounts.FirstOrDefaultAsync(x => x.Code.Equals(code));
+            return checkDiscount;
         }
 
         public async Task<(bool isSuccess, string message)> DiscountActivation(string code)
@@ -66,5 +84,7 @@ namespace GHCW_BE.Services
                 return (false, "Thay đổi trạng thái phiếu giảm giá thất bại, vui lòng thử lại.");
             }
         }
+
+
     }
 }
