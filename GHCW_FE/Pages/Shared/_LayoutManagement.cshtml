@@ -104,6 +104,12 @@
                             <a asp-page="/Admin/BillManagement"><i class="fas fa-file-invoice"></i> Quản lý hóa đơn sản phẩm</a>
                         </li>
                     }
+                    @if (account?.Role == 4 || account?.Role == 2)
+                    {
+                        <li class="@(ViewData["ActivePage"] as string == "/StaffBooking/BookTicket" ? "active" : "")">
+                            <a asp-page="/StaffBooking/BookTicket"><i class="fas fa-ticket-alt"></i> Đặt vé</a>
+                        </li>
+                    }
                 </ul>
             </nav>
         </aside>

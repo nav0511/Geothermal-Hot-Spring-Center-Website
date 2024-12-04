@@ -195,11 +195,10 @@ namespace GHCW_BE.Controllers
                     return BadRequest("Dữ liệu không hợp lệ.");
                 }
 
-                var customer = await _customerService.GetCustomerProfileByAccountId(ticketDto.CustomerId);
+                var customer = await _customerService.GetCustomerProfileById(ticketDto.CustomerId);
                 if (customer == null) return StatusCode(500, "Có lỗi xảy ra khi lưu vé.");
 
                 var newTicket = _mapper.Map<Ticket>(ticketDto);
-                newTicket.CustomerId = customer.Id;
                 foreach (var ticket in newTicket.TicketDetails)
                 {
                     ticket.Total = ticket.Price * ticket.Quantity;

@@ -34,5 +34,11 @@ namespace GHCW_FE.Services
             var statusCode = await PutData("Customer/editsubscribe", s);
             return statusCode;
         }
+
+        public async Task<(HttpStatusCode StatusCode, CustomerDTO? CustomerInfo)> GetCustomerByEmail(string accessToken, string email)
+        {
+            var customer = await GetData<CustomerDTO>($"Customer/customer/getByEmail/{email}", null, accessToken);
+            return customer;
+        }
     }
 }
