@@ -10,7 +10,7 @@ namespace GHCW_FE.DTOs
         public int? AccountId { get; set; }
 
         [Required(ErrorMessage = "Yêu cầu nhập họ tên.")]
-        [RegularExpression(@"^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơưƯẠ-ỹ\s]+$", ErrorMessage = "Họ tên chỉ được chứa chữ cái và khoảng trắng.")]
+        [RegularExpression(@"^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠƯÝàáâãèéêìíòóôõùúăđĩũơưýẠ-ỹ\s]+$", ErrorMessage = "Họ tên chỉ được chứa chữ cái và khoảng trắng.")]
         public string FullName { get; set; } = null!;
 
         [Required(ErrorMessage = "Yêu cầu nhập email.")]
@@ -32,7 +32,7 @@ namespace GHCW_FE.DTOs
         public int? AccountId { get; set; }
 
         [Required(ErrorMessage = "Yêu cầu nhập họ tên.")]
-        [RegularExpression(@"^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơưƯẠ-ỹ\s]+$", ErrorMessage = "Họ tên chỉ được chứa chữ cái và khoảng trắng.")]
+        [RegularExpression(@"^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠƯÝàáâãèéêìíòóôõùúăđĩũơưýẠ-ỹ\s]+$", ErrorMessage = "Họ tên chỉ được chứa chữ cái và khoảng trắng.")]
         public string FullName { get; set; } = null!;
 
         [Required(ErrorMessage = "Yêu cầu nhập email.")]

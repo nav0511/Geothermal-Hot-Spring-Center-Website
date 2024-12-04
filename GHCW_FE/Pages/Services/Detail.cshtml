@@ -2,6 +2,7 @@
 @using GHCW_FE.DTOs
 @model GHCW_FE.Pages.Services.DetailModel
 @{
+    ViewData["Title"] = @Model.Service.Name;
 }
 
 @if (Model.Service != null)

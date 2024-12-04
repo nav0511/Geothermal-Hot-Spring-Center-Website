@@ -56,5 +56,12 @@ namespace GHCW_FE.Services
             string url = $"Ticket/TicketDetail/{id}";
             return await GetData<List<TicketDetailDTO>>(url);
         }
+
+        public async Task<HttpStatusCode> SaveTicketForStaffAsync(TicketDTOForStaff ticket, string accessToken)
+        {
+            string url = "Ticket/SaveForStaff";
+
+            return await PushData(url, ticket, null, accessToken);
+        }
     }
 }

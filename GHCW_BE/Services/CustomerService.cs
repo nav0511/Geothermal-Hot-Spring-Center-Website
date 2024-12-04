@@ -122,5 +122,16 @@ namespace GHCW_BE.Services
             }
             return null;
         }
+
+        public async Task<CustomerDTO?> GetCustomerProfileByEmail(string email)
+        {
+            var customer = await _context.Customers.Include(c => c.Account).FirstOrDefaultAsync(u => u.Email == email);
+            if (customer != null)
+            {
+                var userDTO = _mapper.Map<Customer, CustomerDTO>(customer);
+                return userDTO;
+            }
+            return null;
+        }
     }
 }

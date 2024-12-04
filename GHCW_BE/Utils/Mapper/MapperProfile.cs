@@ -25,6 +25,7 @@ namespace GHCW_BE.Utils.Mapper
 
             CreateMap<Ticket, TicketDTO>();
             CreateMap<Ticket, TicketDTOForPayment>();
+            CreateMap<Ticket, TicketDTOForStaff>();
             CreateMap<TicketDetail, TicketDetailDTO>();
             CreateMap<TicketDetail, TicketDetailDTOForPayment>();
             CreateMap<Bill, BillDTO>();
@@ -44,6 +45,7 @@ namespace GHCW_BE.Utils.Mapper
             CreateMap<ScheduleDTO, Schedule>();
             CreateMap<TicketDTO, TicketDTO>();
             CreateMap<TicketDTOForPayment, Ticket>();
+            CreateMap<TicketDTOForStaff, Ticket>();
             CreateMap<TicketDetailDTO, TicketDetail>();
             CreateMap<TicketDetailDTOForPayment, TicketDetail>();
             CreateMap<BillDTO, Bill>();

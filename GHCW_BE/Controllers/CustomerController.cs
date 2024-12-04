@@ -51,7 +51,7 @@ namespace GHCW_BE.Controllers
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             var roleClaim = identity?.FindFirst("Role");
 
-            if (roleClaim != null && int.Parse(roleClaim.Value) <= 1)
+            if (roleClaim != null && (int.Parse(roleClaim.Value) <= 2 || int.Parse(roleClaim.Value) == 4))
             {
                 var acc = await _service.GetCustomerList();
                 if (acc == null)
@@ -169,6 +169,25 @@ namespace GHCW_BE.Controllers
         {
             var cus = await _service.GetSubcribeCustomerList();
             return Ok(cus);
+        }
+
+        [Authorize]
+        [HttpGet("customer/getByEmail/{email}")]
+        public async Task<IActionResult> GetCustomerProfileByEmail(string email)
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var roleClaim = identity?.FindFirst("Role");
+
+            if (roleClaim != null && int.Parse(roleClaim.Value) <= 4)
+            {
+                var customer = await _service.GetCustomerProfileByEmail(email);
+                if (customer == null)
+                {
+                    return NotFound("Khách hàng không tồn tại.");
+                }
+                return Ok(customer);
+            }
+            return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền xem thông tin này.");
         }
     }
 }
