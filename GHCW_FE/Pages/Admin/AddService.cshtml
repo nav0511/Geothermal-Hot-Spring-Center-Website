@@ -69,42 +69,6 @@
     <button class="btn-back" onclick="window.location.href='/Admin/ServiceManagement'"> << Quay lại</button>
 </div>
 
-<script>
-    // Get the profile icon and dropdown elements
-    var profileIcon = document.getElementById("profileIcon");
-    var dropdownMenu = document.getElementById("dropdownMenu");
-    var profileMenu = document.querySelector(".profile-menu");
-
-    // Toggle dropdown when the profile icon is clicked
-    profileIcon.addEventListener("click", function (event) {
-        event.stopPropagation();
-        profileMenu.classList.toggle("show");
-    });
-
-    // Close the dropdown if user clicks outside
-    window.addEventListener("click", function (event) {
-        if (!event.target.matches('.profile-icon') && profileMenu.classList.contains('show')) {
-            profileMenu.classList.remove('show');
-        }
-    });
-
-    function previewImage(event) {
-        var input = event.target;
-        var imagePreview = document.getElementById("imagePreview");
-
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-
-            reader.onload = function (e) {
-                imagePreview.src = e.target.result;
-                imagePreview.style.display = "block";
-            };
-
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-</script>
-
 <style>
     .btn-add {
         background-color: #42C2A8;

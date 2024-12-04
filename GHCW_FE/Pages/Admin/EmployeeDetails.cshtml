@@ -102,63 +102,6 @@
     <button class="btn-back" onclick="window.location.href='/Admin/EmployeeManagement'"> << Quay lại</button>
 </div>
 
-<script>
-    // Get the profile icon and dropdown elements
-    var profileIcon = document.getElementById("profileIcon");
-    var dropdownMenu = document.getElementById("dropdownMenu");
-    var profileMenu = document.querySelector(".profile-menu");
-
-    // Toggle dropdown when the profile icon is clicked
-    profileIcon.addEventListener("click", function (event) {
-        event.stopPropagation();
-        profileMenu.classList.toggle("show");
-    });
-
-    // Close the dropdown if user clicks outside
-    window.addEventListener("click", function (event) {
-        if (!event.target.matches('.profile-icon') && profileMenu.classList.contains('show')) {
-            profileMenu.classList.remove('show');
-        }
-    });
-
-    // Hàm kiểm tra số điện thoại
-    function validatePhoneNumber() {
-        const phoneInput = document.getElementById('phonenumber');
-        const phoneNumber = phoneInput.value.trim();
-        const phonePattern = /^(0[3,5,7,8,9])\d{8}$/;
-
-        if (!phonePattern.test(phoneNumber)) {
-            phoneInput.setCustomValidity("Số điện thoại phải gồm 10 chữ số và bắt đầu bằng 03, 05, 07, 08 hoặc 09.");
-        } else {
-            phoneInput.setCustomValidity(""); // Xóa thông báo lỗi nếu hợp lệ
-        }
-    }
-
-    // Hàm kiểm tra tên hợp lệ
-    function validateName() {
-        const nameInput = document.getElementById('name');
-        const namePattern = /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠÝàáâãèéêìíòóôõùúăđĩũơưƯẠ-ỹ\s]+$/;
-
-        if (!namePattern.test(nameInput.value.trim())) {
-            nameInput.setCustomValidity("Vui lòng nhập tên không chứa chữ số và kí tự đặc biệt.");
-        } else {
-            nameInput.setCustomValidity(""); // Xóa thông báo lỗi nếu hợp lệ
-        }
-    }
-
-    // Hàm tổng kiểm tra form
-    function validateForm() {
-        validatePhoneNumber();
-        validateName();
-
-        return true;
-    }
-
-    // Thêm sự kiện cho input để kiểm tra ngay khi người dùng nhập liệu
-    document.getElementById('phonenumber').addEventListener('input', validatePhoneNumber);
-    document.getElementById('name').addEventListener('input', validateName);
-</script>
-
 <style>
     .btn-update, .btn-back {
         padding: 10px 20px;

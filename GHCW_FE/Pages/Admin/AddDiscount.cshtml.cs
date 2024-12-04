@@ -38,7 +38,7 @@ namespace GHCW_FE.Pages.Admin
             var handler = new JwtSecurityTokenHandler();
             var jwtToken = handler.ReadJwtToken(accessToken);
             var roleClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "Role");
-            if (roleClaim != null && int.Parse(roleClaim.Value) > 1)
+            if (roleClaim != null && int.Parse(roleClaim.Value) > 3)
             {
                 await _authService.LogoutAsync();
                 TempData["ErrorMessage"] = "Bạn không có quyền truy cập trang này.";

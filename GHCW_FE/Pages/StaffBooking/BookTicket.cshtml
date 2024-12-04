@@ -5,25 +5,30 @@
     Layout = "_LayoutManagement";
     ViewData["ActivePage"] = "/StaffBooking/BookTicket";
 }
-@if (TempData["SuccessMessage"] != null)
-{
-    <div class="alert alert-success mt-3">
-        @TempData["SuccessMessage"]
-    </div>
-}
-@if (Model.HasTicketSaved)
-{
-    <script>
-        localStorage.removeItem("cartForStaff");
-    </script>
-}
+<header class="page-header">
+    <h2>Đặt vé</h2>
+</header>
 
-@if (TempData["ErrorMessage"] != null)
-{
-    <div class="alert alert-danger mt-3">
-        @TempData["ErrorMessage"]
-    </div>
-}
+@if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success mt-3">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+    @if (Model.HasTicketSaved)
+    {
+        <script>
+            localStorage.removeItem("cartForStaff");
+        </script>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger mt-3">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
 <div class="booking-container">
     <div class="services-section">
         <h2 style="margin-bottom: 1rem">Danh sách dịch vụ</h2>
@@ -82,7 +87,7 @@
             <div id="addCustomerForm" style="display: none;">
                 <div style="margin: 1rem 0;">
                     <label for="name">Họ và tên:</label>
-                    <input type="text" id="fullname" name="fullname" title="Vui lòng nhập họ tên không chứa số và kí tự đặc biệt" placeholder="Nhập họ tên" required />
+                    <input type="text" id="name" name="name" title="Vui lòng nhập họ tên không chứa số và kí tự đặc biệt" placeholder="Nhập họ tên" required />
                 </div>
 
                 <div style="margin: 1rem 0;">
@@ -271,55 +276,6 @@
         document.getElementById("addCustomerForm").style.display = "block";
         document.getElementById("customerSearch").value = "";
     }
-
-    function validatePhoneNumber() {
-        const phoneInput = document.getElementById('phonenumber');
-        const phoneNumber = phoneInput.value.trim();
-        const phonePattern = /^(0[3,5,7,8,9])\d{8}$/;
-
-        if (!phonePattern.test(phoneNumber)) {
-            phoneInput.setCustomValidity("Số điện thoại phải gồm 10 chữ số và bắt đầu bằng 03, 05, 07, 08 hoặc 09.");
-        } else {
-            phoneInput.setCustomValidity(""); // Xóa thông báo lỗi nếu hợp lệ
-        }
-    }
-
-    // Hàm kiểm tra tên hợp lệ
-    function validateName() {
-        const nameInput = document.getElementById('fullname');
-        const namePattern = /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠÝàáâãèéêìíòóôõùúăđĩũơưƯẠ-ỹ\s]+$/;
-
-        if (!namePattern.test(nameInput.value.trim())) {
-            nameInput.setCustomValidity("Vui lòng nhập tên không chứa chữ số và kí tự đặc biệt.");
-        } else {
-            nameInput.setCustomValidity(""); // Xóa thông báo lỗi nếu hợp lệ
-        }
-    }
-
-    // Hàm kiểm tra email hợp lệ
-    function validateEmail() {
-        const emailInput = document.getElementById('email');
-        const emailPattern = /^[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-        if (!emailPattern.test(emailInput.value.trim())) {
-            emailInput.setCustomValidity("Vui lòng nhập đúng định dạng email.");
-        } else {
-            emailInput.setCustomValidity(""); // Xóa thông báo lỗi nếu hợp lệ
-        }
-    }
-
-    // Hàm tổng kiểm tra form
-    function validateForm() {
-        validatePhoneNumber();
-        validateName();
-        validateEmail();
-        return true;
-    }
-
-    // Thêm sự kiện cho input để kiểm tra ngay khi người dùng nhập liệu
-    document.getElementById('phonenumber').addEventListener('input', validatePhoneNumber);
-    document.getElementById('fullname').addEventListener('input', validateName);
-    document.getElementById('email').addEventListener('input', validateEmail);
 
     document.addEventListener("click", (event) => {
         const searchContainer = document.querySelector(".customer-search-section");

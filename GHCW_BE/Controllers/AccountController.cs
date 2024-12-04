@@ -81,7 +81,7 @@ namespace GHCW_BE.Controllers
                     var checkExistCustomer = await _cusService.GetCustomerProfileById(r.Id);
                     if (checkExistCustomer != null)
                     {
-                        checkExistCustomer.FullName = r.Name;
+                        checkExistCustomer.Name = r.Name;
                         checkExistCustomer.PhoneNumber = r.PhoneNumber;
                         var (isSuccess, message) = await _cusService.EditCustomer(checkExistCustomer);
                         if (isSuccess)
@@ -293,7 +293,7 @@ namespace GHCW_BE.Controllers
                     var checkExistCustomer = await _cusService.GetCustomerProfileById(r.Id);
                     if (checkExistCustomer != null)
                     {
-                        checkExistCustomer.FullName = r.Name;
+                        checkExistCustomer.Name = r.Name;
                         checkExistCustomer.PhoneNumber = r.PhoneNumber;
 
                         var (isSuccess, message) = await _cusService.EditCustomer(checkExistCustomer);

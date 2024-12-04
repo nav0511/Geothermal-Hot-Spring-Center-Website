@@ -88,7 +88,7 @@ namespace GHCW_FE.Pages.Admin
 
             if (!string.IsNullOrEmpty(SearchTerm))
             {
-                tickets = tickets?.Where(d => d.Customer.FullName?.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase) ?? false).ToList();
+                tickets = tickets?.Where(d => d.Customer.Name?.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase) ?? false).ToList();
             }
 
             tickets = SortOption switch
