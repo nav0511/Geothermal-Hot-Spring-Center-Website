@@ -2,6 +2,7 @@
 using GHCW_FE.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 
 namespace GHCW_FE.Pages.Admin
@@ -68,11 +69,24 @@ namespace GHCW_FE.Pages.Admin
 
         public async Task<IActionResult> OnPostUpdateAsync(int id)
         {
-            if (id <= 0)
+            var accessToken = await _tokenService.CheckAndRefreshTokenAsync();
+            if (string.IsNullOrEmpty(accessToken))
             {
-                ModelState.AddModelError(string.Empty, "ID dịch vụ không hợp lệ.");
-                return Page();
+                await _authService.LogoutAsync();
+                TempData["ErrorMessage"] = "Bạn cần đăng nhập để xem thông tin.";
+                return RedirectToPage("/Authentications/Login");
             }
+
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(accessToken);
+            var roleClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "Role");
+            if (roleClaim != null && int.Parse(roleClaim.Value) > 0)
+            {
+                await _authService.LogoutAsync();
+                TempData["ErrorMessage"] = "Bạn không có quyền truy cập trang này.";
+                return RedirectToPage("/Authentications/Login");
+            }
+            _servicesService.SetAccessToken(accessToken);
 
             var (statusCode, service) = await _servicesService.GetServiceById(id);
             Service = service;
@@ -106,15 +120,17 @@ namespace GHCW_FE.Pages.Admin
                 IsActive = Service.IsActive,
             };
 
-            statusCode = await _servicesService.UpdateService(serviceDto);
+            statusCode = await _servicesService.UpdateService(serviceDto, accessToken);
 
             if (statusCode == HttpStatusCode.OK)
             {
+                TempData["SuccessMessage"] = "Cập nhật dịch vụ thành công";
+
                 return RedirectToPage("/Admin/ServiceManagement");
             }
             else
             {
-                ModelState.AddModelError(string.Empty, "Có lỗi xảy ra khi cập nhật dịch vụ.");
+                @TempData["ErrorMessage"] = ("Có lỗi xảy ra khi cập nhật dịch vụ.");
                 return Page();
             }
         }

@@ -23,7 +23,7 @@
                                 <img class="img-fluid w-100" src="@Model.News.Image" alt="">
                                 <div class="blog-date">
                                     <h6 class="font-weight-bold text-white mb-n1">
-                                        @Model.News.UploadDate.Value.ToString("dd/MM")
+                                        @Model.News.UploadDate.ToString("dd/MM")
                                     </h6>
                                 </div>
                             </div>
@@ -55,7 +55,7 @@
                             <div class="pl-3 m-1">
                                 <h6>@n.Title</h6>
                                 <small>
-                                    @n.UploadDate.Value.ToString("dd/MM/yyyy");
+                                    @n.UploadDate.ToString("dd/MM/yyyy");
                                 </small>
                             </div>
                         </a>

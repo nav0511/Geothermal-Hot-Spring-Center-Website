@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-﻿using AutoMapper;
+using AutoMapper;
 using GHCW_BE.DTOs;
 using GHCW_BE.Services;
 using Microsoft.AspNetCore.OData.Query;
@@ -58,37 +58,39 @@ namespace GHCW_BE.Controllers
             return Ok(serviceDTO);
         }
 
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateService(int id, [FromBody] ServiceDTO serviceDto)
         {
-            if (id != serviceDto.Id)
-            {
-                return BadRequest("ID không khớp.");
-            }
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var roleClaim = identity?.FindFirst("Role");
 
-            var existingService = await _servicesService.GetListServices()
-                                                        .FirstOrDefaultAsync(s => s.Id == id);
-            if (existingService == null)
+            if (roleClaim != null && int.Parse(roleClaim.Value) <= 1)
             {
-                return NotFound();
-            }
+                if (id != serviceDto.Id)
+                {
+                    return BadRequest("ID không khớp.");
+                }
 
-            _mapper.Map(serviceDto, existingService);
-
-            try
-            {
-                await _servicesService.UpdateService(existingService);
-            }
-            catch (DbUpdateConcurrencyException)
-            {
+                var existingService = await _servicesService.GetListServices()
+                                                            .FirstOrDefaultAsync(s => s.Id == id);
                 if (existingService == null)
                 {
-                    return NotFound("Dịch vụ không tồn tại.");
+                    return NotFound();
                 }
-                throw;
-            }
 
-            return Ok("Cập nhật thành công");
+                _mapper.Map(serviceDto, existingService);
+
+                var (isSuccess, message) = await _servicesService.UpdateService(existingService);
+
+                if (!isSuccess)
+                {
+                    return BadRequest(message);
+                }
+
+                return Ok(message);
+            }
+            return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền thực hiện hành động này.");
         }
 
         [HttpDelete("{id}")]
@@ -113,23 +115,32 @@ namespace GHCW_BE.Controllers
             return Ok("Xóa thành công");
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateService([FromForm] ServiceDTO2 serviceDto)
         {
-            if (serviceDto == null)
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var roleClaim = identity?.FindFirst("Role");
+
+            if (roleClaim != null && int.Parse(roleClaim.Value) <= 1)
             {
-                return BadRequest("Dữ liệu dịch vụ không hợp lệ.");
+                if (serviceDto == null)
+                {
+                    return BadRequest("Dữ liệu dịch vụ không hợp lệ.");
+                }
+
+                var service = _mapper.Map<Service>(serviceDto);
+                service.Image = await _cloudinary.UploadImageResult(serviceDto.Image);
+
+                var (isSuccess, message) = await _servicesService.AddService(service);
+                if (!isSuccess)
+                {
+                    return BadRequest(message);
+                }
+
+                return Ok(message);
             }
-
-            var service = _mapper.Map<Service>(serviceDto);
-            service.Image = await _cloudinary.UploadImageResult(serviceDto.Image);
-
-           
-           await _servicesService.AddService(service);
-           
-
-            return Ok("Thêm thành công");
-           
+            return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền thực hiện hành động này.");
         }
 
         [Authorize]

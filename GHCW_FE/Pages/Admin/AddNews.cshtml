@@ -39,7 +39,7 @@
             <div>
                 <label for="discountId">Mã giảm giá:</label>
                 <select id="discountId" name="discountId">
-                    <option value="">Chọn mã giảm giá</option>
+                    <option value="0">Chọn mã giảm giá</option>
                     @foreach (var discount in Model.Discounts)
                     {
                         <option value="@discount.Code">@discount.Code</option>

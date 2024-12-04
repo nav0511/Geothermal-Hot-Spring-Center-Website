@@ -21,10 +21,10 @@ namespace GHCW_FE.Services
             return await GetData<ProductDTO>(url);
         }
 
-        public async Task<HttpStatusCode> UpdateProduct(ProductDTO product)
+        public async Task<HttpStatusCode> UpdateProduct(ProductDTO product, string accessToken)
         {
             string url = $"Product/{product.Id}";
-            return await PutData(url, product);
+            return await PutData(url, product, null, accessToken);
         }
 
         public async Task<HttpStatusCode> DeleteProduct(int id)
@@ -33,11 +33,11 @@ namespace GHCW_FE.Services
             return await DeleteData(url);
         }
 
-        public async Task<HttpStatusCode> CreateProduct(ProductDTOImg product, string? accepttype = null)
+        public async Task<HttpStatusCode> CreateProduct(ProductDTOImg product, string accessToken, string? accepttype = null)
         {
             string url = "Product";
-            if (accepttype != null) return await PushData(url, product, accepttype);
-            else return await PushData(url, product);
+            if (accepttype != null) return await PushData(url, product, accepttype, accessToken);
+            else return await PushData(url, product, null, accessToken);
         }
 
         public async Task<HttpStatusCode> ProductActivation(string accessToken, int id)

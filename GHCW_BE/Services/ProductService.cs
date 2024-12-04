@@ -23,10 +23,19 @@ namespace GHCW_BE.Services
         }
 
 
-        public async Task UpdateProduct(Product product)
+        public async Task<(bool isSuccess, string message)> UpdateProduct(Product product)
         {
-            _context.Products.Update(product);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Products.Update(product);
+                await _context.SaveChangesAsync();
+                return (true, "Cập nhật Sản phẩm mới thành công.");
+
+            }
+            catch (Exception)
+            {
+                return (false, "Có lỗi trong quá trình cập nhật Sản phẩm, vui lòng thử lại.");
+            }
         }
 
         public async Task DeleteProduct(Product product)
@@ -35,19 +44,19 @@ namespace GHCW_BE.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task AddProduct(Product product)
+        public async Task<(bool isSuccess, string message)> AddProduct(Product product)
         {
-
-            await _context.Products.AddAsync(product);
             try
             {
+                await _context.Products.AddAsync(product);
                 await _context.SaveChangesAsync();
+                return (true, "Thêm Sản phẩm mới thành công.");
             }
-            catch(Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine(ex.ToString());
+                return (false, "Có lỗi trong quá trình thêm Sản phẩm, vui lòng thử lại.");
             }
-           
+
         }
 
         public async Task<(bool isSuccess, string message)> ProductActivation(int pid)

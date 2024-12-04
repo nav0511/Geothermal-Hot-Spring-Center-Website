@@ -2,6 +2,7 @@
 using GHCW_FE.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 
 namespace GHCW_FE.Pages.Admin
@@ -64,6 +65,25 @@ namespace GHCW_FE.Pages.Admin
 
         public async Task<IActionResult> OnPostCreateAsync()
         {
+            var accessToken = await _tokenService.CheckAndRefreshTokenAsync();
+            if (string.IsNullOrEmpty(accessToken))
+            {
+                await _authService.LogoutAsync();
+                TempData["ErrorMessage"] = "Bạn cần đăng nhập để xem thông tin.";
+                return RedirectToPage("/Authentications/Login");
+            }
+
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(accessToken);
+            var roleClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "Role");
+            if (roleClaim != null && int.Parse(roleClaim.Value) > 0)
+            {
+                await _authService.LogoutAsync();
+                TempData["ErrorMessage"] = "Bạn không có quyền truy cập trang này.";
+                return RedirectToPage("/Authentications/Login");
+            }
+            _productService.SetAccessToken(accessToken);
+
             if (!ModelState.IsValid)
             {
                 return Page();
@@ -84,15 +104,16 @@ namespace GHCW_FE.Pages.Admin
             };
 
 
-            var response = await _productService.CreateProduct(product, "multipart/form-data");
+            var response = await _productService.CreateProduct(product, accessToken, "multipart/form-data");
 
             if (response == HttpStatusCode.OK)
             {
+                TempData["SuccessMessage"] = "Thêm sản phẩm thành công";
                 return RedirectToPage("/Admin/ProductManagement");
             }
             else
             {
-                ModelState.AddModelError("", "Có lỗi xảy ra khi thêm dịch vụ.");
+                @TempData["ErrorMessage"] = ("Có lỗi xảy ra khi thêm sản phẩm.");
                 return Page();
             }
         }

@@ -2,6 +2,7 @@
 using GHCW_BE.DTOs;
 using GHCW_BE.Models;
 using GHCW_BE.Services;
+using GHCW_BE.Utils.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
@@ -16,6 +17,8 @@ namespace GHCW_BE.Controllers
     {
         private IMapper _mapper;
         private DiscountService _discountService;
+        private NewsService _newsService;
+
 
         public DiscountController(IMapper mapper, DiscountService discountService)
         {
@@ -54,36 +57,36 @@ namespace GHCW_BE.Controllers
             return Ok(discountDTO);
         }
 
+        [Authorize]
         [HttpPut("{code}")]
         public async Task<IActionResult> UpdateDiscount(string code, [FromBody] DiscountDTO discountDto)
         {
-            if (!code.Equals(discountDto.Code))
-            {
-                return BadRequest("Code không khớp.");
-            }
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var roleClaim = identity?.FindFirst("Role");
 
-            var existingDiscount = _discountService.GetDiscount(code);
-            if (existingDiscount == null)
+            if (roleClaim != null && int.Parse(roleClaim.Value) <= 3)
             {
-                return NotFound();
-            }
+                if (!code.Equals(discountDto.Code))
+                {
+                    return BadRequest("Code không khớp.");
+                }
 
-            _mapper.Map(discountDto, existingDiscount);
-
-            try
-            {
-                await _discountService.UpdateDiscount(existingDiscount);
-            }
-            catch (DbUpdateConcurrencyException)
-            {
+                var existingDiscount = _discountService.GetDiscount(code);
                 if (existingDiscount == null)
                 {
-                    return NotFound("Mã giảm giá không tồn tại.");
+                    return NotFound();
                 }
-                throw;
-            }
 
-            return Ok("Cập nhật thành công");
+                _mapper.Map(discountDto, existingDiscount);
+
+                var (isSuccess, message) = await _discountService.UpdateDiscount(existingDiscount);
+                if (!isSuccess)
+                {
+                    return BadRequest(message);
+                }
+                return Ok(message);
+            }
+            return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền thực hiện hành động này.");
         }
 
         [HttpDelete("{code}")]
@@ -107,28 +110,42 @@ namespace GHCW_BE.Controllers
             return Ok("Xóa thành công");
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateDiscount([FromBody] DiscountDTO discountDto)
         {
-            if (discountDto == null)
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var roleClaim = identity?.FindFirst("Role");
+
+            if (roleClaim != null && int.Parse(roleClaim.Value) <= 3)
             {
-                return BadRequest("Dữ liệu mã giảm giá không hợp lệ.");
+                if (discountDto == null)
+                {
+                    return BadRequest("Dữ liệu mã giảm giá không hợp lệ.");
+                }
+                var checkDisExist = await _discountService.CheckDiscountExsit(discountDto.Code);
+                if (checkDisExist != null)
+                {
+                    return Conflict("Code đã được sử dụng, vui lòng dùng Code khác");
+                }
+                var discount = new Discount
+                {
+                    Code = discountDto.Code,
+                    Name = discountDto.Name,
+                    Value = discountDto.Value,
+                    StartDate = discountDto.StartDate,
+                    EndDate = discountDto.EndDate,
+                    Description = discountDto.Description,
+                    IsAvailable = discountDto.IsAvailable
+                };
+                var (isSuccess, message) = await _discountService.AddDiscount(discount);
+                if (!isSuccess)
+                {
+                    return BadRequest(message);
+                }
+                return Ok(message);
             }
-
-            var discount = new Discount
-            {
-                Code = discountDto.Code,
-                Name = discountDto.Name,
-                Value = discountDto.Value ?? 0, 
-                StartDate = discountDto.StartDate ?? DateTime.Now,
-                EndDate = discountDto.EndDate ?? DateTime.Now.AddDays(10),
-                Description = discountDto.Description,
-                IsAvailable = discountDto.IsAvailable ?? false
-            };
-
-            await _discountService.AddDiscount(discount);
-
-            return Ok("Thêm thành công");
+            return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền thực hiện hành động này.");
         }
 
         [Authorize]
@@ -138,7 +155,7 @@ namespace GHCW_BE.Controllers
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             var roleClaim = identity?.FindFirst("Role");
 
-            if (roleClaim != null && int.Parse(roleClaim.Value) <=3)
+            if (roleClaim != null && int.Parse(roleClaim.Value) <= 3)
             {
                 var (isSuccess, message) = await _discountService.DiscountActivation(code);
                 if (!isSuccess)
@@ -151,5 +168,6 @@ namespace GHCW_BE.Controllers
             return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền thực hiện hành động này.");
         }
 
+       
     }
 }

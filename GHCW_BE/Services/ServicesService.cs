@@ -22,10 +22,21 @@ namespace GHCW_BE.Services
             return await _context.Services.FirstOrDefaultAsync(n => n.Id == id);
         }
         
-        public async Task UpdateService(Service service)
+        public async Task<(bool isSuccess, string message)> UpdateService(Service service)
         {
-            _context.Services.Update(service);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Services.Update(service);
+                await _context.SaveChangesAsync();
+                return (true, "Cập nhật Dịch vụ mới thành công.");
+
+            }
+            catch (Exception)
+            {
+                return (false, "Có lỗi trong quá trình cập nhật Dịch vụ, vui lòng thử lại.");
+            }
+
+
         }
 
         public async Task DeleteService(Service service)
@@ -34,11 +45,19 @@ namespace GHCW_BE.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task AddService(Service service)
+        public async Task<(bool isSuccess, string message)> AddService(Service service)
         {
+            try
+            {
+                await _context.Services.AddAsync(service);
+                await _context.SaveChangesAsync();
+                return (true, "Thêm Dịch vụ mới thành công.");
+            }
+            catch (Exception)
+            {
+                return (false, "Có lỗi trong quá trình thêm Dịch vụ, vui lòng thử lại.");
+            }
 
-            await _context.Services.AddAsync(service);
-            await _context.SaveChangesAsync();
         }
 
         public async Task<(bool isSuccess, string message)> ServiceActivation(int sid)

@@ -22,10 +22,10 @@ namespace GHCW_FE.Services
             return await GetData<DiscountDTO>(url);
         }
 
-        public async Task<HttpStatusCode> UpdateDiscount(DiscountDTO discount)
+        public async Task<HttpStatusCode> UpdateDiscount(DiscountDTO discount, string accessToken)
         {
             string url = $"Discount/{discount.Code}";
-            return await PutData(url, discount);
+            return await PutData(url, discount, null, accessToken);
         }
 
         public async Task<HttpStatusCode> DeleteDiscount(string code)
@@ -34,10 +34,10 @@ namespace GHCW_FE.Services
             return await DeleteData(url);
         }
 
-        public async Task<HttpStatusCode> CreateDiscount(DiscountDTO discount)
+        public async Task<HttpStatusCode> CreateDiscount(DiscountDTO discount, string accessToken)
         {
             string url = "Discount";
-            return await PushData(url, discount);
+            return await PushData(url, discount, null, accessToken);
         }
 
         public async Task<HttpStatusCode> DiscountActivation(string accessToken, string code)
