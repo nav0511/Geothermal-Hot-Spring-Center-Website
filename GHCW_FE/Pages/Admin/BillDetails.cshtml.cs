@@ -7,27 +7,30 @@ using System.Net;
 
 namespace GHCW_FE.Pages.Admin
 {
-    public class AddProductModel : PageModel
+    public class BillDetailsModel : PageModel
     {
-        private ProductService _productService;
-        private CategoryService _categoryService;
+        private BillService _billService;
+        private DiscountService _discountService;
         private readonly TokenService _tokenService;
         private readonly AuthenticationService _authService;
         private readonly AccountService _accService;
 
-        public AddProductModel(TokenService tokenService, AuthenticationService authService, ProductService productService, AccountService accService, CategoryService categoryService)
+        public BillDetailsModel(TokenService tokenService, AuthenticationService authService, BillService billService, AccountService accService, DiscountService discountService)
         {
             _authService = authService;
-            _productService = productService;
-            _categoryService = categoryService;
             _tokenService = tokenService;
             _accService = accService;
+            _billService = billService;
+            _discountService = discountService;
         }
-        public List<string> Sizes { get; } = new List<string> { "XS", "S", "M", "L", "XL", "XXL" };
 
-        public List<CategoryDTO> Categories { get; set; } = new List<CategoryDTO>();
+        public int BillId { get; set; }
+        public decimal TotalAmount { get; set; }
 
-        public async Task<IActionResult> OnGetAsync()
+        public List<BillDetailDTO> BillDetails { get; set; } = new List<BillDetailDTO>();
+        public List<DiscountDTO> DiscountDTOs { get; set; } = new List<DiscountDTO>();
+
+        public async Task<IActionResult> OnGetAsync(int id)
         {
             var accessToken = await _tokenService.CheckAndRefreshTokenAsync();
             if (string.IsNullOrEmpty(accessToken))
@@ -41,7 +44,7 @@ namespace GHCW_FE.Pages.Admin
             var handler = new JwtSecurityTokenHandler();
             var jwtToken = handler.ReadJwtToken(accessToken);
             var roleClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "Role");
-            if (roleClaim != null && int.Parse(roleClaim.Value) > 1)
+            if (roleClaim != null && int.Parse(roleClaim.Value) > 1 && int.Parse(roleClaim.Value) != 4)
             {
                 await _authService.LogoutAsync();
                 TempData["ErrorMessage"] = "Bạn không có quyền truy cập trang này.";
@@ -49,7 +52,7 @@ namespace GHCW_FE.Pages.Admin
             }
 
             var (statusCode, userProfile) = await _accService.UserProfile(accessToken);
-            if (userProfile?.Role > 1)
+            if (userProfile?.Role > 4 || userProfile?.Role == 2 || userProfile?.Role == 3)
             {
                 await _authService.LogoutAsync();
                 TempData["ErrorMessage"] = "Bạn không có quyền truy cập thông tin này.";
@@ -68,44 +71,35 @@ namespace GHCW_FE.Pages.Admin
                 return RedirectToPage("/Authentications/Login");
             }
 
-            var (statusCode1, categories) = await _categoryService.GetCategory("Category");
-            Categories = categories;
+            BillId = id;
+
+            var (statusCode0, billDetails) = await _billService.GetBillDetailsById(id);
+            var (statusCode1, discountList) = await _discountService.GetDiscounts("Discount");
+
+            BillDetails = billDetails.ToList();
+            DiscountDTOs = discountList.ToList();
+
+            var discountCode = BillDetails.FirstOrDefault()?.Bill?.DiscountCode;
+
+            var discount = discountList.FirstOrDefault(d => d.Code == discountCode);
+
+            int discountValue = 0;
+            if (discount != null)
+            {
+                discountValue = discount?.Value ?? 0;
+            }
+
+            TotalAmount = BillDetails.Sum(td => td.Price * td.Quantity);
+
+            if (discount != null)
+            {
+                if (discount.Value > 0)
+                {
+                    TotalAmount -= TotalAmount * discountValue / 100;
+                }
+            }
+
             return Page();
-        }
-
-        public async Task<IActionResult> OnPostCreateAsync()
-        {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
-            var product = new ProductDTOImg
-            {
-                Name = Request.Form["name"],
-                Price = Convert.ToDouble(Request.Form["price"]),
-                Description = Request.Form["description"],
-                Image = "/images/" + Request.Form["image"].ToString(),
-                CategoryId = Convert.ToInt32(Request.Form["categoryId"]),
-                Size = Request.Form["size"],
-                IsForRent = Request.Form["isForRent"] == "on",
-                Quantity = Convert.ToInt32(Request.Form["quantity"]),
-                IsAvailable = Request.Form["isAvailable"] == "on",
-                Img = Request.Form.Files["image"]
-            };
-
-
-            var response = await _productService.CreateProduct(product, "multipart/form-data");
-
-            if (response == HttpStatusCode.OK)
-            {
-                return RedirectToPage("/Admin/ProductManagement");
-            }
-            else
-            {
-                ModelState.AddModelError("", "Có lỗi xảy ra khi thêm dịch vụ.");
-                return Page();
-            }
         }
     }
 }

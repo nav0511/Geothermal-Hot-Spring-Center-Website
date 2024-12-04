@@ -50,10 +50,7 @@
             <option value="5" @(Model.SortOption == 5 ? "selected" : "")>Marketing</option>
             <option value="6" @(Model.SortOption == 6 ? "selected" : "")>Sale</option>
             <option value="7" @(Model.SortOption == 7 ? "selected" : "")>Lễ tân</option>
-            @if (account?.Role == 0)
-            {
-                <option value="8" @(Model.SortOption == 8 ? "selected" : "")>Quản lí</option>
-            }
+            <option value="8" @(Model.SortOption == 8 ? "selected" : "")>Quản lý</option>
         </select>
 
         <select name="OrderOption" onchange="document.getElementById('filterForm').submit()">

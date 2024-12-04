@@ -10,7 +10,7 @@ namespace GHCW_BE.DTOs
         public decimal Price { get; set; }
         public decimal Total { get; set; }
 
-        public virtual Bill Bill { get; set; } = null!;
-        public virtual Product Product { get; set; } = null!;
+        public virtual BillDTO Bill { get; set; } = null!;
+        public virtual ProductDTO Product { get; set; } = null!;
     }
 }

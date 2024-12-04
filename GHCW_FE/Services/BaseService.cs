@@ -23,7 +23,7 @@ namespace GHCW_FE.Services
             }
             else
             {
-                client.DefaultRequestHeaders.Authorization = null; // Xóa header nếu không có accessToken
+                client.DefaultRequestHeaders.Authorization = null;
             }
         }
 

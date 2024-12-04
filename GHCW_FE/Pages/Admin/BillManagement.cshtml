@@ -1,7 +1,326 @@
 ﻿@page
+@using GHCW_FE.DTOs
+@using System.Text.Json
+@using Microsoft.AspNetCore.Http
+@removeTagHelper Microsoft.AspNetCore.Mvc.TagHelpers.OptionTagHelper, Microsoft.AspNetCore.Mvc.TagHelpers
 @model GHCW_FE.Pages.Admin.BillManagementModel
 @{
-    ViewData["Title"] = "Quản lý hóa đơn sản phẩm";
+    ViewData["Title"] = "Quản lý hóa đơn bán hàng";
     Layout = "_LayoutManagement";
     ViewData["ActivePage"] = "/Admin/BillManagement";
 }
+<header class="page-header">
+    <h2>Quản lý hóa đơn bán hàng</h2>
+    <button class="btn-add" onclick="window.location.href='#'">+ Thêm hóa đơn</button>
+</header>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success mt-3">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger mt-3">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<div class="search-container">
+    <form method="get" id="filterForm">
+        <input type="text" name="SearchTerm" placeholder="Tìm kiếm..." value="@Model.SearchTerm" />
+        <button type="submit" class="btn-add">Tìm kiếm</button>
+
+        <select name="SortOption" onchange="document.getElementById('filterForm').submit()">
+            <option value="0" @(Model.SortOption == 0 ? "selected" : "")>Lọc theo</option>
+            <option value="1" @(Model.SortOption == 1 ? "selected" : "")>Ngày xuất vé tăng dần</option>
+            <option value="2" @(Model.SortOption == 2 ? "selected" : "")>Ngày xuất vé giảm dần</option>
+            <option value="3" @(Model.SortOption == 3 ? "selected" : "")>Nv lễ tân tăng dần</option>
+            <option value="4" @(Model.SortOption == 4 ? "selected" : "")>Nv lễ tân giảm dần</option>
+        </select>
+    </form>
+</div>
+
+<table class="user-table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Tên NV lễ tân</th>  
+            <th>Tên khách hàng</th>
+            <th>Ngày xuất vé</th>
+            <th>Trạng thái thanh toán</th>
+            <th>Trạng thái hóa đơn</th>
+            @if (HttpContext.Session.GetString("acc") != null)
+            {
+                var account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
+                @if (account.Role <= 4)
+                {
+                    <th>Tùy chọn</th>
+                }
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var bill in Model.BillDTOs)
+        {
+            <tr>
+                <td>@bill.Id</td>
+                <td>@bill.Receptionist?.Name</td>
+                <td>@bill.Customer?.FullName</td>
+                <td>@bill.OrderDate.ToString("dd/MM/yyyy")</td>
+                <td class="@(bill.PaymentStatus == 1 ? "status-paid" : "status-unpaid")">
+                    @(bill.PaymentStatus == 1 ? "Đã thanh toán" : "Chưa thanh toán")
+                </td>
+                <td>
+                    @if (bill.IsActive == true)
+                    {
+                        <span class="status active">Hoạt động</span>
+                    }
+                    else
+                    {
+                        <span class="status inactive">Không hoạt động</span>
+                    }
+                </td>
+
+
+                @if (HttpContext.Session.GetString("acc") != null)
+                {
+                    var account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
+                    @if (account.Role < 5)
+                    {
+                        <td class="options-cell">
+                            <button class="status active" onclick="window.location.href='/Admin/BillDetails?id=@bill.Id'">Chi tiết</button>
+                            @if(account.Role <= 1)
+                            {
+                                @if (bill.IsActive == true)
+                                {
+                                    <form method="post" asp-page-handler="BillActivation">
+                                        <button type="submit" class=" btn-deactive" name="nId" value="@bill.Id">Vô hiệu hóa</button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <form method="post" asp-page-handler="BillActivation">
+                                        <button type="submit" class=" btn-active" name="nId" value="@bill.Id">Kích hoạt</button>
+                                    </form>
+                                }
+                            }
+                        </td>
+                    }
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="pagination">
+    @if (Model.CurrentPage > 1)
+    {
+        <a href="?pageNumber=@(Model.CurrentPage - 1)&searchTerm=@Model.SearchTerm&sortOption=@Model.SortOption">«</a>
+    }
+
+    @for (int i = 1; i <= Model.TotalPages; i++)
+    {
+        <a href="?pageNumber=@i&searchTerm=@Model.SearchTerm&sortOption=@Model.SortOption" class="@(i == Model.CurrentPage ? "active" : "")">@i</a>
+    }
+
+    @if (Model.CurrentPage < Model.TotalPages)
+    {
+        <a href="?pageNumber=@(Model.CurrentPage + 1)&searchTerm=@Model.SearchTerm&sortOption=@Model.SortOption">»</a>
+    }
+</div>
+
+<style>
+    .btn-update, .btn-active, .btn-deactive {
+        padding: 6px;
+        font-size: 14px;
+        font-weight: bold;
+        border-radius: 5px;
+        cursor: pointer;
+        border: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-update {
+        background-color: #007bff;
+        color: #ffffff;
+    }
+
+        .btn-update:hover {
+            background-color: #0056b3;
+        }
+
+    .btn-active {
+        background-color: #00b894;
+        color: #ffffff;
+    }
+
+        .btn-active:hover {
+            background-color: #029274;
+        }
+
+    .btn-deactive {
+        background-color: #ff6b6b;
+        color: #ffffff;
+    }
+
+        .btn-deactive:hover {
+            background-color: #D65D5D;
+        }
+
+    .btn-add {
+        background-color: #42C2A8;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+        .btn-add:hover {
+            background-color: #37a58d;
+        }
+
+    /* Search container */
+    .search-container {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+
+        .search-container input {
+            padding: 10px;
+            width: 80%;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        .search-container select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px; /* Rounded select */
+        }
+
+    /* User table */
+    .user-table {
+        width: 100%;
+        font-size: 12px;
+        border-collapse: collapse;
+        margin-top: 20px;
+        background-color: white;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+        .user-table th, .user-table td {
+            padding: 15px;
+            text-align: left;
+        }
+
+        .user-table th {
+            background-color: #f1f1f1;
+        }
+
+        .user-table td {
+            border-bottom: 1px solid #ddd;
+        }
+
+        .user-table .status {
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .user-table td.address-cell {
+            max-width: 100px; /* Đặt giới hạn độ rộng */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .user-table .options-cell {
+            display: flex;
+            gap: 5px; /* Khoảng cách giữa các nút */
+        }
+
+    .status.active,
+    .status.inactive {
+        display: inline-block;
+        padding: 5px 10px;
+        font-size: 12px;
+        font-weight: bold;
+        text-align: center;
+        border-radius: 5px;
+        white-space: nowrap;
+        max-width: 100px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .status.active {
+        background-color: #00b894;
+        color: white;
+    }
+
+    .status.inactive {
+        background-color: #ff6b6b;
+        color: white;
+    }
+
+    /* Pagination */
+    .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+        .pagination a {
+            padding: 10px 15px;
+            margin: 0 5px;
+            background-color: #e0f7fa;
+            text-decoration: none;
+            color: black;
+            border-radius: 4px;
+        }
+
+            .pagination a.active {
+                background-color: #00b894;
+                color: white;
+            }
+
+            .pagination a:hover {
+                background-color: #019875;
+                color: white;
+            }
+
+    .status-paid {
+        color: #00b894;
+    }
+
+    .status-unpaid {
+        color: #ff6b6b;
+    }
+
+</style>
+
+<script>
+    // Get the profile icon and dropdown elements
+    var profileIcon = document.getElementById("profileIcon");
+    var dropdownMenu = document.getElementById("dropdownMenu");
+    var profileMenu = document.querySelector(".profile-menu");
+
+    // Toggle dropdown when the profile icon is clicked
+    profileIcon.addEventListener("click", function (event) {
+        event.stopPropagation();
+        profileMenu.classList.toggle("show");
+    });
+
+    // Close the dropdown if user clicks outside
+    window.addEventListener("click", function (event) {
+        if (!event.target.matches('.profile-icon') && profileMenu.classList.contains('show')) {
+            profileMenu.classList.remove('show');
+        }
+    });
+</script>
