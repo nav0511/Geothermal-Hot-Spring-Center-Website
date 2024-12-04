@@ -100,7 +100,7 @@ namespace GHCW_BE.Services
             string body = $@"
         <div style='font-family: Arial, sans-serif; color: #333;'>
             <h2>Thông tin vé dịch vụ Trung tâm Khoáng nóng Địa chất</h2>
-            <p>Xin chào {customer.FullName},</p>
+            <p>Xin chào {customer.Name},</p>
             <p>Cảm ơn quý khách đã đặt vé tại Trung tâm Khoáng nóng Địa chất. Dưới đây là thông tin chi tiết về đơn hàng của quý khách:</p>
             <h3>Thông tin vé</h3>
             <table style='width: 100%; border-collapse: collapse;'>

@@ -74,7 +74,7 @@ namespace GHCW_FE.Pages.Admin
             if (!string.IsNullOrEmpty(SearchTerm))
             {
                 customers = customers?.Where(e =>
-                    (e.FullName != null && e.FullName.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase)) ||
+                    (e.Name != null && e.Name.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase)) ||
                     (e.Email != null && e.Email.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase))
                 ).ToList();
             }
@@ -113,10 +113,10 @@ namespace GHCW_FE.Pages.Admin
                     customers = customers?.OrderByDescending(e => e.Id).ToList(); // Sắp xếp ID giảm dần
                     break;
                 case 3:
-                    customers = customers?.OrderBy(e => e.FullName).ToList(); // Sắp xếp tên A-Z
+                    customers = customers?.OrderBy(e => e.Name).ToList(); // Sắp xếp tên A-Z
                     break;
                 case 4:
-                    customers = customers?.OrderByDescending(e => e.FullName).ToList(); // Sắp xếp tên Z-A
+                    customers = customers?.OrderByDescending(e => e.Name).ToList(); // Sắp xếp tên Z-A
                     break;
             }
 

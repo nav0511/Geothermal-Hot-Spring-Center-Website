@@ -55,7 +55,7 @@ namespace GHCW_BE.Utils.Mapper
                 .ForMember(dest => dest.AccountId, opt => opt.MapFrom(src => src.AccountId))
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
                 .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber))
-                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FullName))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.FullName))
                 .ForMember(dest => dest.DoB, opt => opt.MapFrom(src => src.Account.DoB))
                 .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.Account.Gender))
                 .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Account.Address))
@@ -65,14 +65,14 @@ namespace GHCW_BE.Utils.Mapper
                 .ForMember(dest => dest.AccountId, opt => opt.MapFrom(src => src.AccountId))
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
                 .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber))
-                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FullName))
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.IsEmailNotify, opt => opt.MapFrom(src => src.IsEmailNotify));
 
             CreateMap<AddCustomerRequest, Customer>()
                 .ForMember(dest => dest.AccountId, opt => opt.MapFrom(src => src.AccountId))
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
                 .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber))
-                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FullName))
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.IsEmailNotify, opt => opt.MapFrom(src => src.IsEmailNotify));
 
             CreateMap<Account, AccountDTO>()
@@ -129,7 +129,7 @@ namespace GHCW_BE.Utils.Mapper
                 .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive));
 
             CreateMap<EditRequest, CustomerDTO>()
-                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber));
 
             CreateMap<AddScheduleRequest, Schedule>()

@@ -98,7 +98,7 @@ namespace GHCW_BE.Controllers
                         UpdateRequest ur = new UpdateRequest()
                         {
                             Id = a.AccountId ?? 0,
-                            Name = a.FullName,
+                            Name = a.Name,
                             PhoneNumber = a.PhoneNumber,
                             Gender = a.Gender
                         };
@@ -134,7 +134,7 @@ namespace GHCW_BE.Controllers
                     UpdateRequest ur = new UpdateRequest()
                     {
                         Id = c.AccountId ?? 0,
-                        Name = c.FullName,
+                        Name = c.Name,
                         PhoneNumber = c.PhoneNumber,
                         DoB = c.DoB,
                         Gender = c.Gender,

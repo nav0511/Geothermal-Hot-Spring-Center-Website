@@ -68,7 +68,7 @@ namespace GHCW_BE.Controllers
                 var existCustomer = await _cusService.CheckCustomerExsit(a.Email);
                 if (existCustomer != null)
                 {
-                    existCustomer.FullName = a.Name;
+                    existCustomer.Name = a.Name;
                     existCustomer.AccountId = a.Id;
                     existCustomer.IsEmailNotify = true;
                     existCustomer.Gender = a.Gender;
@@ -83,7 +83,7 @@ namespace GHCW_BE.Controllers
                 {
                     var addCustomer = new AddCustomerRequest()
                     {
-                        FullName = a.Name,
+                        Name = a.Name,
                         Email = a.Email,
                         PhoneNumber = a.PhoneNumber,
                         AccountId = a.Id,

@@ -69,7 +69,14 @@
                             <a asp-page="/News/Index" class="nav-item nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/News/Index" || ViewContext.RouteData.Values["page"]?.ToString() == "/News/Detail" ? "active" : "")">Tin tức</a>
                             <a asp-page="/Promotions/Index" class="nav-item nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/Promotions/Index" || ViewContext.RouteData.Values["page"]?.ToString() == "/Promotions/Detail" ? "active" : "")">Khuyến mãi</a>
                             <a asp-page="/Services/Index" class="nav-item nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/Services/Index" || ViewContext.RouteData.Values["page"]?.ToString() == "/Services/Detail" ? "active" : "")">Dịch vụ</a>
-                            <a asp-page="/Booking/Index" class="nav-item nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/Booking/Index" ? "active" : "")">Đặt vé</a>
+                            @if (Context.Session.GetString("acc") != null)
+                            {
+                                var account = JsonSerializer.Deserialize<AccountDTO>(Context.Session.GetString("acc"));
+                                @if (account.Role == 5)
+                                {
+                                    <a asp-page="/Booking/Index" class="nav-item nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/Booking/Index" ? "active" : "")">Đặt vé</a>
+                                }
+                            }
                             <a asp-page="/About" class="nav-item nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/About" ? "active" : "")">Giới thiệu</a>
                             @if (Context.Session.GetString("acc") != null)
                             {

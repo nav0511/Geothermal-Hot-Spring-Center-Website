@@ -90,8 +90,8 @@ namespace GHCW_FE.Pages.Admin
             {
                 bills = bills
                         .Where(d => d.Customer != null &&
-                                    d.Customer.FullName != null &&
-                                    d.Customer.FullName.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase))
+                                    d.Customer.Name != null &&
+                                    d.Customer.Name.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase))
                         .ToList();
             }
 

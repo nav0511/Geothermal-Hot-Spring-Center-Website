@@ -230,27 +230,6 @@
     }
 </div>
 
-
-<script>
-    // Get the profile icon and dropdown elements
-    var profileIcon = document.getElementById("profileIcon");
-    var dropdownMenu = document.getElementById("dropdownMenu");
-    var profileMenu = document.querySelector(".profile-menu");
-
-    // Toggle dropdown when the profile icon is clicked
-    profileIcon.addEventListener("click", function (event) {
-        event.stopPropagation();
-        profileMenu.classList.toggle("show");
-    });
-
-    // Close the dropdown if user clicks outside
-    window.addEventListener("click", function (event) {
-        if (!event.target.matches('.profile-icon') && profileMenu.classList.contains('show')) {
-            profileMenu.classList.remove('show');
-        }
-    });
-</script>
-
 <style>
     .btn-update, .btn-active, .btn-deactive {
         padding: 6px;

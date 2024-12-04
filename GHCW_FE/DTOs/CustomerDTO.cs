@@ -11,7 +11,7 @@ namespace GHCW_FE.DTOs
 
         [Required(ErrorMessage = "Yêu cầu nhập họ tên.")]
         [RegularExpression(@"^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠƯÝàáâãèéêìíòóôõùúăđĩũơưýẠ-ỹ\s]+$", ErrorMessage = "Họ tên chỉ được chứa chữ cái và khoảng trắng.")]
-        public string FullName { get; set; } = null!;
+        public string Name { get; set; } = null!;
 
         [Required(ErrorMessage = "Yêu cầu nhập email.")]
         [EmailAddress(ErrorMessage = "Không đúng định dạng email.")]
@@ -33,7 +33,7 @@ namespace GHCW_FE.DTOs
 
         [Required(ErrorMessage = "Yêu cầu nhập họ tên.")]
         [RegularExpression(@"^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠƯÝàáâãèéêìíòóôõùúăđĩũơưýẠ-ỹ\s]+$", ErrorMessage = "Họ tên chỉ được chứa chữ cái và khoảng trắng.")]
-        public string FullName { get; set; } = null!;
+        public string Name { get; set; } = null!;
 
         [Required(ErrorMessage = "Yêu cầu nhập email.")]
         [EmailAddress(ErrorMessage = "Không đúng định dạng email.")]

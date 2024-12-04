@@ -41,16 +41,6 @@ namespace GHCW_FE.Pages.Authentications
                 TempData["ErrorMessage"] = "Bạn cần đăng nhập để xem thông tin.";
                 return RedirectToPage("/Authentications/Login");
             }
-
-            var handler = new JwtSecurityTokenHandler();
-            var jwtToken = handler.ReadJwtToken(accessToken);
-            var idClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "ID");
-            if (idClaim != null && int.Parse(idClaim.Value) != id)
-            {
-                await _authService.LogoutAsync();
-                TempData["ErrorMessage"] = "Bạn không có quyền truy cập trang này.";
-                return RedirectToPage("/Authentications/Login");
-            }
             _accService.SetAccessToken(accessToken);
 
             var (statusCode, userProfile) = await _accService.UserProfile(accessToken);
