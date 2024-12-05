@@ -8,10 +8,18 @@
     ViewData["Title"] = "Quản lý hóa đơn bán hàng";
     Layout = "_LayoutManagement";
     ViewData["ActivePage"] = "/Admin/BillManagement";
+    AccountDTO? account = null;
+    if (HttpContext.Session.GetString("acc") != null)
+    {
+        account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
+    }
 }
 <header class="page-header">
     <h2>Quản lý hóa đơn bán hàng</h2>
-    <button class="btn-add" onclick="window.location.href='#'">+ Thêm hóa đơn</button>
+    @if (account?.Role == 4 || account?.Role == 1)
+    {
+        <button class="btn-add" onclick="window.location.href='#'">+ Thêm hóa đơn</button>
+    }
 </header>
 
 @if (TempData["SuccessMessage"] != null)
@@ -47,19 +55,12 @@
     <thead>
         <tr>
             <th>Id</th>
-            <th>Tên NV lễ tân</th>  
+            <th>Tên NV lễ tân</th>
             <th>Tên khách hàng</th>
             <th>Ngày xuất vé</th>
             <th>Trạng thái thanh toán</th>
             <th>Trạng thái hóa đơn</th>
-            @if (HttpContext.Session.GetString("acc") != null)
-            {
-                var account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
-                @if (account.Role <= 4)
-                {
-                    <th>Tùy chọn</th>
-                }
-            }
+            <th>Tùy chọn</th>
         </tr>
     </thead>
     <tbody>
@@ -84,31 +85,26 @@
                     }
                 </td>
 
-
-                @if (HttpContext.Session.GetString("acc") != null)
+                @if (account?.Role <= 1 || account?.Role == 4)
                 {
-                    var account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
-                    @if (account.Role < 5)
-                    {
-                        <td class="options-cell">
-                            <button class="status active" onclick="window.location.href='/Admin/BillDetails?id=@bill.Id'">Chi tiết</button>
-                            @if(account.Role <= 1)
+                    <td class="options-cell">
+                        <button class="status active" onclick="window.location.href='/Admin/BillDetails?id=@bill.Id'">Chi tiết</button>
+                        @if (account?.Role <= 1)
+                        {
+                            @if (bill.IsActive == true)
                             {
-                                @if (bill.IsActive == true)
-                                {
-                                    <form method="post" asp-page-handler="BillActivation">
-                                        <button type="submit" class=" btn-deactive" name="nId" value="@bill.Id">Vô hiệu hóa</button>
-                                    </form>
-                                }
-                                else
-                                {
-                                    <form method="post" asp-page-handler="BillActivation">
-                                        <button type="submit" class=" btn-active" name="nId" value="@bill.Id">Kích hoạt</button>
-                                    </form>
-                                }
+                                <form method="post" asp-page-handler="BillActivation">
+                                    <button type="submit" class=" btn-deactive" name="nId" value="@bill.Id">Vô hiệu hóa</button>
+                                </form>
                             }
-                        </td>
-                    }
+                            else
+                            {
+                                <form method="post" asp-page-handler="BillActivation">
+                                    <button type="submit" class=" btn-active" name="nId" value="@bill.Id">Kích hoạt</button>
+                                </form>
+                            }
+                        }
+                    </td>
                 }
             </tr>
         }

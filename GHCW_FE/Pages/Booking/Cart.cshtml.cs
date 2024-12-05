@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
 using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 
 namespace GHCW_FE.Pages.Booking
@@ -43,8 +44,25 @@ namespace GHCW_FE.Pages.Booking
         public List<ServiceDTO> AvailableServices { get; set; } = new List<ServiceDTO>();
         public List<DiscountDTO> AvailableDiscounts { get; set; } = new List<DiscountDTO>();
 
-        public async Task OnGet(string bookingDate)
+        public async Task<IActionResult> OnGet(string bookingDate)
         {
+            var accessToken = await _tokenService.CheckAndRefreshTokenAsync();
+            if (string.IsNullOrEmpty(accessToken))
+            {
+                await _authService.LogoutAsync();
+                TempData["ErrorMessage"] = "Bạn cần đăng nhập để xem thông tin.";
+                return RedirectToPage("/Authentications/Login");
+            }
+
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(accessToken);
+            var roleClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "Role");
+            if (roleClaim != null && int.Parse(roleClaim.Value) != 5)
+            {
+                await _authService.LogoutAsync();
+                TempData["ErrorMessage"] = "Bạn không có quyền truy cập trang này.";
+                return RedirectToPage("/Authentications/Login");
+            }
             (HttpStatusCode StatusCode, List<ServiceDTO>? ListServices) = await _servicesService.GetServices($"Service?$filter=IsActive eq true");
             AvailableServices = ListServices;
             BookingDate = bookingDate;
@@ -65,6 +83,7 @@ namespace GHCW_FE.Pages.Booking
             {
                 IsLoggedIn = true;
             }
+            return Page();
         }
 
         public async Task<IActionResult> OnPostInitiatePaymentAsync()

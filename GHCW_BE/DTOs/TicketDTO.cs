@@ -19,6 +19,7 @@ namespace GHCW_BE.DTOs
 
         public virtual CustomerDTO Customer { get; set; } = null!;
         public virtual AccountDTO? Receptionist { get; set; }
+        public virtual AccountDTO? Sale { get; set; }
     }
 
     public class TicketDTO2

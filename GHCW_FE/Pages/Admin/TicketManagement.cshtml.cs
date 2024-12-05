@@ -90,6 +90,11 @@ namespace GHCW_FE.Pages.Admin
                 return RedirectToPage();
             }
 
+            if (userProfile?.Role == 3)
+            {
+                tickets = tickets?.Where(t => t.SaleId == userProfile.Id).ToList();
+            }
+
             if (!string.IsNullOrEmpty(SearchTerm))
             {
                 tickets = tickets?.Where(d => d.Customer.Name?.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase) ?? false).ToList();

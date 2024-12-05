@@ -8,12 +8,20 @@
     ViewData["Title"] = "Quản lý hàng hóa";
     Layout = "_LayoutManagement";
     ViewData["ActivePage"] = "/Admin/ProductManagement";
+    AccountDTO? account = null;
+    if (HttpContext.Session.GetString("acc") != null)
+    {
+        account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
+    }
 }
 
 <!-- Main Content -->
 <header class="page-header">
     <h2>Quản lý hàng hóa</h2>
-    <button class="btn-add" onclick="window.location.href='/Admin/AddProduct'">+ Thêm sản phẩm mới</button>
+    @if (account?.Role <= 1)
+    {
+        <button class="btn-add" onclick="window.location.href='/Admin/AddProduct'">+ Thêm sản phẩm mới</button>
+    }
 </header>
 
 @if (TempData["SuccessMessage"] != null)
@@ -53,13 +61,9 @@
             <th>Kích thước</th>
             <th>Giá</th>
             <th>Trạng thái</th>
-            @if (HttpContext.Session.GetString("acc") != null)
+            @if (account?.Role <= 1)
             {
-                var account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
-                @if (account.Role <= 1)
-                {
-                    <th>Tùy chọn</th>
-                }
+                <th>Tùy chọn</th>
             }
         </tr>
     </thead>
@@ -74,41 +78,37 @@
                 <td>
                     @if (product.IsAvailable == true)
                     {
-                        <span class="status active">Hoạt động</span>
+                        <span class="status active">Có sẵn</span>
                     }
                     else
                     {
-                        <span class="status inactive">Không hoạt động</span>
+                        <span class="status inactive">Hết hàng</span>
                     }
                 </td>
-                @if (HttpContext.Session.GetString("acc") != null)
+                @if (account?.Role <= 1)
                 {
-                    var account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
-                    @if (account.Role <= 1)
-                    {
-                        <td class="options-cell">
-                            <button class=" btn-update" onclick="window.location.href='/Admin/EditProduct?id=@product.Id'">Chỉnh sửa</button>
-                            @if (product.IsAvailable == true)
-                            {
-                                <form method="post" asp-page-handler="ProductActivation">
-                                    <button type="submit" class=" btn-deactive" name="nId" value="@product.Id">Vô hiệu hóa</button>
-                                </form>
-                            }
-                            else
-                            {
-                                <form method="post" asp-page-handler="ProductActivation">
-                                    <button type="submit" class=" btn-active" name="nId" value="@product.Id">Kích hoạt</button>
-                                </form>
-                            }
-                        </td>
-                    }
+                    <td class="options-cell">
+                        <button class=" btn-update" onclick="window.location.href='/Admin/EditProduct?id=@product.Id'">Chỉnh sửa</button>
+                        @if (product.IsAvailable == true)
+                        {
+                            <form method="post" asp-page-handler="ProductActivation">
+                                <button type="submit" class=" btn-deactive" name="nId" value="@product.Id">Hết hàng</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <form method="post" asp-page-handler="ProductActivation">
+                                <button type="submit" class=" btn-active" name="nId" value="@product.Id">Có sẵn</button>
+                            </form>
+                        }
+                    </td>
                 }
                 @* <td>
-                    <button class="status active" onclick="window.location.href='/Admin/EditProduct?id=@product.Id'">Sửa</button>
-                    <form method="post" asp-page-handler="DeleteProduct" asp-route-id="@product.Id" style="display:inline;">
-                        <button type="submit" class="status inactive" onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?');">Xóa</button>
-                    </form>
-                </td> *@
+            <button class="status active" onclick="window.location.href='/Admin/EditProduct?id=@product.Id'">Sửa</button>
+            <form method="post" asp-page-handler="DeleteProduct" asp-route-id="@product.Id" style="display:inline;">
+            <button type="submit" class="status inactive" onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?');">Xóa</button>
+            </form>
+            </td> *@
             </tr>
         }
     </tbody>

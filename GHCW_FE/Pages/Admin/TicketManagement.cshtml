@@ -8,10 +8,18 @@
     ViewData["Title"] = "Quản lý vé";
     Layout = "_LayoutManagement";
     ViewData["ActivePage"] = "/Admin/TicketManagement";
+    AccountDTO? account = null;
+    if (HttpContext.Session.GetString("acc") != null)
+    {
+        account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
+    }
 }
 <header class="page-header">
     <h2>Quản lý vé</h2>
-    <button class="btn-add" onclick="window.location.href='#'">+ Đặt vé</button>
+    @if (account?.Role == 3)
+    {
+        <button class="btn-add" onclick="window.location.href='/StaffBooking/BookTicket'">+ Đặt vé</button>
+    }
 </header>
 
 @if (TempData["SuccessMessage"] != null)
@@ -47,31 +55,17 @@
     <thead>
         <tr>
             <th>Id</th>
-            @if (HttpContext.Session.GetString("acc") != null)
-            {
-                var account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
-                @if (account.Role == 3)
-                {
-                    <th>Tên NV Sale</th>
-                }
-                else
-                {
-                    <th>Tên NV lễ tân</th>
-                }
-            }
+            <th>Tên NV Sale</th>
+            <th>Tên NV lễ tân</th>
             <th>Tên khách hàng</th>
             <th>Ngày xuất vé</th>
             <th>Ngày sử dụng</th>
             <th>Trạng thái thanh toán</th>
             <th>Check-In</th>
             <th>Trạng thái vé</th>
-            @if (HttpContext.Session.GetString("acc") != null)
+            @if (account?.Role <= 1 || account?.Role == 3)
             {
-                var account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
-                @if (account.Role <= 3)
-                {
-                    <th>Tùy chọn</th>
-                }
+                <th>Tùy chọn</th>
             }
         </tr>
     </thead>
@@ -80,17 +74,21 @@
         {
             <tr>
                 <td>@ticket.Id</td>
-                @if (HttpContext.Session.GetString("acc") != null)
+                @if (ticket.SaleId != null)
                 {
-                    var account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
-                    @if (account.Role == 3)
-                    {
-                        <td>@account.Name</td>
-                    }
-                    else
-                    {
-                        <td>@ticket.Receptionist?.Name</td>
-                    }
+                    <td>@ticket.Sale?.Name</td>
+                }
+                else
+                {
+                    <td>Trống</td>
+                }
+                @if (ticket.ReceptionistId != null)
+                {
+                    <td>@ticket.Receptionist?.Name</td>
+                }
+                else
+                {
+                    <td>Trống</td>
                 }
                 <td>@ticket.Customer.Name</td>
                 <td>@ticket.OrderDate.ToString("dd/MM/yyyy")</td>
@@ -103,10 +101,11 @@
                     {
                         <span>Chưa đến</span>
                     }
-                    else if(ticket.CheckIn == 1)
+                    else if (ticket.CheckIn == 1)
                     {
                         <span>Đã check-in</span>
-                    }else if(ticket.CheckIn == 2)
+                    }
+                    else if (ticket.CheckIn == 2)
                     {
                         <span>Hoàn tất</span>
                     }
@@ -122,31 +121,26 @@
                     }
                 </td>
 
-
-                @if (HttpContext.Session.GetString("acc") != null)
+                @if (account?.Role <= 1 || account?.Role == 3)
                 {
-                    var account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
-                    @if (account.Role < 5)
-                    {
-                        <td class="options-cell">
-                            <button class="status active" onclick="window.location.href='/Admin/CheckIn?id=@ticket.Id&source=quan_ly_ve'">Chi tiết</button>
-                            @if(account.Role <= 1)
+                    <td class="options-cell">
+                        <button class="status active" onclick="window.location.href='/Admin/CheckIn?id=@ticket.Id&source=quan_ly_ve'">Chi tiết</button>
+                        @if(account?.Role <= 1)
+                        {
+                            @if (ticket.IsActive == true)
                             {
-                                @if (ticket.IsActive == true)
-                                {
-                                    <form method="post" asp-page-handler="TicketActivation">
-                                        <button type="submit" class=" btn-deactive" name="nId" value="@ticket.Id">Vô hiệu hóa</button>
-                                    </form>
-                                }
-                                else
-                                {
-                                    <form method="post" asp-page-handler="TicketActivation">
-                                        <button type="submit" class=" btn-active" name="nId" value="@ticket.Id">Kích hoạt</button>
-                                    </form>
-                                }
+                                <form method="post" asp-page-handler="TicketActivation">
+                                    <button type="submit" class=" btn-deactive" name="nId" value="@ticket.Id">Vô hiệu hóa</button>
+                                </form>
                             }
-                        </td>
-                    }
+                            else
+                            {
+                                <form method="post" asp-page-handler="TicketActivation">
+                                    <button type="submit" class=" btn-active" name="nId" value="@ticket.Id">Kích hoạt</button>
+                                </form>
+                            }
+                        }
+                    </td>
                 }
             </tr>
         }
