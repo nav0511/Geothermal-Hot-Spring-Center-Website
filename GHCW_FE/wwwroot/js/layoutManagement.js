@@ -58,7 +58,7 @@ function validatePhoneNumber() {
 // Hàm kiểm tra email hợp lệ
 function validateEmail() {
     const emailInput = document.getElementById('email');
-    const emailPattern = /^[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
     if (!emailPattern.test(emailInput.value.trim())) {
         emailInput.setCustomValidity("Vui lòng nhập đúng định dạng email.");
@@ -79,13 +79,38 @@ function validateName() {
     }
 }
 
+// Hàm kiểm tra đủ ít nhất 15 tuổi
+function validateDoB() {
+    const dobInput = document.getElementById('dob');
+    const dobValue = dobInput.value;
+
+    if (!dobValue) {
+        dobInput.setCustomValidity("Vui lòng chọn ngày sinh.");
+        return;
+    }
+
+    const dobDate = new Date(dobValue);
+    const today = new Date();
+
+    // Tính ngày tối thiểu (15 năm trước từ ngày hôm nay)
+    const minDate = new Date();
+    minDate.setFullYear(today.getFullYear() - 15);
+
+    // Kiểm tra nếu ngày sinh lớn hơn ngày tối thiểu
+    if (dobDate > minDate) {
+        dobInput.setCustomValidity("Người dùng phải ít nhất 15 tuổi.");
+    } else {
+        dobInput.setCustomValidity(""); // Xóa thông báo lỗi nếu hợp lệ
+    }
+}
+
 // Hàm tổng kiểm tra form
 function validateForm() {
     validatePhoneNumber();
     validateEmail();
     validatePassword();
     validateName();
-
+    validateDoB();
     return true;
 }
 
@@ -94,6 +119,7 @@ document.getElementById('phonenumber').addEventListener('input', validatePhoneNu
 document.getElementById('email').addEventListener('input', validateEmail);
 document.getElementById('password').addEventListener('input', validatePassword);
 document.getElementById('name').addEventListener('input', validateName);
+document.getElementById('dob').addEventListener('input', validateDoB);
 
 function previewImage(event) {
     var input = event.target;
