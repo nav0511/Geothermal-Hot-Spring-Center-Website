@@ -134,11 +134,17 @@ namespace GHCW_BE.Models
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
+                entity.Property(e => e.DoB).HasColumnType("datetime");
+
                 entity.Property(e => e.Email)
                     .HasMaxLength(255)
                     .IsUnicode(false);
 
                 entity.Property(e => e.FullName).HasMaxLength(255);
+
+                entity.Property(e => e.Gender)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.PhoneNumber)
                     .HasMaxLength(10)
