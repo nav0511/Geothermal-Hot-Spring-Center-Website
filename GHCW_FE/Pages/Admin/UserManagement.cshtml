@@ -50,11 +50,9 @@
             <option value="5" @(Model.SortOption == 5 ? "selected" : "")>Marketing</option>
             <option value="6" @(Model.SortOption == 6 ? "selected" : "")>Sale</option>
             <option value="7" @(Model.SortOption == 7 ? "selected" : "")>Lễ tân</option>
-            @if (account?.Role == 0)
-            {
-                <option value="8" @(Model.SortOption == 8 ? "selected" : "")>Quản lí</option>
-                <option value="9" @(Model.SortOption == 9 ? "selected" : "")>Admin</option>
-            }
+            <option value="8" @(Model.SortOption == 8 ? "selected" : "")>Quản lí</option>
+            <option value="9" @(Model.SortOption == 9 ? "selected" : "")>Admin</option>
+            <option value="10" @(Model.SortOption == 10 ? "selected" : "")>Khách hàng</option>
         </select>
 
         <select name="OrderOption" onchange="document.getElementById('filterForm').submit()">
@@ -67,34 +65,32 @@
 </div>
 
 <div>
-    @if (Model.Accounts == null || Model.Accounts.Count == 0)
-    {
-        @if (TempData["ErrorMessage"] != null)
+    <table class="user-table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Họ và tên</th>
+                <th>Giới tính</th>
+                <th>Vai trò</th>
+                <th>Số điện thoại</th>
+                <th>Email</th>
+                <th>Địa chỉ</th>
+                <th>Trạng thái</th>
+                @if (account?.Role == 0)
+                {
+                    <th>Tùy chọn</th>
+                }
+            </tr>
+        </thead>
+        @if (Model.Accounts == null || Model.Accounts.Count == 0)
         {
+            <br />
             <div class="alert alert-danger mt-3">
-                @TempData["ErrorMessage"]
+                Danh sách trống
             </div>
         }
-    }
-    else
-    {
-        <table class="user-table">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Họ và tên</th>
-                    <th>Giới tính</th>
-                    <th>Vai trò</th>
-                    <th>Số điện thoại</th>
-                    <th>Email</th>
-                    <th>Địa chỉ</th>
-                    <th>Trạng thái</th>
-                    @if (account?.Role == 0)
-                    {
-                        <th>Tùy chọn</th>
-                    }
-                </tr>
-            </thead>
+        else
+        {
             <tbody>
                 @foreach (var acc in Model.Accounts)
                 {
@@ -162,8 +158,8 @@
                     </tr>
                 }
             </tbody>
-        </table>
-    }
+        }
+    </table>
 </div>
 
 <div class="pagination">

@@ -114,6 +114,9 @@ namespace GHCW_FE.Pages.Admin
                 case 9:
                     accounts = accounts?.Where(e => e.Role == 0).ToList(); // Lọc theo role = admin
                     break;
+                case 10:
+                    accounts = accounts?.Where(e => e.Role == 5).ToList(); // Lọc theo role = admin
+                    break;
             }
 
             switch (OrderOption)

@@ -63,34 +63,33 @@
 </div>
 
 <div>
-    @if (Model.Employees == null || Model.Employees.Count == 0)
-    {
-        @if (TempData["ErrorMessage"] != null)
+    <table class="user-table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Họ và tên</th>
+                <th>Giới tính</th>
+                <th>Vai trò</th>
+                <th>Số điện thoại</th>
+                <th>Email</th>
+                <th>Địa chỉ</th>
+                <th>Trạng thái</th>
+                @if (account?.Role <= 1)
+                {
+                    <th>Tùy chọn</th>
+                }
+            </tr>
+        </thead>
+        @if (Model.Employees == null || Model.Employees.Count == 0)
         {
+            <br />
             <div class="alert alert-danger mt-3">
-                @TempData["ErrorMessage"]
+                Danh sách trống
             </div>
         }
-    }
-    else
-    {
-        <table class="user-table">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Họ và tên</th>
-                    <th>Giới tính</th>
-                    <th>Vai trò</th>
-                    <th>Số điện thoại</th>
-                    <th>Email</th>
-                    <th>Địa chỉ</th>
-                    <th>Trạng thái</th>
-                    @if (account?.Role <= 1)
-                    {
-                        <th>Tùy chọn</th>
-                    }
-                </tr>
-            </thead>
+        else
+        {
+
             <tbody>
                 @foreach (var emp in Model.Employees)
                 {
@@ -170,8 +169,8 @@
                     </tr>
                 }
             </tbody>
-        </table>
-    }
+        }
+    </table>
 </div>
 
 <div class="pagination">

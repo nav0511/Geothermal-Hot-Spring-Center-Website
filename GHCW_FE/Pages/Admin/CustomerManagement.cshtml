@@ -46,11 +46,8 @@
             <option value="2" @(Model.SortOption == 2 ? "selected" : "")>Khách chưa đăng ký tài khoản</option>
             <option value="3" @(Model.SortOption == 3 ? "selected" : "")>Khách nam</option>
             <option value="4" @(Model.SortOption == 4 ? "selected" : "")>Khách nữ</option>
-            @if (account?.Role <= 1)
-            {
-                <option value="5" @(Model.SortOption == 5 ? "selected" : "")>Khách đăng ký nhận thông báo</option>
-                <option value="6" @(Model.SortOption == 6 ? "selected" : "")>Khách không đăng ký nhận thông báo</option>
-            }
+            <option value="5" @(Model.SortOption == 5 ? "selected" : "")>Khách đăng ký nhận thông báo</option>
+            <option value="6" @(Model.SortOption == 6 ? "selected" : "")>Khách không đăng ký nhận thông báo</option>
         </select>
 
         <select name="OrderOption" onchange="document.getElementById('filterForm').submit()">
@@ -63,31 +60,29 @@
 </div>
 
 <div>
-    @if (Model.Customers == null || Model.Customers.Count == 0)
-    {
-        @if (TempData["ErrorMessage"] != null)
+    <table class="user-table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Họ và tên</th>
+                <th>Số điện thoại</th>
+                <th>Email</th>
+                <th>Nhận thông báo qua email</th>
+                @if (account?.Role <= 4)
+                {
+                    <th>Tùy chọn</th>
+                }
+            </tr>
+        </thead>
+        @if (Model.Customers == null || Model.Customers.Count == 0)
         {
+            <br />
             <div class="alert alert-danger mt-3">
-                @TempData["ErrorMessage"]
+                Danh sách trống
             </div>
         }
-    }
-    else
-    {
-        <table class="user-table">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Họ và tên</th>
-                    <th>Số điện thoại</th>
-                    <th>Email</th>
-                    <th>Nhận thông báo qua email</th>
-                    @if (account?.Role <= 4)
-                    {
-                        <th>Tùy chọn</th>
-                    }
-                </tr>
-            </thead>
+        else
+        {
             <tbody>
                 @foreach (var cus in Model.Customers)
                 {
@@ -106,8 +101,8 @@
                     </tr>
                 }
             </tbody>
-        </table>
-    }
+        }
+    </table>
 </div>
 
 <div class="pagination">
@@ -326,8 +321,8 @@
             border-radius: 4px;
         }
 
-        .pagination .page-item.active .page-link{
+        .pagination .page-item.active .page-link {
             background-color: #00b894;
             color: white;
-        }        
+        }
 </style>
