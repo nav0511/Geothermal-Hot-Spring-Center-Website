@@ -24,7 +24,7 @@
 }
 
 <div class="form-container">
-    <form method="post" asp-page-handler="Update">
+    <form method="post" asp-page-handler="Update" enctype="multipart/form-data">
         <div class="form-group">
             <input type="hidden" name="id" id="id" value="@Model.Service.Id" />
             <div>

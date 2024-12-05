@@ -90,7 +90,7 @@ namespace GHCW_BE.Controllers
 
         [Authorize]
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateNews(int id, [FromBody] NewsDTO newsDto)
+        public async Task<IActionResult> UpdateNews(int id, [FromForm] NewsDTOForUpdate newsDto)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             var roleClaim = identity?.FindFirst("Role");
@@ -109,6 +109,7 @@ namespace GHCW_BE.Controllers
                 }
 
                 _mapper.Map(newsDto, existingNews);
+                existingNews.Image = await _cloudinaryService.UploadImageResult(newsDto.Image);
 
 
                 var (isSuccess, message) = await _newsService.UpdateNews(existingNews);

@@ -11,12 +11,15 @@ namespace GHCW_BE.Utils.Mapper
             CreateMap<News, NewsDTO>();
             CreateMap<News, NewsDTO2>();
             CreateMap<News, NewsDTOForAdd>();
+            CreateMap<News, NewsDTOForUpdate>();
             CreateMap<Discount, DiscountDTO>();
             CreateMap<Service, ServiceDTO>();
             CreateMap<Service, ServiceDTO2>();
+            CreateMap<Service, ServiceDTOForUpdate>();
             CreateMap<Product, ProductDTO>();
             CreateMap<Product, ProductDTO2>();
             CreateMap<Product, ProductDTOImg>();
+            CreateMap<Product, ProductDTOForUpdate>();
             CreateMap<Category, CategoryDTO>();
 
             CreateMap<Schedule, ScheduleDTO>()
@@ -35,12 +38,15 @@ namespace GHCW_BE.Utils.Mapper
             CreateMap<NewsDTO, News>();
             CreateMap<NewsDTO2, News>();
             CreateMap<NewsDTOForAdd, News>();
+            CreateMap<NewsDTOForUpdate, News>();
             CreateMap<DiscountDTO, Discount>();
             CreateMap<ServiceDTO, Service>();
             CreateMap<ServiceDTO2, Service>();
+            CreateMap<ServiceDTOForUpdate, Service>();
             CreateMap<ProductDTO, Product>();
             CreateMap<ProductDTO2, Product>();
             CreateMap<ProductDTOImg, Product>();
+            CreateMap<ProductDTOForUpdate, Product>();
             CreateMap<CategoryDTO, Category>();
             CreateMap<ScheduleDTO, Schedule>();
             CreateMap<TicketDTO, TicketDTO>();

@@ -56,4 +56,26 @@ namespace GHCW_BE.DTOs
         public bool IsActive { get; set; }
     }
 
+    public class NewsDTOForUpdate
+    {
+        [Required(ErrorMessage = "Yêu cầu phải có Id.")]
+        public int Id { get; set; }
+
+        public string? DiscountId { get; set; }
+
+        [Required(ErrorMessage = "Yêu cầu phải có tiêu đề.")]
+        public string Title { get; set; }
+
+        [Required(ErrorMessage = "Yêu cầu phải có ngày tải lên.")]
+        public DateTime UploadDate { get; set; }
+
+        public string? Description { get; set; }
+
+        public IFormFile? Image { get; set; }
+
+        [Required(ErrorMessage = "Yêu cầu phải có trạng thái hoạt động.")]
+
+        public bool IsActive { get; set; }
+    }
+
 }

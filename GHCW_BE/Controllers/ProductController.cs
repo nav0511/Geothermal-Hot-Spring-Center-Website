@@ -60,7 +60,7 @@ namespace GHCW_BE.Controllers
 
         [Authorize]
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProduct(int id, [FromBody] ProductDTO productDto)
+        public async Task<IActionResult> UpdateProduct(int id, [FromForm] ProductDTOForUpdate productDto)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             var roleClaim = identity?.FindFirst("Role");
@@ -80,6 +80,7 @@ namespace GHCW_BE.Controllers
                 }
 
                 _mapper.Map(productDto, existingProduct);
+                existingProduct.Image = await _productService.UploadImageResult(productDto.Img);
 
                 var (isSuccess, message) = await _productService.UpdateProduct(existingProduct);
                 if (!isSuccess)

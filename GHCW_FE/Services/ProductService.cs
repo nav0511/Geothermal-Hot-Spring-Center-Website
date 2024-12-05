@@ -21,10 +21,10 @@ namespace GHCW_FE.Services
             return await GetData<ProductDTO>(url);
         }
 
-        public async Task<HttpStatusCode> UpdateProduct(ProductDTO product, string accessToken)
+        public async Task<HttpStatusCode> UpdateProduct(ProductDTOForUpdate product, string accessToken, string? accepttype = null)
         {
             string url = $"Product/{product.Id}";
-            return await PutData(url, product, null, accessToken);
+            return await PutData(url, product, accepttype, accessToken);
         }
 
         public async Task<HttpStatusCode> DeleteProduct(int id)
