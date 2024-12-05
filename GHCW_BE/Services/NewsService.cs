@@ -104,8 +104,8 @@ namespace GHCW_BE.Services
                     ToEmail = email.Email,
                     Subject = "Tin tức mới từ hệ thống",
                    
-                    Body = $"{message}: <strong>{news.Title}</strong>. Nhấn vào đây để xem chi tiết: <a href='{newsUrl}'>Xem tin tức</a>" +
-                    $"Để hủy nhận thông báo từ chúng tôi, vui lòng bấm vào <a href='{url}/Notification/Subscriber?Email={encodedEmail}'>đây.</a>"
+                    Body = $"{message}: <strong>{news.Title}</strong>. Nhấn vào đây để xem chi tiết: <a href='{newsUrl}'>Xem tin tức.</a>" +
+                    $"<br/> Để hủy nhận thông báo từ chúng tôi, vui lòng bấm vào <a href='{url}/Notification/Subscriber?Email={encodedEmail}'>đây.</a>"
                    
                 };
 
