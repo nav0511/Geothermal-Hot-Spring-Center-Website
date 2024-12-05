@@ -168,6 +168,12 @@ namespace GHCW_BE.Controllers
             return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền thực hiện hành động này.");
         }
 
-       
+        [HttpGet("AvailableForNews")]
+        public async Task<IActionResult> GetAvailableDiscountsForNews()
+        {
+            var discounts = await _discountService.GetAvailableDiscountsForNewsAsync();
+            return Ok(discounts);
+        }
+
     }
 }

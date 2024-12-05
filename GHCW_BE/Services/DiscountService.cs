@@ -1,4 +1,5 @@
-﻿using GHCW_BE.Models;
+﻿using GHCW_BE.DTOs;
+using GHCW_BE.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace GHCW_BE.Services
@@ -85,6 +86,21 @@ namespace GHCW_BE.Services
             }
         }
 
+        public async Task<List<DiscountDTO>> GetAvailableDiscountsForNewsAsync()
+        {
+            // Lọc các Discount chưa được gắn vào bất kỳ News nào
+            var availableDiscounts = await _context.Discounts
+                .Where(d => !_context.News.Any(n => n.DiscountId == d.Code))
+                .ToListAsync();
+
+            // Chuyển đổi thành DTO và trả về
+            return availableDiscounts.Select(d => new DiscountDTO
+            {
+                Code = d.Code,
+                Name = d.Name,
+                Description = d.Description
+            }).ToList();
+        }
 
     }
 }
