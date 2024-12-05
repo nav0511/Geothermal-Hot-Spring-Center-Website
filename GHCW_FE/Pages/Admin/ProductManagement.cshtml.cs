@@ -92,10 +92,23 @@ namespace GHCW_FE.Pages.Admin
 
             products = OrderOption switch
             {
-                1 => products.OrderBy(d => d.Name).ToList(),
-                2 => products.OrderByDescending(d => d.Name).ToList(),
+                1 => products.OrderBy(d => d.Id).ToList(),
+                2 => products.OrderByDescending(d => d.Id).ToList(),
                 3 => products.OrderBy(d => d.Price).ToList(),
                 4 => products.OrderByDescending(d => d.Price).ToList(),
+                _ => products.ToList(),
+            };
+
+            products = SortOption switch
+            {
+                1 => products.Where(p => p.IsAvailable).ToList(),
+                2 => products.Where(p => !p.IsAvailable).ToList(),
+                3 => products.Where(p => p.Size == "XS").ToList(),
+                4 => products.Where(p => p.Size == "S").ToList(),
+                5 => products.Where(p => p.Size == "M").ToList(),
+                6 => products.Where(p => p.Size == "L").ToList(),
+                7 => products.Where(p => p.Size == "XL").ToList(),
+                8 => products.Where(p => p.Size == "XXL").ToList(),
                 _ => products.ToList(),
             };
 

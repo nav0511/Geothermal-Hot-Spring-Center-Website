@@ -36,10 +36,18 @@
 
         <select name="SortOption" onchange="document.getElementById('filterForm').submit()">
             <option value="0" @(Model.SortOption == 0 ? "selected" : "")>Lọc theo</option>
-            <option value="1" @(Model.SortOption == 1 ? "selected" : "")>A-Z</option>
-            <option value="2" @(Model.SortOption == 2 ? "selected" : "")>Z-A</option>
-            <option value="3" @(Model.SortOption == 3 ? "selected" : "")>Ngày tăng dần</option>
-            <option value="4" @(Model.SortOption == 4 ? "selected" : "")>Ngày giảm dần</option>
+            <option value="1" @(Model.SortOption == 1 ? "selected" : "")>Đang hoạt động</option>
+            <option value="2" @(Model.SortOption == 2 ? "selected" : "")>Không hoạt động</option>
+
+        </select>
+
+        <select name="OrderOption" onchange="document.getElementById('filterForm').submit()">
+            <option value="1" @(Model.OrderOption == 1 ? "selected" : "")>A-Z</option>
+            <option value="2" @(Model.OrderOption == 2 ? "selected" : "")>Z-A</option>
+            <option value="3" @(Model.OrderOption == 3 ? "selected" : "")>Ngày bắt đầu tăng dần</option>
+            <option value="4" @(Model.OrderOption == 4 ? "selected" : "")>Ngày bắt đầu giảm dần</option>
+            <option value="5" @(Model.OrderOption == 5 ? "selected" : "")>Ngày kết thúc tăng dần</option>
+            <option value="6" @(Model.OrderOption == 6 ? "selected" : "")>Ngày kết thúc giảm dần</option>
         </select>
     </form>
 </div>
@@ -119,17 +127,17 @@
 <div class="pagination">
     @if (Model.CurrentPage > 1)
     {
-        <a href="?pageNumber=@(Model.CurrentPage - 1)&searchTerm=@Model.SearchTerm&sortOption=@Model.SortOption">«</a>
+        <a href="?pageNumber=@(Model.CurrentPage - 1)&searchTerm=@Model.SearchTerm&orderOption=@Model.OrderOption&sortOption=@Model.SortOption">«</a>
     }
 
     @for (int i = 1; i <= Model.TotalPages; i++)
     {
-        <a href="?pageNumber=@i&searchTerm=@Model.SearchTerm&sortOption=@Model.SortOption" class="@(i == Model.CurrentPage ? "active" : "")">@i</a>
+        <a href="?pageNumber=@i&searchTerm=@Model.SearchTerm&orderOption=@Model.OrderOption&sortOption=@Model.SortOption" class="@(i == Model.CurrentPage ? "active" : "")">@i</a>
     }
 
     @if (Model.CurrentPage < Model.TotalPages)
     {
-        <a href="?pageNumber=@(Model.CurrentPage + 1)&searchTerm=@Model.SearchTerm&sortOption=@Model.SortOption">»</a>
+        <a href="?pageNumber=@(Model.CurrentPage + 1)&searchTerm=@Model.SearchTerm&orderOption=@Model.OrderOption&sortOption=@Model.SortOption">»</a>
     }
 </div>
 

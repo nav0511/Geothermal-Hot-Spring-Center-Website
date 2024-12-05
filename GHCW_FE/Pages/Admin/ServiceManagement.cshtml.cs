@@ -92,10 +92,17 @@ namespace GHCW_FE.Pages.Admin
 
             services = OrderOption switch
             {
-                1 => services.OrderBy(d => d.Name).ToList(),
-                2 => services.OrderByDescending(d => d.Name).ToList(),
+                1 => services.OrderBy(d => d.Id).ToList(),
+                2 => services.OrderByDescending(d => d.Id).ToList(),
                 3 => services.OrderBy(d => d.Price).ToList(),
                 4 => services.OrderByDescending(d => d.Price).ToList(),
+                _ => services.ToList(),
+            };
+
+            services = SortOption switch
+            {
+                1 => services.Where(d => d.IsActive).ToList(),
+                2 => services.Where(d => !d.IsActive).ToList(),
                 _ => services.ToList(),
             };
 

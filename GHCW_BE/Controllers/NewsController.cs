@@ -107,17 +107,20 @@ namespace GHCW_BE.Controllers
                 {
                     return NotFound();
                 }
+                var oldImage = existingNews.Image;
 
                 _mapper.Map(newsDto, existingNews);
 
-                string? imageUrl = null;
 
                 if (newsDto.Image != null && newsDto.Image.Length > 0)
                 {
-                    imageUrl = await _cloudinaryService.UploadImageResult(newsDto.Image);
+                    existingNews.Image = await _cloudinaryService.UploadImageResult(newsDto.Image);
+                }
+                else
+                {
+                    existingNews.Image = oldImage;
                 }
 
-                existingNews.Image = imageUrl;
 
                 var (isSuccess, message) = await _newsService.UpdateNews(existingNews);
                 if (!isSuccess)

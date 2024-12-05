@@ -77,15 +77,18 @@ namespace GHCW_BE.Controllers
                     return NotFound();
                 }
 
+                var oldImage = existingProduct.Image;
                 _mapper.Map(productDto, existingProduct);
 
-                string? imageUrl = null;
 
                 if (productDto.Img != null && productDto.Img.Length > 0)
                 {
-                    imageUrl = await _productService.UploadImageResult(productDto.Img);
+                    existingProduct.Image = await _productService.UploadImageResult(productDto.Img);
                 }
-                existingProduct.Image = imageUrl;
+                else
+                {
+                    existingProduct.Image = oldImage;
+                }
 
                 var (isSuccess, message) = await _productService.UpdateProduct(existingProduct);
                 if (!isSuccess)

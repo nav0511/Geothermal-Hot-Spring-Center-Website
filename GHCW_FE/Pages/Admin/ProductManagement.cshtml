@@ -35,8 +35,20 @@
         <input type="text" name="SearchTerm" placeholder="Tìm kiếm..." value="@Model.SearchTerm" />
         <button type="submit" class="btn-add">Tìm kiếm</button>
 
+        <select name="SortOption" onchange="document.getElementById('filterForm').submit()">
+            <option value="0" @(Model.SortOption == 0 ? "selected" : "")>Lọc theo</option>
+            <option value="1" @(Model.SortOption == 1 ? "selected" : "")>Đang hoạt động</option>
+            <option value="2" @(Model.SortOption == 2 ? "selected" : "")>Không hoạt động</option>
+            <option value="3" @(Model.SortOption == 3 ? "selected" : "")>Size XS</option>
+            <option value="4" @(Model.SortOption == 4 ? "selected" : "")>Size S</option>
+            <option value="5" @(Model.SortOption == 5 ? "selected" : "")>Size M</option>
+            <option value="6" @(Model.SortOption == 6 ? "selected" : "")>Size L</option>
+            <option value="7" @(Model.SortOption == 7 ? "selected" : "")>Size XL</option>
+            <option value="8" @(Model.SortOption == 8 ? "selected" : "")>Size XXL</option>
+
+        </select>
+
         <select name="OrderOption" onchange="document.getElementById('filterForm').submit()">
-            <option value="0" @(Model.OrderOption == 0 ? "selected" : "")>Lọc theo</option>
             <option value="1" @(Model.OrderOption == 1 ? "selected" : "")>A-Z</option>
             <option value="2" @(Model.OrderOption == 2 ? "selected" : "")>Z-A</option>
             <option value="3" @(Model.OrderOption == 3 ? "selected" : "")>Giá tăng dần</option>
@@ -52,6 +64,9 @@
             <th>Tên sản phẩm</th>
             <th>Kích thước</th>
             <th>Giá</th>
+            <th>Số lượng</th>
+            <th>Phân loại</th>
+            <th>Cho Thuê</th>
             <th>Trạng thái</th>
             @if (HttpContext.Session.GetString("acc") != null)
             {
@@ -70,7 +85,34 @@
                 <td>@product.Id</td>
                 <td>@product.Name</td>
                 <td>@product.Size</td>
-                <td>@product.Price</td>
+                <td>@String.Format("{0:N0} VNĐ", (int)product.Price * 1000)</td>
+                <td>@product.Quantity</td>
+                <td>
+                    @if(product.CategoryId == 1)
+                    {
+                        <span>Đồ ăn</span>
+                    }
+                    @if (product.CategoryId == 2)
+                    {
+                        <span>Nước uống</span>
+                    }@if (product.CategoryId == 3)
+                    {
+                        <span>Quấn áo bơi</span>
+                    }@if (product.CategoryId == 4)
+                    {
+                        <span>Khăn tắm</span>
+                    }
+                </td>
+                <td>
+                    @if (product.IsForRent == true)
+                    {
+                        <span>Đúng</span>
+                    }
+                    else
+                    {
+                        <span>Sai</span>
+                    }
+                </td>
                 <td>
                     @if (product.IsAvailable == true)
                     {
@@ -117,17 +159,17 @@
 <div class="pagination">
     @if (Model.CurrentPage > 1)
     {
-        <a href="?pageNumber=@(Model.CurrentPage - 1)&searchTerm=@Model.SearchTerm&orderOption=@Model.OrderOption">«</a>
+        <a href="?pageNumber=@(Model.CurrentPage - 1)&searchTerm=@Model.SearchTerm&orderOption=@Model.OrderOption&sortOption=@Model.SortOption">«</a>
     }
 
     @for (int i = 1; i <= Model.TotalPages; i++)
     {
-        <a href="?pageNumber=@i&searchTerm=@Model.SearchTerm&orderOption=@Model.OrderOption" class="@(i == Model.CurrentPage ? "active" : "")">@i</a>
+        <a href="?pageNumber=@i&searchTerm=@Model.SearchTerm&orderOption=@Model.OrderOption&sortOption=@Model.SortOption" class="@(i == Model.CurrentPage ? "active" : "")">@i</a>
     }
 
     @if (Model.CurrentPage < Model.TotalPages)
     {
-        <a href="?pageNumber=@(Model.CurrentPage + 1)&searchTerm=@Model.SearchTerm&orderOption=@Model.OrderOption">»</a>
+        <a href="?pageNumber=@(Model.CurrentPage + 1)&searchTerm=@Model.SearchTerm&orderOption=@Model.OrderOption&sortOption=@Model.SortOption">»</a>
     }
 </div>
 

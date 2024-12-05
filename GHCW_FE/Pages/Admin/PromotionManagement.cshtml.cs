@@ -90,10 +90,17 @@ namespace GHCW_FE.Pages.Admin
 
             news = OrderOption switch
             {
-                1 => news.OrderBy(d => d.Title).ToList(),
-                2 => news.OrderByDescending(d => d.Title).ToList(),
+                1 => news.OrderBy(d => d.Id).ToList(),
+                2 => news.OrderByDescending(d => d.Id).ToList(),
                 3 => news.OrderBy(d => d.UploadDate).ToList(),
                 4 => news.OrderByDescending(d => d.UploadDate).ToList(),
+                _ => news.ToList(),
+            };
+
+            news = SortOption switch
+            {
+                1 => news.Where(n => n.IsActive).ToList(),
+                2 => news.Where(n => !n.IsActive).ToList(),
                 _ => news.ToList(),
             };
 

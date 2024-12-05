@@ -92,7 +92,10 @@ namespace GHCW_FE.Pages.Admin
 
             if (!string.IsNullOrEmpty(SearchTerm))
             {
-                tickets = tickets?.Where(d => d.Customer.Name?.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase) ?? false).ToList();
+                tickets = tickets?.Where(t =>
+                   (t.Receptionist.Name != null && t.Receptionist.Name.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase)) ||
+                   (t.Customer.Name != null && t.Customer.Name.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase))
+               ).ToList();
             }
 
             tickets = OrderOption switch
@@ -101,6 +104,18 @@ namespace GHCW_FE.Pages.Admin
                 2 => tickets.OrderByDescending(d => d.OrderDate).ToList(),
                 3 => tickets.OrderBy(d => d.BookDate).ToList(),
                 4 => tickets.OrderByDescending(d => d.BookDate).ToList(),
+                _ => tickets.ToList(),
+            };
+
+            tickets = SortOption switch
+            {
+                1 => tickets.Where(d => d.PaymentStatus == 1).ToList(),
+                2 => tickets.Where(d => d.PaymentStatus == 0).ToList(),
+                3 => tickets.Where(d => d.CheckIn == 0).ToList(),
+                4 => tickets.Where(d => d.CheckIn == 1).ToList(),
+                5 => tickets.Where(d => d.CheckIn == 2).ToList(),
+                6 => tickets.Where(d => d.IsActive).ToList(),
+                7 => tickets.Where(d => !d.IsActive).ToList(),
                 _ => tickets.ToList(),
             };
 

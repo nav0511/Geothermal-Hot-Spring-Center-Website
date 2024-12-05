@@ -28,11 +28,15 @@ namespace GHCW_FE.Pages.Admin
         public string? SearchTerm { get; set; }
 
         [BindProperty(SupportsGet = true)]
+        public int OrderOption { get; set; }
+
+        [BindProperty(SupportsGet = true)]
         public int SortOption { get; set; }
+
         public int CurrentPage { get; set; }
         public int TotalPages { get; set; }
         private const int PageSize = 6;
-        public async Task<IActionResult> OnGetAsync(int pageNumber = 1, string? searchTerm = null, int sortOption = 0)
+        public async Task<IActionResult> OnGetAsync(int pageNumber = 1, string? searchTerm = null, int orderOption = 0, int sortOption = 0)
         {
             var accessToken = await _tokenService.CheckAndRefreshTokenAsync();
             if (string.IsNullOrEmpty(accessToken))
@@ -74,6 +78,7 @@ namespace GHCW_FE.Pages.Admin
             }
 
             SearchTerm = searchTerm;
+            OrderOption = orderOption;
             SortOption = sortOption;
             CurrentPage = pageNumber;
             int skip = (pageNumber - 1) * PageSize;
@@ -95,12 +100,17 @@ namespace GHCW_FE.Pages.Admin
                         .ToList();
             }
 
-            bills = SortOption switch
+            bills = OrderOption switch
             {
                 1 => bills.OrderBy(d => d.OrderDate).ToList(),
                 2 => bills.OrderByDescending(d => d.OrderDate).ToList(),
-                3 => bills.OrderBy(d => d.ReceptionistId).ToList(),
-                4 => bills.OrderByDescending(d => d.ReceptionistId).ToList(),
+                _ => bills.ToList(),
+            };
+
+            bills = SortOption switch
+            {
+                1 => bills.Where(b => b.PaymentStatus == 1).ToList(),
+                2 => bills.Where(b => b.PaymentStatus == 0).ToList(),
                 _ => bills.ToList(),
             };
 
