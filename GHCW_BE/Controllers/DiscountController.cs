@@ -169,9 +169,9 @@ namespace GHCW_BE.Controllers
         }
 
         [HttpGet("AvailableForNews")]
-        public async Task<IActionResult> GetAvailableDiscountsForNews()
+        public async Task<IActionResult> GetAvailableDiscountsForNews([FromQuery] string? id)
         {
-            var discounts = await _discountService.GetAvailableDiscountsForNewsAsync();
+            var discounts = await _discountService.GetAvailableDiscountsForNewsAsync(id);
             return Ok(discounts);
         }
 

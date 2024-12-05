@@ -73,8 +73,8 @@ namespace GHCW_FE.Pages.Admin
 
             var (statusCode1, news) = await _newsService.GetNewsById(id);
             News = news;
-            var (statusCode2, discounts) = await _discountService.GetDiscounts("Discount");
-            Discounts = discounts;
+            var (statusCode2, discounts) = await _discountService.GetUnsedDiscounts(News.DiscountId);
+            Discounts = discounts ?? new List<DiscountDTO>();
 
 
             if (News == null)
@@ -109,8 +109,8 @@ namespace GHCW_FE.Pages.Admin
 
             var (statusCode, news) = await _newsService.GetNewsById(id);
             News = news;
-            var (statusCode2, discounts) = await _discountService.GetDiscounts("Discount");
-            Discounts = discounts;
+            var (statusCode2, discounts) = await _discountService.GetUnsedDiscounts(News.DiscountId);
+            Discounts = discounts ?? new List<DiscountDTO>();
 
             if (!ModelState.IsValid)
             {
@@ -152,8 +152,16 @@ namespace GHCW_FE.Pages.Admin
 
             if (response == HttpStatusCode.OK)
             {
-                TempData["SuccessMessage"] = "Cập nhật tin tức thành công";
-                return RedirectToPage("/Admin/NewsManagement");
+                if (discount == "0")
+                {
+                    TempData["SuccessMessage"] = "Thêm tin tức thành công";
+                    return RedirectToPage("/Admin/NewsManagement");
+                }
+                else
+                {
+                    TempData["SuccessMessage"] = "Thêm tin khuyến mãi thành công";
+                    return RedirectToPage("/Admin/PromotionManagement");
+                }
             }
             else
             {

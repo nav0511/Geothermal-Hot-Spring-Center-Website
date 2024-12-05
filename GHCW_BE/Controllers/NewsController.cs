@@ -109,8 +109,15 @@ namespace GHCW_BE.Controllers
                 }
 
                 _mapper.Map(newsDto, existingNews);
-                existingNews.Image = await _cloudinaryService.UploadImageResult(newsDto.Image);
 
+                string? imageUrl = null;
+
+                if (newsDto.Image != null && newsDto.Image.Length > 0)
+                {
+                    imageUrl = await _cloudinaryService.UploadImageResult(newsDto.Image);
+                }
+
+                existingNews.Image = imageUrl;
 
                 var (isSuccess, message) = await _newsService.UpdateNews(existingNews);
                 if (!isSuccess)
@@ -181,7 +188,14 @@ namespace GHCW_BE.Controllers
 
                 var news = _mapper.Map<News>(newsDto);
 
-                news.Image = await _cloudinaryService.UploadImageResult(newsDto.Image);
+                string? imageUrl = null;
+
+                if (newsDto.Image != null && newsDto.Image.Length > 0)
+                {
+                    imageUrl = await _cloudinaryService.UploadImageResult(newsDto.Image);
+                }
+
+                news.Image = imageUrl;
 
                 var (isSuccess, message) = await _newsService.AddNews(news);
                 if (!isSuccess)

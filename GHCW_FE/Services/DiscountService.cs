@@ -16,6 +16,12 @@ namespace GHCW_FE.Services
             return await GetData<int>(url);
         }
 
+        public async Task<(HttpStatusCode StatusCode, List<DiscountDTO>? Discount)> GetUnsedDiscounts(string? currentDiscountId)
+        {
+            string url = $"Discount/AvailableForNews?id={currentDiscountId}";
+            return await GetData<List<DiscountDTO>>(url);
+        }
+
         public async Task<(HttpStatusCode StatusCode, DiscountDTO? Discount)> GetDiscountByCode(string code)
         {
             string url = $"Discount/{code}";

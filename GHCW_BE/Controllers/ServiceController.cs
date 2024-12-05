@@ -46,8 +46,7 @@ namespace GHCW_BE.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetServiceByID(int id)
         {
-            var service = await _servicesService.GetListServices()
-                                                .FirstOrDefaultAsync(s => s.Id == id);
+            var service = await _servicesService.GetServiceById(id);
 
             if (service == null)
             {
@@ -72,15 +71,22 @@ namespace GHCW_BE.Controllers
                     return BadRequest("ID không khớp.");
                 }
 
-                var existingService = await _servicesService.GetListServices()
-                                                            .FirstOrDefaultAsync(s => s.Id == id);
+                var existingService = await _servicesService.GetServiceById(id);
                 if (existingService == null)
                 {
                     return NotFound();
                 }
 
                 _mapper.Map(serviceDto, existingService);
-                existingService.Image = await _cloudinary.UploadImageResult(serviceDto.Image);
+
+                string? imageUrl = null;
+
+                if (serviceDto.Image != null && serviceDto.Image.Length > 0)
+                {
+                    imageUrl = await _cloudinary.UploadImageResult(serviceDto.Image);
+                }
+
+                existingService.Image = imageUrl;
 
                 var (isSuccess, message) = await _servicesService.UpdateService(existingService);
 
@@ -131,7 +137,14 @@ namespace GHCW_BE.Controllers
                 }
 
                 var service = _mapper.Map<Service>(serviceDto);
-                service.Image = await _cloudinary.UploadImageResult(serviceDto.Image);
+
+                string? imageUrl = null;
+
+                if (serviceDto.Image != null && serviceDto.Image.Length > 0)
+                {
+                    imageUrl = await _cloudinary.UploadImageResult(serviceDto.Image);
+                }
+                service.Image = imageUrl;
 
                 var (isSuccess, message) = await _servicesService.AddService(service);
                 if (!isSuccess)
