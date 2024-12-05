@@ -16,24 +16,12 @@ window.addEventListener("click", function (event) {
     }
 });
 
-document.getElementById('togglePassword').addEventListener('click', function () {
-    const passwordInput = document.getElementById('password');
-    const eyeIcon = document.getElementById('eyeIcon');
-
-    // Toggle the type attribute
-    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-    passwordInput.setAttribute('type', type);
-
-    // Toggle the eye icon
-    eyeIcon.classList.toggle('fa-eye');
-    eyeIcon.classList.toggle('fa-eye-slash');
-});
-
 // Hàm kiểm tra mật khẩu
 function validatePassword() {
     const passwordInput = document.getElementById('password');
-    const password = passwordInput.value.trim();
+    if (!passwordInput) return;
 
+    const password = passwordInput.value.trim();
     const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@@$#^!%*?&])[A-Za-z\d@@$#^!%*?&]{8,}$/;
 
     if (!passwordPattern.test(password)) {
@@ -45,6 +33,8 @@ function validatePassword() {
 // Hàm kiểm tra số điện thoại
 function validatePhoneNumber() {
     const phoneInput = document.getElementById('phonenumber');
+    if (!phoneInput) return;
+
     const phoneNumber = phoneInput.value.trim();
     const phonePattern = /^(0[3,5,7,8,9])\d{8}$/;
 
@@ -58,6 +48,8 @@ function validatePhoneNumber() {
 // Hàm kiểm tra email hợp lệ
 function validateEmail() {
     const emailInput = document.getElementById('email');
+    if (!emailInput) return;
+
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
     if (!emailPattern.test(emailInput.value.trim())) {
@@ -70,6 +62,8 @@ function validateEmail() {
 // Hàm kiểm tra tên hợp lệ
 function validateName() {
     const nameInput = document.getElementById('name');
+    if (!nameInput) return;
+
     const namePattern = /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠÝàáâãèéêìíòóôõùúăđĩũơưƯẠ-ỹ\s]+$/;
 
     if (!namePattern.test(nameInput.value.trim())) {
@@ -82,6 +76,8 @@ function validateName() {
 // Hàm kiểm tra đủ ít nhất 15 tuổi
 function validateDoB() {
     const dobInput = document.getElementById('dob');
+    if (!dobInput) return;
+
     const dobValue = dobInput.value;
 
     if (!dobValue) {
@@ -108,18 +104,27 @@ function validateDoB() {
 function validateForm() {
     validatePhoneNumber();
     validateEmail();
-    validatePassword();
     validateName();
     validateDoB();
+    validatePassword();
     return true;
 }
 
 // Thêm sự kiện cho input để kiểm tra ngay khi người dùng nhập liệu
-document.getElementById('phonenumber').addEventListener('input', validatePhoneNumber);
-document.getElementById('email').addEventListener('input', validateEmail);
-document.getElementById('password').addEventListener('input', validatePassword);
-document.getElementById('name').addEventListener('input', validateName);
-document.getElementById('dob').addEventListener('input', validateDoB);
+const phoneInput = document.getElementById('phonenumber');
+if (phoneInput) phoneInput.addEventListener('input', validatePhoneNumber);
+
+const emailInput = document.getElementById('email');
+if (emailInput) emailInput.addEventListener('input', validateEmail);
+
+const nameInput = document.getElementById('name');
+if (nameInput) nameInput.addEventListener('input', validateName);
+
+const dobInput = document.getElementById('dob');
+if (dobInput) dobInput.addEventListener('input', validateDoB);
+
+const passwordInput = document.getElementById('password');
+if (passwordInput) passwordInput.addEventListener('input', validatePassword);
 
 function previewImage(event) {
     var input = event.target;
@@ -135,4 +140,20 @@ function previewImage(event) {
 
         reader.readAsDataURL(input.files[0]);
     }
+}
+
+const togglePasswordButton = document.getElementById('togglePassword');
+if (togglePasswordButton) {
+    togglePasswordButton.addEventListener('click', function () {
+        const passwordInput = document.getElementById('password');
+        const eyeIcon = document.getElementById('eyeIcon');
+
+        // Toggle the type attribute
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+
+        // Toggle the eye icon
+        eyeIcon.classList.toggle('fa-eye');
+        eyeIcon.classList.toggle('fa-eye-slash');
+    });
 }

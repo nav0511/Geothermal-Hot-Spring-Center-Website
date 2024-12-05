@@ -100,7 +100,9 @@ namespace GHCW_BE.Controllers
                             Id = a.AccountId ?? 0,
                             Name = a.Name,
                             PhoneNumber = a.PhoneNumber,
-                            Gender = a.Gender
+                            Gender = a.Gender,
+                            DoB = a.DoB,
+                            Address = a.Address
                         };
                         var (isSuccess2, message2) = await _accountService.UpdateProfile(ur);
                         if (!isSuccess2)

@@ -83,6 +83,9 @@ namespace GHCW_BE.Controllers
                     {
                         checkExistCustomer.Name = r.Name;
                         checkExistCustomer.PhoneNumber = r.PhoneNumber;
+                        checkExistCustomer.Address = r.Address;
+                        checkExistCustomer.DoB = r.DoB;
+                        checkExistCustomer.Gender = r.Gender;
                         var (isSuccess, message) = await _cusService.EditCustomer(checkExistCustomer);
                         if (isSuccess)
                         {
@@ -288,36 +291,27 @@ namespace GHCW_BE.Controllers
 
             if (roleClaim != null && int.Parse(roleClaim.Value) == 0)
             {
-                if (r.Role == 5)
+                var (isSuccess, message) = await _service.EditProfile(r);
+                if (!isSuccess)
                 {
-                    var checkExistCustomer = await _cusService.GetCustomerProfileById(r.Id);
-                    if (checkExistCustomer != null)
-                    {
-                        checkExistCustomer.Name = r.Name;
-                        checkExistCustomer.PhoneNumber = r.PhoneNumber;
-
-                        var (isSuccess, message) = await _cusService.EditCustomer(checkExistCustomer);
-                        if (isSuccess)
-                        {
-                            (isSuccess, message) = await _service.EditProfile(r);
-                            if (!isSuccess)
-                            {
-                                return BadRequest(message);
-                            }
-                            return Ok(message);
-                        }
-                        return BadRequest(message);
-                    }
+                    return BadRequest(message);
                 }
-                else
+                var checkExistCustomer = await _cusService.GetCustomerProfileByAccountId(r.Id);
+                if (checkExistCustomer != null)
                 {
-                    var (isSuccess, message) = await _service.EditProfile(r);
+                    checkExistCustomer.Name = r.Name;
+                    checkExistCustomer.PhoneNumber = r.PhoneNumber;
+                    checkExistCustomer.Address = r.Address;
+                    checkExistCustomer.DoB = r.DoB;
+                    checkExistCustomer.Gender = r.Gender;
+                    (isSuccess, message) = await _cusService.EditCustomer(checkExistCustomer);
                     if (!isSuccess)
                     {
                         return BadRequest(message);
                     }
                     return Ok(message);
                 }
+                return Ok(message);
             }
             else if (roleClaim != null && int.Parse(roleClaim.Value) == 1)
             {
@@ -327,6 +321,21 @@ namespace GHCW_BE.Controllers
                     if (!isSuccess)
                     {
                         return BadRequest(message);
+                    }
+                    var checkExistCustomer = await _cusService.GetCustomerProfileById(r.Id);
+                    if (checkExistCustomer != null)
+                    {
+                        checkExistCustomer.Name = r.Name;
+                        checkExistCustomer.PhoneNumber = r.PhoneNumber;
+                        checkExistCustomer.Address = r.Address;
+                        checkExistCustomer.DoB = r.DoB;
+                        checkExistCustomer.Gender = r.Gender;
+                        (isSuccess, message) = await _cusService.EditCustomer(checkExistCustomer);
+                        if (!isSuccess)
+                        {
+                            return BadRequest(message);
+                        }
+                        return Ok(message);
                     }
                     return Ok(message);
                 }
