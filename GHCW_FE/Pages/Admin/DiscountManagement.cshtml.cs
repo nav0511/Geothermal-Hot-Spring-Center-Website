@@ -30,11 +30,14 @@ namespace GHCW_FE.Pages.Admin
         [BindProperty(SupportsGet = true)]
         public int SortOption { get; set; }
 
+        [BindProperty(SupportsGet = true)]
+        public int OrderOption { get; set; }
+
         public int CurrentPage { get; set; }
         public int TotalPages { get; set; }
         private const int PageSize = 6;
 
-        public async Task<IActionResult> OnGetAsync(int pageNumber = 1, string? searchTerm = null, int sortOption = 0)
+        public async Task<IActionResult> OnGetAsync(int pageNumber = 1, string? searchTerm = null, int orderOption = 0, int sortOption = 0)
         {
             var accessToken = await _tokenService.CheckAndRefreshTokenAsync();
             if (string.IsNullOrEmpty(accessToken))
@@ -76,6 +79,7 @@ namespace GHCW_FE.Pages.Admin
             }
 
             SearchTerm = searchTerm; 
+            OrderOption = orderOption;
             SortOption = sortOption;
             CurrentPage = pageNumber;
             int skip = (pageNumber - 1) * PageSize;
@@ -83,18 +87,30 @@ namespace GHCW_FE.Pages.Admin
             var (statusCode1, discounts) = await _discountService.GetDiscounts("Discount");
             if (!string.IsNullOrEmpty(SearchTerm))
             {
-                discounts = discounts?.Where(d => d.Name?.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase) ?? false).ToList();
+                discounts = discounts?.Where(d =>
+                    (d.Name != null && d.Name.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase)) ||
+                    (d.Code != null && d.Code.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase))
+                ).ToList();
             }
 
-            discounts = SortOption switch
+            discounts = OrderOption switch
             {
-                1 => discounts.OrderBy(d => d.Name).ToList(),
-                2 => discounts.OrderByDescending(d => d.Name).ToList(),
-                3 => discounts.OrderBy(d => d.EndDate).ToList(),
-                4 => discounts.OrderByDescending(d => d.EndDate).ToList(),
+                1 => discounts.OrderBy(d => d.Code).ToList(),
+                2 => discounts.OrderByDescending(d => d.Code).ToList(),
+                3 => discounts.OrderBy(d => d.StartDate).ToList(),
+                4 => discounts.OrderByDescending(d => d.StartDate).ToList(),
+                5 => discounts.OrderBy(d => d.EndDate).ToList(),
+                6 => discounts.OrderByDescending(d => d.EndDate).ToList(),
                 _ => discounts.ToList(),
             };
 
+            discounts = SortOption switch
+            {
+                1 => discounts.Where(d => d.IsAvailable).ToList(),
+                2 => discounts.Where(d => !d.IsAvailable).ToList(),
+                _ => discounts.ToList(),
+            };
+            
             var totalDiscounts = discounts?.Count() ?? 0;
             TotalPages = (int)Math.Ceiling((double)totalDiscounts / PageSize);
             DiscountDTOs = discounts?.Skip(skip).Take(PageSize).ToList() ?? new List<DiscountDTO>();

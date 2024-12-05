@@ -77,16 +77,18 @@ namespace GHCW_BE.Controllers
                     return NotFound();
                 }
 
+                string oldImage = existingService.Image;
                 _mapper.Map(serviceDto, existingService);
 
-                string? imageUrl = null;
 
                 if (serviceDto.Image != null && serviceDto.Image.Length > 0)
                 {
-                    imageUrl = await _cloudinary.UploadImageResult(serviceDto.Image);
+                    existingService.Image = await _cloudinary.UploadImageResult(serviceDto.Image);
                 }
-
-                existingService.Image = imageUrl;
+                else
+                {
+                    existingService.Image = oldImage;
+                }
 
                 var (isSuccess, message) = await _servicesService.UpdateService(existingService);
 

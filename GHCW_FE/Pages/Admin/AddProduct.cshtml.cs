@@ -23,7 +23,7 @@ namespace GHCW_FE.Pages.Admin
             _tokenService = tokenService;
             _accService = accService;
         }
-        public List<string> Sizes { get; } = new List<string> { "XS", "S", "M", "L", "XL", "XXL" };
+        public List<string> Sizes { get; } = new List<string> { "XS", "S", "M", "L", "XL", "XXL"};
 
         public List<CategoryDTO> Categories { get; set; } = new List<CategoryDTO>();
 
