@@ -101,7 +101,7 @@ namespace GHCW_FE.Pages.Admin
             var handler = new JwtSecurityTokenHandler();
             var jwtToken = handler.ReadJwtToken(accessToken);
             var roleClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "Role");
-            if (roleClaim != null && int.Parse(roleClaim.Value) > 0)
+            if (roleClaim != null && int.Parse(roleClaim.Value) > 1)
             {
                 await _authService.LogoutAsync();
                 TempData["ErrorMessage"] = "Bạn không có quyền truy cập trang này.";
@@ -113,7 +113,7 @@ namespace GHCW_FE.Pages.Admin
             Product = product;
             if (Product == null)
             {
-                ModelState.AddModelError(string.Empty, "Dịch vụ không tồn tại.");
+                ModelState.AddModelError(string.Empty, "Sản phẩm không tồn tại.");
                 return NotFound();
             }
 
@@ -155,7 +155,7 @@ namespace GHCW_FE.Pages.Admin
             }
             else
             {
-                @TempData["ErrorMessage"] = ("Có lỗi xảy ra khi cập nhật dịch vụ.");
+                @TempData["ErrorMessage"] = ("Có lỗi xảy ra khi cập nhật sản phẩm.");
                 return Page();
             }
         }

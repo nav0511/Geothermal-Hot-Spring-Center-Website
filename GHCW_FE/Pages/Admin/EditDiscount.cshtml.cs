@@ -38,7 +38,7 @@ namespace GHCW_FE.Pages.Admin
             var handler = new JwtSecurityTokenHandler();
             var jwtToken = handler.ReadJwtToken(accessToken);
             var roleClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "Role");
-            if (roleClaim != null && int.Parse(roleClaim.Value) > 3)
+            if (roleClaim != null && int.Parse(roleClaim.Value) > 1)
             {
                 await _authService.LogoutAsync();
                 TempData["ErrorMessage"] = "Bạn không có quyền truy cập trang này.";
@@ -46,7 +46,7 @@ namespace GHCW_FE.Pages.Admin
             }
 
             var (statusCode, userProfile) = await _accService.UserProfile(accessToken);
-            if (userProfile?.Role > 3)
+            if (userProfile?.Role > 1)
             {
                 await _authService.LogoutAsync();
                 TempData["ErrorMessage"] = "Bạn không có quyền truy cập thông tin này.";
@@ -89,7 +89,7 @@ namespace GHCW_FE.Pages.Admin
             var handler = new JwtSecurityTokenHandler();
             var jwtToken = handler.ReadJwtToken(accessToken);
             var roleClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "Role");
-            if (roleClaim != null && int.Parse(roleClaim.Value) > 0)
+            if (roleClaim != null && int.Parse(roleClaim.Value) > 1)
             {
                 await _authService.LogoutAsync();
                 TempData["ErrorMessage"] = "Bạn không có quyền truy cập trang này.";

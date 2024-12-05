@@ -8,11 +8,19 @@
     ViewData["Title"] = "Quản lý Mã giảm giá";
     Layout = "_LayoutManagement";
     ViewData["ActivePage"] = "/Admin/DiscountManagement";
+    AccountDTO? account = null;
+    if (HttpContext.Session.GetString("acc") != null)
+    {
+        account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
+    }
 }
 
 <header class="page-header">
     <h2>Quản lý phiếu giảm giá</h2>
-    <button class="btn-add" onclick="window.location.href='/Admin/AddDiscount'">+ Thêm phiếu giảm giá mới</button>
+    @if (account?.Role <= 1)
+    {
+        <button class="btn-add" onclick="window.location.href='/Admin/AddDiscount'">+ Thêm phiếu giảm giá mới</button>
+    }
 </header>
 
 @if (TempData["SuccessMessage"] != null)
@@ -61,13 +69,9 @@
             <th>Ngày bắt đầu</th>
             <th>Ngày kết thúc</th>
             <th>Trạng thái</th>
-            @if (HttpContext.Session.GetString("acc") != null)
+            @if (account?.Role <= 1)
             {
-                var account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
-                @if (account.Role == 0)
-                {
-                    <th>Tùy chọn</th>
-                }
+                <th>Tùy chọn</th>
             }
         </tr>
     </thead>
@@ -89,36 +93,31 @@
                         <span class="status inactive">Không hoạt động</span>
                     }
                 </td>
-
-                @if (HttpContext.Session.GetString("acc") != null)
+                @if (account?.Role <= 1)
                 {
-                    var account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
-                    @if (account.Role == 0)
-                    {
-                        <td class="options-cell">
-                            <button class=" btn-update" onclick="window.location.href='/Admin/EditDiscount?code=@discount.Code'">Chỉnh sửa</button>
-                            @if (discount.IsAvailable == true)
-                            {
-                                <form method="post" asp-page-handler="DiscountActivation">
-                                    <button type="submit" class=" btn-deactive" name="code" value="@discount.Code">Vô hiệu hóa</button>
-                                </form>
-                            }
-                            else
-                            {
-                                <form method="post" asp-page-handler="DiscountActivation">
-                                    <button type="submit" class=" btn-active" name="code" value="@discount.Code">Kích hoạt</button>
-                                </form>
-                            }
-                        </td>
-                    }
+                    <td class="options-cell">
+                        <button class=" btn-update" onclick="window.location.href='/Admin/EditDiscount?code=@discount.Code'">Chỉnh sửa</button>
+                        @if (discount.IsAvailable == true)
+                        {
+                            <form method="post" asp-page-handler="DiscountActivation">
+                                <button type="submit" class=" btn-deactive" name="code" value="@discount.Code">Vô hiệu hóa</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <form method="post" asp-page-handler="DiscountActivation">
+                                <button type="submit" class=" btn-active" name="code" value="@discount.Code">Kích hoạt</button>
+                            </form>
+                        }
+                    </td>
                 }
 
                 @* <td>
-                    <button class="status active" onclick="window.location.href='/Admin/EditDiscount?code=@discount.Code'">Sửa</button>
-                    <form method="post" asp-page-handler="DeleteDiscount" asp-route-id="@discount.Code" style="display:inline;">
-                        <button type="submit" class="status inactive" onclick="return confirm('Bạn có chắc chắn muốn xóa phiếu giảm giá này?');">Xóa</button>
-                    </form>
-                </td> *@
+            <button class="status active" onclick="window.location.href='/Admin/EditDiscount?code=@discount.Code'">Sửa</button>
+            <form method="post" asp-page-handler="DeleteDiscount" asp-route-id="@discount.Code" style="display:inline;">
+            <button type="submit" class="status inactive" onclick="return confirm('Bạn có chắc chắn muốn xóa phiếu giảm giá này?');">Xóa</button>
+            </form>
+            </td> *@
             </tr>
         }
     </tbody>
@@ -240,7 +239,6 @@
             padding: 5px 10px;
             border-radius: 4px;
             font-size: 14px;
-
         }
 
         .user-table td.address-cell {
@@ -257,16 +255,16 @@
 
     .status.active,
     .status.inactive {
-        display: inline-block; 
-        padding: 5px 10px; 
+        display: inline-block;
+        padding: 5px 10px;
         font-size: 12px;
         font-weight: bold;
         text-align: center;
         border-radius: 5px;
-        white-space: nowrap; 
-        max-width: 100px; 
+        white-space: nowrap;
+        max-width: 100px;
         overflow: hidden;
-        text-overflow: ellipsis; 
+        text-overflow: ellipsis;
     }
 
     .status.active {

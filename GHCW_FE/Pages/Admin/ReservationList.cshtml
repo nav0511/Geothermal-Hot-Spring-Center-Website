@@ -8,6 +8,11 @@
     ViewData["Title"] = "Danh sách đặt trước";
     Layout = "_LayoutManagement";
     ViewData["ActivePage"] = "/Admin/ReservationList";
+    AccountDTO? account = null;
+    if (HttpContext.Session.GetString("acc") != null)
+    {
+        account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
+    }
 }
 <header class="page-header">
     <h2>Danh sách đặt trước</h2>
@@ -57,30 +62,16 @@
     <thead>
         <tr>
             <th>Id</th>
-            @if (HttpContext.Session.GetString("acc") != null)
-            {
-                var account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
-                @if (account.Role == 3)
-                {
-                    <th>Tên NV Sale</th>
-                }
-                else
-                {
-                    <th>Tên NV lễ tân</th>
-                }
-            }
+            <th>Tên NV Sale</th>
+            <th>Tên NV lễ tân</th>
             <th>Tên khách hàng</th>
             <th>Ngày xuất vé</th>
             <th>Ngày sử dụng</th>
             <th>Trạng thái thanh toán</th>
             <th>Check-In</th>
-            @if (HttpContext.Session.GetString("acc") != null)
+            @if (account?.Role == 4)
             {
-                var account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
-                @if (account.Role <= 4)
-                {
-                    <th>Tùy chọn</th>
-                }
+                <th>Tùy chọn</th>
             }
         </tr>
     </thead>
@@ -89,17 +80,21 @@
         {
             <tr>
                 <td>@ticket.Id</td>
-                @if (HttpContext.Session.GetString("acc") != null)
+                @if (ticket.SaleId != null)
                 {
-                    var account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
-                    @if (account.Role == 3)
-                    {
-                        <td>@account.Name</td>
-                    }
-                    else
-                    {
-                        <td>@ticket.Receptionist?.Name</td>
-                    }
+                    <td>@ticket.Sale?.Name</td>
+                }
+                else
+                {
+                    <td>Trống</td>
+                }
+                @if (ticket.ReceptionistId != null)
+                {
+                    <td>@ticket.Receptionist?.Name</td>
+                }
+                else
+                {
+                    <td>Trống</td>
                 }
                 <td>@ticket.Customer.Name</td>
                 <td>@ticket.OrderDate.ToString("dd/MM/yyyy")</td>
@@ -108,35 +103,31 @@
                     @(ticket.PaymentStatus == 1 ? "Đã thanh toán" : "Chưa thanh toán")
                 </td>
 
-                @if (HttpContext.Session.GetString("acc") != null)
+                @if (account?.Role == 3)
                 {
-                    var account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
-                    @if (account.Role == 3)
-                    {
-                        <td>
-                            <select name="checkInStatus" disabled>
+                    <td>
+                        <select name="checkInStatus" disabled>
+                            <option value="0" selected="@(ticket.CheckIn == 0)">Chưa đến</option>
+                            <option value="1" selected="@(ticket.CheckIn == 1)">Đã check-in</option>
+                            <option value="2" selected="@(ticket.CheckIn == 2)">Hoàn tất</option>
+                        </select>
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        <form method="post" asp-page-handler="UpdateCheckIn">
+                            <input type="hidden" name="receptionistID" value="@Model.ReceptionistID" />
+                            <input type="hidden" name="ticketId" value="@ticket.Id" />
+                            <input type="hidden" name="paymentStatus" value="@ticket.PaymentStatus" />
+                            <select name="checkInStatus" onchange="this.form.submit()">
                                 <option value="0" selected="@(ticket.CheckIn == 0)">Chưa đến</option>
                                 <option value="1" selected="@(ticket.CheckIn == 1)">Đã check-in</option>
                                 <option value="2" selected="@(ticket.CheckIn == 2)">Hoàn tất</option>
                             </select>
-                        </td>
-                    }
-                    else
-                    {
-                        <td>
-                            <form method="post" asp-page-handler="UpdateCheckIn">
-                                <input type="hidden" name="receptionistID" value="@Model.ReceptionistID" />
-                                <input type="hidden" name="ticketId" value="@ticket.Id" />
-                                <input type="hidden" name="paymentStatus" value="@ticket.PaymentStatus" />
-                                <select name="checkInStatus" onchange="this.form.submit()">
-                                    <option value="0" selected="@(ticket.CheckIn == 0)">Chưa đến</option>
-                                    <option value="1" selected="@(ticket.CheckIn == 1)">Đã check-in</option>
-                                    <option value="2" selected="@(ticket.CheckIn == 2)">Hoàn tất</option>
-                                </select>
-                            </form>
-                        </td>
-                    }
-                }    
+                        </form>
+                    </td>
+                }
 
                 <td>
                     <button class="status active" onclick="window.location.href='/Admin/CheckIn?id=@ticket.Id&source=danh_sach'">Chi tiết</button>

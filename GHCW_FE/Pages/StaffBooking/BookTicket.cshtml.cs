@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using GHCW_FE.DTOs;
 using GHCW_FE.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -54,7 +55,17 @@ namespace GHCW_FE.Pages.StaffBooking
             if (string.IsNullOrEmpty(accessToken))
             {
                 await _authService.LogoutAsync();
-                TempData["ErrorMessage"] = "Bạn cần đăng nhập để thực hiện hành động này.";
+                TempData["ErrorMessage"] = "Bạn cần đăng nhập để xem thông tin.";
+                return RedirectToPage("/Authentications/Login");
+            }
+
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(accessToken);
+            var roleClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "Role");
+            if (roleClaim != null && int.Parse(roleClaim.Value) !=4 && int.Parse(roleClaim.Value) != 3)
+            {
+                await _authService.LogoutAsync();
+                TempData["ErrorMessage"] = "Bạn không có quyền truy cập trang này.";
                 return RedirectToPage("/Authentications/Login");
             }
             (HttpStatusCode StatusCode, List<ServiceDTO>? ListServices) = await _servicesService.GetServices($"Service?$filter=IsActive eq true");

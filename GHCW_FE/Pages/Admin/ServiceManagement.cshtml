@@ -8,13 +8,21 @@
     ViewData["Title"] = "Quản lí dịch vụ";
     Layout = "_LayoutManagement";
     ViewData["ActivePage"] = "/Admin/ServiceManagement";
+    AccountDTO? account = null;
+    if (HttpContext.Session.GetString("acc") != null)
+    {
+        account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
+    }
 }
 
 
 <!-- Main Content -->
 <header class="page-header">
     <h2>Quản lý dịch vụ</h2>
-    <button class="btn-add" onclick="window.location.href='/Admin/AddService'">+ Thêm dịch vụ mới</button>
+    @if (account?.Role <= 1)
+    {
+        <button class="btn-add" onclick="window.location.href='/Admin/AddService'">+ Thêm dịch vụ mới</button>
+    }
 </header>
 
 @if (TempData["SuccessMessage"] != null)
@@ -61,13 +69,9 @@
             <th>Giá</th>
             <th>Trạng thái</th>
 
-            @if (HttpContext.Session.GetString("acc") != null)
+            @if (account?.Role <= 1)
             {
-                var account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
-                @if (account.Role <= 1)
-                {
-                    <th>Tùy chọn</th>
-                }
+                <th>Tùy chọn</th>
             }
             <th></th>
         </tr>
@@ -91,35 +95,31 @@
                     }
                 </td>
 
-                @if (HttpContext.Session.GetString("acc") != null)
+                @if (account?.Role <= 1)
                 {
-                    var account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
-                    @if (account.Role <= 1)
-                    {
-                        <td class="options-cell">
-                            <button class=" btn-update" onclick="window.location.href='/Admin/EditService?id=@service.Id'">Chỉnh sửa</button>
-                            @if (service.IsActive == true)
-                            {
-                                <form method="post" asp-page-handler="ServiceActivation">
-                                    <button type="submit" class=" btn-deactive" name="nId" value="@service.Id">Vô hiệu hóa</button>
-                                </form>
-                            }
-                            else
-                            {
-                                <form method="post" asp-page-handler="ServiceActivation">
-                                    <button type="submit" class=" btn-active" name="nId" value="@service.Id">Kích hoạt</button>
-                                </form>
-                            }
-                        </td>
-                    }
+                    <td class="options-cell">
+                        <button class=" btn-update" onclick="window.location.href='/Admin/EditService?id=@service.Id'">Chỉnh sửa</button>
+                        @if (service.IsActive == true)
+                        {
+                            <form method="post" asp-page-handler="ServiceActivation">
+                                <button type="submit" class=" btn-deactive" name="nId" value="@service.Id">Vô hiệu hóa</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <form method="post" asp-page-handler="ServiceActivation">
+                                <button type="submit" class=" btn-active" name="nId" value="@service.Id">Kích hoạt</button>
+                            </form>
+                        }
+                    </td>
                 }
 
                 @* <td>
-                    <button class="status active" onclick="window.location.href='/Admin/EditService?id=@service.Id'">Sửa</button>
-                    <form method="post" asp-page-handler="DeleteService" asp-route-id="@service.Id" style="display:inline;">
-                        <button type="submit" class="status inactive" onclick="return confirm('Bạn có chắc chắn muốn xóa dịch vụ này?');">Xóa</button>
-                    </form>
-                </td> *@
+            <button class="status active" onclick="window.location.href='/Admin/EditService?id=@service.Id'">Sửa</button>
+            <form method="post" asp-page-handler="DeleteService" asp-route-id="@service.Id" style="display:inline;">
+            <button type="submit" class="status inactive" onclick="return confirm('Bạn có chắc chắn muốn xóa dịch vụ này?');">Xóa</button>
+            </form>
+            </td> *@
             </tr>
         }
     </tbody>
@@ -180,7 +180,7 @@
             background-color: #D65D5D;
         }
 
-   .btn-add {
+    .btn-add {
         background-color: #42C2A8;
         color: white;
         padding: 10px 20px;
@@ -304,5 +304,4 @@
                 background-color: #019875;
                 color: white;
             }
-   
 </style>
