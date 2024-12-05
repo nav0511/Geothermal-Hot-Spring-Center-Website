@@ -44,6 +44,8 @@ namespace GHCW_BE.DTOs
         public string PhoneNumber { get; set; } = null!;
         public bool Gender { get; set; }
         public bool IsEmailNotify { get; set; }
+        public DateTime? DoB { get; set; }
+        public string? Address { get; set; }
     }
 
     public class Subscriber
