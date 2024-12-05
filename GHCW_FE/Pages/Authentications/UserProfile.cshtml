@@ -134,14 +134,40 @@
         }
     }
 
+    // Hàm kiểm tra tuổi ít nhất 15
+    function validateDoB() {
+        const dobInput = document.getElementById('dob');
+        const dobValue = dobInput.value;
+
+        if (!dobValue) {
+            dobInput.setCustomValidity("Vui lòng chọn ngày sinh.");
+            return;
+        }
+
+        const dobDate = new Date(dobValue);
+        const today = new Date();
+
+        // Tính ngày tối thiểu (15 năm trước từ ngày hôm nay)
+        const minDate = new Date();
+        minDate.setFullYear(today.getFullYear() - 15);
+
+        // Kiểm tra nếu ngày sinh lớn hơn ngày tối thiểu
+        if (dobDate > minDate) {
+            dobInput.setCustomValidity("Người dùng phải ít nhất 15 tuổi.");
+        } else {
+            dobInput.setCustomValidity(""); // Xóa thông báo lỗi nếu hợp lệ
+        }
+    }
+
     function validateForm() {
         validatePhoneNumber();
         validateName();
-
+        validateDoB();
         return true;
     }
 
     // Thêm sự kiện cho input để kiểm tra ngay khi người dùng nhập liệu
     document.getElementById('phone').addEventListener('input', validatePhoneNumber);
     document.getElementById('name').addEventListener('input', validateName);
+    document.getElementById('dob').addEventListener('input', validateDoB);
 </script>
