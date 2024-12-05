@@ -68,6 +68,10 @@
     </div>
 </div>
 
+<div class="back-button-container">
+    <button class="btn-back" onclick="window.location.href='/Authentications/BookingList'"> << Quay lại</button>
+</div>
+
 <style>
     .ticket-details-table {
         background-color: #fff;
@@ -86,4 +90,25 @@
         text-align: right;
         margin-top: 20px;
     }
+
+    .back-button-container {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 20px;
+        padding-right: 98px;
+    }
+
+    .btn-back {
+        background-color: #42A5F5;
+        color: white;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+        .btn-back:hover {
+            background-color: #1E88E5;
+        }
 </style>
