@@ -154,12 +154,12 @@ namespace GHCW_FE.Pages.Admin
             {
                 if (discount == "0")
                 {
-                    TempData["SuccessMessage"] = "Thêm tin tức thành công";
+                    TempData["SuccessMessage"] = "Cập nhật tin tức thành công";
                     return RedirectToPage("/Admin/NewsManagement");
                 }
                 else
                 {
-                    TempData["SuccessMessage"] = "Thêm tin khuyến mãi thành công";
+                    TempData["SuccessMessage"] = "Cập nhật tin khuyến mãi thành công";
                     return RedirectToPage("/Admin/PromotionManagement");
                 }
             }
