@@ -21,10 +21,10 @@ namespace GHCW_FE.Services
             return await GetData<ServiceDTO>(url);
         }
 
-        public async Task<HttpStatusCode> UpdateService(ServiceDTO service, string accessToken)
+        public async Task<HttpStatusCode> UpdateService(ServiceDTOForUpdate service, string accessToken, string? accepttype = null)
         {
             string url = $"Service/{service.Id}";
-            return await PutData(url, service, null, accessToken);
+            return await PutData(url, service, accepttype, accessToken);
         }
 
         public async Task<HttpStatusCode> DeleteService(int id)

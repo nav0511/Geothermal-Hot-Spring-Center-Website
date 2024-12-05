@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace GHCW_FE.Pages.Admin
 {
@@ -110,7 +111,7 @@ namespace GHCW_FE.Pages.Admin
             Service.Price = Convert.ToDouble(Request.Form["price"]);
             Service.Time = Request.Form["time"];
             Service.Description = Request.Form["description"];
-            Service.Image = "/images/" + Request.Form["image"];
+            var img = Request.Form.Files["image"];
             Service.IsActive = Request.Form["isActive"] == "on";
 
 
@@ -119,18 +120,18 @@ namespace GHCW_FE.Pages.Admin
                 return Page();
             }
 
-            var serviceDto = new ServiceDTO
+            var serviceDto = new ServiceDTOForUpdate
             {
                 Id = Service.Id,
                 Name = Service.Name,
                 Price = Service.Price,
                 Time = Service.Time,
                 Description = Service.Description,
-                Image = Service.Image,
+                Image = img,
                 IsActive = Service.IsActive,
             };
 
-            statusCode = await _servicesService.UpdateService(serviceDto, accessToken);
+            statusCode = await _servicesService.UpdateService(serviceDto, accessToken, "multipart/form-data");
 
             if (statusCode == HttpStatusCode.OK)
             {

@@ -120,7 +120,7 @@ namespace GHCW_FE.Pages.Admin
             Product.Name = Request.Form["name"];
             Product.Price = Convert.ToDouble(Request.Form["price"]);
             Product.Description = Request.Form["description"];
-            Product.Image = "/images/" + Request.Form["image"].ToString();
+            var img = Request.Form.Files["image"];
             Product.CategoryId = Convert.ToInt32(Request.Form["categoryId"]);
             Product.Size = Request.Form["size"];
             Product.IsForRent = Request.Form["isForRent"] == "on";
@@ -132,13 +132,13 @@ namespace GHCW_FE.Pages.Admin
                 return Page();
             }
 
-            var productDto = new ProductDTO
+            var productDto = new ProductDTOForUpdate
             {
                 Id = Product.Id,
                 Name = Product.Name,
                 Price = Product.Price,
                 Description = Product.Description,
-                Image = Product.Image,
+                Img = img,
                 CategoryId = Product.CategoryId,
                 Size = Product.Size,
                 IsForRent = Product.IsForRent,
@@ -146,7 +146,7 @@ namespace GHCW_FE.Pages.Admin
                 IsAvailable = Product.IsAvailable
             };
 
-            statusCode = await _productService.UpdateProduct(productDto, accessToken);
+            statusCode = await _productService.UpdateProduct(productDto, accessToken, "multipart/form-data");
 
             if (statusCode == HttpStatusCode.OK)
             {

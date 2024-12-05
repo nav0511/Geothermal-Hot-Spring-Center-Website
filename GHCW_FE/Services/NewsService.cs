@@ -46,10 +46,10 @@ namespace GHCW_FE.Services
         //    return await GetData<NewsDTO>(url);
         //}
 
-        public async Task<HttpStatusCode> UpdateNews(NewsDTO news, string accessToken)
+        public async Task<HttpStatusCode> UpdateNews(NewsDTOForUpdate news, string accessToken, string? accepttype = null)
         {
             string url = $"News/{news.Id}";
-            return await PutData<NewsDTO>(url, news, null, accessToken);
+            return await PutData<NewsDTOForUpdate>(url, news, accepttype, accessToken);
         }
 
         public async Task<HttpStatusCode> DeleteNews(int id)

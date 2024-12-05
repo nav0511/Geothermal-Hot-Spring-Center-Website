@@ -119,11 +119,11 @@ namespace GHCW_FE.Pages.Admin
                 return Page();
             }
 
-            var promotion = new NewsDTO();
+            var promotion = new NewsDTOForUpdate();
             var discount = Request.Form["discountId"];
             if (discount == "0")
             {
-                promotion = new NewsDTO
+                promotion = new NewsDTOForUpdate
                 {
                     Id = id,
                     Title = Request.Form["title"],
@@ -131,12 +131,12 @@ namespace GHCW_FE.Pages.Admin
                     UploadDate = DateTime.Now,
                     IsActive = Request.Form["isActive"] == "on",
                     Description = Request.Form["description"],
-                    Image = "/images/" + Request.Form["image"].ToString(),
+                    Image = Request.Form.Files["image"],
                 };
             }
             else
             {
-                promotion = new NewsDTO
+                promotion = new NewsDTOForUpdate
                 {
                     Id = id,
                     Title = Request.Form["title"],
@@ -144,11 +144,11 @@ namespace GHCW_FE.Pages.Admin
                     UploadDate = DateTime.Now,
                     IsActive = Request.Form["isActive"] == "on",
                     Description = Request.Form["description"],
-                    Image = "/images/" + Request.Form["image"].ToString(),
+                    Image = Request.Form.Files["image"],
                 };
             }
 
-            var response = await _newsService.UpdateNews(promotion, accessToken);
+            var response = await _newsService.UpdateNews(promotion, accessToken, "multipart/form-data");
 
             if (response == HttpStatusCode.OK)
             {
