@@ -1,4 +1,5 @@
-﻿using GHCW_BE.Models;
+﻿using GHCW_BE.DTOs;
+using GHCW_BE.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace GHCW_BE.Services
@@ -83,6 +84,50 @@ namespace GHCW_BE.Services
             {
                 return (false, "Thay đổi trạng thái phiếu giảm giá thất bại, vui lòng thử lại.");
             }
+        }
+
+        //public async Task<List<DiscountDTO>> GetAvailableDiscountsForNewsAsync()
+        //{
+        //    // Lọc các Discount chưa được gắn vào bất kỳ News nào
+        //    var availableDiscounts = await _context.Discounts
+        //        .Where(d => !_context.News.Any(n => n.DiscountId == d.Code))
+        //        .ToListAsync();
+
+        //    // Chuyển đổi thành DTO và trả về
+        //    return availableDiscounts.Select(d => new DiscountDTO
+        //    {
+        //        Code = d.Code,
+        //        Name = d.Name,
+        //        Description = d.Description
+        //    }).ToList();
+        //}
+
+        public async Task<List<DiscountDTO>> GetAvailableDiscountsForNewsAsync(string? currentDiscountId)
+        {
+            // Nếu không có DiscountId hiện tại (tin tức), chỉ trả về các Discount chưa được sử dụng
+            if (string.IsNullOrEmpty(currentDiscountId))
+            {
+                return await _context.Discounts
+                    .Where(d => !_context.News.Any(n => n.DiscountId == d.Code))
+                    .Select(d => new DiscountDTO
+                    {
+                        Code = d.Code,
+                        Name = d.Name,
+                        Description = d.Description
+                    })
+                    .ToListAsync();
+            }
+
+            // Nếu có DiscountId, trả về cả Discount hiện tại và Discount chưa được sử dụng
+            return await _context.Discounts
+                .Where(d => d.Code == currentDiscountId || !_context.News.Any(n => n.DiscountId == d.Code))
+                .Select(d => new DiscountDTO
+                {
+                    Code = d.Code,
+                    Name = d.Name,
+                    Description = d.Description
+                })
+                .ToListAsync();
         }
 
 

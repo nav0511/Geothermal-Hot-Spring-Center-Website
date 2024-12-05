@@ -46,8 +46,7 @@ namespace GHCW_BE.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProductByID(int id)
         {
-            var product = await _productService.GetListProducts()
-                                                .FirstOrDefaultAsync(s => s.Id == id);
+            var product = await _productService.GetProductById(id);
 
             if (product == null)
             {
@@ -72,15 +71,21 @@ namespace GHCW_BE.Controllers
                     return BadRequest("ID không khớp.");
                 }
 
-                var existingProduct = await _productService.GetListProducts()
-                                                            .FirstOrDefaultAsync(s => s.Id == id);
+                var existingProduct = await _productService.GetProductById(id);
                 if (existingProduct == null)
                 {
                     return NotFound();
                 }
 
                 _mapper.Map(productDto, existingProduct);
-                existingProduct.Image = await _productService.UploadImageResult(productDto.Img);
+
+                string? imageUrl = null;
+
+                if (productDto.Img != null && productDto.Img.Length > 0)
+                {
+                    imageUrl = await _productService.UploadImageResult(productDto.Img);
+                }
+                existingProduct.Image = imageUrl;
 
                 var (isSuccess, message) = await _productService.UpdateProduct(existingProduct);
                 if (!isSuccess)
@@ -131,7 +136,13 @@ namespace GHCW_BE.Controllers
 
                 var product = _mapper.Map<Product>(productDto);
 
-                product.Image = await _productService.UploadImageResult(productDto.Img);
+                string? imageUrl = null;
+
+                if (productDto.Image != null && productDto.Image.Length > 0)
+                {
+                    imageUrl = await _productService.UploadImageResult(productDto.Img);
+                }
+                product.Image = imageUrl;
 
                 var (isSuccess, message) = await _productService.AddProduct(product);
                 if (!isSuccess)

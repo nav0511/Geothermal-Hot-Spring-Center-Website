@@ -6,7 +6,7 @@
 }
 
 <header class="page-header">
-    <h2><span style="color:#9197B3">Quản lý sản phẩm > </span>Thêm sản phẩm mới</h2>
+    <h2><span style="color:#9197B3">Quản lý sản phẩm > </span>Cập nhật sản phẩm</h2>
 </header>
 
 @if (TempData["SuccessMessage"] != null)
@@ -87,7 +87,7 @@
             <div class="full-width">
                 <label for="image">Ảnh sản phẩm:</label>
                 <input type="file" id="image" name="image" accept="image/*" onchange="previewImage(event)" />
-                <img id="imagePreview" class="image-preview" src="@Model.Product.Image" alt="Xem trước ảnh" style="display: none;" />
+                <img id="imagePreview" class="image-preview" src="@Model.Product.Image" alt="Xem trước ảnh" style="display: @(!string.IsNullOrEmpty(Model.Product?.Image) ? "block" : "none");" />
             </div>
         </div>
         <div class="form-group">

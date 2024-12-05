@@ -12,7 +12,7 @@
 
 <header class="page-header">
     <h2>Quản lý tin tức</h2>
-    <button class="btn-add" onclick="window.location.href='/Admin/AddNews'">+ Thêm tin tức mới</button>
+    <button class="btn-add" onclick="window.location.href='/Admin/AddNews?source=news'">+ Thêm tin tức mới</button>
 </header>
 
 @if (TempData["SuccessMessage"] != null)
@@ -84,7 +84,7 @@
                     @if (account.Role <= 3)
                     {
                         <td class="options-cell">
-                            <button class=" btn-update" onclick="window.location.href='/Admin/EditNews?id=@news.Id'">Chỉnh sửa</button>
+                            <button class=" btn-update" onclick="window.location.href='/Admin/EditNews?id=@news.Id&source=news'">Chỉnh sửa</button>
                             @if (news.IsActive == true)
                             {
                                 <form method="post" asp-page-handler="NewsActivation">

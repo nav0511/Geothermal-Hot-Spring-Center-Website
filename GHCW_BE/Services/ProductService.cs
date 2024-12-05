@@ -22,6 +22,10 @@ namespace GHCW_BE.Services
             return _context.Products.AsQueryable();
         }
 
+        public async Task<Product> GetProductById(int id)
+        {
+            return await _context.Products.FirstOrDefaultAsync(n => n.Id == id);
+        }
 
         public async Task<(bool isSuccess, string message)> UpdateProduct(Product product)
         {
