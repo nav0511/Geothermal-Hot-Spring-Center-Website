@@ -29,12 +29,15 @@ namespace GHCW_FE.Pages.Admin
         public string? SearchTerm { get; set; }
 
         [BindProperty(SupportsGet = true)]
+        public int OrderOption { get; set; }
+
+        [BindProperty(SupportsGet = true)]
         public int SortOption { get; set; }
         public int CurrentPage { get; set; }
         public int TotalPages { get; set; }
         private const int PageSize = 6;
 
-        public async Task<IActionResult> OnGetAsync(int pageNumber = 1, string? searchTerm = null, int sortOption = 0)
+        public async Task<IActionResult> OnGetAsync(int pageNumber = 1, string? searchTerm = null, int orderOption = 0, int sortOption = 0)
         {
             var accessToken = await _tokenService.CheckAndRefreshTokenAsync();
             if (string.IsNullOrEmpty(accessToken))
@@ -76,6 +79,7 @@ namespace GHCW_FE.Pages.Admin
             }
 
             SearchTerm = searchTerm;
+            OrderOption = orderOption;
             SortOption = sortOption;
             CurrentPage = pageNumber;
             int skip = (pageNumber - 1) * PageSize;
@@ -86,7 +90,7 @@ namespace GHCW_FE.Pages.Admin
                 products = products?.Where(d => d.Name?.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase) ?? false).ToList();
             }
 
-            products = SortOption switch
+            products = OrderOption switch
             {
                 1 => products.OrderBy(d => d.Name).ToList(),
                 2 => products.OrderByDescending(d => d.Name).ToList(),

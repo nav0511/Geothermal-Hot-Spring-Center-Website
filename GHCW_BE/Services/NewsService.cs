@@ -91,7 +91,7 @@ namespace GHCW_BE.Services
             }
             else
             {
-                return false;
+                return true;
             }
 
             foreach (var email in users)
