@@ -50,10 +50,12 @@
         </select>
 
         <select name="OrderOption" onchange="document.getElementById('filterForm').submit()">
-            <option value="1" @(Model.OrderOption == 1 ? "selected" : "")>Ngày xuất vé tăng dần</option>
-            <option value="2" @(Model.OrderOption == 2 ? "selected" : "")>Ngày xuất vé giảm dần</option>
-            <option value="3" @(Model.OrderOption == 3 ? "selected" : "")>Ngày sử dụng tăng dần</option>
-            <option value="4" @(Model.OrderOption == 4 ? "selected" : "")>Ngày sử dụng giảm dần</option>
+            <option value="1" @(Model.OrderOption == 1 ? "selected" : "")>Id tăng dần</option>
+            <option value="2" @(Model.OrderOption == 2 ? "selected" : "")>Id giảm dần</option>
+            <option value="3" @(Model.OrderOption == 3 ? "selected" : "")>Ngày xuất vé tăng dần</option>
+            <option value="4" @(Model.OrderOption == 4 ? "selected" : "")>Ngày xuất vé giảm dần</option>
+            <option value="5" @(Model.OrderOption == 5 ? "selected" : "")>Ngày sử dụng tăng dần</option>
+            <option value="6" @(Model.OrderOption == 6 ? "selected" : "")>Ngày sử dụng giảm dần</option>
         </select>
     </form>
 </div>

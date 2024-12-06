@@ -35,7 +35,7 @@ namespace GHCW_FE.Pages.Admin
         public int SortOption { get; set; }
         public int CurrentPage { get; set; }
         public int TotalPages { get; set; }
-        private const int PageSize = 6;
+        private const int PageSize = 9;
 
         public async Task<IActionResult> OnGetAsync(int pageNumber = 1, string? searchTerm = null, int orderOption = 0, int sortOption = 0)
         {

@@ -35,7 +35,7 @@ namespace GHCW_FE.Pages.Admin
 
         public int CurrentPage { get; set; }
         public int TotalPages { get; set; }
-        private const int PageSize = 6;
+        private const int PageSize = 9;
         public async Task<IActionResult> OnGetAsync(int pageNumber = 1, string? searchTerm = null, int orderOption = 0, int sortOption = 0)
         {
             var accessToken = await _tokenService.CheckAndRefreshTokenAsync();
@@ -102,8 +102,10 @@ namespace GHCW_FE.Pages.Admin
 
             bills = OrderOption switch
             {
-                1 => bills.OrderBy(d => d.OrderDate).ToList(),
-                2 => bills.OrderByDescending(d => d.OrderDate).ToList(),
+                1 => bills.OrderBy(d => d.Id).ToList(),
+                2 => bills.OrderByDescending(d => d.Id).ToList(),
+                3 => bills.OrderBy(d => d.OrderDate).ToList(),
+                4 => bills.OrderByDescending(d => d.OrderDate).ToList(),
                 _ => bills.ToList(),
             };
 
