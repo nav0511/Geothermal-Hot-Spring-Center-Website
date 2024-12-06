@@ -25,7 +25,7 @@
 @if (TempData["ErrorMessage"] != null)
 {
     <div class="alert alert-danger mt-3">
-        @TempData["ErrorMessage"]
+        @Html.Raw(TempData["ErrorMessage"].ToString())
     </div>
 }
 
@@ -55,7 +55,7 @@
                             {
                                 <div class="quantity-row">
                                     <label class="quantity-label">Số lượng:</label>
-                                    <input type="number" min="1" value="1" id="quantity-@service.Id" class="quantity-input">
+                                    <input type="number" min="1" value="1" id="quantity-@service.Id" class="quantity-input" required oninput="validateQuantity(this)">
                                 </div>
                                 <button class="btn btn-primary" onclick="addToCart(@service.Id, '@Html.Raw(service.Name.Replace("'", "\\'"))', parseInt(document.getElementById('quantity-@service.Id').value), @service.Price)">Thêm</button>
                             }
@@ -100,12 +100,6 @@
                 <button id="showAddCustomerFormBtn" class="btn btn-primary" style="display: none; margin: 1rem;" onclick="showAddCustomerForm()">Thêm khách hàng mới</button>
             </div>
 
-            <div class="add-customer-option">
-                <label for="addNewCustomer">Bạn có muốn thêm khách hàng mới?</label>
-                <input type="checkbox" id="addNewCustomer" name="addNewCustomer" />
-            </div>
-
-
             <div id="addCustomerForm" style="display: none;">
                 <div style="margin: 1rem 0;">
                     <label class="label-text" for="name">Họ và tên:</label>
@@ -146,6 +140,11 @@
                     </label>
                 </div>
             </div>
+
+            <div class="add-customer-option">
+                <label for="addNewCustomer">Bạn có muốn thêm khách hàng mới?</label>
+                <input type="checkbox" id="addNewCustomer" name="addNewCustomer" asp-for="AddNewCustomer">
+            </div>
         </form>
 
         <button class="btn btn-success" id="paymentButton" disabled" style="margin: 1rem;">Thanh toán</button>
@@ -164,6 +163,48 @@
     let cart = JSON.parse(localStorage.getItem("productCart")) || [];
 
     const availableDiscounts = @Html.Raw(Json.Serialize(Model.AvailableDiscounts));
+
+    function validateQuantity(input) {
+        const originalValue = input.value;
+        const cursorPosition = input.selectionStart;
+
+        const filteredValue = originalValue.replace(/[^0-9]/g, "");
+
+        if (!filteredValue || parseInt(filteredValue, 10) === 0) {
+            input.value = "1";
+        } else {
+            input.value = filteredValue;
+        }
+
+        // Đặt lại vị trí con trỏ
+        const newCursorPosition = Math.min(cursorPosition, input.value.length);
+        input.setSelectionRange(newCursorPosition, newCursorPosition);
+    }
+
+    document.querySelectorAll('.quantity-input').forEach(input => {
+        input.addEventListener('keydown', function (event) {
+            // Các phím được phép nhập: Backspace, Delete, Tab, mũi tên, Ctrl/Command + A, C, V
+            const allowedKeys = [
+                "Backspace", "Delete", "Tab", "ArrowLeft", "ArrowRight", "Control", "Meta", "Enter"
+            ];
+
+            if (
+                allowedKeys.includes(event.key) || // Cho phép phím đặc biệt
+                (event.ctrlKey || event.metaKey) // Cho phép Ctrl/Command
+            ) {
+                return;
+            }
+
+            // Chặn nhập "e", ".", "-", hoặc ký tự không phải số
+            if (!/^[0-9]$/.test(event.key)) {
+                event.preventDefault();
+            }
+        });
+
+        input.addEventListener('input', function () {
+            validateQuantity(input);
+        });
+    });
 
     function updateCartDisplay() {
         const cartItemsContainer = document.getElementById("cartItems");
@@ -205,6 +246,12 @@
 
 
     function addToCart(serviceId, name, quantity, price) {
+        const quantityInput = document.getElementById('quantity-' + serviceId);
+        if (isNaN(quantity) || quantity < 1) {
+            alert("Số lượng phải lớn hơn 0.");
+            return;
+        }
+
         const existingItem = cart.find(item => item.serviceId === serviceId);
 
         if (existingItem) {

@@ -21,7 +21,7 @@
                             </div>
                             <div class="bg-white p-4">
                                 <div class="d-flex mb-2">
-                                    <a class="text-primary text-uppercase text-decoration-none" asp-page="./Detail" asp-route-Id="@n.Id">@n.Title</a>
+                                    <a class="text-primary text-uppercase text-decoration-none blog-title" asp-page="./Detail" asp-route-Id="@n.Id">@n.Title</a>
                                 </div>
                                 <p class="h5 m-0 text-decoration-none service-description">@n.Description</p>
                             </div>
@@ -84,6 +84,10 @@
 <!-- Promotions End -->
 
 <style>
+    .blog-item {
+        height: 400px; /* Fixed height for all blog items */
+    }
+
     .service-description {
         display: -webkit-box;
         -webkit-box-orient: vertical;
@@ -96,5 +100,27 @@
     .service-image {
         min-height: 150px;
         max-height: 200px;
+    }
+
+    .service-image {
+        width: 100%;
+        height: 200px;
+        background: #f9f9f9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+
+    .blog-title {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2; /* Limits title to 2 lines */
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .bg-white {
+        flex-grow: 1; /* Ensures the content stretches to fill the available height */
     }
 </style>

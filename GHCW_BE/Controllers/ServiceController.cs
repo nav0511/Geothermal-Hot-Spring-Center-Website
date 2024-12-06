@@ -39,7 +39,7 @@ namespace GHCW_BE.Controllers
         [HttpGet("Total")]
         public async Task<IActionResult> GetTotalServices()
         {
-            var list = _servicesService.GetListServices();
+            var list = _servicesService.GetListServices().Where(s => s.IsActive == true);
             return Ok(list.Count());
         }
 
