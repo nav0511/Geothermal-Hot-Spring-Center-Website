@@ -49,8 +49,10 @@
         </select>
 
         <select name="OrderOption" onchange="document.getElementById('filterForm').submit()">
-            <option value="1" @(Model.OrderOption == 1 ? "selected" : "")>Ngày xuất vé tăng dần</option>
-            <option value="2" @(Model.OrderOption == 2 ? "selected" : "")>Ngày xuất vé giảm dần</option>
+            <option value="1" @(Model.OrderOption == 1 ? "selected" : "")>Id tăng dần</option>
+            <option value="2" @(Model.OrderOption == 2 ? "selected" : "")>Id giảm dần</option>
+            <option value="1" @(Model.OrderOption == 3 ? "selected" : "")>Ngày xuất vé tăng dần</option>
+            <option value="2" @(Model.OrderOption == 4 ? "selected" : "")>Ngày xuất vé giảm dần</option>
             
         </select>
     </form>
@@ -187,14 +189,14 @@
 
     /* Search container */
     .search-container {
-        display: flex;
+        display: inline;
         justify-content: space-between;
         margin-bottom: 20px;
     }
 
         .search-container input {
             padding: 10px;
-            width: 80%;
+            width: 60%;
             border: 1px solid #ccc;
             border-radius: 8px;
         }

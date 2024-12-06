@@ -35,7 +35,7 @@ namespace GHCW_FE.Pages.Admin
         public int SortOption { get; set; }
         public int CurrentPage { get; set; }
         public int TotalPages { get; set; }
-        private const int PageSize = 6;
+        private const int PageSize = 9;
 
         public async Task<IActionResult> OnGetAsync(int pageNumber = 1, string? searchTerm = null, int orderOption = 0, int sortOption = 0)
         {
@@ -103,10 +103,12 @@ namespace GHCW_FE.Pages.Admin
 
             tickets = OrderOption switch
             {
-                1 => tickets.OrderBy(d => d.OrderDate).ToList(),
-                2 => tickets.OrderByDescending(d => d.OrderDate).ToList(),
-                3 => tickets.OrderBy(d => d.BookDate).ToList(),
-                4 => tickets.OrderByDescending(d => d.BookDate).ToList(),
+                1 => tickets.OrderBy(d => d.Id).ToList(),
+                2 => tickets.OrderByDescending(d => d.Id).ToList(),
+                3 => tickets.OrderBy(d => d.OrderDate).ToList(),
+                4 => tickets.OrderByDescending(d => d.OrderDate).ToList(),
+                5 => tickets.OrderBy(d => d.BookDate).ToList(),
+                6 => tickets.OrderByDescending(d => d.BookDate).ToList(),
                 _ => tickets.ToList(),
             };
 
