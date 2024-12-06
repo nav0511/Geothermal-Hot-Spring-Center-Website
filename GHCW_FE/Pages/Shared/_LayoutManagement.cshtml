@@ -104,7 +104,7 @@
                             <a asp-page="/Admin/TicketManagement"><i class="fas fa-clipboard-list"></i> Quản lý vé</a>
                         </li>
                     }
-                    @if (account?.Role == 4 || account?.Role == 2)
+                    @if (account?.Role == 4 || account?.Role == 3)
                     {
                         <li class="@(ViewData["ActivePage"] as string == "/StaffBooking/BookTicket" ? "active" : "")">
                             <a asp-page="/StaffBooking/BookTicket"><i class="fas fa-ticket-alt"></i> Đặt vé</a>

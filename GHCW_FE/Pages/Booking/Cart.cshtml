@@ -73,7 +73,7 @@
 
             @if (Model.IsLoggedIn == true)
             {
-                <button type="submit" class="btn btn-success mt-3">Thanh toán online qua VNPay</button>
+                <button type="submit" class="btn btn-success mt-3">Thanh toán qua VNPay</button>
             }
             else
             {
@@ -87,7 +87,7 @@
             @if (Model.IsLoggedIn == true)
             {
                 <input type="hidden" asp-for="PaymentMethod" value="PayLater"/>
-                <button type="submit" class="btn btn-success mt-3">Thanh toán sau</button>
+                <button type="submit" class="btn btn-success mt-3">Thanh toán tại quầy</button>
             }
         </form>
     </div>
