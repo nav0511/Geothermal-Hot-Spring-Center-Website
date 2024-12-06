@@ -115,6 +115,7 @@ namespace GHCW_BE.Controllers
             }
             var discount = _discountService.GetDiscount(ticketDto.DiscountCode);
             if (discount != null) newTicket.Total *= (1 - (discount.Value / 100.0m));
+            else newTicket.DiscountCode = null;
 
             var result = await _ticketService.SaveTicketAsync(newTicket);
 

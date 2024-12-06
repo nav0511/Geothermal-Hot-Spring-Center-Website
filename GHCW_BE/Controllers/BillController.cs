@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.OData.Query;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using GHCW_BE.Models;
 
 namespace GHCW_BE.Controllers
 {
@@ -87,6 +88,44 @@ namespace GHCW_BE.Controllers
             var billDetailDTOs = _mapper.Map<List<BillDetailDTO>>(details);
             return Ok(billDetailDTOs);
         }
+
+        [Authorize]
+        [HttpPost("Save")]
+        public async Task<IActionResult> SaveBillForStaff([FromBody] BillDTOForBuyProducts billDto)
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var roleClaim = identity?.FindFirst("Role");
+
+            if (roleClaim != null && int.Parse(roleClaim.Value) == 4)
+            {
+                if (billDto == null || billDto.CustomerId == 0 || billDto.BillDetails == null
+                    || !billDto.BillDetails.Any() || billDto.ReceptionistId == null)
+                {
+                    return BadRequest("Dữ liệu không hợp lệ.");
+                }
+
+                var discount = _discountService.GetDiscount(billDto.DiscountCode);
+                if (discount != null) billDto.Total *= (1 - (discount.Value / 100.0m));
+                else billDto.DiscountCode = null;
+
+                var newbill = _mapper.Map<Bill>(billDto);
+                foreach (var bill in newbill.BillDetails)
+                {
+                    bill.Total = bill.Price * bill.Quantity;
+                }
+
+                var result = await _billService.SaveBillAsync(newbill);
+
+                if (result == null)
+                {
+                    return StatusCode(500, "Có lỗi xảy ra khi lưu vé.");
+                }
+
+                return Ok("Đã lưu vé thành công.");
+            }
+            return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền thực hiện hành động này.");
+        }
+
 
     }
 }

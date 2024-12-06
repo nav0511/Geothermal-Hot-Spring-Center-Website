@@ -81,5 +81,19 @@ namespace GHCW_BE.Services
                 .ToListAsync();
         }
 
+        public async Task<Bill?> SaveBillAsync(Bill bill)
+        {
+            try
+            {
+                _context.Bills.Add(bill);
+                await _context.SaveChangesAsync();
+                return bill;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
     }
 }
