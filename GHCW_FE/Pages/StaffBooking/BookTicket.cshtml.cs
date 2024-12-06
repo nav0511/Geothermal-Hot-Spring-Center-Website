@@ -1,5 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Net;
+using System.Text.RegularExpressions;
 using GHCW_FE.DTOs;
 using GHCW_FE.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -103,6 +104,46 @@ namespace GHCW_FE.Pages.StaffBooking
 
                 if (SelectedCustomerEmail == null)
                 {
+                    var errorMessages = new List<string>();
+
+                    // Validate Name
+                    if (string.IsNullOrWhiteSpace(AddRequest.Name))
+                    {
+                        errorMessages.Add("Yêu cầu nhập họ tên.");
+                    }
+                    else if (!Regex.IsMatch(AddRequest.Name, @"^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠƯÝàáâãèéêìíòóôõùúăđĩũơưýẠ-ỹ\s]+$"))
+                    {
+                        errorMessages.Add("Họ tên chỉ được chứa chữ cái và khoảng trắng.");
+                    }
+
+                    // Validate Email
+                    if (string.IsNullOrWhiteSpace(AddRequest.Email))
+                    {
+                        errorMessages.Add("Yêu cầu nhập email.");
+                    }
+                    else if (!Regex.IsMatch(AddRequest.Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+                    {
+                        errorMessages.Add("Không đúng định dạng email.");
+                    }
+
+                    // Validate PhoneNumber
+                    if (string.IsNullOrWhiteSpace(AddRequest.PhoneNumber))
+                    {
+                        errorMessages.Add("Yêu cầu nhập số điện thoại.");
+                    }
+                    else if (!Regex.IsMatch(AddRequest.PhoneNumber, @"^(0[3||5||7||8||9])\d{8}$"))
+                    {
+                        errorMessages.Add("Số điện thoại chưa đúng định dạng.");
+                    }
+
+                    // If there are errors, set them in TempData and return
+                    if (errorMessages.Any())
+                    {
+                        TempData["ErrorMessage"] = string.Join("<br/>", errorMessages);
+                        await OnGetAsync();
+                        return Page();
+                    }
+
                     var (statusCode1, account) = await _accService.GetUserByEmail(accessToken, AddRequest.Email);
 
                     if (statusCode1 == HttpStatusCode.OK && account != null)
@@ -119,6 +160,12 @@ namespace GHCW_FE.Pages.StaffBooking
                     else if (statusCode == HttpStatusCode.Forbidden)
                     {
                         TempData["ErrorMessage"] = "Bạn không có quyền thêm khách hàng mới.";
+                        await OnGetAsync();
+                        return Page();
+                    }
+                    else if (statusCode == HttpStatusCode.Conflict)
+                    {
+                        TempData["ErrorMessage"] = "Đã có người sử dụng email này, xin vui lòng chọn email khác.";
                         await OnGetAsync();
                         return Page();
                     }

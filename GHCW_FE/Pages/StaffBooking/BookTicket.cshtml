@@ -25,7 +25,7 @@
     @if (TempData["ErrorMessage"] != null)
     {
         <div class="alert alert-danger mt-3">
-            @TempData["ErrorMessage"]
+            @Html.Raw(TempData["ErrorMessage"].ToString())
         </div>
     }
 
@@ -44,7 +44,7 @@
                         <div class="service-actions">
                             <p class="price">Giá: @(service.Price * 1000) VND</p>
                             <label class="quantity-label">Số lượng:</label>
-                            <input type="number" min="1" value="1" id="quantity-@service.Id" class="quantity-input">
+                            <input type="number" min="1" value="1" id="quantity-@service.Id" class="quantity-input" required oninput="validateQuantity(this)">
                             <button class="btn btn-primary" onclick="addToCart(@service.Id, '@Html.Raw(service.Name.Replace("'", "\\'"))', parseInt(document.getElementById('quantity-@service.Id').value), @service.Price)">Thêm</button>
                         </div>
 
@@ -125,9 +125,10 @@
                     </label>
                 </div>
             </div>
+
+            <button class="btn btn-success" id="paymentButton" disabled" style="margin: 1rem;">Thanh toán</button>
         </form>
 
-        <button class="btn btn-success" id="paymentButton" disabled" style="margin: 1rem;">Thanh toán</button>
 
     </div>
 
@@ -141,6 +142,48 @@
 
 <script>
     let cart = JSON.parse(localStorage.getItem("cartForStaff")) || [];
+
+    function validateQuantity(input) {
+        const originalValue = input.value;
+        const cursorPosition = input.selectionStart;
+
+        const filteredValue = originalValue.replace(/[^0-9]/g, "");
+
+        if (!filteredValue || parseInt(filteredValue, 10) === 0) {
+            input.value = "1";
+        } else {
+            input.value = filteredValue;
+        }
+
+        // Đặt lại vị trí con trỏ
+        const newCursorPosition = Math.min(cursorPosition, input.value.length);
+        input.setSelectionRange(newCursorPosition, newCursorPosition);
+    }
+
+    document.querySelectorAll('.quantity-input').forEach(input => {
+        input.addEventListener('keydown', function (event) {
+            // Các phím được phép nhập: Backspace, Delete, Tab, mũi tên, Ctrl/Command + A, C, V
+            const allowedKeys = [
+                "Backspace", "Delete", "Tab", "ArrowLeft", "ArrowRight", "Control", "Meta", "Enter"
+            ];
+
+            if (
+                allowedKeys.includes(event.key) || // Cho phép phím đặc biệt
+                (event.ctrlKey || event.metaKey) // Cho phép Ctrl/Command
+            ) {
+                return;
+            }
+
+            // Chặn nhập "e", ".", "-", hoặc ký tự không phải số
+            if (!/^[0-9]$/.test(event.key)) {
+                event.preventDefault();
+            }
+        });
+
+        input.addEventListener('input', function () {
+            validateQuantity(input);
+        });
+    });
 
     function updateCartDisplay() {
         const cartItemsContainer = document.getElementById("cartItems");

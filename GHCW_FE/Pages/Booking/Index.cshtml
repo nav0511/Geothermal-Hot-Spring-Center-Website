@@ -28,11 +28,12 @@
                 <div class="card">
                     <img src="@service.Image" class="card-img-top service-image" alt="@service.Name">
                     <div class="card-body">
-                        <h5 class="card-title">@service.Name</h5>
+                        <h5 class="card-title service-title">@service.Name</h5>
                         <p class="card-text service-description">@service.Description</p>
-                        <div>
-                            <label>Quantity:</label>
-                            <input type="number" min="1" value="1" id="quantity-@service.Id" class="form-control" />
+                        <p class="service-price">Giá: <strong>@String.Format("{0:N0}", service.Price * 1000) VNĐ</strong></p>
+                        <div class="quantity-wrapper">
+                            <label>Số lượng:</label>
+                            <input type="number" min="1" value="1" id="quantity-@service.Id" class="form-control quantity-input" oninput="validateQuantity(this)" />
                         </div>
                         <button class="btn btn-primary mt-2" onclick="addToCart(@service.Id, parseInt(document.getElementById('quantity-@service.Id').value), @service.Price)">Chọn</button>
                     </div>
@@ -49,6 +50,49 @@
 </div>
 
 <script>
+    function validateQuantity(input) {
+        const originalValue = input.value;
+        const cursorPosition = input.selectionStart;
+
+        const filteredValue = originalValue.replace(/[^0-9]/g, "");
+
+        if (!filteredValue || parseInt(filteredValue, 10) === 0) {
+            input.value = "1";
+        } else {
+            input.value = filteredValue;
+        }
+
+        // Đặt lại vị trí con trỏ
+        const newCursorPosition = Math.min(cursorPosition, input.value.length);
+        input.setSelectionRange(newCursorPosition, newCursorPosition);
+    }
+
+    document.querySelectorAll('.quantity-input').forEach(input => {
+        input.addEventListener('keydown', function (event) {
+            // Các phím được phép nhập: Backspace, Delete, Tab, mũi tên, Ctrl/Command + A, C, V
+            const allowedKeys = [
+                "Backspace", "Delete", "Tab", "ArrowLeft", "ArrowRight", "Control", "Meta", "Enter"
+            ];
+
+            if (
+                allowedKeys.includes(event.key) || // Cho phép phím đặc biệt
+                (event.ctrlKey || event.metaKey) // Cho phép Ctrl/Command
+            ) {
+                return;
+            }
+
+            // Chặn nhập "e", ".", "-", hoặc ký tự không phải số
+            if (!/^[0-9]$/.test(event.key)) {
+                event.preventDefault();
+            }
+        });
+
+        input.addEventListener('input', function () {
+            validateQuantity(input);
+        });
+    });
+
+
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
     function updatePaymentButton() {
@@ -76,6 +120,11 @@
     });
 
     function addToCart(serviceId, quantity, price) {
+        if (!quantity || quantity < 1) {
+            showNotification("Số lượng phải lớn hơn hoặc bằng 1.");
+            return;
+        }
+
         const existingItem = cart.find(item => item.serviceId === serviceId);
 
         if (existingItem) {
@@ -127,8 +176,48 @@
     }
 
     .service-image {
-        min-height: 150px;
-        max-height: 200px;
+        height: 200px; /* Chiều cao cố định */
+        object-fit: cover; /* Giữ ảnh đúng tỉ lệ */
+        width: 100%;
+    }
+
+    .card {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; /* Đảm bảo các phần tử cách đều nhau */
+        height: 100%; /* Chiều cao đồng bộ */
+    }
+
+    .card-body {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; /* Đảm bảo các phần tử trong card cách đều nhau */
+        flex-grow: 1;
+    }
+
+    .service-title {
+        display: -webkit-box;
+        -webkit-line-clamp: 3; /* Hiển thị tối đa 3 dòng */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        height: 4.5em; /* Đảm bảo chiều cao đồng nhất */
+    }
+
+    .quantity-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .quantity-input {
+        max-width: 80px;
+    }
+
+    .service-price {
+        font-size: 1rem;
+        color: #ff5722;
+        font-weight: bold;
     }
 
     .notification {

@@ -46,12 +46,12 @@ namespace GHCW_BE.Controllers
             var list = _newsService.GetListNews();
             if (hasDiscount)
             {
-                var result = list.Where(n => n.DiscountId != null);
+                var result = list.Where(n => n.DiscountId != null && n.IsActive == true);
                 return Ok(await result.CountAsync());
             }
             else
             {
-                var result = list.Where(n => n.DiscountId == null);
+                var result = list.Where(n => n.DiscountId == null && n.IsActive == true);
                 return Ok(await result.CountAsync());
             }
         }

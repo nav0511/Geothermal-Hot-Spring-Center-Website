@@ -73,7 +73,7 @@
 
             @if (Model.IsLoggedIn == true)
             {
-                <button type="submit" class="btn btn-success mt-3">Thanh toán qua VNPay</button>
+                <button type="submit" class="btn btn-success mt-3"><i class="fas fa-money-check"></i>Thanh toán qua VNPay</button>
             }
             else
             {
@@ -87,9 +87,13 @@
             @if (Model.IsLoggedIn == true)
             {
                 <input type="hidden" asp-for="PaymentMethod" value="PayLater"/>
-                <button type="submit" class="btn btn-success mt-3">Thanh toán tại quầy</button>
+                <button type="submit" class="btn btn-success mt-3"><i class="fas fa-store"></i> Thanh toán tại quầy</button>
             }
         </form>
+
+
+        <a href="/Booking" class="btn btn-primary mt-3" id="backToBookingButton"><i class="fas fa-arrow-left"></i>Quay lại trang đặt vé</a>
+
     </div>
 
     <script>
@@ -122,12 +126,14 @@
                 const itemTotal = item.quantity * servicePrice;
                 cartTotal += itemTotal;
 
+                const disableDecrease = item.quantity === 1 ? 'disabled' : '';
+
                 cartItemsContainer.innerHTML += `
                                 <tbody>
                                     <tr class="cart-item">
                                         <td>${serviceName}</td>
                                         <td class="quantity-controls">
-                                            <button onclick="decreaseQuantity(${index})" class="cart-button">-</button>
+                                            <button onclick="decreaseQuantity(${index})" class="cart-button" ${disableDecrease}>-</button>
                                             <span class="quantity-display">${item.quantity}</span>
                                             <button onclick="increaseQuantity(${index})" class="cart-button">+</button>
                                         </td>
@@ -141,15 +147,31 @@
                             `;
             });
 
+        if (cart.length === 0) {
             cartItemsContainer.innerHTML += `
-                                <tbody>
-                                        <tr class="cart-item" style="border-top: 1px solid lightgray;">
-                                        <th>Tổng tiền</th>
-                                        <th colspan="2">${cartTotal.toLocaleString('en-US')} VND</th>
-                                        <th></th>
-                                    </tr>
-                                </tbody>
-                                    `;
+                <tbody>
+                    <tr>
+                        <td colspan="5" style="text-align:center; padding: 20px;">
+                            <h4>Giỏ hàng của bạn đang trống. Vui lòng chọn dịch vụ trước khi thực hiện thanh toán.</h4>
+                        </td>
+                    </tr>
+                </tbody>
+            `;
+            document.querySelectorAll('button[type="submit"]').forEach(btn => btn.style.display = 'none');
+            document.querySelector('.discount-section').style.display = 'none';
+            document.getElementById("discountedTotalP").style.display = 'none';
+        } else {
+            cartItemsContainer.innerHTML += `
+                <tbody>
+                    <tr class="cart-item" style="border-top: 1px solid lightgray;">
+                        <th>Tổng tiền</th>
+                        <th colspan="2">${cartTotal.toLocaleString('en-US')} VND</th>
+                        <th></th>
+                    </tr>
+                </tbody>
+            `;
+            document.querySelectorAll('button[type="submit"]').forEach(btn => btn.style.display = 'block');
+        }
             const amountInput = document.getElementById("paymentAmount");
             if (amountInput) {
                 amountInput.value = cartTotal;
@@ -336,6 +358,61 @@
                 font-size: 16px;
                 flex: 1;
             }
+
+        #empty-cart-message {
+            font-size: 18px;
+            color: #333;
+            margin: 20px 0;
+        }
+
+        /* Định dạng nút thanh toán */
+        button.btn-success i {
+            margin-right: 8px; /* Đảm bảo biểu tượng và text có khoảng cách */
+        }
+
+        button.btn-success, a.btn-primary {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 16px;
+        }
+
+        /* Định dạng nút "Quay lại trang đặt vé" trong giỏ hàng */
+        #backToBookingButton {
+            position: absolute;
+            bottom: 20px; /* Đặt cách đáy của giỏ hàng một khoảng */
+            right: 20px; /* Đặt cách bên phải của giỏ hàng một khoảng */
+            padding: 12px 20px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 50px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+            font-size: 16px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+            /* Định dạng nút khi hover */
+            #backToBookingButton:hover {
+                background-color: #0056b3;
+            }
+
+            #backToBookingButton i {
+                font-size: 20px;
+            }
+
+        .container.py-5 {
+            position: relative;
+        }
+
+        /* Định dạng nút thanh toán tại quầy */
+        button.btn-success i {
+            margin-right: 8px; /* Đảm bảo biểu tượng và text có khoảng cách */
+        }
 
     </style>
 
