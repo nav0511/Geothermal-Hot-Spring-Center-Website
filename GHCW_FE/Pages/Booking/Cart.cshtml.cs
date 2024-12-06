@@ -40,6 +40,8 @@ namespace GHCW_FE.Pages.Booking
         [BindProperty]
         public string SelectedDiscountCode { get; set; }
         public bool HasTicketSaved { get; set; } = false;
+        [BindProperty]
+        public string PaymentMethod { get; set; }
 
         public List<ServiceDTO> AvailableServices { get; set; } = new List<ServiceDTO>();
         public List<DiscountDTO> AvailableDiscounts { get; set; } = new List<DiscountDTO>();
@@ -88,12 +90,29 @@ namespace GHCW_FE.Pages.Booking
 
         public async Task<IActionResult> OnPostInitiatePaymentAsync()
         {
-            var user = JsonConvert.DeserializeObject<AccountDTO>(HttpContext.Session.GetString("acc"));
-            PaymentInfo.OrderType = "Vé dịch vụ";
-            PaymentInfo.OrderDescription = "Thanh toán vé dịch vụ";
-            PaymentInfo.Name = user.Name;
-            var paymentUrl = _vnPayService.CreatePaymentUrl(PaymentInfo, HttpContext);
-            return Redirect(paymentUrl);
+            if (PaymentMethod != null && PaymentMethod == "PayLater")
+            {
+                Message = "Đang xử lí đơn hàng của quý khách, xin đợi trong giây lát";
+                Success = true;
+                return Page();
+            }
+            else if (PaymentMethod != null && PaymentMethod == "VnPay")
+            {
+                Message = "Đang xử lí đơn hàng của quý khách, xin đợi trong giây lát";
+                Success = true;
+                var user = JsonConvert.DeserializeObject<AccountDTO>(HttpContext.Session.GetString("acc"));
+                PaymentInfo.OrderType = "Vé dịch vụ";
+                PaymentInfo.OrderDescription = "Thanh toán vé dịch vụ";
+                PaymentInfo.Name = user.Name;
+                var paymentUrl = _vnPayService.CreatePaymentUrl(PaymentInfo, HttpContext);
+                return Redirect(paymentUrl);
+            }
+            else
+            {
+                Message = "Có lỗi xảy ra khi thực hiện giao dịch, xin quý khách vui lòng thử lại sau";
+                Success = false;
+                return Page();
+            }
         }
         public async Task OnGetPaymentCallbackAsync()
         {
@@ -102,12 +121,12 @@ namespace GHCW_FE.Pages.Booking
 
             if (paymentResponse.VnPayResponseCode == "00")
             {
-                Message = "Thanh toán thành công";
+                Message = "Đang xử lí đơn hàng của quý khách, xin đợi trong giây lát";
                 Success = true;
             }
             else
             {
-                Message = "Thanh toán không thành công";
+                Message = "Thanh toán không thành công, xin quý khách vui lòng thử lại sau";
                 Success= false;
             }
 

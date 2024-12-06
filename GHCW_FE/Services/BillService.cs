@@ -26,5 +26,11 @@ namespace GHCW_FE.Services
             string url = $"Bill/BillDetail/{id}";
             return await GetData<List<BillDetailDTO>>(url);
         }
+        public async Task<HttpStatusCode> SaveBillAsync(BillDTOForBuyProducts bill, string accessToken)
+        {
+            string url = "Bill/Save";
+
+            return await PushData(url, bill, null, accessToken);
+        }
     }
 }

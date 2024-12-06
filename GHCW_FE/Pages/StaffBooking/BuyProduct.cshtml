@@ -1,39 +1,39 @@
 ﻿@page
-@model GHCW_FE.Pages.StaffBooking.BookTicketModel
+@model GHCW_FE.Pages.StaffBooking.BuyProductModel
 @{
-    ViewData["Title"] = "Đặt vé";
+    ViewData["Title"] = "Mua hàng";
     Layout = "_LayoutManagement";
-    ViewData["ActivePage"] = "/StaffBooking/BookTicket";
+    ViewData["ActivePage"] = "/StaffBooking/BuyProduct";
 }
 <header class="page-header">
-    <h2>Đặt vé</h2>
+    <h2>Mua hàng</h2>
 </header>
 
 @if (TempData["SuccessMessage"] != null)
-    {
-        <div class="alert alert-success mt-3">
-            @TempData["SuccessMessage"]
-        </div>
-    }
-    @if (Model.HasTicketSaved)
-    {
-        <script>
-            localStorage.removeItem("cartForStaff");
-        </script>
-    }
+{
+    <div class="alert alert-success mt-3">
+        @TempData["SuccessMessage"]
+    </div>
+}
+@if (Model.HasBillSaved)
+{
+    <script>
+        localStorage.removeItem("productCart");
+    </script>
+}
 
-    @if (TempData["ErrorMessage"] != null)
-    {
-        <div class="alert alert-danger mt-3">
-            @TempData["ErrorMessage"]
-        </div>
-    }
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger mt-3">
+        @TempData["ErrorMessage"]
+    </div>
+}
 
 <div class="booking-container">
     <div class="services-section">
-        <h2 style="margin-bottom: 1rem">Danh sách dịch vụ</h2>
+        <h2 style="margin-bottom: 1rem">Danh sách sản phẩm</h2>
         <div class="services-grid">
-            @foreach (var service in Model.AvailableServices)
+            @foreach (var service in Model.AvailableProducts)
             {
                 <div class="service-card">
                     <div class="service-image-container">
@@ -41,12 +41,25 @@
                     </div>
                     <div class="service-info">
                         <h3>@service.Name</h3>
+                        <p><strong>Kích thước:</strong> @service.Size</p>
+                        <p><strong>Loại:</strong> @(service.IsForRent ? "Thuê" : "Mua")</p>
+                        <p class="availability">
+                            <strong>Trạng thái:</strong>
+                            <span class="@(service.IsAvailable ? "available" : "unavailable")">
+                                @(service.IsAvailable ? "Còn hàng" : "Hết hàng")
+                            </span>
+                        </p>
                         <div class="service-actions">
                             <p class="price">Giá: @(service.Price * 1000) VND</p>
-                            <label class="quantity-label">Số lượng:</label>
-                            <input type="number" min="1" value="1" id="quantity-@service.Id" class="quantity-input">
-                            <button class="btn btn-primary" onclick="addToCart(@service.Id, '@Html.Raw(service.Name.Replace("'", "\\'"))', parseInt(document.getElementById('quantity-@service.Id').value), @service.Price)">Thêm</button>
-                        </div>
+                            @if (service.IsAvailable)
+                            {
+                                <div class="quantity-row">
+                                    <label class="quantity-label">Số lượng:</label>
+                                    <input type="number" min="1" value="1" id="quantity-@service.Id" class="quantity-input">
+                                </div>
+                                <button class="btn btn-primary" onclick="addToCart(@service.Id, '@Html.Raw(service.Name.Replace("'", "\\'"))', parseInt(document.getElementById('quantity-@service.Id').value), @service.Price)">Thêm</button>
+                            }
+                            </div>
 
                     </div>
                 </div>
@@ -55,9 +68,9 @@
     </div>
 
     <div class="cart-summary">
-        <h2>Dịch vụ đã chọn</h2>
+        <h2>Sản phẩm đã chọn</h2>
         <div class="cart-items" id="cartItems">
-            <p>Bạn chưa chọn dịch vụ nào.</p>
+            <p>Bạn chưa chọn sản phẩm nào.</p>
         </div>
         <form method="post" id="paymentForm">
             <input type="hidden" id="cartData" name="cartData" />
@@ -65,8 +78,10 @@
                 <label for="discountSelect">Chọn mã giảm giá:</label>
                 <select id="discountSelect" asp-for="SelectedDiscountCode">
                     <option value="">Không áp dụng mã giảm giá</option>
-                    @if (Model.AvailableDiscounts.Any()){
-                        @foreach (var discount in Model.AvailableDiscounts){
+                    @if (Model.AvailableDiscounts.Any())
+                    {
+                        @foreach (var discount in Model.AvailableDiscounts)
+                        {
                             <option value="@discount.Code">@discount.Code - Giảm @discount.Value %</option>
                         }
                     }
@@ -84,6 +99,12 @@
                 <!-- Add Customer Button -->
                 <button id="showAddCustomerFormBtn" class="btn btn-primary" style="display: none; margin: 1rem;" onclick="showAddCustomerForm()">Thêm khách hàng mới</button>
             </div>
+
+            <div class="add-customer-option">
+                <label for="addNewCustomer">Bạn có muốn thêm khách hàng mới?</label>
+                <input type="checkbox" id="addNewCustomer" name="addNewCustomer" />
+            </div>
+
 
             <div id="addCustomerForm" style="display: none;">
                 <div style="margin: 1rem 0;">
@@ -140,7 +161,9 @@
 </div>
 
 <script>
-    let cart = JSON.parse(localStorage.getItem("cartForStaff")) || [];
+    let cart = JSON.parse(localStorage.getItem("productCart")) || [];
+
+    const availableDiscounts = @Html.Raw(Json.Serialize(Model.AvailableDiscounts));
 
     function updateCartDisplay() {
         const cartItemsContainer = document.getElementById("cartItems");
@@ -150,7 +173,7 @@
         const headerRow = document.createElement("div");
         headerRow.className = "cart-header";
         headerRow.innerHTML = `
-            <span class="cart-header-item">Tên dịch vụ</span>
+            <span class="cart-header-item">Tên sản phẩm</span>
             <span class="cart-header-item">Số lượng</span>
             <span class="cart-header-item">Thành tiền</span>
             <span class="cart-header-item">Hành động</span>
@@ -173,7 +196,7 @@
         });
 
         if (cart.length === 0) {
-            cartItemsContainer.innerHTML = "<p>Bạn chưa chọn dịch vụ nào.</p>";
+            cartItemsContainer.innerHTML = "<p>Bạn chưa chọn sản phẩm nào.</p>";
         }
 
         document.getElementById("cartTotal").textContent = total.toLocaleString();
@@ -190,13 +213,13 @@
             cart.push({ serviceId, name, quantity, price });
         }
 
-        localStorage.setItem("cartForStaff", JSON.stringify(cart));
+        localStorage.setItem("productCart", JSON.stringify(cart));
         updateCartDisplay();
     }
 
     function removeFromCart(serviceId) {
         cart = cart.filter(item => item.serviceId !== serviceId);
-        localStorage.setItem("cartForStaff", JSON.stringify(cart));
+        localStorage.setItem("productCart", JSON.stringify(cart));
         updateCartDisplay();
     }
 
@@ -206,7 +229,7 @@
     });
 
     function confirmPayment() {
-        let cartt = JSON.parse(localStorage.getItem("cartForStaff")) || [];
+        let cartt = JSON.parse(localStorage.getItem("productCart")) || [];
         let cartData = cartt.map(item => ({
             ServiceId: item.serviceId,
             Quantity: item.quantity,
@@ -303,6 +326,41 @@
         }
     });
 
+        // Function to calculate and update the total price with the discount
+    function updateTotalPriceWithDiscount() {
+        const discountSelect = document.getElementById("discountSelect");
+        const selectedDiscountCode = discountSelect.value;
+        const cartItems = JSON.parse(localStorage.getItem("productCart")) || [];
+
+        // Calculate the total price without discount
+        let total = 0;
+        cartItems.forEach(item => {
+            total += item.price * item.quantity * 1000; // Assuming price is in VND
+        });
+
+        let discount = 0;
+
+        // If a discount code is selected, apply the discount
+        if (selectedDiscountCode) {
+            const discountItem = availableDiscounts.find(d => d.Code === selectedDiscountCode);
+            if (discountItem) {
+                discount = discountItem.Value;
+            }
+        }
+
+        // Calculate the total after discount
+        const totalAfterDiscount = total - (total * discount / 100);
+
+        // Update the total price on the page
+        document.getElementById("cartTotal").textContent = totalAfterDiscount.toLocaleString();
+    }
+
+    // Listen for changes in the discount selection
+    document.getElementById("discountSelect").addEventListener("change", updateTotalPriceWithDiscount);
+
+    // Recalculate and update total price when page loads
+    document.addEventListener("DOMContentLoaded", updateTotalPriceWithDiscount);
+
 
 </script>
 
@@ -335,52 +393,40 @@
     }
 
     .service-card {
-        background: linear-gradient(135deg, #f3f8ff, #d6e4ff); /* Soft gradient for a modern look */
-        border-radius: 15px; /* Slightly more rounded corners for a smoother design */
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Enhanced shadow for depth */
+        background: #ffffff;
+        border-radius: 15px;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
         display: flex;
         flex-direction: column;
         overflow: hidden;
-        transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effect */
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
         .service-card:hover {
-            transform: translateY(-5px); /* Lift the card slightly on hover */
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Increase shadow on hover */
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
 
     .service-image-container {
         width: 100%;
-        height: 180px; /* Slightly taller for better image visibility */
-        background: #e6f0ff; /* Subtle background color */
+        height: 200px;
+        background: #f9f9f9;
         display: flex;
         align-items: center;
         justify-content: center;
-        overflow: hidden; /* Ensure images are contained */
-        position: relative; /* To enable overlay effects */
+        position: relative;
     }
 
-        .service-image-container::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.1); /* Subtle overlay for image enhancement */
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .service-image-container:hover::after {
-            opacity: 1; /* Enhance overlay visibility on hover */
-        }
-
     .service-image {
-        max-width: 100%;
-        max-height: 100%;
+        max-width: 90%;
+        max-height: 90%;
         object-fit: cover;
-        border-bottom: 2px solid #d6e4ff; /* Border to separate image and content */
+        border-radius: 10px;
+        transition: transform 0.3s ease;
+    }
+
+    .service-card:hover .service-image {
+        transform: scale(1.05);
     }
 
     .service-info {
@@ -388,72 +434,81 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        gap: 10px; /* Add some space between elements */
     }
 
         .service-info h3 {
-            font-size: 1.25rem; /* Slightly larger for prominence */
+            font-size: 1.25rem;
             font-weight: bold;
+            margin-bottom: 10px;
             color: #333;
-            margin: 0;
-            text-align: center; /* Center-align the service name */
         }
+
+        .service-info p {
+            margin: 5px 0;
+            font-size: 0.95rem;
+            color: #555;
+        }
+
+        .service-info .availability {
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+            .service-info .availability .available {
+                color: #28a745;
+            }
+
+            .service-info .availability .unavailable {
+                color: #dc3545;
+            }
 
     .service-actions {
         display: flex;
-        flex-wrap: wrap; /* Allow flexibility for smaller screens */
-        justify-content: space-between; /* Spread actions evenly */
-        align-items: center;
-        gap: 10px; /* Add spacing between elements */
-        margin-top: 10px;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 15px;
     }
 
-        .service-actions p,
-        .service-actions label {
-            margin: 0;
-            font-size: 0.95rem; /* Consistent font size */
-            color: #666; /* Softer text color */
+        .service-actions .price {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #333;
         }
 
-        .service-actions .price {
-            font-weight: bold;
-            color: #0066cc; /* Highlighted price */
-            font-size: 1rem;
-        }
+    ..quantity-row {
+        display: flex;
+        align-items: center;
+        gap: 10px; /* Adjust the spacing between the label and input */
+        margin-top: 10px; /* Add some space between this row and the content above */
+    }
 
     .quantity-label {
-        margin-right: 10px;
+        font-weight: bold;
+        font-size: 14px;
     }
 
     .quantity-input {
-        width: 60px;
+        width: 60px; /* Adjust width to fit nicely */
         padding: 5px;
         border: 1px solid #ccc;
         border-radius: 5px;
-        text-align: center; /* Align text in the center */
-        font-size: 0.9rem;
     }
 
+
     .btn-primary {
-        background: linear-gradient(135deg, #0066cc, #004da3); /* Gradient for button */
+        background: linear-gradient(135deg, #007bff, #0056b3);
         color: #fff;
-        padding: 10px 20px;
+        padding: 10px 15px;
         border: none;
-        border-radius: 5px;
-        font-weight: bold;
-        text-transform: uppercase;
+        border-radius: 25px;
         cursor: pointer;
-        font-size: 0.9rem;
+        font-size: 1rem;
         transition: background 0.3s ease;
     }
 
         .btn-primary:hover {
-            background: linear-gradient(135deg, #004da3, #002b80); /* Darker gradient on hover */
+            background: linear-gradient(135deg, #0056b3, #003f8a);
         }
-
-    .service-card:hover .btn-primary {
-        transform: scale(1.05); /* Slightly enlarge button on hover */
-    }
 
 
     /* Cart Section */
@@ -498,7 +553,9 @@
     }
 
     .cart-total {
-        margin: 1rem 0;
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-top: 20px;
     }
 
     .btn-primary {

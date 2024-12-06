@@ -66,17 +66,27 @@
                 </select>
             </div>
 
+            <input type="hidden" asp-for="PaymentMethod" value="VnPay" />
             <input type="hidden" asp-for="PaymentInfo.Amount" id="paymentAmount" />
             <h4 id="discountedTotalP" style="color: #656565"></h4>
 
             @if (Model.IsLoggedIn == true)
             {
-                <button type="submit" class="btn btn-success mt-3">Thanh toán</button>
+                <button type="submit" class="btn btn-success mt-3">Thanh toán online qua VNPay</button>
             }
             else
             {
                 <a href="@Url.Page("/Authentications/Login", new { returnUrl = Url.Page("/Booking/Cart") })" class="btn btn-primary mt-3">Đăng nhập</a>
                 <p class="text-danger mt-2">@Model.ErrorMessage</p>
+            }
+        </form>
+
+        <form method="post" asp-page-handler="InitiatePayment">
+
+            @if (Model.IsLoggedIn == true)
+            {
+                <input type="hidden" asp-for="PaymentMethod" value="PayLater"/>
+                <button type="submit" class="btn btn-success mt-3">Thanh toán sau</button>
             }
         </form>
     </div>
