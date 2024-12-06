@@ -42,6 +42,8 @@ namespace GHCW_FE.Pages.Booking
         public bool HasTicketSaved { get; set; } = false;
         [BindProperty]
         public string PaymentMethod { get; set; }
+        [BindProperty]
+        public bool PayLater { get; set; } = false ;
 
         public List<ServiceDTO> AvailableServices { get; set; } = new List<ServiceDTO>();
         public List<DiscountDTO> AvailableDiscounts { get; set; } = new List<DiscountDTO>();
@@ -94,6 +96,7 @@ namespace GHCW_FE.Pages.Booking
             {
                 Message = "Đang xử lí đơn hàng của quý khách, xin đợi trong giây lát";
                 Success = true;
+                PayLater = true;
                 return Page();
             }
             else if (PaymentMethod != null && PaymentMethod == "VnPay")
@@ -166,6 +169,8 @@ namespace GHCW_FE.Pages.Booking
                         Price = item.Price
                     }).ToList()
                 };
+
+                if (PayLater == true) newTicket.PaymentStatus = 0;
 
                 var statusCode = await _ticketService.SaveTicketAsync(newTicket, accessToken);
                 if (statusCode == HttpStatusCode.OK)
