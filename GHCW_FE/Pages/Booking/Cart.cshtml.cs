@@ -176,13 +176,13 @@ namespace GHCW_FE.Pages.Booking
                 if (statusCode == HttpStatusCode.OK)
                 {
 
-                    Message = "Thanh toán thành công";
+                    Message = "Đặt vé thành công";
                     Success = true;
                     HasTicketSaved = true;
                 }
                 else
                 {
-                    Message = "Thanh toán không thành công";
+                    Message = "Đặt vé không thành công";
                     Success = false;
                 }
 
