@@ -16,10 +16,14 @@
 
 <!-- Main Content -->
 <header class="page-header">
-    <h2>Quản lý lịch làm việc</h2>
     @if (account?.Role <= 1)
     {
+        <h2>Quản lý lịch làm việc</h2>
         <button class="btn-add" onclick="window.location.href='/Admin/AddSchedule'">+ Thêm lịch</button>
+    }
+    else
+    {
+        <h2>Lịch làm việc</h2>
     }
 </header>
 
