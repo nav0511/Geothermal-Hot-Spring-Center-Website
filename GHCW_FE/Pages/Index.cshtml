@@ -161,7 +161,7 @@
     function saveBookingDate() {
         const bookingDate = document.getElementById("dateInput").value;
         if (!bookingDate) {
-            alert("Please select a booking date.");
+            alert("Vui lòng chọn ngày trước khi đặt vé.");
         } else {
             localStorage.setItem("bookingDate", bookingDate);
             window.location.href = "@Url.Page("/Booking/Index")";
