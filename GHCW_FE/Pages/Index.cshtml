@@ -31,9 +31,7 @@
                 <div class="d-flex align-items-center">
                     <label>Chọn ngày sử dụng dịch vụ:&nbsp;&nbsp;</label>
                     <div class="date" id="date1" data-target-input="nearest">
-                        @* <input type="text" class="form-control p-4 datetimepicker-input" placeholder="Chọn ngày"
-                        data-target="#date1" data-toggle="datetimepicker" style="width: 100%;" /> *@
-                        <input id="dateInput" type="date" class="form-control p-4" placeholder="Chọn ngày" style="width: 100%;" />
+                        <input id="date" type="date" class="form-control p-4" placeholder="Chọn ngày" style="width: 100%;" />
                     </div>
                 </div>
                 <div class="ml-2">
@@ -139,8 +137,8 @@
 <script>
     // Thiết lập thuộc tính min cho input date để không cho phép chọn ngày trong quá khứ
     document.addEventListener("DOMContentLoaded", function () {
-        const today = new Date().toISOString().split('T')[0]; // Lấy ngày hiện tại
-        document.getElementById("dateInput").setAttribute("min", today); // Thiết lập thuộc tính min
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById("date").setAttribute("min", today);
     });
 
     function formatPrice(price) {
@@ -159,12 +157,20 @@
     });
 
     function saveBookingDate() {
-        const bookingDate = document.getElementById("dateInput").value;
+        const bookingDate = document.getElementById("date").value;
         if (!bookingDate) {
-            alert("Please select a booking date.");
+            alert("Vui lòng chọn ngày đặt vé.");
         } else {
-            localStorage.setItem("bookingDate", bookingDate);
-            window.location.href = "@Url.Page("/Booking/Index")";
+            const selectedDate = new Date(bookingDate);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            if (selectedDate < today) {
+                alert("Ngày sử dụng không hợp lệ. Vui lòng chọn ngày lớn hơn hoặc bằng ngày hiện tại.");
+            } else {
+                localStorage.setItem("bookingDate", bookingDate);
+                window.location.href = "@Url.Page("/Booking/Index")";
+            }
         }
     }
 </script>

@@ -50,6 +50,11 @@
 </div>
 
 <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById("bookingDate").setAttribute("min", today);
+    });
+
     function validateQuantity(input) {
         const originalValue = input.value;
         const cursorPosition = input.selectionStart;
@@ -74,10 +79,7 @@
                 "Backspace", "Delete", "Tab", "ArrowLeft", "ArrowRight", "Control", "Meta", "Enter"
             ];
 
-            if (
-                allowedKeys.includes(event.key) || // Cho phép phím đặc biệt
-                (event.ctrlKey || event.metaKey) // Cho phép Ctrl/Command
-            ) {
+            if (allowedKeys.includes(event.key) || (event.ctrlKey || event.metaKey)) {
                 return;
             }
 
@@ -130,7 +132,7 @@
         if (existingItem) {
             existingItem.quantity += quantity;
         } else {
-            cart.push({ serviceId, quantity , price });
+            cart.push({ serviceId, quantity, price });
         }
 
         localStorage.setItem("cart", JSON.stringify(cart));
@@ -156,13 +158,22 @@
     function checkBookingDate() {
         const bookingDate = document.getElementById("bookingDate").value;
         if (!bookingDate) {
-            alert("Please select a booking date before proceeding to payment.");
-        } else {
-            localStorage.setItem("bookingDate", bookingDate);
-            window.location.href = `@Url.Page("./Cart")?bookingDate=${encodeURIComponent(bookingDate)}`;
+            alert("Vui lòng chọn ngày đặt vé.");
+        }
+        else {
+            const selectedDate = new Date(bookingDate);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            if (selectedDate < today) {
+                alert("Ngày sử dụng không hợp lệ. Vui lòng chọn ngày lớn hơn hoặc bằng ngày hiện tại.");
+            }
+            else {
+                localStorage.setItem("bookingDate", bookingDate);
+                window.location.href = `@Url.Page("./Cart")?bookingDate=${encodeURIComponent(bookingDate)}`;
+            }
         }
     }
-
 </script>
 
 <style>
