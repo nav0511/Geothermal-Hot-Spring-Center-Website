@@ -7,11 +7,12 @@
 <div class="container py-5">
     <form>
         <!-- Date Selection -->
-        <div class="form-group">
-            <label for="bookingDate">Choose Booking Date:</label>
-            <input type="date" id="bookingDate" class="form-control" asp-for="BookingDate"
+        <div class="form-group d-flex align-items-center">
+            <label for="bookingDate" style="margin: 0">Chọn ngày đặt vé:</label>
+            <input type="date" id="bookingDate" class="form-control d-inline-block" asp-for="BookingDate"
                    min="@DateTime.Now.ToString("yyyy-MM-dd")"
-                   value="@DateTime.Now.ToString("yyyy-MM-dd")" required />
+                   value="@DateTime.Now.ToString("yyyy-MM-dd")" required 
+                   style="width: auto; display: inline-block;" />
         </div>
 
         <!-- Cart Summary and Payment -->
@@ -50,11 +51,6 @@
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById("bookingDate").setAttribute("min", today);
-    });
-
     function validateQuantity(input) {
         const originalValue = input.value;
         const cursorPosition = input.selectionStart;
@@ -79,7 +75,10 @@
                 "Backspace", "Delete", "Tab", "ArrowLeft", "ArrowRight", "Control", "Meta", "Enter"
             ];
 
-            if (allowedKeys.includes(event.key) || (event.ctrlKey || event.metaKey)) {
+            if (
+                allowedKeys.includes(event.key) || // Cho phép phím đặc biệt
+                (event.ctrlKey || event.metaKey) // Cho phép Ctrl/Command
+            ) {
                 return;
             }
 
@@ -115,11 +114,27 @@
     document.addEventListener("DOMContentLoaded", function () {
         updatePaymentButton();
 
+        const bookingDateInput = document.getElementById("bookingDate");
+        const today = new Date().toISOString().split("T")[0];
+        bookingDateInput.setAttribute("min", today); // Đảm bảo `min` luôn cập nhật
+
+        bookingDateInput.addEventListener("input", function () {
+            const selectedDate = new Date(this.value);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            if (selectedDate < today) {
+                alert("Không thể chọn ngày trong quá khứ. Vui lòng chọn một ngày hợp lệ.");
+                this.value = ""; // Xóa giá trị không hợp lệ
+            }
+        });
+
         const savedBookingDate = localStorage.getItem("bookingDate");
         if (savedBookingDate) {
-            document.getElementById("bookingDate").value = savedBookingDate;
+            bookingDateInput.value = savedBookingDate;
         }
     });
+
 
     function addToCart(serviceId, quantity, price) {
         if (!quantity || quantity < 1) {
@@ -132,7 +147,7 @@
         if (existingItem) {
             existingItem.quantity += quantity;
         } else {
-            cart.push({ serviceId, quantity, price });
+            cart.push({ serviceId, quantity , price });
         }
 
         localStorage.setItem("cart", JSON.stringify(cart));
@@ -156,24 +171,28 @@
     }
 
     function checkBookingDate() {
-        const bookingDate = document.getElementById("bookingDate").value;
-        if (!bookingDate) {
-            alert("Vui lòng chọn ngày đặt vé.");
-        }
-        else {
-            const selectedDate = new Date(bookingDate);
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
+        const bookingDateInput = document.getElementById("bookingDate");
+        const bookingDate = new Date(bookingDateInput.value);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Đặt thời gian của hôm nay về 00:00:00
 
-            if (selectedDate < today) {
-                alert("Ngày sử dụng không hợp lệ. Vui lòng chọn ngày lớn hơn hoặc bằng ngày hiện tại.");
-            }
-            else {
-                localStorage.setItem("bookingDate", bookingDate);
-                window.location.href = `@Url.Page("./Cart")?bookingDate=${encodeURIComponent(bookingDate)}`;
-            }
+        if (!bookingDateInput.value) {
+            alert("Vui lòng chọn ngày đặt vé trước khi thanh toán.");
+            return;
         }
+
+        if (bookingDate < today) {
+            alert("Không thể chọn ngày trong quá khứ. Vui lòng chọn một ngày hợp lệ.");
+            bookingDateInput.value = ""; // Xóa giá trị không hợp lệ
+            return;
+        }
+
+        // Lưu ngày vào localStorage và chuyển hướng
+        localStorage.setItem("bookingDate", bookingDateInput.value);
+        window.location.href = `@Url.Page("./Cart")?bookingDate=${encodeURIComponent(bookingDateInput.value)}`;
     }
+
+
 </script>
 
 <style>
@@ -244,4 +263,17 @@
         font-size: 16px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
+
+    .form-group label {
+        margin-right: 10px;
+    }
+
+    #bookingDate {
+        max-width: 200px;
+    }
+
+    #paymentButton {
+        margin-left: 20px;
+    }
+
 </style>
