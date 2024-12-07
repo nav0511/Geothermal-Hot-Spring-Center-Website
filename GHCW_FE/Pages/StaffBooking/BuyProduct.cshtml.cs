@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
 using System.Text.RegularExpressions;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace GHCW_FE.Pages.StaffBooking
 {
@@ -57,7 +58,17 @@ namespace GHCW_FE.Pages.StaffBooking
             if (string.IsNullOrEmpty(accessToken))
             {
                 await _authService.LogoutAsync();
-                TempData["ErrorMessage"] = "Bạn cần đăng nhập để thực hiện hành động này.";
+                TempData["ErrorMessage"] = "Bạn cần đăng nhập để xem thông tin.";
+                return RedirectToPage("/Authentications/Login");
+            }
+
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(accessToken);
+            var roleClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "Role");
+            if (roleClaim != null && int.Parse(roleClaim.Value) != 4)
+            {
+                await _authService.LogoutAsync();
+                TempData["ErrorMessage"] = "Bạn không có quyền truy cập trang này.";
                 return RedirectToPage("/Authentications/Login");
             }
             (HttpStatusCode StatusCode, List<ProductDTO>? ListProducts) = await _ProductService.GetProducts($"Product?$filter=IsAvailable eq true");
