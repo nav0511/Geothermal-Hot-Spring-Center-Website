@@ -62,10 +62,10 @@ namespace GHCW_FE.Pages.Authentications
                     {
                         0 => RedirectToPage("/Admin/Dashboard"),
                         1 => RedirectToPage("/Admin/Dashboard"),
-                        2 => Redirect("../Index"),
-                        3 => Redirect("../Index"),
-                        4 => Redirect("../Index"),
-                        5 => Redirect("../Index"),
+                        2 => RedirectToPage("/Admin/NewsManagement"),
+                        3 => RedirectToPage("/Admin/ReservationList"),
+                        4 => RedirectToPage("/StaffBooking/BookTicket"),
+                        5 => RedirectToPage("/Index"),
                         _ => RedirectToPage("/Index")
                     };
                 }
