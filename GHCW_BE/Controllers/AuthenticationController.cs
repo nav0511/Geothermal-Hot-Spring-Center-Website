@@ -225,12 +225,12 @@ namespace GHCW_BE.Controllers
                 var emailSent = await _service.SendNewPasswordEmail(email.Email, newPass);
                 if (!emailSent)
                 {
-                    return StatusCode(500, "Không thể gửi email đặt lại mật khẩu.");
+                    return BadRequest("Không thể gửi email đặt lại mật khẩu.");
                 }
                 await _service.ChangePassword(user.Id, user.Password);
                 return Ok("Gửi thành công, vui lòng kiểm tra email để lấy tài khoản mới của bạn!");
             }
-            return BadRequest("Không có tài khoản nào khớp với email đã nhập");
+            return NotFound("Không có tài khoản nào khớp với email đã nhập");
         }
 
         [Authorize]

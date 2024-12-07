@@ -26,7 +26,7 @@ namespace GHCW_FE.Pages.Authentications
         {
             if (string.IsNullOrWhiteSpace(Email))
             {
-                TempData["ErrorMessage"] = "Gửi email thất bại. Vui lòng thử lại.";
+                TempData["ErrorMessage"] = "Email không được để trống.";
                 return Page();
             }
 
@@ -35,6 +35,11 @@ namespace GHCW_FE.Pages.Authentications
             if (statusCode == HttpStatusCode.OK)
             {
                 TempData["SuccessMessage"] = "Mật khẩu mới đã được gửi đến email của bạn.";
+                return Page();
+            }
+            else if (statusCode == HttpStatusCode.NotFound)
+            {
+                TempData["ErrorMessage"] = "Không tìm thấy email, vui lòng thử lại.";
                 return Page();
             }
             else
