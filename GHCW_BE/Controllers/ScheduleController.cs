@@ -114,12 +114,18 @@ namespace GHCW_BE.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSchedule(int id)
         {
-            var (isSuccess, message) = await _scheduleService.DeleteSchedule(id);
-            if (!isSuccess)
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var roleClaim = identity?.FindFirst("Role");
+            if (roleClaim != null && int.Parse(roleClaim.Value) <= 1)
             {
-                return BadRequest(message);
+                var (isSuccess, message) = await _scheduleService.DeleteSchedule(id);
+                if (!isSuccess)
+                {
+                    return BadRequest(message);
+                }
+                return Ok(message);
             }
-            return Ok(message);
+            return StatusCode(StatusCodes.Status403Forbidden, "Bạn không có quyền thực hiện hành động này.");
         }
     }
 }
