@@ -143,6 +143,19 @@ namespace GHCW_FE.Pages.Admin
                     return RedirectToPage("/Admin/PromotionManagement");
                 }
             }
+            else if (response == HttpStatusCode.InternalServerError)
+            {
+                if (discount == "0")
+                {
+                    TempData["ErrorMessage"] = "Thêm tin tức thành công nhưng chưa gửi được email thông báo.";
+                    return RedirectToPage("/Admin/PromotionManagement");
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Thêm tin khuyến mãi thành công nhưng chưa gửi được email thông báo.";
+                    return RedirectToPage("/Admin/PromotionManagement");
+                }
+            }
             else
             {
                 @TempData["ErrorMessage"] = ("Có lỗi xảy ra khi thêm tin tức.");
