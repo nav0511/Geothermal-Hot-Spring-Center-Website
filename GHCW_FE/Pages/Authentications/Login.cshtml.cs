@@ -24,8 +24,14 @@ namespace GHCW_FE.Pages.Authentications
         [BindProperty]
         public LoginDTO Account { get; set; }
 
-        public void OnGet()
+        public async Task<IActionResult> OnGet()
         {
+            var accessToken = await _tokenService.CheckAndRefreshTokenAsync();
+            if (!string.IsNullOrEmpty(accessToken))
+            {
+                return RedirectToPage("/Index", new { reload = true });
+            }
+            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(string? returnUrl = null)

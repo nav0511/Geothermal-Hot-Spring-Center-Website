@@ -35,6 +35,12 @@
     <Content Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+	  
   </ItemGroup>
-
+	<ItemGroup>
+		<Content Include="F:\users\Ky9\GHCW_BE\ChatbotPrompt.txt">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+	
 </Project>
