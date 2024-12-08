@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "{reload?}"
 @using GHCW_FE.DTOs
 @model IndexModel
 @{
@@ -133,6 +133,20 @@
     </div>
 </div>
 <!-- Packages End -->
+
+@if (ViewContext.HttpContext.Request.Query.ContainsKey("reload"))
+{
+    <script>
+        if (!window.sessionStorage.getItem("sessionRefreshed")) {
+            // Đặt cờ trong sessionStorage để tránh vòng lặp tải lại
+            window.sessionStorage.setItem("sessionRefreshed", "true");
+            window.location.reload();
+        } else {
+            // Xóa cờ sau khi đã tải lại
+            window.sessionStorage.removeItem("sessionRefreshed");
+        }
+    </script>
+}
 
 <script>
     // Thiết lập thuộc tính min cho input date để không cho phép chọn ngày trong quá khứ

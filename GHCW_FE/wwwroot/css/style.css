@@ -9791,8 +9791,8 @@ h6,
 /* Chat popup styles */
 .chat-popup {
     position: fixed;
-    bottom: 90px;
-    right: 20px;
+    bottom: 100px;
+    right: 120px;
     width: 350px; /* Tăng chiều rộng */
     height: 450px; /* Tăng chiều cao */
     background-color: #fff;
