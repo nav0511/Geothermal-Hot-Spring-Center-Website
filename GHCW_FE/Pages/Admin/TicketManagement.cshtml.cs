@@ -48,31 +48,11 @@ namespace GHCW_FE.Pages.Admin
             var handler = new JwtSecurityTokenHandler();
             var jwtToken = handler.ReadJwtToken(accessToken);
             var roleClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "Role");
+            var idClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "ID");
             if (roleClaim != null && (int.Parse(roleClaim.Value) > 3 || int.Parse(roleClaim.Value) == 2))
             {
                 await _authService.LogoutAsync();
                 TempData["ErrorMessage"] = "Bạn không có quyền truy cập trang này.";
-                return RedirectToPage("/Authentications/Login");
-            }
-            _accService.SetAccessToken(accessToken);
-
-            var (statusCode, userProfile) = await _accService.UserProfile(accessToken);
-            if (userProfile?.Role > 3 || userProfile?.Role == 2)
-            {
-                await _authService.LogoutAsync();
-                TempData["ErrorMessage"] = "Bạn không có quyền truy cập thông tin này.";
-                return RedirectToPage("/Authentications/Login");
-            }
-            else if (statusCode == HttpStatusCode.NotFound)
-            {
-                await _authService.LogoutAsync();
-                TempData["ErrorMessage"] = "Không tìm thấy người dùng này.";
-                return RedirectToPage("/Authentications/Login");
-            }
-            else if (statusCode != HttpStatusCode.OK)
-            {
-                await _authService.LogoutAsync();
-                TempData["ErrorMessage"] = "Đã xảy ra lỗi khi lấy thông tin người dùng.";
                 return RedirectToPage("/Authentications/Login");
             }
 
@@ -82,23 +62,17 @@ namespace GHCW_FE.Pages.Admin
             CurrentPage = pageNumber;
             int skip = (pageNumber - 1) * PageSize;
 
-            var (statusCode1, tickets) = await _ticketService.GetBookingList("Ticket", userProfile.Role, userProfile.Id);
+            var (statusCode1, tickets) = await _ticketService.GetBookingList(accessToken);
             if (statusCode1 != HttpStatusCode.OK || tickets == null)
             {
                 TempData["ErrorMessage"] = "Không lấy được danh sách vé.";
-                tickets = new List<TicketDTO>();
                 return RedirectToPage();
-            }
-
-            if (userProfile?.Role == 3)
-            {
-                tickets = tickets?.Where(t => t.SaleId == userProfile.Id).ToList();
             }
 
             if (!string.IsNullOrEmpty(SearchTerm))
             {
                 tickets = tickets?.Where(t =>
-                   (t.Receptionist.Name != null && t.Receptionist.Name.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase)) ||
+                   (t.Receptionist?.Name != null && t.Receptionist.Name.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase)) ||
                    (t.Customer.Name != null && t.Customer.Name.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase))
                ).ToList();
             }

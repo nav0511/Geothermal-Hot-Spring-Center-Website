@@ -1,28 +1,22 @@
 ﻿using GHCW_FE.DTOs;
 using Microsoft.AspNetCore.Http;
+using System;
 using System.Net;
 
 namespace GHCW_FE.Services
 {
     public class TicketService : BaseService
     {
-        public async Task<(HttpStatusCode StatusCode, List<TicketDTO>?)> GetBookingList(string url, int? role, int? uId)
+        public async Task<(HttpStatusCode StatusCode, List<TicketDTO>?)> GetBookingList(string accessToken)
         {
-            if (role.HasValue)
-            {
-                url += $"?role={role.Value}&uId={uId.Value}";
-            }
-            
-            return await GetData<List<TicketDTO>>(url);
+            var result = await GetData<List<TicketDTO>>("Ticket", null, accessToken);
+            return result;
         }
-        public async Task<(HttpStatusCode StatusCode, int Total)> GetTotalBooking(int? role, int? uId)
+        public async Task<(HttpStatusCode StatusCode, int Total)> GetTotalBooking(string accessToken)
         {
             string url = "Ticket/Total";
-            if (role.HasValue)
-            {
-                url += $"?role={role.Value}&uId={uId.Value}";
-            }
-            return await GetData<int>(url);
+            var result = await GetData<int>(url, null, accessToken);
+            return result;
         }
 
         public async Task<HttpStatusCode> UpdateCheckinStatus(TicketDTO2 ticket)

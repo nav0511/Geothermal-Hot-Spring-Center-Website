@@ -23,28 +23,23 @@ namespace GHCW_BE.Services
 
 
 
-        public IQueryable<Ticket> GetListBooking(int? role, int? uId)
+        public async Task<List<TicketDTO>> GetListBooking(int role, int? uId)
         {
-            if(role == 3)
+            var tickets = await _context.Tickets.Include(c => c.Customer).Include(a => a.Receptionist).Include(d => d.DiscountCodeNavigation).Include(s => s.Sale).ToListAsync();
+            if (role == 3)
             {
-                return _context.Tickets.Include(t => t.Customer).Include(t => t.Receptionist).Where(t => t.SaleId == uId && t.IsActive);
+                tickets = tickets.Where(t => t.SaleId == uId).ToList();
             }
             else if (role == 5)
             {
-                return _context.Tickets.Include(t => t.Customer).Include(t => t.Receptionist).Where(t => t.Customer.AccountId == uId && t.IsActive);
+                tickets = tickets.Where(t => t.Customer.AccountId == uId && t.IsActive).ToList();
             }
-            else if(role == 4)
+            else if (role == 4)
             {
-                return _context.Tickets.Include(t => t.Customer).Include(t => t.Receptionist).Where(t => t.IsActive);
+                tickets = tickets.Where(t => t.IsActive).ToList();
             }
-            else if(role <= 1)
-            {
-                return _context.Tickets.Include(t => t.Customer).Include(t => t.Receptionist);
-            }
-            else
-            {
-                return _context.Tickets.Where(t => false);
-            }
+            var ticketsDTO = _mapper.Map<List<Ticket>, List<TicketDTO>>(tickets);
+            return ticketsDTO;
         }
 
         public async Task<Ticket> GetTicketById(int id)
