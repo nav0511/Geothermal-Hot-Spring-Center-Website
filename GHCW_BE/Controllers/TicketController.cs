@@ -40,7 +40,7 @@ namespace GHCW_BE.Controllers
             var roleClaim = identity?.FindFirst("Role");
             var idClaim = identity?.FindFirst("ID");
 
-            var list = await _ticketService.GetListBooking(int.Parse(roleClaim.Value),int.Parse(idClaim.Value));
+            var list = await _ticketService.GetListBooking(int.Parse(roleClaim.Value), int.Parse(idClaim.Value));
             if (list == null)
             {
                 return NotFound("Không có danh sách vé nào.");
@@ -59,7 +59,7 @@ namespace GHCW_BE.Controllers
             var list = await _ticketService.GetListBooking(int.Parse(roleClaim.Value), int.Parse(idClaim.Value));
             if (list == null)
             {
-                return Ok(0); 
+                return Ok(0);
             }
             return Ok(list.Count());
         }

@@ -111,7 +111,7 @@ namespace GHCW_FE.Pages.Admin
             Discount.StartDate = Convert.ToDateTime(Request.Form["startDate"]);
             Discount.EndDate = Convert.ToDateTime(Request.Form["endDate"]);
             Discount.Description = Request.Form["description"];
-            Discount.IsAvailable = Request.Form["isAvailable"] == "on";
+            Discount.IsAvailable = Request.Form["isAvailable"] == "true";
 
             if (!ModelState.IsValid)
             {

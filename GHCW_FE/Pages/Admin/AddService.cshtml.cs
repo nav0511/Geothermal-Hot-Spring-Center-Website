@@ -99,7 +99,7 @@ namespace GHCW_FE.Pages.Admin
                 Time = Request.Form["time"],
                 Description = Request.Form["description"],
                 Image = Request.Form.Files["image"],
-                IsActive = Request.Form["isActive"] == "on"
+                IsActive = Request.Form["isActive"] == "true"
             };
 
             

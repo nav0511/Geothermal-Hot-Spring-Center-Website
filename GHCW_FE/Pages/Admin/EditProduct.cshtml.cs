@@ -123,9 +123,9 @@ namespace GHCW_FE.Pages.Admin
             var img = Request.Form.Files["image"];
             Product.CategoryId = Convert.ToInt32(Request.Form["categoryId"]);
             Product.Size = Request.Form["size"];
-            Product.IsForRent = Request.Form["isForRent"] == "on";
+            Product.IsForRent = Request.Form["isForRent"] == "true";
             Product.Quantity = Convert.ToInt32(Request.Form["quantity"]);
-            Product.IsAvailable = Request.Form["isAvailable"] == "on";
+            Product.IsAvailable = Request.Form["isAvailable"] == "true";
 
             if (!ModelState.IsValid)
             {

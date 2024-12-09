@@ -55,7 +55,6 @@ namespace GHCW_FE.Pages.Admin
                 TempData["ErrorMessage"] = "Bạn không có quyền truy cập trang này.";
                 return RedirectToPage("/Authentications/Login");
             }
-
             SearchTerm = searchTerm;
             OrderOption = orderOption;
             SortOption = sortOption;

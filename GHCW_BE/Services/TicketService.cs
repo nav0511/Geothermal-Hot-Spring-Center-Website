@@ -42,6 +42,8 @@ namespace GHCW_BE.Services
             return ticketsDTO;
         }
 
+
+
         public async Task<Ticket> GetTicketById(int id)
         {
             return await _context.Tickets.FirstOrDefaultAsync(t => t.Id == id);
