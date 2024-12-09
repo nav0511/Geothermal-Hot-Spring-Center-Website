@@ -18,7 +18,6 @@ namespace GHCW_BE.DTOs
 
 
         public virtual CustomerDTO Customer { get; set; } = null!;
-        public virtual Discount? DiscountCodeNavigation { get; set; }
         public virtual AccountDTO? Receptionist { get; set; }
         public virtual AccountDTO? Sale { get; set; }
         public virtual DiscountDTO? DiscountCodeNavigation { get; set; }
