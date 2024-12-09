@@ -110,7 +110,7 @@ namespace GHCW_FE.Pages.Admin
                     Title = Request.Form["title"],
                     DiscountId = null,
                     UploadDate = DateTime.Now,
-                    IsActive = Request.Form["isActive"] == "on",
+                    IsActive = Request.Form["isActive"] == "true",
                     Description = Request.Form["description"],
                     Image = Request.Form.Files["image"],
                 };
@@ -122,7 +122,7 @@ namespace GHCW_FE.Pages.Admin
                     Title = Request.Form["title"],
                     DiscountId = discount,
                     UploadDate = DateTime.Now,
-                    IsActive = Request.Form["isActive"] == "on",
+                    IsActive = Request.Form["isActive"] == "true",
                     Description = Request.Form["description"],
                     Image = Request.Form.Files["image"],
                 };

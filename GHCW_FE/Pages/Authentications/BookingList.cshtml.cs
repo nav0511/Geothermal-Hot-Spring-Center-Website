@@ -2,6 +2,7 @@
 using GHCW_FE.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 
 namespace GHCW_FE.Pages.Authentications
@@ -35,32 +36,16 @@ namespace GHCW_FE.Pages.Authentications
                 TempData["ErrorMessage"] = "Bạn cần đăng nhập để xem thông tin.";
                 return RedirectToPage("/Authentications/Login");
             }
-            _accService.SetAccessToken(accessToken);
 
-            var (statusCode, userProfile) = await _accService.UserProfile(accessToken);
-            if (userProfile?.Role > 5)
-            {
-                await _authService.LogoutAsync();
-                TempData["ErrorMessage"] = "Bạn không có quyền truy cập thông tin này.";
-                return RedirectToPage("/Authentications/Login");
-            }
-            else if (statusCode == HttpStatusCode.NotFound)
-            {
-                await _authService.LogoutAsync();
-                TempData["ErrorMessage"] = "Không tìm thấy người dùng này.";
-                return RedirectToPage("/Authentications/Login");
-            }
-            else if (statusCode != HttpStatusCode.OK)
-            {
-                await _authService.LogoutAsync();
-                TempData["ErrorMessage"] = "Đã xảy ra lỗi khi lấy thông tin người dùng.";
-                return RedirectToPage("/Authentications/Login");
-            }
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(accessToken);
+            var roleClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "Role");
+            var idClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "ID");
 
             CurrentPage = pageNumber;
             int skip = (pageNumber - 1) * PageSize;
 
-            var (statusCode2, totalNewsCount) = await _ticketService.GetTotalBooking(userProfile?.Role, userProfile?.Id);
+            var (statusCode2, totalNewsCount) = await _ticketService.GetTotalBooking(accessToken);
             if (statusCode2 != HttpStatusCode.OK)
             {
                 TempData["ErrorMessage"] = "Đã xảy ra lỗi khi lấy tổng số vé đặt chỗ.";
@@ -69,7 +54,7 @@ namespace GHCW_FE.Pages.Authentications
 
             TotalPages = (int)Math.Ceiling((double)totalNewsCount / PageSize);
 
-            var (statusCode1, list) = await _ticketService.GetBookingList($"Ticket", userProfile?.Role, userProfile?.Id);
+            var (statusCode1, list) = await _ticketService.GetBookingList(accessToken);
 
             if (statusCode1 == HttpStatusCode.NotFound)
             {

@@ -56,28 +56,9 @@ namespace GHCW_FE.Pages.Admin
                 TempData["ErrorMessage"] = "Bạn không có quyền truy cập trang này.";
                 return RedirectToPage("/Authentications/Login");
             }
-            _accService.SetAccessToken(accessToken);
+            var idClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "ID");
 
-            var (statusCode, userProfile) = await _accService.UserProfile(accessToken);
-            if (userProfile?.Role != 4)
-            {
-                await _authService.LogoutAsync();
-                TempData["ErrorMessage"] = "Bạn không có quyền truy cập thông tin này.";
-                return RedirectToPage("/Authentications/Login");
-            }
-            else if (statusCode == HttpStatusCode.NotFound)
-            {
-                await _authService.LogoutAsync();
-                TempData["ErrorMessage"] = "Không tìm thấy người dùng này.";
-                return RedirectToPage("/Authentications/Login");
-            }
-            else if (statusCode != HttpStatusCode.OK)
-            {
-                await _authService.LogoutAsync();
-                TempData["ErrorMessage"] = "Đã xảy ra lỗi khi lấy thông tin người dùng.";
-                return RedirectToPage("/Authentications/Login");
-            }
-            ReceptionistID = userProfile.Id;
+            ReceptionistID = int.Parse(idClaim.Value);
 
             SearchTerm = searchTerm;
             OrderOption = orderOption;
@@ -85,7 +66,7 @@ namespace GHCW_FE.Pages.Admin
             CurrentPage = pageNumber;
             int skip = (pageNumber - 1) * PageSize;
 
-            var (statusCode1, tickets) = await _ticketService.GetBookingList("Ticket", userProfile.Role, userProfile.Id);
+            var (statusCode1, tickets) = await _ticketService.GetBookingList(accessToken);
             if (statusCode1 != HttpStatusCode.OK || tickets == null)
             {
                 TempData["ErrorMessage"] = "Không lấy được danh sách vé.";

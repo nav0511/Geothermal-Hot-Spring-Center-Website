@@ -112,7 +112,7 @@ namespace GHCW_FE.Pages.Admin
             Service.Time = Request.Form["time"];
             Service.Description = Request.Form["description"];
             var img = Request.Form.Files["image"];
-            Service.IsActive = Request.Form["isActive"] == "on";
+            Service.IsActive = Request.Form["isActive"] == "true";
 
 
             if (!ModelState.IsValid)

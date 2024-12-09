@@ -101,7 +101,7 @@ namespace GHCW_FE.Pages.Admin
                 StartDate = Convert.ToDateTime(Request.Form["startDate"]),
                 EndDate = Convert.ToDateTime(Request.Form["endDate"]),
                 Description = Request.Form["description"],
-                IsAvailable  = Request.Form["isAvailable"] == "on"
+                IsAvailable  = Request.Form["isAvailable"] == "true"
             };
 
 

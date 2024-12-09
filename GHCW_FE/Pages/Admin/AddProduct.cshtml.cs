@@ -109,7 +109,7 @@ namespace GHCW_FE.Pages.Admin
                 Size = Request.Form["size"],
                 IsForRent = Request.Form["isForRent"] == "on",
                 Quantity = Convert.ToInt32(Request.Form["quantity"]),
-                IsAvailable = Request.Form["isAvailable"] == "on",
+                IsAvailable = Request.Form["isAvailable"] == "true",
                 Img = Request.Form.Files["image"]
             };
 
