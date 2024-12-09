@@ -48,13 +48,13 @@ namespace GHCW_FE.Pages.Admin
             var handler = new JwtSecurityTokenHandler();
             var jwtToken = handler.ReadJwtToken(accessToken);
             var roleClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "Role");
+            var idClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "ID");
             if (roleClaim != null && (int.Parse(roleClaim.Value) > 3 || int.Parse(roleClaim.Value) == 2))
             {
                 await _authService.LogoutAsync();
                 TempData["ErrorMessage"] = "Bạn không có quyền truy cập trang này.";
                 return RedirectToPage("/Authentications/Login");
             }
-            
             SearchTerm = searchTerm;
             OrderOption = orderOption;
             SortOption = sortOption;
@@ -65,15 +65,13 @@ namespace GHCW_FE.Pages.Admin
             if (statusCode1 != HttpStatusCode.OK || tickets == null)
             {
                 TempData["ErrorMessage"] = "Không lấy được danh sách vé.";
-                tickets = new List<TicketDTO>();
                 return RedirectToPage();
             }
-
 
             if (!string.IsNullOrEmpty(SearchTerm))
             {
                 tickets = tickets?.Where(t =>
-                   (t.Receptionist.Name != null && t.Receptionist.Name.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase)) ||
+                   (t.Receptionist?.Name != null && t.Receptionist.Name.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase)) ||
                    (t.Customer.Name != null && t.Customer.Name.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase))
                ).ToList();
             }

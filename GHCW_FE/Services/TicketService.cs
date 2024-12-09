@@ -1,5 +1,6 @@
 ﻿using GHCW_FE.DTOs;
 using Microsoft.AspNetCore.Http;
+using System;
 using System.Net;
 
 namespace GHCW_FE.Services
@@ -8,15 +9,14 @@ namespace GHCW_FE.Services
     {
         public async Task<(HttpStatusCode StatusCode, List<TicketDTO>?)> GetBookingList(string accessToken)
         {
-            var url = "Ticket/List";
-            var tickets = await GetData<List<TicketDTO>>(url, null, accessToken);
-            return tickets;
+            var result = await GetData<List<TicketDTO>>("Ticket", null, accessToken);
+            return result;
         }
         public async Task<(HttpStatusCode StatusCode, int Total)> GetTotalBooking(string accessToken)
         {
             string url = "Ticket/Total";
-            var total = await GetData<int>(url, null, accessToken);
-            return total;
+            var result = await GetData<int>(url, null, accessToken);
+            return result;
         }
 
         public async Task<HttpStatusCode> UpdateCheckinStatus(TicketDTO2 ticket)

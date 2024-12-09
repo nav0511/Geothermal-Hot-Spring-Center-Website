@@ -50,14 +50,13 @@ namespace GHCW_FE.Pages.Admin
             var handler = new JwtSecurityTokenHandler();
             var jwtToken = handler.ReadJwtToken(accessToken);
             var roleClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "Role");
+            var idClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "ID");
             if (roleClaim != null && int.Parse(roleClaim.Value) != 4)
             {
                 await _authService.LogoutAsync();
                 TempData["ErrorMessage"] = "Bạn không có quyền truy cập trang này.";
                 return RedirectToPage("/Authentications/Login");
             }
-            var idClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "ID");
-
             ReceptionistID = int.Parse(idClaim.Value);
 
             SearchTerm = searchTerm;

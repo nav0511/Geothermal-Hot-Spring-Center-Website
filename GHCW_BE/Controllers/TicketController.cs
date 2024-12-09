@@ -32,9 +32,23 @@ namespace GHCW_BE.Controllers
             _accountService = accountService;
         }
 
-        [HttpGet("List")]
         [Authorize]
+        [HttpGet]
         public async Task<IActionResult> GetBookingList()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var roleClaim = identity?.FindFirst("Role");
+            var idClaim = identity?.FindFirst("ID");
+
+            var list = await _ticketService.GetListBooking(int.Parse(roleClaim.Value),int.Parse(idClaim.Value));
+            }
+
+            return Ok(list);
+        }
+
+        [Authorize]
+        [HttpGet("Total")]
+        public async Task<IActionResult> GetTotalBooking()
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             var roleClaim = identity?.FindFirst("Role");
@@ -43,28 +57,9 @@ namespace GHCW_BE.Controllers
             var list = await _ticketService.GetListBooking(int.Parse(roleClaim.Value), int.Parse(idClaim.Value));
             if (list == null)
             {
-                return NotFound("Không có danh sách vé nào.");
-            }
-
-            return Ok(list);
-        }
-
-        [HttpGet("Total")]
-        [Authorize]
-        public async Task<IActionResult> GetTotalBooking()
-        {
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-            var roleClaim = identity?.FindFirst("Role");
-            var idClaim = identity?.FindFirst("ID");
-
-            var list = _ticketService.GetListBooking(int.Parse(roleClaim.Value), int.Parse(idClaim.Value));
-            if (list == null)
-            {
                 return Ok(0); 
             }
-
-            //var count = await list.CountAsync();
-            return Ok();
+            return Ok(list.Count());
         }
 
         [HttpGet("{id}")]

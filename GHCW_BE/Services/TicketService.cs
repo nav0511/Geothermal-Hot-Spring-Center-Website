@@ -23,28 +23,23 @@ namespace GHCW_BE.Services
 
 
 
-        public async Task<List<TicketDTO>> GetListBooking(int role, int? id)
+        public async Task<List<TicketDTO>> GetListBooking(int role, int? uId)
         {
-            var tickets = await _context.Tickets.Include(t => t.Customer).Include(t => t.Receptionist).Include(t => t.DiscountCodeNavigation).ToListAsync();
-            //if(role == 3)
-            //{
-            //    tickets = await _context.Tickets.Include(t => t.Customer).Include(t => t.Receptionist).Where(t => t.SaleId == id).ToListAsync();
-            //}
-            //else if (role == 5)
-            //{
-            //    tickets = await _context.Tickets.Include(t => t.Customer).Include(t => t.Receptionist).Where(t => t.Customer.AccountId == id).ToListAsync();
-            //}
-            //else if(role == 4)
-            //{
-            //    tickets = await _context.Tickets.Include(t => t.Customer).Include(t => t.Receptionist).Where(t => t.IsActive).ToListAsync();
-            //}
-            //else if(role <= 1)
-            //{
-            //    tickets = await _context.Tickets.Include(t => t.Customer).Include(t => t.Receptionist).ToListAsync();
-            //}
-
-            var ticketDTOs = _mapper.Map<List<Ticket>, List<TicketDTO>>(tickets);
-            return ticketDTOs;
+            var tickets = await _context.Tickets.Include(c => c.Customer).Include(a => a.Receptionist).Include(d => d.DiscountCodeNavigation).Include(s => s.Sale).ToListAsync();
+            if (role == 3)
+            {
+                tickets = tickets.Where(t => t.SaleId == uId).ToList();
+            }
+            else if (role == 5)
+            {
+                tickets = tickets.Where(t => t.Customer.AccountId == uId && t.IsActive).ToList();
+            }
+            else if (role == 4)
+            {
+                tickets = tickets.Where(t => t.IsActive).ToList();
+            }
+            var ticketsDTO = _mapper.Map<List<Ticket>, List<TicketDTO>>(tickets);
+            return ticketsDTO;
         }
 
 

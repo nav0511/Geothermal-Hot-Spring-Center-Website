@@ -21,6 +21,7 @@ namespace GHCW_BE.DTOs
         public virtual Discount? DiscountCodeNavigation { get; set; }
         public virtual AccountDTO? Receptionist { get; set; }
         public virtual AccountDTO? Sale { get; set; }
+        public virtual DiscountDTO? DiscountCodeNavigation { get; set; }
     }
 
     public class TicketDTO2
