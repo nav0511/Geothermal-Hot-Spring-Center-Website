@@ -51,7 +51,6 @@ namespace GHCW_FE.DTOs
     public class Subscriber
     {
         [Required(ErrorMessage = "Yêu cầu nhập email.")]
-        [EmailAddress(ErrorMessage = "Không đúng định dạng email.")]
         public string Email { get; set; } = null!;
         public bool IsEmailNotify { get; set; }
     }
