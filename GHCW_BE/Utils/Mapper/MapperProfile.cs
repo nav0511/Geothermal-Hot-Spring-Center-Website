@@ -51,7 +51,7 @@ namespace GHCW_BE.Utils.Mapper
             CreateMap<ProductDTOForUpdate, Product>();
             CreateMap<CategoryDTO, Category>();
             CreateMap<ScheduleDTO, Schedule>();
-            CreateMap<TicketDTO, TicketDTO>();
+            CreateMap<TicketDTO, Ticket>();
             CreateMap<TicketDTOForPayment, Ticket>();
             CreateMap<TicketDTOForStaff, Ticket>();
             CreateMap<TicketDetailDTO, TicketDetail>();
