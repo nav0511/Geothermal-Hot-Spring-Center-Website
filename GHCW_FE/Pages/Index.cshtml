@@ -1,8 +1,14 @@
 ﻿@page "{reload?}"
 @using GHCW_FE.DTOs
+@using System.Text.Json
 @model IndexModel
 @{
     ViewData["Title"] = "Trang chủ";
+    AccountDTO? account = null;
+    if (HttpContext.Session.GetString("acc") != null)
+    {
+        account = JsonSerializer.Deserialize<AccountDTO>(HttpContext.Session.GetString("acc"));
+    }
 }
 
 <!-- Carousel Start -->
@@ -15,7 +21,10 @@
                     <div class="p-3" style="max-width: 900px;">
                         <h4 class="text-white text-uppercase mb-md-3">Tham quan & Nghỉ dưỡng</h4>
                         <h1 class="display-3 text-white mb-md-4">Trải nghiệm nghỉ dưỡng cao cấp</h1>
-                        <a asp-page="/Booking/Index" class="btn btn-primary py-md-3 px-md-5 mt-2">Đặt vé ngay</a>
+                        @if(account?.Role == 5)
+                        {
+                            <a asp-page="/Booking/Index" class="btn btn-primary py-md-3 px-md-5 mt-2">Đặt vé ngay</a>
+                        }
                     </div>
                 </div>
             </div>
@@ -24,23 +33,26 @@
 </div>
 <!-- Carousel End -->
 <!-- Booking Start -->
-<div class="container-fluid booking mt-5 pb-5">
-    <div class="container pb-5">
-        <div class="bg-light shadow" style="padding: 30px;">
-            <div class="d-flex justify-content-center align-items-center" style="min-height:60px;">
-                <div class="d-flex align-items-center">
-                    <label>Chọn ngày sử dụng dịch vụ:&nbsp;&nbsp;</label>
-                    <div class="date" id="date1" data-target-input="nearest">
-                        <input id="date" type="date" class="form-control p-4" placeholder="Chọn ngày" style="width: 100%;" />
+@if(account?.Role == 5)
+{
+    <div class="container-fluid booking mt-5 pb-5">
+        <div class="container pb-5">
+            <div class="bg-light shadow" style="padding: 30px;">
+                <div class="d-flex justify-content-center align-items-center" style="min-height:60px;">
+                    <div class="d-flex align-items-center">
+                        <label>Chọn ngày sử dụng dịch vụ:&nbsp;&nbsp;</label>
+                        <div class="date" id="date1" data-target-input="nearest">
+                            <input id="date" type="date" class="form-control p-4" placeholder="Chọn ngày" style="width: 100%;" />
+                        </div>
                     </div>
-                </div>
-                <div class="ml-2">
-                    <button class="btn btn-primary btn-block" type="button" onclick="saveBookingDate()" style="height: 47px;">Đặt vé</button>
+                    <div class="ml-2">
+                        <button class="btn btn-primary btn-block" type="button" onclick="saveBookingDate()" style="height: 47px;">Đặt vé</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+}
 <!-- Booking End -->
 <!-- About Start -->
 <div class="container-fluid py-5">
