@@ -49,14 +49,14 @@
                 <td>@billDetail.BillId</td>
                 <td>@billDetail.Product.Name</td>
                 <td>@billDetail.Quantity</td>
-                <td>@String.Format("{0:N0} VNĐ", (int)billDetail.Price * 1000)</td>
+                <td>@String.Format("{0:N0} VNĐ", (int)billDetail.Price)</td>
                 <td>@discountValue%</td>
-                <td>@String.Format("{0:N0} VNĐ", (int)total * 1000)</td>
+                <td>@String.Format("{0:N0} VNĐ", (int)total)</td>
             </tr>
         }
         <tr>
             <td colspan="5" style="text-align: right; font-weight: bold;">Tổng cộng:</td>
-            <td style="font-weight: bold;">@String.Format("{0:N0} VNĐ", Model.TotalAmount * 1000)</td>
+            <td style="font-weight: bold;">@String.Format("{0:N0} VNĐ", Model.TotalAmount)</td>
         </tr>
     </tbody>
 </table>

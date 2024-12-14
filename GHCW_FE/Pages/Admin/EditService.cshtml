@@ -33,9 +33,10 @@
             </div>
 
             <div>
-                <label for="price">Giá dịch vụ: <span>(Đơn vị tính nghìn đồng)</span></label>
-                <input type="number" id="price" name="price" step="0.01" required value="@Model.Service?.Price" />
+                <label for="price">Giá dịch vụ: <span>(Đơn vị tính: VNĐ)</span></label>
+                <input type="number" id="price" name="price" required value="@Model.Service?.Price">
             </div>
+
 
             <div>
                 <label for="time">Thời gian thực hiện:</label>
@@ -70,6 +71,50 @@
 <div class="back-button-container">
     <button class="btn-back" onclick="window.location.href='/Admin/ServiceManagement'"> << Quay lại</button>
 </div>
+
+<script>
+    document.getElementById("price").addEventListener("input", function () {
+        const priceInput = document.getElementById("price");
+        const priceValue = priceInput.value.trim();
+        const priceNumber = parseInt(priceValue);
+
+        if (!priceValue || isNaN(priceNumber) || priceNumber < 1000 || priceNumber % 1000 !== 0) {
+            priceInput.setCustomValidity("Giá dịch vụ phải từ 1.000 VND trở lên và không lẻ (ví dụ: 1.000, 5.000, 100.000).");
+        } else {
+            priceInput.setCustomValidity("");
+        }
+    });
+
+    document.getElementById("time").addEventListener("input", function () {
+        const timeInput = document.getElementById("time");
+        let timeValue = timeInput.value.trim();
+
+        if (!timeValue.endsWith("Phút")) {
+            timeValue = timeValue.replace(/[^0-9]/g, "");
+            if (timeValue) {
+                timeInput.value = timeValue + " Phút";
+            }
+        }
+
+        const timeNumber = parseInt(timeValue.replace("Phút", "").trim());
+        if (isNaN(timeNumber) || timeNumber <= 0) {
+            timeInput.setCustomValidity("Thời gian phải là số nguyên dương (ví dụ: 10, 15, 30, 60 phút).");
+        } else {
+            timeInput.setCustomValidity("");
+        }
+    });
+
+    document.querySelector("form").addEventListener("submit", function (e) {
+        const priceInput = document.getElementById("price");
+        const timeInput = document.getElementById("time");
+
+        if (!priceInput.checkValidity() && !timeInput.checkVisibility()) {
+            e.preventDefault();
+            priceInput.reportValidity();
+            timeInput.reportValidity();
+        }
+    });
+</script>
 
 <style>
     .btn-add {

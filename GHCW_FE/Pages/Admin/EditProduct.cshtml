@@ -34,7 +34,7 @@
 
             <div>
                 <label for="price">Giá sản phẩm: <span>(Đơn vị tính nghìn đồng)</span></label>
-                <input type="number" id="price" name="price" value="@Model.Product.Price" step="0.01" required />
+                <input type="number" id="price" name="price" value="@Model.Product.Price" required />
             </div>
 
             <div>
@@ -99,6 +99,43 @@
 <div class="back-button-container">
     <button class="btn-back" onclick="window.location.href='/Admin/ProductManagement'"> << Quay lại</button>
 </div>
+
+<script>
+    document.getElementById("price").addEventListener("input", function () {
+        const priceInput = document.getElementById("price");
+        const priceValue = priceInput.value.trim();
+        const priceNumber = parseInt(priceValue);
+
+        if (!priceValue || isNaN(priceNumber) || priceNumber < 1000 || priceNumber % 1000 !== 0) {
+            priceInput.setCustomValidity("Giá dịch vụ phải từ 1.000 VND trở lên và không lẻ (ví dụ: 1.000, 5.000, 100.000).");
+        } else {
+            priceInput.setCustomValidity("");
+        }
+    });
+
+    document.getElementById("quantity").addEventListener("input", function () {
+        const quantityInput = document.getElementById("quantity");
+        const quantityValue = quantityInput.value.trim();
+        const quantityNumber = parseInt(quantityValue);
+
+        if (isNaN(quantityNumber) || quantityNumber < 0) {
+            quantityInput.setCustomValidity("Số lượng phải lớn hơn hoặc bằng 0.");
+        } else {
+            quantityInput.setCustomValidity("");
+        }
+    });
+
+    document.querySelector("form").addEventListener("submit", function (e) {
+        const priceInput = document.getElementById("price");
+        const quantityInput = document.getElementById("quantity");
+
+        if (!priceInput.checkValidity() && !quantityInput.checkVisibility()) {
+            e.preventDefault();
+            priceInput.reportValidity();
+            quantityInput.reportValidity();
+        }
+    });
+</script>
 
 <style>
     .btn-add {

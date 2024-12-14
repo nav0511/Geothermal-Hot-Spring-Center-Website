@@ -60,14 +60,14 @@
                 <td>@ticketDetail.Service.Name</td>
                 <td>@ticketDetail.Ticket.BookDate.ToString("dd/MM/yyyy")</td>
                 <td>@ticketDetail.Quantity</td>
-                <td>@String.Format("{0:N0} VNĐ", (int)ticketDetail.Price * 1000)</td>
+                <td>@String.Format("{0:N0} VNĐ", (int)ticketDetail.Price)</td>
                 <td>@discountValue%</td>
-                <td>@String.Format("{0:N0} VNĐ", (int)total * 1000)</td>
+                <td>@String.Format("{0:N0} VNĐ", (int)total)</td>
             </tr>
         }
         <tr>
             <td colspan="6" style="text-align: right; font-weight: bold;">Tổng cộng:</td>
-            <td style="font-weight: bold;">@String.Format("{0:N0} VNĐ", Model.TotalAmount * 1000)</td>
+            <td style="font-weight: bold;">@String.Format("{0:N0} VNĐ", Model.TotalAmount)</td>
         </tr>
     </tbody>
 </table>
