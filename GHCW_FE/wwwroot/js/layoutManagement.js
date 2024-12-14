@@ -157,3 +157,20 @@ if (togglePasswordButton) {
         eyeIcon.classList.toggle('fa-eye-slash');
     });
 }
+
+const priceInput = document.getElementById("price");
+priceInput.addEventListener("input", function () {
+    // Loại bỏ ký tự không phải số
+    let sanitizedValue = priceInput.value.replace(/\D/g, "");
+    priceInput.value = sanitizedValue;
+
+    // Chuyển đổi giá trị sang số
+    const priceNumber = parseInt(sanitizedValue, 10);
+
+    // Kiểm tra điều kiện hợp lệ
+    if (!sanitizedValue || isNaN(priceNumber) || priceNumber < 1000 || priceNumber % 100 !== 0) {
+        priceInput.setCustomValidity("Giá dịch vụ phải từ 1.000 VND trở lên và là bội số của 1.00 (ví dụ: 1.000, 1.500, 100.300).");
+    } else {
+        priceInput.setCustomValidity("");
+    }
+});

@@ -33,7 +33,7 @@
 
             <div>
                 <label for="price">Giá dịch vụ: <span>(Đơn vị tính: VNĐ)</span></label>
-                <input type="number" id="price" name="price" min="1000" step="100" required/>
+                <input type="number" id="price" name="price" min="1000" value="1000" step="100" required />
             </div>
 
             <div>
@@ -70,18 +70,6 @@
 </div>
 
 <script>
-    document.getElementById("price").addEventListener("input", function () {
-        const priceInput = document.getElementById("price");
-        const priceValue = priceInput.value.trim();
-        const priceNumber = parseInt(priceValue);
-
-        if (!priceValue || isNaN(priceNumber) || priceNumber < 1000 || priceNumber % 100 !== 0) {
-            priceInput.setCustomValidity("Giá dịch vụ phải từ 1.000 VND trở lên và không lẻ (ví dụ: 1.000, 5.000, 100.000).");
-        } else {
-            priceInput.setCustomValidity("");
-        }
-    });
-
     document.getElementById("time").addEventListener("input", function () {
         const timeInput = document.getElementById("time");
         let timeValue = timeInput.value.trim();

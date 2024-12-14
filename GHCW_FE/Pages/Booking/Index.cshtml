@@ -31,7 +31,7 @@
                     <div class="card-body">
                         <h5 class="card-title service-title">@service.Name</h5>
                         <div class="card-text service-description">@Html.Raw(service.Description)</div>
-                        <p class="service-price">Giá: <strong>@String.Format("{0:N0}", service.Price * 1000) VNĐ</strong></p>
+                        <p class="service-price">Giá: <strong>@String.Format("{0:N0}", service.Price) VNĐ</strong></p>
                         <div class="quantity-wrapper">
                             <label>Số lượng:</label>
                             <input type="number" min="1" value="1" id="quantity-@service.Id" class="form-control quantity-input" oninput="validateQuantity(this)" />
