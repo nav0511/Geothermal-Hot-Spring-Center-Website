@@ -3,20 +3,20 @@
   "WorkspaceRootPath": "E:\\New folder\\Geothermal-Hot-Spring-Center-Website\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{D63C82C9-B3F6-491B-86E2-D2EE2709DC52}|GHCW_FE\\GHCW_FE.csproj|e:\\new folder\\geothermal-hot-spring-center-website\\ghcw_fe\\pages\\admin\\addservice.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{D63C82C9-B3F6-491B-86E2-D2EE2709DC52}|GHCW_FE\\GHCW_FE.csproj|solutionrelative:ghcw_fe\\pages\\admin\\addservice.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{D63C82C9-B3F6-491B-86E2-D2EE2709DC52}|GHCW_FE\\GHCW_FE.csproj|e:\\new folder\\geothermal-hot-spring-center-website\\ghcw_fe\\pages\\admin\\addproduct.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D63C82C9-B3F6-491B-86E2-D2EE2709DC52}|GHCW_FE\\GHCW_FE.csproj|solutionrelative:ghcw_fe\\pages\\admin\\addproduct.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{D63C82C9-B3F6-491B-86E2-D2EE2709DC52}|GHCW_FE\\GHCW_FE.csproj|e:\\new folder\\geothermal-hot-spring-center-website\\ghcw_fe\\pages\\admin\\editproduct.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{D63C82C9-B3F6-491B-86E2-D2EE2709DC52}|GHCW_FE\\GHCW_FE.csproj|solutionrelative:ghcw_fe\\pages\\admin\\editproduct.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D63C82C9-B3F6-491B-86E2-D2EE2709DC52}|GHCW_FE\\GHCW_FE.csproj|e:\\new folder\\geothermal-hot-spring-center-website\\ghcw_fe\\pages\\admin\\addproduct.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{D63C82C9-B3F6-491B-86E2-D2EE2709DC52}|GHCW_FE\\GHCW_FE.csproj|solutionrelative:ghcw_fe\\pages\\admin\\addproduct.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{D63C82C9-B3F6-491B-86E2-D2EE2709DC52}|GHCW_FE\\GHCW_FE.csproj|e:\\new folder\\geothermal-hot-spring-center-website\\ghcw_fe\\pages\\admin\\editservice.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{D63C82C9-B3F6-491B-86E2-D2EE2709DC52}|GHCW_FE\\GHCW_FE.csproj|solutionrelative:ghcw_fe\\pages\\admin\\editservice.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D63C82C9-B3F6-491B-86E2-D2EE2709DC52}|GHCW_FE\\GHCW_FE.csproj|e:\\new folder\\geothermal-hot-spring-center-website\\ghcw_fe\\pages\\admin\\addservice.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D63C82C9-B3F6-491B-86E2-D2EE2709DC52}|GHCW_FE\\GHCW_FE.csproj|solutionrelative:ghcw_fe\\pages\\admin\\addservice.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{D63C82C9-B3F6-491B-86E2-D2EE2709DC52}|GHCW_FE\\GHCW_FE.csproj|e:\\new folder\\geothermal-hot-spring-center-website\\ghcw_fe\\pages\\admin\\editservice.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -535,17 +535,17 @@
         },
         {
           "DockedWidth": 335,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "AddService.cshtml",
               "DocumentMoniker": "E:\\New folder\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\Pages\\Admin\\AddService.cshtml",
               "RelativeDocumentMoniker": "GHCW_FE\\Pages\\Admin\\AddService.cshtml",
               "ToolTip": "E:\\New folder\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\Pages\\Admin\\AddService.cshtml",
               "RelativeToolTip": "GHCW_FE\\Pages\\Admin\\AddService.cshtml",
-              "ViewState": "AQIAADwAAAAAAAAAAAAAAGMAAAAsAAAA",
+              "ViewState": "AQIAAA8AAAAAAAAAAAAAACIAAABXAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2024-11-04T15:41:47.252Z",
               "IsPinned": true,
@@ -553,26 +553,26 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "EditService.cshtml",
               "DocumentMoniker": "E:\\New folder\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\Pages\\Admin\\EditService.cshtml",
               "RelativeDocumentMoniker": "GHCW_FE\\Pages\\Admin\\EditService.cshtml",
               "ToolTip": "E:\\New folder\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\Pages\\Admin\\EditService.cshtml",
               "RelativeToolTip": "GHCW_FE\\Pages\\Admin\\EditService.cshtml",
-              "ViewState": "AQIAAFEAAAAAAAAAAAAAAG4AAABKAAAA",
+              "ViewState": "AQIAABIAAAAAAAAAAAAAAG4AAABKAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2024-12-05T05:04:49.247Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "AddProduct.cshtml",
               "DocumentMoniker": "E:\\New folder\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\Pages\\Admin\\AddProduct.cshtml",
               "RelativeDocumentMoniker": "GHCW_FE\\Pages\\Admin\\AddProduct.cshtml",
               "ToolTip": "E:\\New folder\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\Pages\\Admin\\AddProduct.cshtml",
               "RelativeToolTip": "GHCW_FE\\Pages\\Admin\\AddProduct.cshtml",
-              "ViewState": "AQIAAG4AAAAAAAAAAAAwwIkAAAAHAAAA",
+              "ViewState": "AQIAAAgAAAAAAAAAAAAwwBgAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2024-11-05T17:35:24.413Z",
               "EditorCaption": ""
@@ -585,7 +585,7 @@
               "RelativeDocumentMoniker": "GHCW_FE\\Pages\\Admin\\EditProduct.cshtml",
               "ToolTip": "E:\\New folder\\Geothermal-Hot-Spring-Center-Website\\GHCW_FE\\Pages\\Admin\\EditProduct.cshtml",
               "RelativeToolTip": "GHCW_FE\\Pages\\Admin\\EditProduct.cshtml",
-              "ViewState": "AQIAAGoAAAAAAAAAAAAAAIYAAAArAAAA",
+              "ViewState": "AQIAAA8AAAAAAAAAAAAAACIAAAARAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2024-12-05T04:45:03.053Z",
               "EditorCaption": ""
@@ -600,8 +600,7 @@
               "RelativeToolTip": "GHCW_FE\\Pages\\Admin\\EditService.cshtml.cs",
               "ViewState": "AQIAAGcAAAAAAAAAAAAkwG8AAAAvAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-31T17:37:19.346Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-31T17:37:19.346Z"
             },
             {
               "$type": "Document",
@@ -613,8 +612,7 @@
               "RelativeToolTip": "GHCW_FE\\Pages\\Admin\\AddDiscount.cshtml",
               "ViewState": "AQIAACoAAAAAAAAAAAAAAEEAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-10-31T17:13:58.736Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-31T17:13:58.736Z"
             },
             {
               "$type": "Document",
@@ -626,8 +624,7 @@
               "RelativeToolTip": "GHCW_FE\\Pages\\Admin\\AddCustomer.cshtml",
               "ViewState": "AQIAAAwAAAAAAAAAAAAAAGYAAAAnAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-12-05T16:49:36.999Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-05T16:49:36.999Z"
             },
             {
               "$type": "Document",
@@ -639,8 +636,7 @@
               "RelativeToolTip": "GHCW_FE\\Pages\\Admin\\AddService.cshtml.cs",
               "ViewState": "AQIAAFgAAAAAAAAAAAAkwGUAAAA9AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-30T10:14:47.181Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-30T10:14:47.181Z"
             },
             {
               "$type": "Document",
@@ -652,8 +648,7 @@
               "RelativeToolTip": "GHCW_FE\\Pages\\Admin\\AddAccount.cshtml",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAABkAAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-12-04T09:15:00.671Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-04T09:15:00.671Z"
             },
             {
               "$type": "Document",
@@ -665,8 +660,7 @@
               "RelativeToolTip": "GHCW_FE\\Pages\\Admin\\CheckIn.cshtml",
               "ViewState": "AQIAACsAAAAAAAAAAAAAAEQAAABZAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-12-03T14:02:34.36Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-03T14:02:34.36Z"
             },
             {
               "$type": "Document",
@@ -678,8 +672,7 @@
               "RelativeToolTip": "GHCW_FE\\Pages\\Admin\\BillDetails.cshtml",
               "ViewState": "AQIAACEAAAAAAAAAAAAAADcAAAAJAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-12-03T14:00:53.671Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-03T14:00:53.671Z"
             },
             {
               "$type": "Document",
@@ -691,8 +684,7 @@
               "RelativeToolTip": "GHCW_FE\\Pages\\Admin\\ServiceManagement.cshtml",
               "ViewState": "AQIAAFEAAAAAAAAAAAAAAFUAAABDAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-12-02T20:17:38.501Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-02T20:17:38.501Z"
             },
             {
               "$type": "Document",
@@ -704,8 +696,7 @@
               "RelativeToolTip": "GHCW_FE\\Pages\\Admin\\ProductManagement.cshtml",
               "ViewState": "AQIAAFIAAAAAAAAAAAAAAFsAAABDAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-12-02T20:43:24.731Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-02T20:43:24.731Z"
             },
             {
               "$type": "Document",
@@ -717,8 +708,7 @@
               "RelativeToolTip": "GHCW_FE\\Pages\\Admin\\TicketManagement.cshtml",
               "ViewState": "AQIAAFcAAAAAAAAAAAAAAFUAAAAYAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-12-05T12:00:20.806Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-05T12:00:20.806Z"
             },
             {
               "$type": "Document",
@@ -730,8 +720,7 @@
               "RelativeToolTip": "GHCW_FE\\Pages\\Authentications\\BookingList.cshtml",
               "ViewState": "AQIAADwAAAAAAAAAAAAAAE8AAABqAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-11-09T13:39:50.475Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-09T13:39:50.475Z"
             },
             {
               "$type": "Document",
@@ -743,8 +732,7 @@
               "RelativeToolTip": "GHCW_FE\\Pages\\Authentications\\BookingDetails.cshtml",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAADAAAABXAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-11-12T10:53:53.609Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-12T10:53:53.609Z"
             },
             {
               "$type": "Document",
@@ -756,8 +744,7 @@
               "RelativeToolTip": "GHCW_BE\\Services\\TicketService.cs",
               "ViewState": "AQIAAA4AAAAAAAAAAAAlwCsAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-01T13:15:38.689Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-01T13:15:38.689Z"
             },
             {
               "$type": "Document",
