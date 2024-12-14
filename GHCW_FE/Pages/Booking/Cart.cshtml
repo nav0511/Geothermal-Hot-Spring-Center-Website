@@ -121,7 +121,7 @@
 
             cart.forEach((item, index) => {
                 const serviceName = getServiceName(item.serviceId);
-                const servicePrice = getServicePrice(item.serviceId) * 1000;
+                const servicePrice = getServicePrice(item.serviceId);
 
                 const itemTotal = item.quantity * servicePrice;
                 cartTotal += itemTotal;
@@ -365,7 +365,6 @@
             margin: 20px 0;
         }
 
-        /* Định dạng nút thanh toán */
         button.btn-success i {
             margin-right: 8px; /* Đảm bảo biểu tượng và text có khoảng cách */
         }
@@ -378,11 +377,10 @@
             font-size: 16px;
         }
 
-        /* Định dạng nút "Quay lại trang đặt vé" trong giỏ hàng */
         #backToBookingButton {
             position: absolute;
-            bottom: 20px; /* Đặt cách đáy của giỏ hàng một khoảng */
-            right: 20px; /* Đặt cách bên phải của giỏ hàng một khoảng */
+            bottom: 20px;
+            right: 20px;
             padding: 12px 20px;
             background-color: #007bff;
             color: white;
@@ -396,7 +394,6 @@
             gap: 8px;
         }
 
-            /* Định dạng nút khi hover */
             #backToBookingButton:hover {
                 background-color: #0056b3;
             }
@@ -409,9 +406,8 @@
             position: relative;
         }
 
-        /* Định dạng nút thanh toán tại quầy */
         button.btn-success i {
-            margin-right: 8px; /* Đảm bảo biểu tượng và text có khoảng cách */
+            margin-right: 8px;
         }
 
     </style>

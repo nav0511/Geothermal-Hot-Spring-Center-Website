@@ -34,7 +34,7 @@
 
             <div>
                 <label for="price">Giá sản phẩm: <span>(Đơn vị tính: VNĐ)</span></label>
-                <input type="number" id="price" name="price" value="@Model.Product.Price" required />
+                <input type="number" id="price" name="price" min="1000" value="@Model.Product.Price" required />
             </div>
 
             <div>
@@ -101,18 +101,6 @@
 </div>
 
 <script>
-    document.getElementById("price").addEventListener("input", function () {
-        const priceInput = document.getElementById("price");
-        const priceValue = priceInput.value.trim();
-        const priceNumber = parseInt(priceValue);
-
-        if (!priceValue || isNaN(priceNumber) || priceNumber < 1000 || priceNumber % 1000 !== 0) {
-            priceInput.setCustomValidity("Giá dịch vụ phải từ 1.000 VND trở lên và không lẻ (ví dụ: 1.000, 5.000, 100.000).");
-        } else {
-            priceInput.setCustomValidity("");
-        }
-    });
-
     document.getElementById("quantity").addEventListener("input", function () {
         const quantityInput = document.getElementById("quantity");
         const quantityValue = quantityInput.value.trim();

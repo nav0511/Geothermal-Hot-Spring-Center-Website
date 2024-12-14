@@ -42,7 +42,7 @@
                     <div class="service-info">
                         <h3>@service.Name</h3>
                         <div class="service-actions">
-                            <p class="price">Giá: @(service.Price * 1000) VND</p>
+                            <p class="price">Giá: @(service.Price) VND</p>
                             <label class="quantity-label">Số lượng:</label>
                             <input type="number" min="1" value="1" id="quantity-@service.Id" class="quantity-input" required oninput="validateQuantity(this)">
                             <button class="btn btn-primary" onclick="addToCart(@service.Id, '@Html.Raw(service.Name.Replace("'", "\\'"))', parseInt(document.getElementById('quantity-@service.Id').value), @service.Price)">Thêm</button>

@@ -34,7 +34,7 @@
 
             <div>
                 <label for="price">Giá dịch vụ: <span>(Đơn vị tính: VNĐ)</span></label>
-                <input type="number" id="price" name="price" required value="@Model.Service?.Price">
+                <input type="number" id="price" name="price" min="1000" required value="@Model.Service?.Price">
             </div>
 
 
