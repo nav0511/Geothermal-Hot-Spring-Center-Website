@@ -125,8 +125,11 @@ namespace GHCW_FE.Pages.Admin
                 return RedirectToPage();
             }
 
-            var currentDate = DateTime.Now.Date;
-            if (ticket.BookDate.Date != currentDate)
+            TimeZoneInfo timeZone = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
+            DateTime localDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZone);
+            var currentDate = DateOnly.FromDateTime(localDateTime);
+            var bookedDate = DateOnly.FromDateTime(ticket.BookDate);
+            if (bookedDate != currentDate)
             {
                 TempData["ErrorMessage"] = "Chỉ được thay đổi trạng thái check-in vào ngày đặt vé.";
                 return RedirectToPage();

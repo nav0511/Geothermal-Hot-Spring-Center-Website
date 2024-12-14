@@ -94,7 +94,7 @@ namespace GHCW_BE.Services
                 return true;
             }
 
-            foreach (var email in users)
+            var emailTasks = users.Select(async email =>
             {
                 var encodedEmail = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(email.Email));
                 var emailDTO = new SendEmailDTO
@@ -103,20 +103,17 @@ namespace GHCW_BE.Services
                     Password = emailSettings.Password,
                     ToEmail = email.Email,
                     Subject = "Tin tức mới từ hệ thống",
-                   
+
                     Body = $"{message}: <strong>{news.Title}</strong>. Nhấn vào đây để xem chi tiết: <a href='{newsUrl}'>Xem tin tức.</a>" +
                     $"<br/> Để hủy nhận thông báo từ chúng tôi, vui lòng bấm vào <a href='{url}/Notification/Subscriber?Email={encodedEmail}'>đây.</a>"
-                   
+
                 };
 
-                bool emailSent = await _helper.SendEmail(emailDTO);
-                if (!emailSent)
-                {
-                    return false;
-                }
-            }
+                return await _helper.SendEmail(emailDTO);
+            });
 
-            return true;
+            var results = await Task.WhenAll(emailTasks);
+            return results.All(result => result);
         }
 
 

@@ -21,7 +21,7 @@
                     <div class="p-3" style="max-width: 900px;">
                         <h4 class="text-white text-uppercase mb-md-3">Tham quan & Nghỉ dưỡng</h4>
                         <h1 class="display-3 text-white mb-md-4">Trải nghiệm nghỉ dưỡng cao cấp</h1>
-                        @if(account?.Role == 5)
+                        @if(account?.Role == 5 || account == null)
                         {
                             <a asp-page="/Booking/Index" class="btn btn-primary py-md-3 px-md-5 mt-2">Đặt vé ngay</a>
                         }
