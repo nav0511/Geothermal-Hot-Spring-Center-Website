@@ -44,9 +44,9 @@
                             <tr>
                                 <td>@ticketDetail.Service.Name</td>
                                 <td>@ticketDetail.Quantity</td>
-                                <td>@String.Format("{0:N0} VNĐ",(int)ticketDetail.Price * 1000)</td>
+                                <td>@String.Format("{0:N0} VNĐ",(int)ticketDetail.Price)</td>
                                 <td>@discountValue%</td>
-                                <td>@String.Format("{0:N0} VNĐ",(int)ticketDetail.Total * 1000)</td>
+                                <td>@String.Format("{0:N0} VNĐ",(int)ticketDetail.Total)</td>
                             </tr>
                         }
 
@@ -54,9 +54,9 @@
                 </table>
 
                 <div class="total-amount">
-                    <h5>Tổng cộng: @String.Format("{0:N0} VNĐ", Model.TotalBeforeDiscount * 1000)</h5>
-                    <p>Giảm giá: -@String.Format("{0:N0} VNĐ", Model.DiscountPrice * 1000)</p>
-                    <h5>Cần thanh toán: @String.Format("{0:N0} VNĐ", Model.TotalAmount * 1000)</h5>
+                    <h5>Tổng cộng: @String.Format("{0:N0} VNĐ", Model.TotalBeforeDiscount)</h5>
+                    <p>Giảm giá: -@String.Format("{0:N0} VNĐ", Model.DiscountPrice)</p>
+                    <h5>Cần thanh toán: @String.Format("{0:N0} VNĐ", Model.TotalAmount)</h5>
 
                 </div>
             }
