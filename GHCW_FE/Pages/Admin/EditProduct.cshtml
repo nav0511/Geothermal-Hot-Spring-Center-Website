@@ -34,7 +34,7 @@
 
             <div>
                 <label for="price">Giá sản phẩm: <span>(Đơn vị tính: VNĐ)</span></label>
-                <input type="number" id="price" name="price" min="1000" value="@Model.Product.Price" required />
+                <input type="number" id="price" name="price" min="1000" step="100" value="@Model.Product.Price" required />
             </div>
 
             <div>
@@ -52,7 +52,7 @@
 
             <div>
                 <label for="quantity">Số lượng:</label>
-                <input type="number" id="quantity" name="quantity" value="@Model.Product.Quantity" required />
+                <input type="number" id="quantity" name="quantity" min="0" value="@Model.Product.Quantity" required />
             </div>
 
             <div>
