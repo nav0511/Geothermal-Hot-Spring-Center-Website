@@ -63,11 +63,11 @@
             <input type="hidden" id="cartData" name="cartData" />
             <div class="discount-section" style="margin: 1rem 0;">
                 <label for="discountSelect">Chọn mã giảm giá:</label>
-                <select id="discountSelect" asp-for="SelectedDiscountCode">
+                <select id="discountSelect" asp-for="SelectedDiscountCode" onchange="applyDiscount()">
                     <option value="">Không áp dụng mã giảm giá</option>
                     @if (Model.AvailableDiscounts.Any()){
                         @foreach (var discount in Model.AvailableDiscounts){
-                            <option value="@discount.Code">@discount.Code - Giảm @discount.Value %</option>
+                            <option value="@discount.Code" data-value="@discount.Value">@discount.Code - Giảm @discount.Value %</option>
                         }
                     }
                 </select>
@@ -345,6 +345,19 @@
             resultsContainer.innerHTML = ""; // Close dropdown when clicking outside
         }
     });
+
+    function applyDiscount() {
+        const discountSelect = document.getElementById("discountSelect");
+        const discountValue = parseInt(discountSelect.options[discountSelect.selectedIndex].getAttribute("data-value")) || 0; // Giá trị giảm giá (%)
+        const cartTotalElement = document.getElementById("cartTotal");
+        const originalCartTotal = cart.reduce((total, item) => total + (item.price * 1000 * item.quantity), 0); // Tổng tiền gốc
+
+        // Tính tổng tiền sau giảm giá
+        const discountedTotal = originalCartTotal * (1 - discountValue / 100);
+
+        // Cập nhật giao diện tổng tiền
+        cartTotalElement.textContent = discountedTotal.toLocaleString();
+    }
 
 
 </script>

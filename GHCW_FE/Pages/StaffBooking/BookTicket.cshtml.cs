@@ -233,6 +233,8 @@ namespace GHCW_FE.Pages.StaffBooking
                         TempData["SuccessMessage"] = "Thanh toán thành công.";
                         Success = true;
                         HasTicketSaved = true;
+                        SelectedCustomerEmail = null;
+                        SelectedDiscountCode = null;
                     }
                     else
                     {

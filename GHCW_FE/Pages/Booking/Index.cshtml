@@ -30,7 +30,7 @@
                     <img src="@service.Image" class="card-img-top service-image" alt="@service.Name">
                     <div class="card-body">
                         <h5 class="card-title service-title">@service.Name</h5>
-                        <p class="card-text service-description">@service.Description</p>
+                        <div class="card-text service-description">@Html.Raw(service.Description)</div>
                         <p class="service-price">Giá: <strong>@String.Format("{0:N0}", service.Price * 1000) VNĐ</strong></p>
                         <div class="quantity-wrapper">
                             <label>Số lượng:</label>

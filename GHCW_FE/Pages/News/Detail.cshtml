@@ -31,9 +31,9 @@
                         </div>
                         <div class="mb-3 bg-white" style="padding: 30px;">
                             <h2 class="mb-3">@Model.News.Title</h2>
-                            <p>
-                                @Model.News.Description
-                            </p>
+                            <div>
+                                @Html.Raw(Model.News.Description)
+                            </div>
                         </div>
                     </div>
                     <!-- News Detail End -->

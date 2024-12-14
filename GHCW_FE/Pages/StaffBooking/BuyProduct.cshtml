@@ -76,13 +76,13 @@
             <input type="hidden" id="cartData" name="cartData" />
             <div class="discount-section" style="margin: 1rem 0;">
                 <label for="discountSelect">Chọn mã giảm giá:</label>
-                <select id="discountSelect" asp-for="SelectedDiscountCode">
+                <select id="discountSelect" asp-for="SelectedDiscountCode" onchange="applyDiscount()">
                     <option value="">Không áp dụng mã giảm giá</option>
                     @if (Model.AvailableDiscounts.Any())
                     {
                         @foreach (var discount in Model.AvailableDiscounts)
                         {
-                            <option value="@discount.Code">@discount.Code - Giảm @discount.Value %</option>
+                            <option value="@discount.Code" data-value="@discount.Value">@discount.Code - Giảm @discount.Value %</option>
                         }
                     }
                 </select>
@@ -373,41 +373,22 @@
         }
     });
 
-        // Function to calculate and update the total price with the discount
-    function updateTotalPriceWithDiscount() {
+    function applyDiscount() {
         const discountSelect = document.getElementById("discountSelect");
-        const selectedDiscountCode = discountSelect.value;
-        const cartItems = JSON.parse(localStorage.getItem("productCart")) || [];
+        const discountValue = parseInt(discountSelect.options[discountSelect.selectedIndex].getAttribute("data-value")) || 0;
 
-        // Calculate the total price without discount
-        let total = 0;
-        cartItems.forEach(item => {
-            total += item.price * item.quantity * 1000; // Assuming price is in VND
-        });
+        // Tính tổng tiền từ cart
+        const originalCartTotal = cart.reduce((total, item) => {
+            return total + (item.price * 1000 * item.quantity);
+        }, 0);
 
-        let discount = 0;
+        // Áp dụng giảm giá
+        const discountedTotal = originalCartTotal * (1 - discountValue / 100);
 
-        // If a discount code is selected, apply the discount
-        if (selectedDiscountCode) {
-            const discountItem = availableDiscounts.find(d => d.Code === selectedDiscountCode);
-            if (discountItem) {
-                discount = discountItem.Value;
-            }
-        }
-
-        // Calculate the total after discount
-        const totalAfterDiscount = total - (total * discount / 100);
-
-        // Update the total price on the page
-        document.getElementById("cartTotal").textContent = totalAfterDiscount.toLocaleString();
+        // Cập nhật giao diện tổng tiền
+        const cartTotalElement = document.getElementById("cartTotal");
+        cartTotalElement.textContent = discountedTotal.toLocaleString();
     }
-
-    // Listen for changes in the discount selection
-    document.getElementById("discountSelect").addEventListener("change", updateTotalPriceWithDiscount);
-
-    // Recalculate and update total price when page loads
-    document.addEventListener("DOMContentLoaded", updateTotalPriceWithDiscount);
-
 
 </script>
 

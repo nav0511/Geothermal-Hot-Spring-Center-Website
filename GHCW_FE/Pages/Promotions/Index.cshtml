@@ -23,7 +23,7 @@
                                 <div class="d-flex mb-2">
                                     <a class="text-primary text-uppercase text-decoration-none blog-title" asp-page="./Detail" asp-route-Id="@n.Id">@n.Title</a>
                                 </div>
-                                <p class="h5 m-0 text-decoration-none service-description">@n.Description</p>
+                                <div class="h5 m-0 text-decoration-none service-description">@Html.Raw(n.Description)</div>
                             </div>
                         </div>
                     </div>
