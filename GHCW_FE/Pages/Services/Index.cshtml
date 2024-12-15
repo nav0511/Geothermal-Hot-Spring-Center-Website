@@ -15,7 +15,9 @@
                     <div class="col-md-4 mb-4 pb-2">
                         <div class="blog-item">
                             <div class="position-relative">
-                                <img class="img-fluid w-100 service-image" src="@s.Image" alt="">
+                                <a asp-page="./Detail" asp-route-Id="@s.Id">
+                                    <img class="img-fluid w-100 service-image" src="@s.Image" alt="">
+                                </a>
                             </div>
                             <div class="bg-white p-4">
                                 <div class="d-flex justify-content-between mb-3">

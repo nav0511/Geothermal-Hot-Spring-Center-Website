@@ -133,7 +133,7 @@
                         <div class="p-4">
                             <div class="d-flex justify-content-between mb-3">
                                 <small class="m-0"><i class="fa fa-clock text-primary mr-2"></i>@s.Time</small>
-                                <h5 class="m-0 service-price">@(s.Price * 1000)₫</h5>
+                                <h5 class="m-0 service-price">@(s.Price)₫</h5>
                             </div>
                             <a class="text-primary text-uppercase text-decoration-none service-title" asp-page="./Services/Detail" asp-route-Id="@s.Id">@s.Name</a>
                             <div class="h5 m-0 text-decoration-none service-description">@Html.Raw(s.Description)</div>

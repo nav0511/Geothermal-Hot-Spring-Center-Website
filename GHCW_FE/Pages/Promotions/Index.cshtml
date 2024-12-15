@@ -14,10 +14,12 @@
                     <div class="col-md-4 mb-4 pb-2">
                         <div class="blog-item">
                             <div class="position-relative">
-                                <img class="img-fluid w-100 service-image" src="@n.Image" alt="">
-                                <div class="blog-date">
-                                    <h6 class="font-weight-bold text-white mb-n1">@n.UploadDate.ToString("dd/MM")</h6>
-                                </div>
+                                <a asp-page="./Detail" asp-route-Id="@n.Id">
+                                    <img class="img-fluid w-100 service-image" src="@n.Image" alt="">
+                                    <div class="blog-date">
+                                        <h6 class="font-weight-bold text-white mb-n1">@n.UploadDate.ToString("dd/MM")</h6>
+                                    </div>
+                                </a>
                             </div>
                             <div class="bg-white p-4">
                                 <div class="d-flex mb-2">
