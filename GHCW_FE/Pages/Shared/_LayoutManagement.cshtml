@@ -144,31 +144,5 @@
 
     <script src="~/js/layoutManagement.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
-
-
-    <script>
-        const {
-            ClassicEditor,
-            Essentials,
-            Bold,
-            Italic,
-            Font,
-            Paragraph
-        } = CKEDITOR;
-        const { FormatPainter } = CKEDITOR_PREMIUM_FEATURES;
-
-        ClassicEditor
-            .create( document.querySelector( '#description' ), {
-                licenseKey: 'eyJhbGciOiJFUzI1NiJ9.eyJleHAiOjE3NjU3NTY3OTksImp0aSI6ImY2NzMyMzE0LTUwNzctNDZjYi05OTg2LTY0NWI3MGI4OTM3OSIsImxpY2Vuc2VkSG9zdHMiOlsiMTI3LjAuMC4xIiwibG9jYWxob3N0IiwiMTkyLjE2OC4qLioiLCIxMC4qLiouKiIsIjE3Mi4qLiouKiIsIioudGVzdCIsIioubG9jYWxob3N0IiwiKi5sb2NhbCJdLCJ1c2FnZUVuZHBvaW50IjoiaHR0cHM6Ly9wcm94eS1ldmVudC5ja2VkaXRvci5jb20iLCJkaXN0cmlidXRpb25DaGFubmVsIjpbImNsb3VkIiwiZHJ1cGFsIl0sImxpY2Vuc2VUeXBlIjoiZGV2ZWxvcG1lbnQiLCJmZWF0dXJlcyI6WyJEUlVQIiwiQk9YIl0sInZjIjoiMTE2MjM1ZjkifQ.nW_UgYQTtRIom_FUoNyo5jXI_Fhn_6j-u7TGFLi7idNVBw6S3Nuw4oFE2O0ukTzHmB1YW2fMLCJK78Xf0D2oPg',
-                plugins: [ Essentials, Bold, Italic, Font, Paragraph ],
-                toolbar: [
-                    'undo', 'redo', '|', 'bold', 'italic', '|',
-                    'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', '|',
-                    'formatPainter'
-                ]
-            } )
-            .then( /* ... */ )
-            .catch( /* ... */ );
-    </script>
 </body>
 </html>

@@ -110,7 +110,6 @@ function validateForm() {
     return true;
 }
 
-// Thêm sự kiện cho input để kiểm tra ngay khi người dùng nhập liệu
 const phoneInput = document.getElementById('phonenumber');
 if (phoneInput) phoneInput.addEventListener('input', validatePhoneNumber);
 
@@ -159,18 +158,45 @@ if (togglePasswordButton) {
 }
 
 const priceInput = document.getElementById("price");
-priceInput.addEventListener("input", function () {
-    // Loại bỏ ký tự không phải số
-    let sanitizedValue = priceInput.value.replace(/\D/g, "");
-    priceInput.value = sanitizedValue;
+if (priceInput) {
+    priceInput.addEventListener("input", function () {
+        // Loại bỏ ký tự không phải số
+        let sanitizedValue = priceInput.value.replace(/\D/g, "");
+        priceInput.value = sanitizedValue;
 
-    // Chuyển đổi giá trị sang số
-    const priceNumber = parseInt(sanitizedValue, 10);
+        // Chuyển đổi giá trị sang số
+        const priceNumber = parseInt(sanitizedValue, 10);
 
-    // Kiểm tra điều kiện hợp lệ
-    if (!sanitizedValue || isNaN(priceNumber) || priceNumber < 1000 || priceNumber % 100 !== 0) {
-        priceInput.setCustomValidity("Giá dịch vụ phải từ 1.000 VND trở lên và là bội số của 1.00 (ví dụ: 1.000, 1.500, 100.300).");
-    } else {
-        priceInput.setCustomValidity("");
-    }
-});
+        // Kiểm tra điều kiện hợp lệ
+        if (!sanitizedValue || isNaN(priceNumber) || priceNumber < 1000 || priceNumber % 100 !== 0) {
+            priceInput.setCustomValidity("Giá dịch vụ phải từ 1.000 VND trở lên và là bội số của 1.00 (ví dụ: 1.000, 1.500, 100.300).");
+        } else {
+            priceInput.setCustomValidity("");
+        }
+    });
+}
+
+const {
+    ClassicEditor,
+    Essentials,
+    Bold,
+    Italic,
+    Font,
+    Paragraph
+} = CKEDITOR;
+const { FormatPainter } = CKEDITOR_PREMIUM_FEATURES;
+const descriptionElement = document.querySelector('#description');
+if (descriptionElement) {
+    ClassicEditor
+        .create(document.querySelector('#description'), {
+            licenseKey: 'eyJhbGciOiJFUzI1NiJ9.eyJleHAiOjE3NjU3NTY3OTksImp0aSI6IjhjZWEzMjBhLWY3NmItNDQ5MC04NDZiLWRkNTU0ODE5MmY1YiIsInVzYWdlRW5kcG9pbnQiOiJodHRwczovL3Byb3h5LWV2ZW50LmNrZWRpdG9yLmNvbSIsImRpc3RyaWJ1dGlvbkNoYW5uZWwiOlsiY2xvdWQiLCJkcnVwYWwiXSwiZmVhdHVyZXMiOlsiRFJVUCIsIkJPWCJdLCJ2YyI6ImM0ZDZjZGM2In0.7UVmmWAJvyMrnahcppnFCcAY5y0_CulkL7BqBnxQ-vDclJZPB7c9aX2yUPeSLS-rz-g5cCNUKGF5xl7km4sSfA',
+            plugins: [Essentials, Bold, Italic, Font, Paragraph],
+            toolbar: [
+                'undo', 'redo', '|', 'bold', 'italic', '|',
+                'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', '|',
+                'formatPainter'
+            ]
+        })
+        .then( /* ... */)
+        .catch( /* ... */);
+}
