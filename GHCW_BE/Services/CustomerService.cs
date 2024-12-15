@@ -32,7 +32,7 @@ namespace GHCW_BE.Services
 
         public async Task<CustomerDTO?> GetCustomerProfileById(int uID)
         {
-            var customer = await _context.Customers.Include(c => c.Account).FirstOrDefaultAsync(u => u.Id == uID);
+            var customer = await _context.Customers.Include(c => c.Account).FirstOrDefaultAsync(u => u.AccountId == uID);
             if (customer != null)
             {
                 var userDTO = _mapper.Map<Customer, CustomerDTO>(customer);
