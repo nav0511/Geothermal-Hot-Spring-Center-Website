@@ -42,6 +42,11 @@
                                     @Model.News.Discount.StartDate.ToString("dd/MM") đến ngày
                                     @Model.News.Discount.EndDate.ToString("dd/MM")
                                 </p>
+                                <p class="text-primary">
+                                    Trong thời gian khuyến mãi có hiệu lực, khi áp dụng mã
+                                    <b>@Model.News.Discount.Code</b>,
+                                    quý khách sẽ được khuyến mãi @Model.News.Discount.Value% khi thanh toán dịch vụ
+                                </p>
                             }
                             <p>
                                 @Html.Raw(Model.News.Description)
