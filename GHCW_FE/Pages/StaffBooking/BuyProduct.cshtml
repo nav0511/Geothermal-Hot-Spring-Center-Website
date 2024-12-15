@@ -223,7 +223,7 @@
 
         let total = 0;
         cart.forEach(item => {
-            const displayPrice = item.price * 1000;
+            const displayPrice = item.price;
             const itemRow = document.createElement("div");
             itemRow.className = "cart-item";
             itemRow.innerHTML = `
@@ -379,7 +379,7 @@
 
         // Tính tổng tiền từ cart
         const originalCartTotal = cart.reduce((total, item) => {
-            return total + (item.price * 1000 * item.quantity);
+            return total + (item.price * item.quantity);
         }, 0);
 
         // Áp dụng giảm giá

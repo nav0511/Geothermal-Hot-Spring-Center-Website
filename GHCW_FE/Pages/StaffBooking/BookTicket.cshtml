@@ -202,7 +202,7 @@
 
         let total = 0;
         cart.forEach(item => {
-            const displayPrice = item.price * 1000;
+            const displayPrice = item.price;
             const itemRow = document.createElement("div");
             itemRow.className = "cart-item";
             itemRow.innerHTML = `
@@ -350,7 +350,7 @@
         const discountSelect = document.getElementById("discountSelect");
         const discountValue = parseInt(discountSelect.options[discountSelect.selectedIndex].getAttribute("data-value")) || 0; // Giá trị giảm giá (%)
         const cartTotalElement = document.getElementById("cartTotal");
-        const originalCartTotal = cart.reduce((total, item) => total + (item.price * 1000 * item.quantity), 0); // Tổng tiền gốc
+        const originalCartTotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0); // Tổng tiền gốc
 
         // Tính tổng tiền sau giảm giá
         const discountedTotal = originalCartTotal * (1 - discountValue / 100);
