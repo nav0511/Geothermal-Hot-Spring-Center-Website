@@ -59,7 +59,7 @@
 
         <div class="form-group checkbox-group">
             <div class="checkbox-item">
-                <input type="checkbox" id="isAvailable" name="isAvailable" @(Model.Discount.IsAvailable == true ? "checked" : "") />
+                <input type="checkbox" id="isAvailable" name="isAvailable" value="true" @(Model.Discount.IsAvailable == true ? "checked" : "") />
                 <label for="isAvailable">Đang hoạt động</label>
             </div>
         </div>

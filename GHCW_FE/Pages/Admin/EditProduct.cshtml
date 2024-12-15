@@ -69,11 +69,11 @@
 
             <div class="form-group checkbox-group full-width">
                 <div class="checkbox-item">
-                    <input type="checkbox" id="isAvailable" name="isAvailable" @(Model.Product.IsAvailable == true ? "checked" : "") />
+                    <input type="checkbox" id="isAvailable" name="isAvailable" value="true" @(Model.Product.IsAvailable == true ? "checked" : "") />
                     <label for="isAvailable">Đang có sẵn</label>
                 </div>
                 <div class="checkbox-item">
-                    <input type="checkbox" id="isForRent" name="isForRent" @(Model.Product.IsForRent == true ? "checked" : "") />
+                    <input type="checkbox" id="isForRent" name="isForRent" value="true" @(Model.Product.IsForRent == true ? "checked" : "") />
                     <label for="isForRent">Để cho thuê</label>
                 </div>
             </div>
