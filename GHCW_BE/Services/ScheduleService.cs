@@ -19,7 +19,7 @@ namespace GHCW_BE.Services
         public async Task<List<ScheduleDTO>?> GetWeeklySchedule(DateTime startDate, DateTime endDate)
         {
             var schedules = await _context.Schedules
-                                 .Where(s => s.Date >= startDate && s.Date <= endDate)
+                                 .Where(s => s.Date >= startDate && s.Date <= endDate && s.Receptionist.IsActive)
                                  .Include(s => s.Receptionist)
                                  .ToListAsync();
             if (schedules != null)
