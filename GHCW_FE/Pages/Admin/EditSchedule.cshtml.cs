@@ -66,7 +66,7 @@ namespace GHCW_FE.Pages.Admin
                 TempData["ErrorMessage"] = "Đã xảy ra lỗi khi lấy danh sách thông tin người dùng.";
                 return Page();
             }
-            Receptionists = receptionists;
+            Receptionists = receptionists.Where(r => r.IsActive == true).ToList();
 
             var (statusCode2, schedule) = await _scheduleService.GetScheduleByID(id, accessToken);
             if (statusCode2 == HttpStatusCode.NotFound)
