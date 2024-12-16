@@ -21,7 +21,7 @@ namespace GHCW_FE.Pages.Services
             {
                 return NotFound();
             }
-            var(statusCode2, serviceDTOs) = await _servicesService.GetServices($"Service?$top=5&$filter=Id ne {id}");
+            var(statusCode2, serviceDTOs) = await _servicesService.GetServices($"Service?$top=5&$filter=Id ne {id} and IsActive eq true");
             ServiceDTOs = serviceDTOs;
             return Page();
         }

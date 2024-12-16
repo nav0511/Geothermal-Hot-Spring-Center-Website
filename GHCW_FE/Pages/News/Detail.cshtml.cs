@@ -28,7 +28,7 @@ namespace GHCW_FE.Pages.News
             {
                 Message = "Không có tin tức";
             }
-            var (statusCode, newsDTOs) = _newsService.GetNews($"News?$orderby=UploadDate desc&$top=5&$filter=Id ne {id} and DiscountId eq null").Result;
+            var (statusCode, newsDTOs) = _newsService.GetNews($"News?$orderby=UploadDate desc&$top=5&$filter=Id ne {id} and DiscountId eq null and IsActive eq true").Result;
             NewsDtos = newsDTOs;
             return Page();
         }

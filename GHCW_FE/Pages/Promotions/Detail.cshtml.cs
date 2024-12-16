@@ -30,7 +30,7 @@ namespace GHCW_FE.Pages.Promotions
             {
                 Message = "Khuyến mãi không có hoặc đã hết hiệu lực";
             }
-            var(statusCode2, newsDtos) = _newsService.GetNews($"News?$orderby=UploadDate desc&$top=5&$filter=Id ne {id} and DiscountId ne null").Result;
+            var(statusCode2, newsDtos) = _newsService.GetNews($"News?$orderby=UploadDate desc&$top=5&$filter=Id ne {id} and DiscountId ne null and IsActive eq true").Result;
             NewsDtos = newsDtos;
 
             return Page();
