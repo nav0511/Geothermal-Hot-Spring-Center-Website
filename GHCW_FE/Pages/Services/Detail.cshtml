@@ -31,8 +31,8 @@
                         </div>
                         <div class="bg-white mb-3" style="padding: 30px;">
                             <h2 class="mb-3">@Model.Service.Name</h2>
-                            <p class="text-primary service-price">Giá dịch vụ: @Model.Service.Price VNĐ</p>
-                            <small class="m-0"><i class="fa fa-clock text-primary mr-2"></i>Thời gian: @Model.Service.Time</small>
+                            <p class="text-primary">Giá dịch vụ: <span class="service-price">@Model.Service.Price</span> VNĐ</p>
+                            <small class="m-0 text-primary"><i class="fa fa-clock text-primary mr-2"></i>Thời gian: @Model.Service.Time</small>
                             <p>
                                 @Html.Raw(Model.Service.Description)
                             </p>
@@ -60,21 +60,21 @@
         </div>
     </div>
     <!-- Services End -->
+    <script>
+        function formatPrice(price) {
+            return price.toLocaleString();
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const priceElements = document.querySelectorAll('.service-price');
+
+            priceElements.forEach(function (element) {
+                let priceText = element.textContent.trim().replace(',', '');
+                let formattedPrice = formatPrice(parseInt(priceText));
+
+                element.textContent = `${formattedPrice}`;
+            });
+        });
+    </script>
 }
 
-<script>
-    function formatPrice(price) {
-        return price.toLocaleString();
-    }
-
-    document.addEventListener('DOMContentLoaded', function () {
-        const priceElements = document.querySelectorAll('.service-price');
-
-        priceElements.forEach(function (element) {
-            let priceText = element.textContent.trim().replace('₫', '').replace(',', '');
-            let formattedPrice = formatPrice(parseInt(priceText));
-
-            element.textContent = `${formattedPrice}₫`;
-        });
-    });
-</script>
