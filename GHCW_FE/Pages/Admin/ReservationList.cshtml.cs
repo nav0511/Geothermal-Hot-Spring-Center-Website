@@ -76,7 +76,7 @@ namespace GHCW_FE.Pages.Admin
             if (!string.IsNullOrEmpty(SearchTerm))
             {
                 tickets = tickets?.Where(t =>
-                   (t.Receptionist.Name != null && t.Receptionist.Name.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase)) ||
+                   (t.Receptionist?.Name != null && t.Receptionist.Name.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase)) ||
                    (t.Customer.Name != null && t.Customer.Name.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase))
                ).ToList();
             }
