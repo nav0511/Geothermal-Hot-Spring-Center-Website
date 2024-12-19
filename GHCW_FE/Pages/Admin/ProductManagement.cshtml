@@ -45,8 +45,8 @@
 
         <select name="SortOption" onchange="document.getElementById('filterForm').submit()">
             <option value="0" @(Model.SortOption == 0 ? "selected" : "")>Lọc theo</option>
-            <option value="1" @(Model.SortOption == 1 ? "selected" : "")>Đang hoạt động</option>
-            <option value="2" @(Model.SortOption == 2 ? "selected" : "")>Không hoạt động</option>
+            <option value="1" @(Model.SortOption == 1 ? "selected" : "")>Có sẵn</option>
+            <option value="2" @(Model.SortOption == 2 ? "selected" : "")>Hết hàng</option>
             <option value="3" @(Model.SortOption == 3 ? "selected" : "")>Size XS</option>
             <option value="4" @(Model.SortOption == 4 ? "selected" : "")>Size S</option>
             <option value="5" @(Model.SortOption == 5 ? "selected" : "")>Size M</option>
